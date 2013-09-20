@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">SwEng Tutorial</string>
-    <string name="action_settings">Settings</string>
+    <string name="app_name">SwEngTutorial</string>
     <string name="hello_world">Hello world!</string>
-<<<<<<< HEAD
-    <string name="edit_message">&quot;Type in!&quot;</string>
-=======
+    <string name="menu_settings">Settings</string>
+    <string name="title_activity_main">MainActivity</string>
     <string name="edit_message">Type in!</string>
->>>>>>> f045a7d1588d1bba44162d724618e77cd32675b6
     <string name="send_button">Display</string>
+    <string name="action_settings">Action</string>
     <string name="title_activity_show_message">ShowMessageActivity</string>
 
 </resources>

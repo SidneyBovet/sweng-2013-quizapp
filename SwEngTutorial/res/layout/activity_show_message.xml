@@ -1,28 +1,12 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-<<<<<<< HEAD
-    android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".ShowMessageActivity" >
-=======
     android:layout_height="match_parent" >
->>>>>>> f045a7d1588d1bba44162d724618e77cd32675b6
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/displayed_text"
-<<<<<<< HEAD
-        tools:context=".MainActivity" />
-
-</RelativeLayout>
-=======
         tools:context=".MainActivity"
-     	 />
 
 </RelativeLayout>
->>>>>>> f045a7d1588d1bba44162d724618e77cd32675b6
