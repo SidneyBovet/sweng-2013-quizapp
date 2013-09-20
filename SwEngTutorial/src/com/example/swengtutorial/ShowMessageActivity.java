@@ -12,17 +12,17 @@ public class ShowMessageActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_show_message);
-
-		// get Intent that started this Activity
-		Intent startingIntent = getIntent();
-
-		// get the value of the user string
-		String userText = startingIntent.getStringExtra(MainActivity.class.getName());
-
-		// get the TextView on which we are going to show the string, and update
-		// its contents
-		TextView textView = (TextView) findViewById(R.id.displayed_text);
-		textView.setText(userText);
+		
+		 // Get the Intent that started this Activity
+	    Intent startingIntent = getIntent();
+	    
+	    // Get the value of the user string
+	    String userText = startingIntent.getStringExtra(MainActivity.class.getName());
+	    
+	    // Get the TextView on which we are going to show the string, and update
+	    // its contents
+	    TextView textView = (TextView) findViewById(R.id.displayed_text);
+	    textView.setText(userText);
 	}
 
 	@Override
