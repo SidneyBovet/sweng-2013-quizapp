@@ -4,14 +4,26 @@
     android:layout_height="match_parent" >
 
     <EditText
+<<<<<<< HEAD
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:hint="@string/edit_message"
         android:id="@+id/edit_text" />
+=======
+        android:id="@+id/edit_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="@string/edit_message" />
+
+>>>>>>> f045a7d1588d1bba44162d724618e77cd32675b6
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/send_button"
         android:onClick="displayMessage" />
 
+<<<<<<< HEAD
 </LinearLayout>
+=======
+</LinearLayout>
+>>>>>>> f045a7d1588d1bba44162d724618e77cd32675b6
