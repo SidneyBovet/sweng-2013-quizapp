@@ -10,7 +10,7 @@ import android.widget.Toast;
 
 /**
  * 
- * @author born4new
+ * @author sbovet
  * 
  */
 public class MainActivity extends Activity {
