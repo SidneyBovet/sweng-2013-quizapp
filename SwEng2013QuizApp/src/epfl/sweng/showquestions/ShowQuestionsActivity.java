@@ -31,21 +31,25 @@ public class ShowQuestionsActivity extends Activity {
 		HttpGet firstRandom = new HttpGet("https://sweng-quiz.appspot.com/quizquestions/random");
 		ResponseHandler<String> firstHandler = new BasicResponseHandler();
 		
-		try {
-			String randomQuestionJSON = SwengHttpClientFactory.getInstance().execute(firstRandom, firstHandler);
+//		try {
+			
+			// String randomQuestionJSON = SwengHttpClientFactory.getInstance().execute(firstRandom, firstHandler);
+			
+			String randomQuestionJSON = "{\"tags\": [\"capitals\",\"geography\", \"countries\"], \"solutionIndex\": 1, \"question\": \"What is the capital of South Korea?\", \"answers\": [\"Kabul\", \"Seoul\", \"Podgorica\", \"Accra\"], \"owner\": \"sehaag\", \"id\": 4819571781402624}";
 			
 			Question firstQuestion = null;
+			
 			try {
 				firstQuestion = Question.createQuestionFromJSON(randomQuestionJSON);
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
 			
-		} catch (ClientProtocolException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+//		} catch (ClientProtocolException e) {
+//			e.printStackTrace();
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
 		
 	}
 
