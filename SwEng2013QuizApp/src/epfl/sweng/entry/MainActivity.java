@@ -1,5 +1,6 @@
 package epfl.sweng.entry;
 
+import sweng.epfl.editquestions.EditQuestionActivity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,6 +8,7 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.Toast;
 import epfl.sweng.R;
+import epfl.sweng.showquestions.ShowQuestionsActivity;
 import epfl.sweng.testing.TestingTransactions;
 import epfl.sweng.testing.TestingTransactions.TTChecks;
 
@@ -35,13 +37,13 @@ public class MainActivity extends Activity {
 	
 	public void displayRandomQuestion(View view) {
 		Toast.makeText(this, "Please answer to the following question.", Toast.LENGTH_SHORT).show();
-		Intent displayQuestionActivityIntent = new Intent(this, DisplayQuestionActivity.class);
-	    startActivity(displayQuestionActivityIntent);
+		Intent showQuestionActivityIntent = new Intent(this, ShowQuestionsActivity.class);
+	    startActivity(showQuestionActivityIntent);
 	}
 	
 	public void submitQuestion(View view) {
 		Toast.makeText(this, "Please enter your question.", Toast.LENGTH_SHORT).show();
-		Intent submitQuestionActivityIntent = new Intent(this, SubmitQuestionActivity.class);
+		Intent submitQuestionActivityIntent = new Intent(this, EditQuestionActivity.class);
 	    startActivity(submitQuestionActivityIntent);
 	}
 

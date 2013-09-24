@@ -8,6 +8,9 @@
         android:minSdkVersion="18"
         android:targetSdkVersion="18" />
 
+    <uses-permission android:name="android.permission.INTERNET" />
+	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
@@ -23,13 +26,13 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="epfl.sweng.entry.SubmitQuestionActivity"
+            android:name="sweng.epfl.editquestions.EditQuestionActivity"
             android:label="@string/title_activity_submit_question" >
         </activity>
         <activity
-            android:name="epfl.sweng.entry.DisplayQuestionActivity"
+            android:name="epfl.sweng.showquestions.ShowQuestionsActivity"
             android:label="@string/title_activity_display_question" >
         </activity>
     </application>
-
+    
 </manifest>

@@ -1,4 +1,4 @@
-package epfl.sweng.entry;
+package sweng.epfl.editquestions;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -10,7 +10,7 @@ import epfl.sweng.R;
  * @author born4new
  *
  */
-public class SubmitQuestionActivity extends Activity {
+public class EditQuestionActivity extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
