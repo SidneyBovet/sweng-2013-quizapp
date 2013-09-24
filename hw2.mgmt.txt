@@ -1,0 +1,24 @@
+
+    TODO :
+
+        [x] 3.1 Application entry point UI                             : David
+        [x] 3.2 AndroidManifest.xml                                    : David
+        [x] 3.3 Testing hooks                                          : when everything done
+
+        [x] 4.1 Fetch a random quiz question from the server           : David
+        [x] 4.2 Link MainActivity to the quiz question functionality   : David
+        [ ] 4.3 Display a quiz question                                : Joanna
+        [ ] 4.4 Take a quiz                                            : Sidney
+        [ ] 4.5 Testing hooks                                          : when everything done
+
+        [ ] 5.1 Link MainActivity to the quiz question functionnality  : John
+        [ ] 5.2 GUI for editing and submitting questions               : Aymeric
+        [ ] 5.3 Submit the question to the SwEng quiz server           :
+        [ ] 5.4 Testing hooks                                          : when everything done
+
+        [ ] 6   Generating JavaDoc and Class Diagram (+ checkstyle)    : Aymeric (if not already done)
+
+        [ ] 7   Work time of everyone                                  : last thing to think of
+
+    Comments :
+        Fill in with a little "x" as you commit your work.
