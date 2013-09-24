@@ -27,16 +27,10 @@ public class ShowQuestionsActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_display_question);
-		
-		/**
-		 *  TODO: Extract this into a class when working.
-		 *  
-		 */
 		HttpGet firstRandom = new HttpGet("https://sweng-quiz.appspot.com/quizquestions/random");
 		ResponseHandler<String> firstHandler = new BasicResponseHandler();
 		try {
 			String randomQuestionJSON = SwengHttpClientFactory.getInstance().execute(firstRandom, firstHandler);
-			
 			Question firstQuestion = null;
 			try {
 				firstQuestion = Question.createQuestionFromJSON(randomQuestionJSON);
