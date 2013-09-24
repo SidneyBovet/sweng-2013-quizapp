@@ -2,6 +2,8 @@
 .classpath
 .project
 .settings
+.class
+project.properties
 bin/
 gen/
 local.properties
