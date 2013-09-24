@@ -30,7 +30,9 @@ public class ShowQuestionsActivity extends Activity {
 		setContentView(R.layout.activity_display_question);
 			DownloadJSONFromServer asyncTaskRandomQuestionGetter = new DownloadJSONFromServer();
 			asyncTaskRandomQuestionGetter.execute();
+
 			Question firstQuestion = null;
+			
 			try {
 				firstQuestion = Question.createQuestionFromJSON(asyncTaskRandomQuestionGetter.get());
 			} catch (JSONException e) {
@@ -42,9 +44,6 @@ public class ShowQuestionsActivity extends Activity {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			System.out.println("TEST : " + firstQuestion.getId());
-			
-		
 	}
 
 	@Override
