@@ -13,7 +13,7 @@
 
         [ ] 5.1 Link MainActivity to the quiz question functionnality  : John
         [ ] 5.2 GUI for editing and submitting questions               : Aymeric
-        [ ] 5.3 Submit the question to the SwEng quiz server           :
+        [ ] 5.3 Submit the question to the SwEng quiz server           :	
         [ ] 5.4 Testing hooks                                          : when everything done
 
         [ ] 6   Generating JavaDoc and Class Diagram (+ checkstyle)    : Aymeric (if not already done)
