@@ -5,6 +5,11 @@ import android.os.Bundle;
 import android.view.Menu;
 import epfl.sweng.R;
 
+/**
+ * The user can now enter a question that will be saved on a server.
+ * @author born4new
+ *
+ */
 public class SubmitQuestionActivity extends Activity {
 
 	@Override

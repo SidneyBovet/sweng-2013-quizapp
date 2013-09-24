@@ -4,6 +4,11 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.view.Menu;
 
+/***
+ * Activity used to display a random question to the user.
+ * @author born4new
+ *
+ */
 public class DisplayQuestionActivity extends Activity {
 
 	@Override
