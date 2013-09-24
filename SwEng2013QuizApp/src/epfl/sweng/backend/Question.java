@@ -43,30 +43,28 @@ public class Question {
 		this.tags = tags;
 		this.owner = owner;
 	}
-	
-	/* 
-	 * XXX : Don't think it's a great idea since it couples the code a bit.
-	 * Here the keys are hardcoded, which is bad if for instance the server
-	 * changes its variable naming.
-	 * 
-	 * What do you guys think?
-	 * 
-	 */
-	
-	/**
-	 * 
-	 * @param questionJSON 		: JSON object that represents a question.  
-	 * @throws JSONException
-	 */
-	public Question(JSONObject questionJSON) throws JSONException {
-		this.id = (Integer) questionJSON.get("id");
-		this.questionContent = (String) questionJSON.get("question");
-		this.answers = (String[]) questionJSON.get("answers");
-		this.solutionIndex = Integer.parseInt((String) questionJSON.get("solutionIndex"));
-		this.tags = (String[]) questionJSON.get("tags");
-		this.owner = (String) questionJSON.get("owner");
-	}
 
+	public static Question createQuestionFromJSON(String questionJSON) throws JSONException {
+		
+		// JSON Parsing.
+		int id = 0;
+		String question = "";
+		String[] answers = {};
+		int solutionIndex = 0;
+		String[] tags = {};
+		String owner = "";
+
+		JSONObject jsonParser = new JSONObject(questionJSON);
+		id = (Integer) jsonParser.get("id");
+		question = (String) jsonParser.get("question");
+		answers = (String[]) jsonParser.get("answers");
+		solutionIndex = Integer.parseInt((String) jsonParser.get("solutionIndex"));
+		tags = (String[]) jsonParser.get("tags");
+		owner = (String) jsonParser.get("owner");
+		
+		return new Question(id, question, answers, solutionIndex, tags, owner);
+	}
+	
 	public int getId() {
 		return id;
 	}

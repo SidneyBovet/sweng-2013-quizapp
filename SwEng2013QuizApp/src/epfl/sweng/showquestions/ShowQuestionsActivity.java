@@ -37,28 +37,12 @@ public class ShowQuestionsActivity extends Activity {
 		try {
 			String randomQuestionJSON = SwengHttpClientFactory.getInstance().execute(firstRandom, firstHandler);
 			
-			// JSON Parsing.
-			int id = 0;
-			String question = "";
-			String[] answers = {};
-			int solutionIndex = 0;
-			String[] tags = {};
-			String owner = "";
-			
+			Question firstQuestion = null;
 			try {
-				JSONObject jsonParser = new JSONObject(randomQuestionJSON);
-				id = (Integer) jsonParser.get("id");
-				question = (String) jsonParser.get("question");
-				answers = (String[]) jsonParser.get("answers");
-				solutionIndex = Integer.parseInt((String) jsonParser.get("solutionIndex"));
-				tags = (String[]) jsonParser.get("tags");
-				owner = (String) jsonParser.get("owner");
+				firstQuestion = Question.createQuestionFromJSON(randomQuestionJSON);
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
-			
-			Question firstQuestion = new Question(id, question, answers, solutionIndex, tags, owner);
-			
 			System.out.println("TEST : " + firstQuestion.getId());
 			
 		} catch (ClientProtocolException e) {
