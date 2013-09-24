@@ -27,7 +27,7 @@
             android:label="@string/title_activity_submit_question" >
         </activity>
         <activity
-            android:name="epfl.sweng.DisplayQuestionActivity"
+            android:name="epfl.sweng.entry.DisplayQuestionActivity"
             android:label="@string/title_activity_display_question" >
         </activity>
     </application>

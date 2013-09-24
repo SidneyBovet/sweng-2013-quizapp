@@ -6,8 +6,9 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Toast;
-import epfl.sweng.DisplayQuestionActivity;
 import epfl.sweng.R;
+import epfl.sweng.testing.TestingTransactions;
+import epfl.sweng.testing.TestingTransactions.TTChecks;
 
 /***
  * Main class of the program.
@@ -19,7 +20,10 @@ public class MainActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);	
+		setContentView(R.layout.activity_main);
+		
+		// Transaction testing.
+		TestingTransactions.check(TTChecks.MAIN_ACTIVITY_SHOWN);
 	}
 
 	@Override

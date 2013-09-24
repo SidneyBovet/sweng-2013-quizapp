@@ -1,5 +1,8 @@
-package epfl.sweng;
+package epfl.sweng.entry;
 
+import epfl.sweng.R;
+import epfl.sweng.R.layout;
+import epfl.sweng.R.menu;
 import android.os.Bundle;
 import android.app.Activity;
 import android.view.Menu;
