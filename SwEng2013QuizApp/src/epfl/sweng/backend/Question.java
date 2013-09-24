@@ -11,7 +11,7 @@ import org.json.JSONObject;
  */
 public class Question {
 
-	private int id;
+	private long id;
 	private String questionContent;
 	private String[] answers;
 	private int solutionIndex;
@@ -37,7 +37,7 @@ public class Question {
 	 * @param owner
 	 *            : Question owner.
 	 */
-	public Question(int id, String question, String[] answers,
+	public Question(long id, String question, String[] answers,
 			int solutionIndex, String[] tags, String owner) {
 		this.id = id;
 		this.questionContent = question;
@@ -52,7 +52,7 @@ public class Question {
 
 		JSONObject jsonParser = new JSONObject(questionJSON);
 		
-		int id = Integer.parseInt((String) jsonParser.get("id"));
+		long id = Long.parseLong((String) jsonParser.get("id"));
 		String question = (String) jsonParser.get("question");
 		String[] answers = (String[]) jsonParser.get("answers");
 		int solutionIndex = Integer.parseInt((String) jsonParser
@@ -63,7 +63,7 @@ public class Question {
 		return new Question(id, question, answers, solutionIndex, tags, owner);
 	}
 
-	public int getId() {
+	public long getId() {
 		return id;
 	}
 

@@ -33,6 +33,7 @@ public class ShowQuestionsActivity extends Activity {
 		
 //		try {
 			
+			// TODO : To get rid of!
 			// String randomQuestionJSON = SwengHttpClientFactory.getInstance().execute(firstRandom, firstHandler);
 			
 			String randomQuestionJSON = "{\"tags\": [\"capitals\",\"geography\", \"countries\"], \"solutionIndex\": 1, \"question\": \"What is the capital of South Korea?\", \"answers\": [\"Kabul\", \"Seoul\", \"Podgorica\", \"Accra\"], \"owner\": \"sehaag\", \"id\": 4819571781402624}";
