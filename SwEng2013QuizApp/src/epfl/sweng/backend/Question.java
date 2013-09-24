@@ -45,22 +45,14 @@ public class Question {
 	}
 
 	public static Question createQuestionFromJSON(String questionJSON) throws JSONException {
-		
-		// JSON Parsing.
-		int id = 0;
-		String question = "";
-		String[] answers = {};
-		int solutionIndex = 0;
-		String[] tags = {};
-		String owner = "";
 
 		JSONObject jsonParser = new JSONObject(questionJSON);
-		id = (Integer) jsonParser.get("id");
-		question = (String) jsonParser.get("question");
-		answers = (String[]) jsonParser.get("answers");
-		solutionIndex = Integer.parseInt((String) jsonParser.get("solutionIndex"));
-		tags = (String[]) jsonParser.get("tags");
-		owner = (String) jsonParser.get("owner");
+		int id = Integer.parseInt((String) jsonParser.get("id"));
+		String question = (String) jsonParser.get("question");
+		String[] answers = (String[]) jsonParser.get("answers");
+		int solutionIndex = Integer.parseInt((String) jsonParser.get("solutionIndex"));
+		String[] tags = (String[]) jsonParser.get("tags");
+		String owner = (String) jsonParser.get("owner");
 		
 		return new Question(id, question, answers, solutionIndex, tags, owner);
 	}
