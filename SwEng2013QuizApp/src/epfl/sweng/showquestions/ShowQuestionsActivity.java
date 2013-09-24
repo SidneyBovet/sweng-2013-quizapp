@@ -1,6 +1,7 @@
 package epfl.sweng.showquestions;
 
 import java.io.IOException;
+import java.util.concurrent.ExecutionException;
 
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.ResponseHandler;
@@ -27,23 +28,22 @@ public class ShowQuestionsActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_display_question);
-		HttpGet firstRandom = new HttpGet("https://sweng-quiz.appspot.com/quizquestions/random");
-		ResponseHandler<String> firstHandler = new BasicResponseHandler();
-		try {
-			String randomQuestionJSON = SwengHttpClientFactory.getInstance().execute(firstRandom, firstHandler);
+			DownloadJSONFromServer asyncTaskRandomQuestionGetter = new DownloadJSONFromServer();
+			asyncTaskRandomQuestionGetter.execute();
 			Question firstQuestion = null;
 			try {
-				firstQuestion = Question.createQuestionFromJSON(randomQuestionJSON);
+				firstQuestion = Question.createQuestionFromJSON(asyncTaskRandomQuestionGetter.get());
 			} catch (JSONException e) {
+				e.printStackTrace();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ExecutionException e) {
+				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			System.out.println("TEST : " + firstQuestion.getId());
 			
-		} catch (ClientProtocolException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 		
 	}
 

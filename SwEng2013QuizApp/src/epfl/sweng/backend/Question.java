@@ -10,7 +10,7 @@ import org.json.JSONObject;
  */
 public class Question {
 	
-	private int id;
+	private long id;
 	private String questionContent;
 	private String[] answers;
 	private int solutionIndex;
@@ -23,14 +23,14 @@ public class Question {
 	 * @param id 				: long that uniquely identifies a question.
 	 * @param question 			: String that contains the text of the question.
 	 * @param answers			: List of String objects that contains the possible answers. 
-	 * 							  The list is 0-indexed, meaning that the first elementÕs index is 0.
+	 * 							  The list is 0-indexed, meaning that the first elementï¿½s index is 0.
 	 * 							  The order of the answers is important, because the correct answer is 
 	 * 							  identified by its index in the answers list.
 	 * @param solutionIndex		: Int that indicates the correct answer by its position in the answers list.
 	 * @param tags				: Set of question tags.
 	 * @param owner				: Question owner.
 	 */
-	public Question(int id, 
+	public Question(long id, 
 					String question, 
 					String[] answers, 
 					int solutionIndex, 
@@ -47,7 +47,7 @@ public class Question {
 	public static Question createQuestionFromJSON(String questionJSON) throws JSONException {
 
 		JSONObject jsonParser = new JSONObject(questionJSON);
-		int id = Integer.parseInt((String) jsonParser.get("id"));
+		long id = Long.parseLong((String) jsonParser.get("id"));
 		String question = (String) jsonParser.get("question");
 		String[] answers = (String[]) jsonParser.get("answers");
 		int solutionIndex = Integer.parseInt((String) jsonParser.get("solutionIndex"));
@@ -57,7 +57,7 @@ public class Question {
 		return new Question(id, question, answers, solutionIndex, tags, owner);
 	}
 	
-	public int getId() {
+	public long getId() {
 		return id;
 	}
 
