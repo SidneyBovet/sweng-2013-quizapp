@@ -40,18 +40,15 @@ public class ShowQuestionsActivity extends Activity {
 		DownloadJSONFromServer asyncTaskRandomQuestionGetter = new DownloadJSONFromServer();
 		asyncTaskRandomQuestionGetter.execute();
 		
-		Question question;
+		Question question = null;
 		try {
 			question = Question.createQuestionFromJSON(asyncTaskRandomQuestionGetter.get());
 		} catch (JSONException e) {
 			e.printStackTrace();
-			question = null;
 		} catch (InterruptedException e) {
 			e.printStackTrace();
-			question = null;
 		} catch (ExecutionException e) {
 			e.printStackTrace();
-			question = null;
 		}
 		
 		return question;
