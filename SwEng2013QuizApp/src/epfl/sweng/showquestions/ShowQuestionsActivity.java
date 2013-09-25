@@ -34,13 +34,18 @@ public class ShowQuestionsActivity extends Activity {
 		TextView textViewQuestion = (TextView) findViewById(R.id.displayQuestion);
 		textViewQuestion.setText(firstQuestion.getQuestionContent());
 		
-		
 		TextView textViewTag = (TextView) findViewById(R.id.displayTags);
 		try {
 			textViewTag.setText("tags: " + firstQuestion.getTagToString(0));
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
+		
+		String[] myStringArray = new String[]{"a","b","c", "d", "e"};
+		ArrayAdapter adapter = new ArrayAdapter<String>(this, 
+		        android.R.layout.simple_list_item_1, myStringArray);
+		ListView textViewAnswers = (ListView) findViewById(R.id.listView);
+		textViewAnswers.setAdapter(adapter);
 		
 	}
 	
