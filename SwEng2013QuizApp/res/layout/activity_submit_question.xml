@@ -12,5 +12,32 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/hello_world" />
+    
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="@string/write_question1"
+        android:id="@+id/write_textQuestion1" />
+    
+    
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="@string/answer_question1"
+        android:id="@+id/write_answerQuestion1" />
+    
+     <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="@string/tags_question"
+        android:id="@+id/write_tagsQuestion" />
+    
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="submitQuizzAndRefreshEdit"
+        android:text="@string/submit_Edited_Question_Button" />
+    
+    
 
 </RelativeLayout>
