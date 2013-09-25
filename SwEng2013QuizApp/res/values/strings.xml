@@ -9,5 +9,6 @@
     <string name="title_activity_submit_question">SubmitQuestionActivity</string>
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_display_question">DisplayQuestionActivity</string>
+    <string name="nextRandomQuestion">next</string>
 
 </resources>
