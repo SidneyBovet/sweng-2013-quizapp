@@ -37,13 +37,9 @@ public class Question {
 	 * @param owner
 	 *            : Question owner.
 	 */
-	public Question(
-			long questionId,
-			String questionStmt,
-			JSONArray questionAnswers,
-			int questionSolutionIndex,
-			JSONArray questionTags,
-			String questionOwner) {
+	public Question(long questionId, String questionStmt,
+			JSONArray questionAnswers, int questionSolutionIndex,
+			JSONArray questionTags, String questionOwner) {
 		this.id = questionId;
 		this.questionContent = questionStmt;
 		this.answers = questionAnswers;
@@ -53,13 +49,11 @@ public class Question {
 	}
 
 	public static Question createQuestionFromJSON(String questionJSON)
-		throws JSONException {
-		
+			throws JSONException {
+
 		JSONObject jsonParser = new JSONObject(questionJSON);
 		long id = jsonParser.getLong("id");
-		
-		
-		
+
 		String question = jsonParser.getString("question");
 		JSONArray answers = jsonParser.getJSONArray("answers");
 		int solutionIndex = jsonParser.getInt("solutionIndex");
@@ -88,28 +82,42 @@ public class Question {
 	public JSONArray getTags() {
 		return tags;
 	}
-	
+
 	/**
 	 * Returns a single tag
+	 * 
 	 * @param index
 	 * @return The i-th tag of the Question object
 	 * @throws JSONException
 	 */
-	public String getTag(int index) throws JSONException {
+	public String getTagToString(int index) throws JSONException {
 		return tags.getString(index);
 	}
-	
 
+	/**
+	 * Returns all the tag together
+	 * 
+	 * @return all the tag delimited by ","
+	 * @throws JSONException
+	 */
+	public String getTagsToString() throws JSONException {
+		String tags = "tags: ";
+		for (int i = 0; i < (tags.length()-1); i++) {
+			System.out.println(getTagToString(i));
+			tags += getTagToString(i) + ", ";
+		}
+		return tags;
+	}
 
 	public String getOwner() {
 		return owner;
 	}
-	
 
 	@Override
 	public String toString() {
 		return "Question [id=" + id + ", questionContent=" + questionContent
-				+ ", answers=" + answers.toString() + ", solutionIndex=" + solutionIndex
-				+ ", tags=" + tags.toString() + ", owner=" + owner + "]";
+				+ ", answers=" + answers.toString() + ", solutionIndex="
+				+ solutionIndex + ", tags=" + tags.toString() + ", owner="
+				+ owner + "]";
 	}
 }
