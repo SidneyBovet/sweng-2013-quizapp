@@ -1,5 +1,7 @@
 package epfl.sweng.backend;
 
+import java.util.ArrayList;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -75,6 +77,22 @@ public class Question {
 		return answers;
 	}
 
+	/**
+	 * Get one JSON object after the other, transform then to string and put them
+	 * in an array list of string
+	 * @return an array list of string containing the JSONObjects
+	 */
+	public ArrayList<String> getAnswerToStringArray() {
+		ArrayList<String> list = new ArrayList<String>();
+		list = null;
+		if (answers != null) {
+			for (int i = 0; i < answers.length(); i++) {
+				list.add(answers.optJSONObject(i).toString());
+			}
+		}
+		return list;
+	}
+
 	public int getSolutionIndex() {
 		return solutionIndex;
 	}
@@ -102,7 +120,7 @@ public class Question {
 	 */
 	public String getTagsToString() throws JSONException {
 		String tags = "tags: ";
-		for (int i = 0; i < (tags.length()-1); i++) {
+		for (int i = 0; i < (tags.length() - 1); i++) {
 			System.out.println(getTagToString(i));
 			tags += getTagToString(i) + ", ";
 		}
