@@ -1,21 +1,16 @@
 package epfl.sweng.showquestions;
 
-import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.ResponseHandler;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.BasicResponseHandler;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import android.app.Activity;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
+import android.widget.TextView;
 import epfl.sweng.R;
 import epfl.sweng.backend.Question;
-import epfl.sweng.servercomm.SwengHttpClientFactory;
 
 /***
  * Activity used to display a random question to the user.
@@ -28,22 +23,38 @@ public class ShowQuestionsActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_display_question);
-			DownloadJSONFromServer asyncTaskRandomQuestionGetter = new DownloadJSONFromServer();
-			asyncTaskRandomQuestionGetter.execute();
 
-			Question firstQuestion = null;
-			
-			try {
-				firstQuestion = Question.createQuestionFromJSON(asyncTaskRandomQuestionGetter.get());
-			} catch (JSONException e) {
-				e.printStackTrace();
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (ExecutionException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+		Question firstQuestion = getRandomQuestion();
+		
+		TextView textView = (TextView) findViewById(R.id.displayQuestion);
+	    textView.setText(firstQuestion.toString());
+		
+	}
+	
+	/**
+	 * Processes a request in an {@link AsyncTask} and returns the parsed {@link Question}
+	 * @return The parsed {@link Question} object.
+	 */
+	private Question getRandomQuestion() {
+
+		DownloadJSONFromServer asyncTaskRandomQuestionGetter = new DownloadJSONFromServer();
+		asyncTaskRandomQuestionGetter.execute();
+		
+		Question question;
+		try {
+			question = Question.createQuestionFromJSON(asyncTaskRandomQuestionGetter.get());
+		} catch (JSONException e) {
+			e.printStackTrace();
+			question = null;
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+			question = null;
+		} catch (ExecutionException e) {
+			e.printStackTrace();
+			question = null;
+		}
+		
+		return question;
 	}
 
 	@Override

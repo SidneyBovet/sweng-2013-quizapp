@@ -1,10 +1,11 @@
 package epfl.sweng.backend;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * Represents a question that a user gets asked in the quizz application.
+ * Represents a question that a user gets asked in the quiz application.
  * 
  * @author born4new
  * 
@@ -12,9 +13,9 @@ import org.json.JSONObject;
 public class Question {
 	private long id;
 	private String questionContent;
-	private String[] answers;
+	private JSONArray answers;
 	private int solutionIndex;
-	private String[] tags;
+	private JSONArray tags;
 	private String owner;
 
 	/**
@@ -25,7 +26,7 @@ public class Question {
 	 *            : String that contains the text of the question.
 	 * @param answers
 	 *            : List of String objects that contains the possible answers.
-	 *            The list is 0-indexed, meaning that the first element’s index
+	 *            The list is 0-indexed, meaning that the first element's index
 	 *            is 0. The order of the answers is important, because the
 	 *            correct answer is identified by its index in the answers list.
 	 * @param solutionIndex
@@ -36,27 +37,34 @@ public class Question {
 	 * @param owner
 	 *            : Question owner.
 	 */
-	public Question(long id, String question, String[] answers,
-			int solutionIndex, String[] tags, String owner) {
-		this.id = id;
-		this.questionContent = question;
-		this.answers = answers;
-		this.solutionIndex = solutionIndex;
-		this.tags = tags;
-		this.owner = owner;
+	public Question(
+			long questionId,
+			String questionStmt,
+			JSONArray questionAnswers,
+			int questionSolutionIndex,
+			JSONArray questionTags,
+			String questionOwner) {
+		this.id = questionId;
+		this.questionContent = questionStmt;
+		this.answers = questionAnswers;
+		this.solutionIndex = questionSolutionIndex;
+		this.tags = questionTags;
+		this.owner = questionOwner;
 	}
 
 	public static Question createQuestionFromJSON(String questionJSON)
-			throws JSONException {
-
+		throws JSONException {
+		
 		JSONObject jsonParser = new JSONObject(questionJSON);
-		long id = Long.parseLong((String) jsonParser.get("id"));
-		String question = (String) jsonParser.get("question");
-		String[] answers = (String[]) jsonParser.get("answers");
-		int solutionIndex = Integer.parseInt((String) jsonParser
-				.get("solutionIndex"));
-		String[] tags = (String[]) jsonParser.get("tags");
-		String owner = (String) jsonParser.get("owner");
+		long id = jsonParser.getLong("id");
+		
+		
+		
+		String question = jsonParser.getString("question");
+		JSONArray answers = jsonParser.getJSONArray("answers");
+		int solutionIndex = jsonParser.getInt("solutionIndex");
+		JSONArray tags = jsonParser.getJSONArray("tags");
+		String owner = jsonParser.getString("owner");
 
 		return new Question(id, question, answers, solutionIndex, tags, owner);
 	}
@@ -69,7 +77,7 @@ public class Question {
 		return questionContent;
 	}
 
-	public String[] getAnswers() {
+	public JSONArray getAnswers() {
 		return answers;
 	}
 
@@ -77,11 +85,29 @@ public class Question {
 		return solutionIndex;
 	}
 
-	public String[] getTags() {
+	public JSONArray getTags() {
 		return tags;
+	}
+	
+	/**
+	 * Returns a single tag
+	 * @param index
+	 * @return The i-th tag of the Question object
+	 * @throws JSONException
+	 */
+	public String getTag(int index) throws JSONException {
+		return tags.getString(index);
 	}
 
 	public String getOwner() {
 		return owner;
+	}
+	
+
+	@Override
+	public String toString() {
+		return "Question [id=" + id + ", questionContent=" + questionContent
+				+ ", answers=" + answers.toString() + ", solutionIndex=" + solutionIndex
+				+ ", tags=" + tags.toString() + ", owner=" + owner + "]";
 	}
 }
