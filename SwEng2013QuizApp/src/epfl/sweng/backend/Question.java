@@ -74,7 +74,7 @@ public class Question {
 	}
 
 	public String getQuestionContent() {
-		return questionContent;
+		return "question:" + questionContent;
 	}
 
 	public JSONArray getAnswers() {
@@ -98,6 +98,8 @@ public class Question {
 	public String getTag(int index) throws JSONException {
 		return tags.getString(index);
 	}
+	
+
 
 	public String getOwner() {
 		return owner;
