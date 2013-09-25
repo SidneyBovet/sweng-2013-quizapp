@@ -3,7 +3,8 @@ package epfl.sweng;
 import android.os.Bundle;
 import android.app.Activity;
 import android.view.Menu;
-
+// TODO 
+//=> REMOVE ?
 public class SubmitQuizzActivity extends Activity {
 
 	@Override
@@ -16,6 +17,7 @@ public class SubmitQuizzActivity extends Activity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.submit_quizz, menu);
+		
 		return true;
 	}
 
