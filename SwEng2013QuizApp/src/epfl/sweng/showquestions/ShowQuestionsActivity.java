@@ -5,10 +5,15 @@ import java.util.concurrent.ExecutionException;
 import org.json.JSONException;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 import epfl.sweng.R;
 import epfl.sweng.backend.Question;
 
@@ -26,8 +31,8 @@ public class ShowQuestionsActivity extends Activity {
 
 		Question firstQuestion = getRandomQuestion();
 		
-		TextView textView = (TextView) findViewById(R.id.displayQuestion);
-	    textView.setText(firstQuestion.toString());
+		TextView textViewQuestion = (TextView) findViewById(R.id.displayQuestion);
+		textViewQuestion.setText(firstQuestion.getQuestionContent());
 		
 	}
 	
@@ -56,7 +61,15 @@ public class ShowQuestionsActivity extends Activity {
 		
 		return question;
 	}
-
+/**
+ * Go back to the state when the current activity was started
+ * @param view that was clicked (here the button send) 
+ */
+	public void displayAgainRandomQuestion(View view) {
+		Intent showQuestionsActivityIntent = new Intent(this, ShowQuestionsActivity.class);
+	    startActivity(showQuestionsActivityIntent);
+	}
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
