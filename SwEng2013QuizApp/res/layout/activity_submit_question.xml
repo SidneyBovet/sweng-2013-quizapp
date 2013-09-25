@@ -31,7 +31,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="submitQuizzAndRefreshEdit"
+        android:onClick="sendEditedQuestion"
         android:text="@string/submit_Edited_Question_Button" />
     
     
