@@ -7,7 +7,6 @@
     <string name="displayRandomQuestionButton">Show a random question.</string>
     <string name="submitQuestionButton">Submit a quiz question.</string>
     <string name="title_activity_submit_question">SubmitQuestionActivity</string>
-    <string name="hello_world">Hello world!</string>
     <string name="title_activity_display_question">DisplayQuestionActivity</string>
     <string name="write_question1">Type in the question’s text body.</string>
     <string name="answer_question1">Type in the answer.</string>
