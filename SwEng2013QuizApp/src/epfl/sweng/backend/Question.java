@@ -119,12 +119,11 @@ public class Question {
 	 * @throws JSONException
 	 */
 	public String getTagsToString() throws JSONException {
-		String tags = "tags: ";
+		String tagsTogether = "tags: ";
 		for (int i = 0; i < (tags.length() - 1); i++) {
-			System.out.println(getTagToString(i));
-			tags += getTagToString(i) + ", ";
+			tagsTogether += getTagToString(i) + ", ";
 		}
-		return tags;
+		return tagsTogether;
 	}
 
 	public String getOwner() {

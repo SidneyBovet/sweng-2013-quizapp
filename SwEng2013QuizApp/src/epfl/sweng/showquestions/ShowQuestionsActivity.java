@@ -36,7 +36,7 @@ public class ShowQuestionsActivity extends Activity {
 		
 		TextView textViewTag = (TextView) findViewById(R.id.displayTags);
 		try {
-			textViewTag.setText("tags: " + firstQuestion.getTagToString(0));
+			textViewTag.setText(firstQuestion.getTagsToString());
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
