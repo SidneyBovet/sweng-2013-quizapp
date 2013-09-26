@@ -33,7 +33,6 @@ import epfl.sweng.showquestions.ShowQuestionsActivity;
  * 
  */
 public class EditQuestionActivity extends Activity {
-	private final static String SERVER_URL = "https://sweng-quiz.appspot.com/quizquestions";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -51,11 +50,9 @@ public class EditQuestionActivity extends Activity {
 	}
 
 	public void sendEditedQuestion(View view) {
-		LinearLayout layout = (LinearLayout) findViewById(R.id.layoutEditQuestion);
-		HttpPost post = new HttpPost(SERVER_URL + "/quizquestions/");
 		Toast.makeText(this, "Quizz submitted to the server.",
 				Toast.LENGTH_SHORT).show();
-
+		LinearLayout layout = (LinearLayout) findViewById(R.id.layoutEditQuestion);
 		// this is done in order to get the content of the EditText elements in
 		// the XML
 		// WARNING : you MUST follow this structure when you write the EditText
@@ -69,59 +66,9 @@ public class EditQuestionActivity extends Activity {
 			}
 		}
 
-		generatePostentity(post, listElem);
-		ResponseHandler<String> handler = new BasicResponseHandler();
-		String response;
-		try {
-			response = SwengHttpClientFactory.getInstance().execute(post,
-					handler);
-		} catch (ClientProtocolException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		// TODO FUNCTION : CLEAR VIEW OF QUIZ EDITION
+		QuizEditExecution quizEditExcute = new QuizEditExecution();
+		quizEditExcute.execute(listElem);
 
-	}
-
-	private void generatePostentity(HttpPost post, ArrayList<String> listElem) {
-
-		int solutionIndex = 0; // THIS A DUMMY VALUE.
-		// We need to split the last element of the ArrayList in order to have
-		// the the tags separated
-		String questionText = "\"" + listElem.remove(0) + "\"";
-		String tagsInOneLine = listElem.remove(listElem.size() - 1);
-		String formattedTags = tagsInOneLine.replaceAll("\\W", "\", \"");
-		formattedTags = "\"" + formattedTags + "\"";
-		// now we need to get the questions and transform them for the JSon
-		// Format
-		String answerInOneLine = null;
-		for (int i = 0; i < listElem.size(); i++) {
-			if (listElem.size() == 1) {
-				answerInOneLine = listElem.get(i) + "\"";
-			} 
-			else {
-				answerInOneLine = listElem.get(i) + "\", \"";
-			}
-		}
-		answerInOneLine = "\"" + answerInOneLine + "\"";
-
-		String questionJsonFormat = " \"question\": " + questionText + ",";
-		String answersJsonFormat = " \"answers\": [ " + answerInOneLine + " ],";
-		String solutionIndexJsonFormat = " \"solutionIndex\": " + solutionIndex
-				+ ",";
-		String tagsJsonFormat = " \"tags\": [ " + formattedTags + " ]";
-		try {
-			post.setEntity(new StringEntity("{" + questionJsonFormat
-					+ answersJsonFormat + solutionIndexJsonFormat
-					+ tagsJsonFormat + " }"));
-
-			post.setHeader("Content-type", "application/json");
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 	}
 
 }
