@@ -51,7 +51,6 @@ public class EditQuestionActivity extends Activity {
 	}
 
 	public void sendEditedQuestion(View view) {
-		int a = 3;
 		LinearLayout layout = (LinearLayout) findViewById(R.id.layoutEditQuestion);
 		HttpPost post = new HttpPost(SERVER_URL + "/quizquestions/");
 		Toast.makeText(this, "Quizz submitted to the server.",
