@@ -27,23 +27,14 @@ public class QuizEditExecution extends
 		HttpPost post = new HttpPost(SERVER_URL + "/quizquestions/");
 
 		generatePostentity(post, listElem[0]);
-		ResponseHandler<String> handler = new BasicResponseHandler();
-		String response;
-		try {
-			response = SwengHttpClientFactory.getInstance().execute(post,
-					handler);
-		} catch (ClientProtocolException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+
 		// TODO FUNCTION : CLEAR VIEW OF QUIZ EDITION
 
 		return null;
 	}
 
 	private void generatePostentity(HttpPost post, ArrayList<String> listElem) {
-
+		// Get the values and format them
 		int solutionIndex = 0; // THIS A DUMMY VALUE.
 		// We need to split the last element of the ArrayList in order to have
 		// the the tags separated
@@ -53,13 +44,9 @@ public class QuizEditExecution extends
 		formattedTags = "\"" + formattedTags + "\"";
 		// now we need to get the questions and transform them for the JSon
 		// Format
-		String answerInOneLine = null;
-		for (int i = 0; i < listElem.size(); i++) {
-			if (listElem.size() == 1) {
-				answerInOneLine = listElem.get(i);
-			} else {
-				answerInOneLine = listElem.get(i) + "\", \"";
-			}
+		String answerInOneLine = listElem.get(0);
+		for (int i = 1; i < listElem.size(); i++) {
+			answerInOneLine = answerInOneLine + "\", \"" + listElem.get(i);
 		}
 		answerInOneLine = "\"" + answerInOneLine + "\"";
 
@@ -68,12 +55,22 @@ public class QuizEditExecution extends
 		String solutionIndexJsonFormat = " \"solutionIndex\": " + solutionIndex
 				+ ",";
 		String tagsJsonFormat = " \"tags\": [ " + formattedTags + " ]";
+
+		String teeeeestFinalString = "{" + questionJsonFormat
+				+ answersJsonFormat + solutionIndexJsonFormat + tagsJsonFormat
+				+ " }";
+		
+		//send the quiz
+		
+		String response;
+		ResponseHandler<String> handler = new BasicResponseHandler();
 		try {
 			post.setEntity(new StringEntity("{" + questionJsonFormat
 					+ answersJsonFormat + solutionIndexJsonFormat
 					+ tagsJsonFormat + " }"));
-
 			post.setHeader("Content-type", "application/json");
+			response = SwengHttpClientFactory.getInstance().execute(post,
+					handler);
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
