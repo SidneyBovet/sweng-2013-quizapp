@@ -29,24 +29,22 @@ public class ShowQuestionsActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_display_question);
 
-		Question firstQuestion = getRandomQuestion();
+		Question randomQuestion = getRandomQuestion();
 		
 		TextView textViewQuestion = (TextView) findViewById(R.id.displayQuestion);
-		textViewQuestion.setText(firstQuestion.getQuestionContent());
+		textViewQuestion.setText(randomQuestion.getQuestionContent());
 		
 		TextView textViewTag = (TextView) findViewById(R.id.displayTags);
 		try {
-			textViewTag.setText(firstQuestion.getTagsToString());
+			textViewTag.setText(randomQuestion.getTagsToString());
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
 		
-		String[] myStringArray = new String[]{"a","b","c", "d", "e"};
-		ArrayAdapter adapter = new ArrayAdapter<String>(this, 
-		        android.R.layout.simple_list_item_1, myStringArray);
-		ListView textViewAnswers = (ListView) findViewById(R.id.listView);
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, 
+		        android.R.layout.simple_list_item_1, randomQuestion.getAnswerToStringArray());
+		ListView textViewAnswers = (ListView) findViewById(R.id.displayAnswers);
 		textViewAnswers.setAdapter(adapter);
-		
 	}
 	
 	/**
@@ -58,24 +56,20 @@ public class ShowQuestionsActivity extends Activity {
 		DownloadJSONFromServer asyncTaskRandomQuestionGetter = new DownloadJSONFromServer();
 		asyncTaskRandomQuestionGetter.execute();
 		
-		Question question;
+		Question question = null;
 		try {
 			question = Question.createQuestionFromJSON(asyncTaskRandomQuestionGetter.get());
 		} catch (JSONException e) {
 			e.printStackTrace();
-			question = null;
 		} catch (InterruptedException e) {
 			e.printStackTrace();
-			question = null;
 		} catch (ExecutionException e) {
 			e.printStackTrace();
-			question = null;
 		}
-		
 		return question;
 	}
 /**
- * Go back to the state when the current activity was started
+ * Go back to the state when the current activity was started.
  * @param view that was clicked (here the button send) 
  */
 	public void displayAgainRandomQuestion(View view) {

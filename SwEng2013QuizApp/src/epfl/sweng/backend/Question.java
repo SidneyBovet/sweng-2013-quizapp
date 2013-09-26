@@ -78,16 +78,18 @@ public class Question {
 	}
 
 	/**
-	 * Get one JSON object after the other, transform then to string and put them
-	 * in an array list of string
+	 * Get one JSON object after the other, transform then to string and put
+	 * them in an array list of string
+	 * 
 	 * @return an array list of string containing the JSONObjects
 	 */
 	public ArrayList<String> getAnswerToStringArray() {
 		ArrayList<String> list = new ArrayList<String>();
-		list = null;
 		if (answers != null) {
 			for (int i = 0; i < answers.length(); i++) {
-				list.add(answers.optJSONObject(i).toString());
+				if (answers.optString(i) != null) {
+					list.add(answers.optString(i));
+				}
 			}
 		}
 		return list;
@@ -121,7 +123,10 @@ public class Question {
 	public String getTagsToString() throws JSONException {
 		String tagsTogether = "tags: ";
 		for (int i = 0; i < (tags.length() - 1); i++) {
-			tagsTogether += getTagToString(i) + ", ";
+			tagsTogether += getTagToString(i);
+			if(i < tags.length()-2){
+			tagsTogether += ", ";
+			}
 		}
 		return tagsTogether;
 	}
