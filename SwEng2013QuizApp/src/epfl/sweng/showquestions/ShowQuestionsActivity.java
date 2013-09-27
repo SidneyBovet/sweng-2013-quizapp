@@ -62,7 +62,7 @@ public class ShowQuestionsActivity extends Activity {
 		ListView displayAnswers = (ListView) findViewById(R.id.displayAnswers);
 		displayAnswers.setAdapter(adapter);
 		SelectionListener listener =
-				new SelectionListener(buttonNext, randomQuestion, this);
+				new SelectionListener(buttonNext, randomQuestion);
 		displayAnswers.setOnItemClickListener(listener);
 	}
 

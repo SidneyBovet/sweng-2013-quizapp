@@ -9,7 +9,6 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.Toast;
 import epfl.sweng.backend.Question;
 
 /**
@@ -20,9 +19,8 @@ import epfl.sweng.backend.Question;
  */
 public class SelectionListener implements OnItemClickListener {
 	
-	Activity parentActivity;
-	Button buttonNext;
-	Question concernedQuestion;
+	private Button buttonNext;
+	private Question concernedQuestion;
 	
 	/**
 	 * Creates a listener to react to user input within a {@link ShowQuestionsActivity}.
@@ -31,11 +29,9 @@ public class SelectionListener implements OnItemClickListener {
 	 */
 	public SelectionListener(
 			Button bNext,
-			Question question,
-			Activity parent) {
+			Question question) {
 		this.buttonNext = bNext;
 		this.concernedQuestion = question;
-		this.parentActivity = parent;
 	}
 	
 	@Override
@@ -50,21 +46,19 @@ public class SelectionListener implements OnItemClickListener {
 		 * 		position	The position of the view in the adapter
 		 * 		id			The row id of the item that was clicked
 		 * 
-		 * /!\	(I have no idea what this means, using *id*)
+		 * /!\	(I have no idea what this means, using *id*, as advised by TA)
 		 */
 		
 		ListView displayAnswers;
 		try {
 			displayAnswers = (ListView) parent;
 		} catch (RuntimeException e) {
-			System.err.println("Exception while casting parent.");
+			System.err.println("Exception while casting parent.\n"
+					+e.getStackTrace());
 			displayAnswers = null;
 		}
 		if (displayAnswers != null) {
-			Toast.makeText(
-					parentActivity,
-					"position="+position+" id="+id+". Yeeepey!!",
-					Toast.LENGTH_SHORT).show();
+			
 		}
 	}
 
