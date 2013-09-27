@@ -16,7 +16,7 @@
     
 	 <ListView 
         android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:id="@+id/displayAnswers"/>
  
     <TextView
@@ -27,7 +27,8 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/nextRandomQuestion" 
+        android:text="@string/nextRandomQuestion"
+        android:id="@+id/buttonNext"
         android:onClick="displayAgainRandomQuestion"/>
        		
 </LinearLayout>
