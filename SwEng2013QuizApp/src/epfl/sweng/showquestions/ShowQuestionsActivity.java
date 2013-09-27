@@ -57,7 +57,7 @@ public class ShowQuestionsActivity extends Activity {
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(
 				this, 
 		        android.R.layout.simple_list_item_1,
-		        randomQuestion.getAnswerToStringArray());
+		        randomQuestion.getAnswers());
 
 		ListView displayAnswers = (ListView) findViewById(R.id.displayAnswers);
 		displayAnswers.setAdapter(adapter);

@@ -1,11 +1,11 @@
 package epfl.sweng.backend;
 
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.os.AsyncTask;
 import epfl.sweng.showquestions.DownloadJSONFromServer;
 
 /**
@@ -17,9 +17,9 @@ import epfl.sweng.showquestions.DownloadJSONFromServer;
 public class Question {
 	private long id;
 	private String questionContent;
-	private JSONArray answers;
+	private ArrayList<String> answers;
 	private int solutionIndex;
-	private JSONArray tags;
+	private ArrayList<String> tags;
 	private String owner;
 
 	/**
@@ -42,8 +42,8 @@ public class Question {
 	 *            : Question owner.
 	 */
 	public Question(long questionId, String questionStmt,
-			JSONArray questionAnswers, int questionSolutionIndex,
-			JSONArray questionTags, String questionOwner) {
+			ArrayList<String> questionAnswers, int questionSolutionIndex,
+			ArrayList<String> questionTags, String questionOwner) {
 		this.id = questionId;
 		this.questionContent = questionStmt;
 		this.answers = questionAnswers;
@@ -54,15 +54,17 @@ public class Question {
 
 	/**
 	 * Processes a request in an {@link AsyncTask}.
+	 * 
 	 * @return The parsed question.
 	 */
 	public static Question getRandomQuestion() {
 		DownloadJSONFromServer asyncTaskRandomQuestionGetter = new DownloadJSONFromServer();
 		asyncTaskRandomQuestionGetter.execute();
-		
+
 		Question question = null;
 		try {
-			question = Question.createQuestionFromJSON(asyncTaskRandomQuestionGetter.get());
+			question = Question
+					.createQuestionFromJSON(asyncTaskRandomQuestionGetter.get());
 		} catch (JSONException e) {
 			e.printStackTrace();
 		} catch (InterruptedException e) {
@@ -72,7 +74,7 @@ public class Question {
 		}
 		return question;
 	}
-	
+
 	public static Question createQuestionFromJSON(String questionJSON)
 			throws JSONException {
 
@@ -80,26 +82,32 @@ public class Question {
 		long id = jsonParser.getLong("id");
 
 		String question = jsonParser.getString("question");
-		JSONArray answers = jsonParser.getJSONArray("answers");
-		
+		JSONArray answersJSON = jsonParser.getJSONArray("answers");
+		ArrayList<String> answers = getJSONArrayToStringArray(answersJSON);
+
 		int solutionIndex = jsonParser.getInt("solutionIndex");
-		JSONArray tags = jsonParser.getJSONArray("tags");
+		JSONArray tagsJSON = jsonParser.getJSONArray("tags");
+		ArrayList<String> tags = getJSONArrayToStringArray(tagsJSON);
 		String owner = jsonParser.getString("owner");
 
 		return new Question(id, question, answers, solutionIndex, tags, owner);
 	}
-	
 
-	public long getId() {
-		return id;
-	}
+	public JSONObject createJSONFromQuestion() {
+		JSONObject jsonObject = new JSONObject();
+		try {
+			jsonObject.put("id", id);
+			jsonObject.put("question", questionContent);
+			jsonObject.put("answers", answers);
+			jsonObject.put("solutionIndex", solutionIndex);
+			jsonObject.put("tags", tags);
+			jsonObject.put("owner", owner);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
-	public String getQuestionContent() {
-		return "question:" + questionContent;
-	}
-
-	public JSONArray getAnswers() {
-		return answers;
+		return jsonObject;
 	}
 
 	/**
@@ -108,35 +116,17 @@ public class Question {
 	 * 
 	 * @return an array list of string containing the JSONObjects
 	 */
-	public ArrayList<String> getAnswerToStringArray() {
+	private static ArrayList<String> getJSONArrayToStringArray(
+			JSONArray arrayToChange) {
 		ArrayList<String> list = new ArrayList<String>();
-		if (answers != null) {
-			for (int i = 0; i < answers.length(); i++) {
-				if (answers.optString(i) != null) {
-					list.add(answers.optString(i));
+		if (arrayToChange != null) {
+			for (int i = 0; i < arrayToChange.length(); i++) {
+				if (arrayToChange.optString(i) != null) {
+					list.add(arrayToChange.optString(i));
 				}
 			}
 		}
 		return list;
-	}
-
-	public int getSolutionIndex() {
-		return solutionIndex;
-	}
-
-	public JSONArray getTags() {
-		return tags;
-	}
-
-	/**
-	 * Returns a single tag
-	 * 
-	 * @param index
-	 * @return The i-th tag of the Question object
-	 * @throws JSONException
-	 */
-	public String getTagToString(int index) throws JSONException {
-		return tags.getString(index);
 	}
 
 	/**
@@ -147,10 +137,10 @@ public class Question {
 	 */
 	public String getTagsToString() throws JSONException {
 		String tagsTogether = "tags: ";
-		for (int i = 0; i < (tags.length()); i++) {
-			tagsTogether += getTagToString(i);
-			if(i < tags.length()-1){
-			tagsTogether += ", ";
+		for (int i = 0; i < (tags.size()); i++) {
+			tagsTogether += tags.get(i);
+			if (i < tags.size() - 1) {
+				tagsTogether += ", ";
 			}
 		}
 		return tagsTogether;
@@ -160,6 +150,26 @@ public class Question {
 		return owner;
 	}
 
+	public int getSolutionIndex() {
+		return solutionIndex;
+	}
+
+	public ArrayList<String> getTags() {
+		return tags;
+	}
+
+	public long getId() {
+		return id;
+	}
+
+	public String getQuestionContent() {
+		return "question:" + questionContent;
+	}
+
+	public ArrayList<String> getAnswers() {
+		return answers;
+	}
+
 	@Override
 	public String toString() {
 		return "Question [id=" + id + ", questionContent=" + questionContent
@@ -167,5 +177,5 @@ public class Question {
 				+ solutionIndex + ", tags=" + tags.toString() + ", owner="
 				+ owner + "]";
 	}
-	
+
 }
