@@ -12,11 +12,17 @@ import org.apache.http.impl.client.BasicResponseHandler;
 
 import epfl.sweng.R;
 import epfl.sweng.servercomm.SwengHttpClientFactory;
+import epfl.sweng.testing.TestingTransactions;
+import epfl.sweng.testing.TestingTransactions.TTChecks;
 
 import android.os.AsyncTask;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-
+/**
+ * 
+ * @author Merok
+ *
+ */
 public class QuizEditExecution extends
 		AsyncTask<ArrayList<String>, Void, String> {
 	private final static String SERVER_URL = "https://sweng-quiz.appspot.com";
@@ -25,10 +31,8 @@ public class QuizEditExecution extends
 	protected String doInBackground(ArrayList<String>... listElem) {
 
 		HttpPost post = new HttpPost(SERVER_URL + "/quizquestions/");
-
+		
 		generatePostentity(post, listElem[0]);
-
-		// TODO FUNCTION : CLEAR VIEW OF QUIZ EDITION
 
 		return null;
 	}
@@ -55,13 +59,8 @@ public class QuizEditExecution extends
 		String solutionIndexJsonFormat = " \"solutionIndex\": " + solutionIndex
 				+ ",";
 		String tagsJsonFormat = " \"tags\": [ " + formattedTags + " ]";
-
-		String teeeeestFinalString = "{" + questionJsonFormat
-				+ answersJsonFormat + solutionIndexJsonFormat + tagsJsonFormat
-				+ " }";
 		
 		//send the quiz
-		
 		String response;
 		ResponseHandler<String> handler = new BasicResponseHandler();
 		try {
@@ -71,6 +70,7 @@ public class QuizEditExecution extends
 			post.setHeader("Content-type", "application/json");
 			response = SwengHttpClientFactory.getInstance().execute(post,
 					handler);
+			TestingTransactions.check(TTChecks.NEW_QUESTION_SUBMITTED);
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		} catch (IOException e) {

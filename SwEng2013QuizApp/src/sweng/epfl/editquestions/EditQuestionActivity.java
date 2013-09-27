@@ -24,6 +24,8 @@ import epfl.sweng.R;
 import epfl.sweng.SubmitQuizzActivity;
 import epfl.sweng.servercomm.SwengHttpClientFactory;
 import epfl.sweng.showquestions.ShowQuestionsActivity;
+import epfl.sweng.testing.TestingTransactions;
+import epfl.sweng.testing.TestingTransactions.TTChecks;
 
 /**
  * The user can now enter a question that will be saved on a server.
@@ -38,7 +40,7 @@ public class EditQuestionActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_submit_question);
-
+		TestingTransactions.check(TTChecks.EDIT_QUESTIONS_SHOWN);
 	}
 
 	@Override
@@ -69,6 +71,23 @@ public class EditQuestionActivity extends Activity {
 		QuizEditExecution quizEditExcute = new QuizEditExecution();
 		quizEditExcute.execute(listElem);
 
+		//FUNCTION : CLEAR VIEW OF QUIZ EDITION
+		resetEditQuestionLayout(layout);
+		TestingTransactions.check(TTChecks.EDIT_QUESTIONS_SHOWN);
+	}
+
+	private void resetEditQuestionLayout(LinearLayout mainLayout) {
+		EditText editTextToFocus = null;
+		for (int i = 0; i < mainLayout.getChildCount(); i++) {
+			if (mainLayout.getChildAt(i) instanceof EditText) {
+				EditText currentEditText = (EditText) mainLayout.getChildAt(i);
+				currentEditText.setText("");
+				if(i == 0){
+				editTextToFocus = currentEditText;	
+				}
+			}
+		}
+		editTextToFocus.requestFocus();
 	}
 
 }
