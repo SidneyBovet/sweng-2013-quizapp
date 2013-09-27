@@ -68,8 +68,9 @@ public class TestingTransactions {
 			synchronized (tts) {
 				if (tts.state != TTState.IDLE) {
 					throw new TestingTransactionsError(
-							"Attempt to run transaction '" + t +
-							"', but another transaction is running.");
+							"Attempt to run transaction '"
+							+ t
+							+"', but another transaction is running.");
 				}
 				tts.startTime = System.currentTimeMillis();
 				Log.d(TAG, String.format("Starting transaction %s", t));
@@ -91,8 +92,9 @@ public class TestingTransactions {
 				// simultaneously, and set the state back to IDLE.
 				if (tts.state != TTState.INITIATED && tts.state != TTState.COMPLETED) {
 					throw new TestingTransactionsError(
-							"Attempt to wait for transaction '" + t +
-							"', but it was aborted.");
+							"Attempt to wait for transaction '"
+							+ t
+							+ "', but it was aborted.");
 				}
 				
 				// 2) wait for the transaction to complete (i.e., to call check)
