@@ -122,9 +122,9 @@ public class Question {
 	 */
 	public String getTagsToString() throws JSONException {
 		String tagsTogether = "tags: ";
-		for (int i = 0; i < (tags.length() - 1); i++) {
+		for (int i = 0; i < (tags.length()); i++) {
 			tagsTogether += getTagToString(i);
-			if(i < tags.length()-2){
+			if(i < tags.length()-1){
 			tagsTogether += ", ";
 			}
 		}

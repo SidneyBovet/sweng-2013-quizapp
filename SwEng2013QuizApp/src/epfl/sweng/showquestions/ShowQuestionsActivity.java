@@ -54,7 +54,7 @@ public class ShowQuestionsActivity extends Activity {
 	private Question getRandomQuestion() {
 
 		DownloadJSONFromServer asyncTaskRandomQuestionGetter = new DownloadJSONFromServer();
-		asyncTaskRandomQuestionGetter.execute();
+		asyncTaskRandomQuestionGetter.execute("https://sweng-quiz.appspot.com/quizquestions/random");
 		
 		Question question = null;
 		try {

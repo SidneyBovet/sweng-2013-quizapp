@@ -10,11 +10,11 @@ import org.apache.http.impl.client.BasicResponseHandler;
 import android.os.AsyncTask;
 import epfl.sweng.servercomm.SwengHttpClientFactory;
 
-public class DownloadJSONFromServer extends AsyncTask<Void, Void, String> {
+public class DownloadJSONFromServer extends AsyncTask<String, Void, String> {
 
 	@Override
-	protected String doInBackground(Void... params) {
-		HttpGet firstRandom = new HttpGet("https://sweng-quiz.appspot.com/quizquestions/random");
+	protected String doInBackground(String... url) {
+		HttpGet firstRandom = new HttpGet(url[0]);
 		ResponseHandler<String> firstHandler = new BasicResponseHandler();
 		String randomQuestionJSON = "";
 		try {
