@@ -6,6 +6,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import sweng.epfl.editquestions.QuizEditExecution;
+
 import epfl.sweng.showquestions.DownloadJSONFromServer;
 
 /**
@@ -52,6 +54,14 @@ public class Question {
 		this.owner = questionOwner;
 	}
 
+	public Question(String questionStmt, ArrayList<String> questionAnswers,
+			int questionSolutionIndex, ArrayList<String> questionTags) {
+		this.questionContent = questionStmt;
+		this.answers = questionAnswers;
+		this.solutionIndex = questionSolutionIndex;
+		this.tags = questionTags;
+	}
+
 	/**
 	 * Processes a request in an {@link AsyncTask}.
 	 * 
@@ -65,8 +75,6 @@ public class Question {
 		try {
 			question = Question
 					.createQuestionFromJSON(asyncTaskRandomQuestionGetter.get());
-		} catch (JSONException e) {
-			e.printStackTrace();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		} catch (ExecutionException e) {
@@ -75,33 +83,81 @@ public class Question {
 		return question;
 	}
 
-	public static Question createQuestionFromJSON(String questionJSON)
-			throws JSONException {
+	public static void submitRandomQuestion(ArrayList<String> listInputGUI) {
+		Question questionToSubmit = createQuestionFromList(listInputGUI);
+		JSONObject jsonToSubmit = createJSONFromQuestion(questionToSubmit);
+		QuizEditExecution quizEditExecute = new QuizEditExecution();
+		// TODO FINIR SUBMIT
+//		quizEditExcute.execute(jsonToSubmit);
 
-		JSONObject jsonParser = new JSONObject(questionJSON);
-		long id = jsonParser.getLong("id");
-
-		String question = jsonParser.getString("question");
-		JSONArray answersJSON = jsonParser.getJSONArray("answers");
-		ArrayList<String> answers = getJSONArrayToStringArray(answersJSON);
-
-		int solutionIndex = jsonParser.getInt("solutionIndex");
-		JSONArray tagsJSON = jsonParser.getJSONArray("tags");
-		ArrayList<String> tags = getJSONArrayToStringArray(tagsJSON);
-		String owner = jsonParser.getString("owner");
-
-		return new Question(id, question, answers, solutionIndex, tags, owner);
 	}
 
-	public JSONObject createJSONFromQuestion() {
+	public static Question createQuestionFromJSON(String questionJSON) {
+		long id = -1;
+		String question = null;
+		JSONObject jsonParser = null;
+		JSONArray answersJSON = null;
+		ArrayList<String> answers = null;
+		int solutionIndex = -1;
+		JSONArray tagsJSON = null;
+		ArrayList<String> tags = null;
+		String owner = null;
+		try {
+			jsonParser = new JSONObject(questionJSON);
+			id = jsonParser.getLong("id");
+			question = jsonParser.getString("question");
+			answersJSON = jsonParser.getJSONArray("answers");
+			answers = getJSONArrayToStringArray(answersJSON);
+			solutionIndex = jsonParser.getInt("solutionIndex");
+			tagsJSON = jsonParser.getJSONArray("tags");
+			tags = getJSONArrayToStringArray(tagsJSON);
+			owner = jsonParser.getString("owner");
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		Question questionFromUser;
+		if ((id == -1) || (owner == null)) {
+			questionFromUser = new Question(question, answers, solutionIndex,
+					tags);
+		} else {
+			questionFromUser = new Question(id, question, answers,
+					solutionIndex, tags, owner);
+		}
+
+		return questionFromUser;
+	}
+
+	public static Question createQuestionFromList(ArrayList<String> listElm) {
+		Question questionFromUser;
+		int dummysolutionIndex = 1;
+		String questionText = listElm.remove(0);
+		String tagsInOneLine = listElm.remove(listElm.size() - 1);
+		String formattedTags = tagsInOneLine.replaceAll("\\W", " ");
+		String[] tagsInArray = formattedTags.split(" ");
+		ArrayList<String> tagStrings = new ArrayList<String>();
+		for (int i = 0; i < tagsInArray.length; i++) {
+			tagStrings.add(tagsInArray[i]);
+		}
+
+		ArrayList<String> answers = new ArrayList<String>();
+		for (int i = 0; i < listElm.size(); i++) {
+			answers.add(listElm.get(i));
+		}
+
+		questionFromUser = new Question(questionText, answers,
+				dummysolutionIndex, tagStrings);
+		return questionFromUser;
+	}
+
+	public static JSONObject createJSONFromQuestion(Question question) {
 		JSONObject jsonObject = new JSONObject();
 		try {
-			jsonObject.put("id", id);
-			jsonObject.put("question", questionContent);
-			jsonObject.put("answers", answers);
-			jsonObject.put("solutionIndex", solutionIndex);
-			jsonObject.put("tags", tags);
-			jsonObject.put("owner", owner);
+			jsonObject.put("id", question.id);
+			jsonObject.put("question", question.questionContent);
+			jsonObject.put("answers", question.answers);
+			jsonObject.put("solutionIndex", question.solutionIndex);
+			jsonObject.put("tags", question.tags);
+			jsonObject.put("owner", question.owner);
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

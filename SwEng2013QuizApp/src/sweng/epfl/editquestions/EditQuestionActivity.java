@@ -22,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import epfl.sweng.R;
 import epfl.sweng.SubmitQuizzActivity;
+import epfl.sweng.backend.Question;
 import epfl.sweng.servercomm.SwengHttpClientFactory;
 import epfl.sweng.showquestions.ShowQuestionsActivity;
 import epfl.sweng.testing.TestingTransactions;
@@ -55,24 +56,13 @@ public class EditQuestionActivity extends Activity {
 		Toast.makeText(this, "Quizz submitted to the server.",
 				Toast.LENGTH_SHORT).show();
 		LinearLayout layout = (LinearLayout) findViewById(R.id.layoutEditQuestion);
-		// this is done in order to get the content of the EditText elements in
-		// the XML
-		// WARNING : you MUST follow this structure when you write the EditText
-		// elements : Question1 => Answer1 => ... => indexOfAnswer => tags
-		ArrayList<String> listElem = new ArrayList<String>();
-		int childCountInlayout = layout.getChildCount();
-		for (int i = 0; i < childCountInlayout; i++) {
-			if (layout.getChildAt(i) instanceof EditText) {
-				EditText currentEditText = (EditText) layout.getChildAt(i);
-				String currentArgument = currentEditText.getText().toString();
-				listElem.add(currentArgument);
-			}
-		}
+		ArrayList<String> listInputGUI = createListFromUserGUI(layout);
 		
-		QuizEditExecution quizEditExcute = new QuizEditExecution();
-		quizEditExcute.execute(listElem);
+		
+		Question.submitRandomQuestion(listInputGUI);
+		
 
-		//FUNCTION : CLEAR VIEW OF QUIZ EDITION
+		// FUNCTION : CLEAR VIEW OF QUIZ EDITION
 		resetEditQuestionLayout(layout);
 		TestingTransactions.check(TTChecks.EDIT_QUESTIONS_SHOWN);
 	}
@@ -83,12 +73,31 @@ public class EditQuestionActivity extends Activity {
 			if (mainLayout.getChildAt(i) instanceof EditText) {
 				EditText currentEditText = (EditText) mainLayout.getChildAt(i);
 				currentEditText.setText("");
-				if(i == 0){
-				editTextToFocus = currentEditText;	
+				if (i == 0) {
+					editTextToFocus = currentEditText;
 				}
 			}
 		}
 		editTextToFocus.requestFocus();
 	}
+
+	private ArrayList<String> createListFromUserGUI(LinearLayout layout) {
+		// this is done in order to get the content of the EditText elements in
+		// the XML
+		// WARNING : you MUST follow this structure when you write the EditText
+		// elements : Question1 => Answer1 => ... => indexOfAnswer => tags
+		ArrayList<String> listInputGUI = new ArrayList<String>();
+		int childCountInlayout = layout.getChildCount();
+		for (int i = 0; i < childCountInlayout; i++) {
+			if (layout.getChildAt(i) instanceof EditText) {
+				EditText currentEditText = (EditText) layout.getChildAt(i);
+				String currentArgument = currentEditText.getText().toString();
+				listInputGUI.add(currentArgument);
+			}
+		}
+		return listInputGUI;
+	}
+
+
 
 }
