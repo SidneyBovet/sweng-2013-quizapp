@@ -2,6 +2,7 @@ package epfl.sweng.backend;
 
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -58,8 +59,10 @@ public class Question {
 	 * @return The parsed question.
 	 */
 	public static Question getRandomQuestion() {
-		DownloadJSONFromServer asyncTaskRandomQuestionGetter = new DownloadJSONFromServer();
-		asyncTaskRandomQuestionGetter.execute();
+		DownloadJSONFromServer asyncTaskRandomQuestionGetter =
+				new DownloadJSONFromServer();
+		String url = "https://sweng-quiz.appspot.com/quizquestions/random"; 
+		asyncTaskRandomQuestionGetter.execute(url);
 		
 		Question question = null;
 		try {
@@ -137,9 +140,9 @@ public class Question {
 	 */
 	public String getTagsToString() throws JSONException {
 		String tagsTogether = "tags: ";
-		for (int i = 0; i < (tags.length()); i++) {
-			tagsTogether += getTagToString(i);
-			if(i < tags.length()-1){
+		for (int i = 0; i < tags.size(); i++) {
+			tagsTogether += tags.get(i);
+			if (i < tags.size()-1) {
 				tagsTogether += ", ";
 			}
 		}

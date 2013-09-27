@@ -11,7 +11,7 @@ import android.os.AsyncTask;
 import epfl.sweng.servercomm.SwengHttpClientFactory;
 
 public class DownloadJSONFromServer extends AsyncTask<String, Void, String> {
-
+	
 	@Override
 	protected String doInBackground(String... url) {
 		HttpGet firstRandom = new HttpGet(url[0]);
