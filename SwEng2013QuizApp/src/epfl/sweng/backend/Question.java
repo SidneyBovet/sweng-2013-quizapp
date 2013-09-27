@@ -60,7 +60,7 @@ public class Question {
 	public static Question getRandomQuestion() {
 		DownloadJSONFromServer asyncTaskRandomQuestionGetter = new DownloadJSONFromServer();
 		asyncTaskRandomQuestionGetter.execute();
-
+		
 		Question question = null;
 		try {
 			question = Question
@@ -76,7 +76,7 @@ public class Question {
 	}
 
 	public static Question createQuestionFromJSON(String questionJSON)
-			throws JSONException {
+		throws JSONException {
 
 		JSONObject jsonParser = new JSONObject(questionJSON);
 		long id = jsonParser.getLong("id");
@@ -137,9 +137,9 @@ public class Question {
 	 */
 	public String getTagsToString() throws JSONException {
 		String tagsTogether = "tags: ";
-		for (int i = 0; i < (tags.size()); i++) {
-			tagsTogether += tags.get(i);
-			if (i < tags.size() - 1) {
+		for (int i = 0; i < (tags.length()); i++) {
+			tagsTogether += getTagToString(i);
+			if(i < tags.length()-1){
 				tagsTogether += ", ";
 			}
 		}
