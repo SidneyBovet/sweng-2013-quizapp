@@ -60,14 +60,15 @@ public class EditQuestionActivity extends Activity {
 		// WARNING : you MUST follow this structure when you write the EditText
 		// elements : Question1 => Answer1 => ... => indexOfAnswer => tags
 		ArrayList<String> listElem = new ArrayList<String>();
-		for (int i = 0; i < layout.getChildCount(); i++) {
+		int childCountInlayout = layout.getChildCount();
+		for (int i = 0; i < childCountInlayout; i++) {
 			if (layout.getChildAt(i) instanceof EditText) {
 				EditText currentEditText = (EditText) layout.getChildAt(i);
 				String currentArgument = currentEditText.getText().toString();
 				listElem.add(currentArgument);
 			}
 		}
-
+		
 		QuizEditExecution quizEditExcute = new QuizEditExecution();
 		quizEditExcute.execute(listElem);
 

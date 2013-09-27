@@ -61,14 +61,13 @@ public class QuizEditExecution extends
 		String tagsJsonFormat = " \"tags\": [ " + formattedTags + " ]";
 		
 		//send the quiz
-		String response;
 		ResponseHandler<String> handler = new BasicResponseHandler();
 		try {
 			post.setEntity(new StringEntity("{" + questionJsonFormat
 					+ answersJsonFormat + solutionIndexJsonFormat
 					+ tagsJsonFormat + " }"));
 			post.setHeader("Content-type", "application/json");
-			response = SwengHttpClientFactory.getInstance().execute(post,
+			SwengHttpClientFactory.getInstance().execute(post,
 					handler);
 			TestingTransactions.check(TTChecks.NEW_QUESTION_SUBMITTED);
 		} catch (UnsupportedEncodingException e) {

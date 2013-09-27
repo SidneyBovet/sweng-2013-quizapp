@@ -1,5 +1,7 @@
 package epfl.sweng.backend;
 
+import java.util.ArrayList;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -62,12 +64,14 @@ public class Question {
 		
 		String question = jsonParser.getString("question");
 		JSONArray answers = jsonParser.getJSONArray("answers");
+		
 		int solutionIndex = jsonParser.getInt("solutionIndex");
 		JSONArray tags = jsonParser.getJSONArray("tags");
 		String owner = jsonParser.getString("owner");
 
 		return new Question(id, question, answers, solutionIndex, tags, owner);
 	}
+	
 
 	public long getId() {
 		return id;
