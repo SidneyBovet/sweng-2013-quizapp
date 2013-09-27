@@ -10,6 +10,8 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import epfl.sweng.backend.Question;
+import epfl.sweng.testing.TestingTransactions;
+import epfl.sweng.testing.TestingTransactions.TTChecks;
 
 /**
  * @author Sidney
@@ -48,7 +50,9 @@ public class SelectionListener implements OnItemClickListener {
 		 * 		position	The position of the view in the adapter
 		 * 		id			The row id of the item that was clicked
 		 * 
-		 * /!\	(I have no idea what this means, using *id*, as advised by TA)
+		 * (I have no idea what this means, keep using *id* as advised by TA)
+		 * 
+		 * 									Sidney
 		 */
 		if (!alreadyAnswered) {
 			alreadyAnswered = true;
@@ -74,6 +78,9 @@ public class SelectionListener implements OnItemClickListener {
 				}
 			}
 		}
+		
+		// Notifying the testing interface
+		TestingTransactions.check(TTChecks.ANSWER_SELECTED);
 	}
 
 }

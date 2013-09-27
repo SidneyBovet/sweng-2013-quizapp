@@ -31,6 +31,7 @@
         </activity>
         <activity
             android:name="epfl.sweng.showquestions.ShowQuestionsActivity"
+            android:screenOrientation="vertical"
             android:label="@string/title_activity_display_question" >
         </activity>
         <activity

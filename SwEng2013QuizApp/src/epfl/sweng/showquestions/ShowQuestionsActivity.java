@@ -12,6 +12,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import epfl.sweng.R;
 import epfl.sweng.backend.Question;
+import epfl.sweng.testing.TestingTransactions;
+import epfl.sweng.testing.TestingTransactions.TTChecks;
 
 /***
  * Activity used to display a random question to the user.
@@ -25,6 +27,8 @@ public class ShowQuestionsActivity extends Activity {
 		setContentView(R.layout.activity_display_question);
 		
 		setDisplayView();
+		
+		TestingTransactions.check(TTChecks.QUESTION_SHOWN);
 	}
 
 	private void setDisplayView() {
