@@ -5,6 +5,7 @@ import java.util.concurrent.ExecutionException;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.json.JSONStringer;
 
 import sweng.epfl.editquestions.QuizEditExecution;
 
@@ -86,14 +87,6 @@ public class Question {
 	public static void submitRandomQuestion(ArrayList<String> listInputGUI) {
 		Question questionToSubmit = createQuestionFromList(listInputGUI);
 		JSONObject jsonToSubmit = createJSONFromQuestion(questionToSubmit);
-		String test = "faux";
-		try {
-			 test = jsonToSubmit.get("question").toString();
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		String a = test;
 		QuizEditExecution quizEditExecute = new QuizEditExecution();
 		// TODO FINIR SUBMIT
 		quizEditExecute.execute(jsonToSubmit);
@@ -138,22 +131,18 @@ public class Question {
 	public static Question createQuestionFromList(ArrayList<String> listElm) {
 		Question questionFromUser;
 		int dummysolutionIndex = 1;
-		String questionText = "\"" + listElm.remove(0) + "\"";
+		String questionText = listElm.remove(0);
 		String tagsInOneLine = listElm.remove(listElm.size() - 1);
 		String formattedTags = tagsInOneLine.replaceAll("\\W", " ");
 		String[] tagsInArray = formattedTags.split(" ");
 		ArrayList<String> tagStrings = new ArrayList<String>();
-		String temporaryTagsFormatted = null;
 		for (int i = 0; i < tagsInArray.length; i++) {
-			temporaryTagsFormatted = "\"" + tagsInArray[i] + "\"";
-			tagStrings.add(temporaryTagsFormatted);
+			tagStrings.add(tagsInArray[i]);
 		}
 
 		ArrayList<String> answers = new ArrayList<String>();
-		String temporaryAnswerFormatted = null;
 		for (int i = 0; i < listElm.size(); i++) {
-			temporaryAnswerFormatted = "\"" + listElm.get(i) + "\"";
-			answers.add(temporaryAnswerFormatted);
+			answers.add(listElm.get(i));
 		}
 		// XXX WHY DO THIS CREAT A QUESTION OBJECT WITH ID AND OWNER
 		questionFromUser = new Question(questionText, answers,
@@ -167,10 +156,13 @@ public class Question {
 		try {
 			// XXX ! HERE I HAVE REMOVED ID AND OWNER SINCE THEY MUSTE BE IN THE
 			// JSON OBJECT WHEN WE SEND AN EDITED QUESTION !
+			JSONArray answersJSONArray = new JSONArray(question.answers);
+			JSONArray tafsJSONArray = new JSONArray(question.tags);
 			jsonObject.put("question", question.questionContent);
-			jsonObject.put("answers", question.answers);
+			jsonObject.put("answers", answersJSONArray);
 			jsonObject.put("solutionIndex", question.solutionIndex);
-			jsonObject.put("tags", question.tags);
+			jsonObject.put("tags", tafsJSONArray);
+
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
