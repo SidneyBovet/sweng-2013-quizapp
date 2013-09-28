@@ -86,9 +86,17 @@ public class Question {
 	public static void submitRandomQuestion(ArrayList<String> listInputGUI) {
 		Question questionToSubmit = createQuestionFromList(listInputGUI);
 		JSONObject jsonToSubmit = createJSONFromQuestion(questionToSubmit);
+		String test = "faux";
+		try {
+			 test = jsonToSubmit.get("question").toString();
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		String a = test;
 		QuizEditExecution quizEditExecute = new QuizEditExecution();
 		// TODO FINIR SUBMIT
-//		quizEditExcute.execute(jsonToSubmit);
+		quizEditExecute.execute(jsonToSubmit);
 
 	}
 
@@ -130,34 +138,39 @@ public class Question {
 	public static Question createQuestionFromList(ArrayList<String> listElm) {
 		Question questionFromUser;
 		int dummysolutionIndex = 1;
-		String questionText = listElm.remove(0);
+		String questionText = "\"" + listElm.remove(0) + "\"";
 		String tagsInOneLine = listElm.remove(listElm.size() - 1);
 		String formattedTags = tagsInOneLine.replaceAll("\\W", " ");
 		String[] tagsInArray = formattedTags.split(" ");
 		ArrayList<String> tagStrings = new ArrayList<String>();
+		String temporaryTagsFormatted = null;
 		for (int i = 0; i < tagsInArray.length; i++) {
-			tagStrings.add(tagsInArray[i]);
+			temporaryTagsFormatted = "\"" + tagsInArray[i] + "\"";
+			tagStrings.add(temporaryTagsFormatted);
 		}
 
 		ArrayList<String> answers = new ArrayList<String>();
+		String temporaryAnswerFormatted = null;
 		for (int i = 0; i < listElm.size(); i++) {
-			answers.add(listElm.get(i));
+			temporaryAnswerFormatted = "\"" + listElm.get(i) + "\"";
+			answers.add(temporaryAnswerFormatted);
 		}
-
+		// XXX WHY DO THIS CREAT A QUESTION OBJECT WITH ID AND OWNER
 		questionFromUser = new Question(questionText, answers,
 				dummysolutionIndex, tagStrings);
+
 		return questionFromUser;
 	}
 
 	public static JSONObject createJSONFromQuestion(Question question) {
 		JSONObject jsonObject = new JSONObject();
 		try {
-			jsonObject.put("id", question.id);
+			// XXX ! HERE I HAVE REMOVED ID AND OWNER SINCE THEY MUSTE BE IN THE
+			// JSON OBJECT WHEN WE SEND AN EDITED QUESTION !
 			jsonObject.put("question", question.questionContent);
 			jsonObject.put("answers", question.answers);
 			jsonObject.put("solutionIndex", question.solutionIndex);
 			jsonObject.put("tags", question.tags);
-			jsonObject.put("owner", question.owner);
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

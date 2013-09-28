@@ -57,10 +57,8 @@ public class EditQuestionActivity extends Activity {
 				Toast.LENGTH_SHORT).show();
 		LinearLayout layout = (LinearLayout) findViewById(R.id.layoutEditQuestion);
 		ArrayList<String> listInputGUI = createListFromUserGUI(layout);
-		
-		
+
 		Question.submitRandomQuestion(listInputGUI);
-		
 
 		// FUNCTION : CLEAR VIEW OF QUIZ EDITION
 		resetEditQuestionLayout(layout);
@@ -97,7 +95,5 @@ public class EditQuestionActivity extends Activity {
 		}
 		return listInputGUI;
 	}
-
-
 
 }
