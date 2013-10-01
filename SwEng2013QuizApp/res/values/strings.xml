@@ -7,8 +7,16 @@
     <string name="displayRandomQuestionButton">Show a random question.</string>
     <string name="submitQuestionButton">Submit a quiz question.</string>
     <string name="title_activity_submit_question">SubmitQuestionActivity</string>
-    <string name="hello_world">Hello world!</string>
     <string name="title_activity_display_question">DisplayQuestionActivity</string>
     <string name="nextRandomQuestion">next</string>
+    <string name="write_question1">Type in the question’s text body.</string>
+    <string name="answer_question1">Type in the answer.</string>
+    <string name="answer_question2">Type in the answer</string>
+    <string name="tags_question">Type in the question’s tags.</string>
+    <string name="submit_Edited_Question_Button">Submit.</string>
+    <string name="title_activity_submit_quizz">SubmitQuizzActivity</string>
+    <string name="hello_world">Hello world!</string>
+
+
 
 </resources>

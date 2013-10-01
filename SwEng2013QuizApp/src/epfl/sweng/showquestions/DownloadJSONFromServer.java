@@ -11,18 +11,20 @@ import android.os.AsyncTask;
 import epfl.sweng.servercomm.SwengHttpClientFactory;
 
 public class DownloadJSONFromServer extends AsyncTask<String, Void, String> {
-
+	
 	@Override
 	protected String doInBackground(String... url) {
-		HttpGet firstRandom = new HttpGet(url[0]);
-		ResponseHandler<String> firstHandler = new BasicResponseHandler();
 		String randomQuestionJSON = "";
-		try {
-			randomQuestionJSON = SwengHttpClientFactory.getInstance().execute(firstRandom, firstHandler);
-		} catch (ClientProtocolException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
+		if (url.length != 0 && url != null) {
+			HttpGet firstRandom = new HttpGet(url[0]);
+			ResponseHandler<String> firstHandler = new BasicResponseHandler();
+			try {
+				randomQuestionJSON = SwengHttpClientFactory.getInstance().execute(firstRandom, firstHandler);
+			} catch (ClientProtocolException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 		return randomQuestionJSON;
 	}
