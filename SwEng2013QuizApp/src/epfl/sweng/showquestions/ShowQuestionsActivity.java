@@ -12,6 +12,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import epfl.sweng.R;
 import epfl.sweng.backend.Question;
+import epfl.sweng.servercomm.ServerInteractions;
 import epfl.sweng.testing.TestingTransactions;
 import epfl.sweng.testing.TestingTransactions.TTChecks;
 
@@ -41,7 +42,7 @@ public class ShowQuestionsActivity extends Activity {
 		buttonNext.setEnabled(false);
 
 		// fetching question
-		Question randomQuestion = Question.getRandomQuestion();
+		Question randomQuestion = ServerInteractions.getRandomQuestion();
 
 		// setting tags
 		TextView textViewQuestion = (TextView) findViewById(R.id.displayQuestion);

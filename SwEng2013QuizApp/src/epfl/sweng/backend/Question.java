@@ -53,31 +53,6 @@ public class Question {
 		this.owner = questionOwner;
 	}
 
-	/**
-	 * Processes a request in an {@link AsyncTask}.
-	 * 
-	 * @return The parsed question.
-	 */
-	public static Question getRandomQuestion() {
-		DownloadJSONFromServer asyncTaskRandomQuestionGetter =
-				new DownloadJSONFromServer();
-		String url = "https://sweng-quiz.appspot.com/quizquestions/random"; 
-		asyncTaskRandomQuestionGetter.execute(url);
-		
-		Question question = null;
-		try {
-			question = Question
-					.createQuestionFromJSON(asyncTaskRandomQuestionGetter.get());
-		} catch (JSONException e) {
-			e.printStackTrace();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		} catch (ExecutionException e) {
-			e.printStackTrace();
-		}
-		return question;
-	}
-
 	public static Question createQuestionFromJSON(String questionJSON)
 		throws JSONException {
 
