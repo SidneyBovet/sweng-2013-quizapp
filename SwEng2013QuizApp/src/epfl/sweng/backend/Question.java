@@ -1,14 +1,15 @@
 package epfl.sweng.backend;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.JSONStringer;
 
 import sweng.epfl.editquestions.QuizEditExecution;
-
+import android.os.AsyncTask;
 import epfl.sweng.showquestions.DownloadJSONFromServer;
 
 /**
@@ -20,9 +21,9 @@ import epfl.sweng.showquestions.DownloadJSONFromServer;
 public class Question {
 	private long id;
 	private String questionContent;
-	private ArrayList<String> answers;
+	private List<String> answers;
 	private int solutionIndex;
-	private ArrayList<String> tags;
+	private List<String> tags;
 	private String owner;
 
 	/**
@@ -45,8 +46,8 @@ public class Question {
 	 *            : Question owner.
 	 */
 	public Question(long questionId, String questionStmt,
-			ArrayList<String> questionAnswers, int questionSolutionIndex,
-			ArrayList<String> questionTags, String questionOwner) {
+			List<String> questionAnswers, int questionSolutionIndex,
+			List<String> questionTags, String questionOwner) {
 		this.id = questionId;
 		this.questionContent = questionStmt;
 		this.answers = questionAnswers;
@@ -55,12 +56,16 @@ public class Question {
 		this.owner = questionOwner;
 	}
 
-	public Question(String questionStmt, ArrayList<String> questionAnswers,
-			int questionSolutionIndex, ArrayList<String> questionTags) {
-		this.questionContent = questionStmt;
-		this.answers = questionAnswers;
-		this.solutionIndex = questionSolutionIndex;
-		this.tags = questionTags;
+	/**
+	 * Alternative constructor for sending a question (we don't have questionId nor owner)
+	 * @param questionStmt
+	 * @param questionAnswers
+	 * @param questionSolutionIndex
+	 * @param questionTags
+	 */
+	public Question(String questionStmt, List<String> questionAnswers,
+			int questionSolutionIndex, List<String> questionTags) {
+		this(-1, questionStmt, questionAnswers, questionSolutionIndex, questionTags, null);
 	}
 
 	/**
@@ -74,8 +79,7 @@ public class Question {
 
 		Question question = null;
 		try {
-			question = Question
-					.createQuestionFromJSON(asyncTaskRandomQuestionGetter.get());
+			question = createQuestionFromJSON(asyncTaskRandomQuestionGetter.get());
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		} catch (ExecutionException e) {
@@ -84,9 +88,9 @@ public class Question {
 		return question;
 	}
 
-	public static void submitRandomQuestion(ArrayList<String> listInputGUI) {
+	public static void submitQuestion(List<String> listInputGUI) {
 		Question questionToSubmit = createQuestionFromList(listInputGUI);
-		JSONObject jsonToSubmit = createJSONFromQuestion(questionToSubmit);
+		JSONObject jsonToSubmit = questionToSubmit.toJSON();
 		QuizEditExecution quizEditExecute = new QuizEditExecution();
 		// TODO FINIR SUBMIT
 		quizEditExecute.execute(jsonToSubmit);
@@ -103,6 +107,7 @@ public class Question {
 		JSONArray tagsJSON = null;
 		ArrayList<String> tags = null;
 		String owner = null;
+		
 		try {
 			jsonParser = new JSONObject(questionJSON);
 			id = jsonParser.getLong("id");
@@ -116,55 +121,44 @@ public class Question {
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-		Question questionFromUser;
-		if ((id == -1) || (owner == null)) {
-			questionFromUser = new Question(question, answers, solutionIndex,
-					tags);
-		} else {
-			questionFromUser = new Question(id, question, answers,
-					solutionIndex, tags, owner);
-		}
-
-		return questionFromUser;
+		
+		return new Question(id, question, answers, solutionIndex,
+				tags, owner);
 	}
 
-	public static Question createQuestionFromList(ArrayList<String> listElm) {
-		Question questionFromUser;
+	public static Question createQuestionFromList(List<String> listElm) {
+		
 		int dummysolutionIndex = 1;
 		String questionText = listElm.remove(0);
 		String tagsInOneLine = listElm.remove(listElm.size() - 1);
 		String formattedTags = tagsInOneLine.replaceAll("\\W", " ");
 		String[] tagsInArray = formattedTags.split(" ");
-		ArrayList<String> tagStrings = new ArrayList<String>();
-		for (int i = 0; i < tagsInArray.length; i++) {
-			tagStrings.add(tagsInArray[i]);
+		
+		List<String> tagStrings = new ArrayList<String>();		
+		for (String tag : tagsInArray) {
+			tagStrings.add(tag);
 		}
 
-		ArrayList<String> answers = new ArrayList<String>();
-		for (int i = 0; i < listElm.size(); i++) {
-			answers.add(listElm.get(i));
+		List<String> answers = new ArrayList<String>();
+		for (String answer : listElm) {
+			answers.add(answer);
 		}
-		// XXX WHY DO THIS CREAT A QUESTION OBJECT WITH ID AND OWNER
-		questionFromUser = new Question(questionText, answers,
+		
+		return new Question(questionText, answers,
 				dummysolutionIndex, tagStrings);
-
-		return questionFromUser;
 	}
-
-	public static JSONObject createJSONFromQuestion(Question question) {
+	
+	public JSONObject toJSON() {
 		JSONObject jsonObject = new JSONObject();
 		try {
-			// XXX ! HERE I HAVE REMOVED ID AND OWNER SINCE THEY MUSTE BE IN THE
-			// JSON OBJECT WHEN WE SEND AN EDITED QUESTION !
-			JSONArray answersJSONArray = new JSONArray(question.answers);
-			JSONArray tafsJSONArray = new JSONArray(question.tags);
-			jsonObject.put("question", question.questionContent);
+			JSONArray answersJSONArray = new JSONArray(answers);
+			JSONArray tafsJSONArray = new JSONArray(tags);
+			jsonObject.put("question", questionContent);
 			jsonObject.put("answers", answersJSONArray);
-			jsonObject.put("solutionIndex", question.solutionIndex);
+			jsonObject.put("solutionIndex", solutionIndex);
 			jsonObject.put("tags", tafsJSONArray);
 
 		} catch (JSONException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -215,7 +209,7 @@ public class Question {
 		return solutionIndex;
 	}
 
-	public ArrayList<String> getTags() {
+	public List<String> getTags() {
 		return tags;
 	}
 
@@ -227,7 +221,7 @@ public class Question {
 		return "question:" + questionContent;
 	}
 
-	public ArrayList<String> getAnswers() {
+	public List<String> getAnswers() {
 		return answers;
 	}
 

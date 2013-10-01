@@ -1,30 +1,16 @@
 package sweng.epfl.editquestions;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.ResponseHandler;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.BasicResponseHandler;
-
+import android.R;
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
-import epfl.sweng.R;
-import epfl.sweng.SubmitQuizzActivity;
 import epfl.sweng.backend.Question;
-import epfl.sweng.servercomm.SwengHttpClientFactory;
-import epfl.sweng.showquestions.ShowQuestionsActivity;
 import epfl.sweng.testing.TestingTransactions;
 import epfl.sweng.testing.TestingTransactions.TTChecks;
 
@@ -58,7 +44,7 @@ public class EditQuestionActivity extends Activity {
 		LinearLayout layout = (LinearLayout) findViewById(R.id.layoutEditQuestion);
 		ArrayList<String> listInputGUI = createListFromUserGUI(layout);
 
-		Question.submitRandomQuestion(listInputGUI);
+		Question.submitQuestion(listInputGUI);
 
 		// FUNCTION : CLEAR VIEW OF QUIZ EDITION
 		resetEditQuestionLayout(layout);
