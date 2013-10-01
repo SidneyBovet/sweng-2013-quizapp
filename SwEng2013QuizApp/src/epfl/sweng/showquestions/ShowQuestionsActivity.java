@@ -1,24 +1,17 @@
 package epfl.sweng.showquestions;
 
-import java.util.concurrent.ExecutionException;
-
 import org.json.JSONException;
 
 import android.app.Activity;
-import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
-import android.widget.Adapter;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import epfl.sweng.R;
 import epfl.sweng.backend.Question;
-import epfl.sweng.entry.MainActivity;
 
 /***
  * Activity used to display a random question to the user.
