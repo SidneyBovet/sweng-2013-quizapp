@@ -7,7 +7,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
-import android.widget.ListView;
 import android.widget.TextView;
 import epfl.sweng.backend.Question;
 import epfl.sweng.testing.TestingTransactions;
@@ -61,7 +60,7 @@ public class SelectionListener implements OnItemClickListener {
 				clickedAnswer = (TextView) parent.getChildAt(position);
 			} catch (RuntimeException e) {
 				System.err.println("Exception while casting parent."
-						+ "Not a ListView containing TextViews?\n"
+						+ "Not containing TextViews?\n"
 						+ e.getStackTrace());
 				clickedAnswer = null;
 			}
