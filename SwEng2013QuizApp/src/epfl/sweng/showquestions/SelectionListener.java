@@ -56,19 +56,16 @@ public class SelectionListener implements OnItemClickListener {
 		 */
 		if (!alreadyAnswered) {
 			alreadyAnswered = true;
-			ListView displayAnswers;
 			TextView clickedAnswer;
 			try {
-				displayAnswers = (ListView) parent;
 				clickedAnswer = (TextView) parent.getChildAt(position);
 			} catch (RuntimeException e) {
 				System.err.println("Exception while casting parent."
 						+ "Not a ListView containing TextViews?\n"
 						+ e.getStackTrace());
-				displayAnswers = null;
 				clickedAnswer = null;
 			}
-			if (displayAnswers != null) {
+			if (clickedAnswer != null) {
 				int solution = concernedQuestion.getSolutionIndex();
 				if (id == solution) {
 					buttonNext.setEnabled(true);
