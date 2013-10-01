@@ -1,13 +1,10 @@
 package epfl.sweng.backend;
 
 import java.util.ArrayList;
-import java.util.concurrent.ExecutionException;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import epfl.sweng.servercomm.DownloadJSONFromServer;
 
 /**
  * Represents a question that a user gets asked in the quiz application.

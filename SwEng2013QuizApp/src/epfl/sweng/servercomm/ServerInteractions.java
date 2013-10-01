@@ -39,4 +39,12 @@ public class ServerInteractions {
 		}
 		return question;
 	}
+	
+	/**
+	 * Sends a new question to the SwEng server
+	 * @param The new {@link Question}
+	 */
+	public static void sendQuestion(Question newQuestion) {
+		
+	}
 }
