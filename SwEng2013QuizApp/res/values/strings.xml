@@ -8,7 +8,7 @@
     <string name="submitQuestionButton">Submit a quiz question.</string>
     <string name="title_activity_submit_question">SubmitQuestionActivity</string>
     <string name="title_activity_display_question">DisplayQuestionActivity</string>
-    <string name="nextRandomQuestion">next</string>
+    <string name="nextRandomQuestion">Next question</string>
     <string name="write_question1">Type in the question’s text body.</string>
     <string name="answer_question1">Type in the answer.</string>
     <string name="answer_question2">Type in the answer</string>
