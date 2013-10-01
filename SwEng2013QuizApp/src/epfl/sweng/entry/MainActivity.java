@@ -19,6 +19,13 @@ import epfl.sweng.testing.TestingTransactions.TTChecks;
  */
 public class MainActivity extends Activity {
 
+	//TODO: ask staff if ok
+//	@Override
+//	protected void onResume() {
+//		super.onResume();
+//		TestingTransactions.check(TTChecks.MAIN_ACTIVITY_SHOWN);
+//	}
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

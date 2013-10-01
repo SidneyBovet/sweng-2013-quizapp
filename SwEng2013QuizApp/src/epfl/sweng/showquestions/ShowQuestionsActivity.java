@@ -12,6 +12,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import epfl.sweng.R;
 import epfl.sweng.backend.Question;
+import epfl.sweng.servercomm.ServerInteractions;
 import epfl.sweng.testing.TestingTransactions;
 import epfl.sweng.testing.TestingTransactions.TTChecks;
 
@@ -27,8 +28,6 @@ public class ShowQuestionsActivity extends Activity {
 		setContentView(R.layout.activity_display_question);
 
 		setDisplayView();
-
-		TestingTransactions.check(TTChecks.QUESTION_SHOWN);
 	}
 /**
  * Set all the view in this activity.
@@ -41,7 +40,7 @@ public class ShowQuestionsActivity extends Activity {
 		buttonNext.setEnabled(false);
 
 		// fetching question
-		Question randomQuestion = Question.getRandomQuestion();
+		Question randomQuestion = ServerInteractions.getRandomQuestion();
 
 		// setting tags
 		TextView textViewQuestion = (TextView) findViewById(R.id.displayQuestion);
@@ -66,6 +65,8 @@ public class ShowQuestionsActivity extends Activity {
 		SelectionListener listener =
 				new SelectionListener(buttonNext, randomQuestion);
 		displayAnswers.setOnItemClickListener(listener);
+		
+		TestingTransactions.check(TTChecks.QUESTION_SHOWN);
 	}
 
 	/**
@@ -76,7 +77,7 @@ public class ShowQuestionsActivity extends Activity {
 		setDisplayView();
 	}
 
-@Override
+	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.display_question, menu);

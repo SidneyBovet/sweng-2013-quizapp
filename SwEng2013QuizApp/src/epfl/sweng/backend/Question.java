@@ -1,13 +1,10 @@
 package epfl.sweng.backend;
 
 import java.util.ArrayList;
-import java.util.concurrent.ExecutionException;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import epfl.sweng.showquestions.DownloadJSONFromServer;
 
 /**
  * Represents a question that a user gets asked in the quiz application.
@@ -51,31 +48,6 @@ public class Question {
 		this.solutionIndex = questionSolutionIndex;
 		this.tags = questionTags;
 		this.owner = questionOwner;
-	}
-
-	/**
-	 * Processes a request in an {@link AsyncTask}.
-	 * 
-	 * @return The parsed question.
-	 */
-	public static Question getRandomQuestion() {
-		DownloadJSONFromServer asyncTaskRandomQuestionGetter =
-				new DownloadJSONFromServer();
-		String url = "https://sweng-quiz.appspot.com/quizquestions/random"; 
-		asyncTaskRandomQuestionGetter.execute(url);
-		
-		Question question = null;
-		try {
-			question = Question
-					.createQuestionFromJSON(asyncTaskRandomQuestionGetter.get());
-		} catch (JSONException e) {
-			e.printStackTrace();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		} catch (ExecutionException e) {
-			e.printStackTrace();
-		}
-		return question;
 	}
 
 	public static Question createQuestionFromJSON(String questionJSON)
