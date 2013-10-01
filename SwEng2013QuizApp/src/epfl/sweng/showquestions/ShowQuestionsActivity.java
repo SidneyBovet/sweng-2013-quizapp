@@ -28,8 +28,6 @@ public class ShowQuestionsActivity extends Activity {
 		setContentView(R.layout.activity_display_question);
 
 		setDisplayView();
-
-		TestingTransactions.check(TTChecks.QUESTION_SHOWN);
 	}
 /**
  * Set all the view in this activity.
@@ -67,6 +65,8 @@ public class ShowQuestionsActivity extends Activity {
 		SelectionListener listener =
 				new SelectionListener(buttonNext, randomQuestion);
 		displayAnswers.setOnItemClickListener(listener);
+		
+		TestingTransactions.check(TTChecks.QUESTION_SHOWN);
 	}
 
 	/**
