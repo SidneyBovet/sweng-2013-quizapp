@@ -7,7 +7,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import epfl.sweng.showquestions.DownloadJSONFromServer;
+import epfl.sweng.servercomm.DownloadJSONFromServer;
 
 /**
  * Represents a question that a user gets asked in the quiz application.

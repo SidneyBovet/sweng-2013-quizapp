@@ -1,4 +1,4 @@
-package epfl.sweng.showquestions;
+package epfl.sweng.servercomm;
 
 import java.io.IOException;
 
@@ -8,7 +8,6 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.BasicResponseHandler;
 
 import android.os.AsyncTask;
-import epfl.sweng.servercomm.SwengHttpClientFactory;
 
 public class DownloadJSONFromServer extends AsyncTask<String, Void, String> {
 	
