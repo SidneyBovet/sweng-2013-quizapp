@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+    
+    <Button
+        android:id="@+id/submit_question_trueness"
+        android:layout_width="40dp"
+        android:layout_height="wrap_content"
+        android:onClick="switchCorrectAnswer"
+        android:text="@string/question_wrong_answer" />
+
+    <EditText
+        android:id="@+id/submit_question_answer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/submit_question_trueness"
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@+id/submit_question_remove_answer"
+        android:layout_toRightOf="@+id/submit_question_trueness"
+        android:hint="@string/submit_question_answer_hint" />
+
+    <Button
+        android:id="@+id/submit_question_remove_answer"
+        android:layout_width="40dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:onClick="removeAnswer"
+        android:text="@string/submit_question_remove_answer" />
+
+</RelativeLayout>
