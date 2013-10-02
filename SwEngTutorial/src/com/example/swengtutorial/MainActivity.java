@@ -40,4 +40,9 @@ public class MainActivity extends Activity {
 	    startActivity(displayActivityIntent);
 	}
 
+	public void switchListView(View view) {
+		Intent switchListViewIntent = new Intent(this, ListViewExampleActivity.class);
+
+	    startActivity(switchListViewIntent);
+	}
 }

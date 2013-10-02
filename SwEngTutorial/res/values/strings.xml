@@ -7,5 +7,12 @@
     <string name="edit_message">Type in!</string>
     <string name="send_button">Display</string>
     <string name="title_activity_show_message">ShowMessageActivity</string>
+    <string name="switch_listview">ListView</string>
+    <string name="question_wrong_answer">✘</string>
+    <string name="question_right_answer">✔</string>
+    <string name="submit_question_add_answer">+</string>
+    <string name="submit_question_remove_answer">-</string>
+    <string name="submit_question_answer_hint">Type in the answer</string>
+    <string name="add_answers_text">Answers</string>
 
 </resources>
