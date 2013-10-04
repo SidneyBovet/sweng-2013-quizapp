@@ -50,7 +50,7 @@ public class ServerInteractions {
 	 */
 	public static void submitQuestion(List<String> listInputGUI) {
 		Question questionToSubmit = Question.createQuestionFromList(listInputGUI);
-		JSONObject jsonToSubmit = questionToSubmit.toJSON();
+		JSONObject jsonToSubmit = Question.createJSONFromQuestion(questionToSubmit);
 		QuizEditExecution quizEditExecute = new QuizEditExecution();
 		quizEditExecute.execute(jsonToSubmit);
 	}
