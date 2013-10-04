@@ -5,6 +5,8 @@ import java.util.List;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
@@ -29,6 +31,10 @@ public class EditQuestionActivity extends Activity {
 	private AnswerListAdapter mAnswerListAdapter;
 	private ListView mListview;
 	private RelativeLayout mLayout;
+	
+	// fields related to the question
+	private String mQuestionBodyText;
+	private String mTagsText;
 
 	public void addMoreElements(View view) {
 		mAnswerListAdapter.add("");
@@ -47,11 +53,59 @@ public class EditQuestionActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_submit_question);
 
+		mQuestionBodyText = "";
+		mTagsText = "";
+
 		mLayout = (RelativeLayout) findViewById(R.id.layoutEditQuestion);
 		mAnswerListAdapter = new AnswerListAdapter(this);
 		mListview = (ListView) findViewById(R.id.submit_question_listview);
 
 		mListview.setAdapter(mAnswerListAdapter);
+		EditText questionEditText = (EditText) findViewById(R.id.submit_question_text_body);
+		questionEditText.addTextChangedListener(new TextWatcher() {
+
+			@Override
+			public void afterTextChanged(Editable s) {
+				// TODO if (question hasn't changed) quit
+				mQuestionBodyText = s.toString();
+				updateSubmitButton(mAnswerListAdapter.audit() == 0);
+			}
+
+			@Override
+			public void beforeTextChanged(CharSequence s, int start,
+					int count, int after) {
+				// Nothing to do here
+			}
+
+			@Override
+			public void onTextChanged(CharSequence s, int start, int count,
+					int after) {
+				// Nothing to do here
+			}
+		});
+
+		EditText tagsEditText = (EditText) findViewById(R.id.submit_question_tags);
+		tagsEditText.addTextChangedListener(new TextWatcher() {
+
+			@Override
+			public void afterTextChanged(Editable s) {
+				// TODO if (question hasn't changed) quit
+				mTagsText = s.toString();
+				updateSubmitButton(mAnswerListAdapter.audit() == 0);
+			}
+
+			@Override
+			public void beforeTextChanged(CharSequence s, int start,
+					int count, int after) {
+				// Nothing to do here
+			}
+
+			@Override
+			public void onTextChanged(CharSequence s, int start, int count,
+					int after) {
+				// Nothing to do here
+			}
+		});
 
 		TestingTransactions.check(TTChecks.EDIT_QUESTIONS_SHOWN);
 	}
@@ -102,7 +156,7 @@ public class EditQuestionActivity extends Activity {
 
 		//FUNCTION : CLEAR VIEW OF QUIZ EDITION
 		resetEditQuestionLayout(mLayout);
-		TestingTransactions.check(TTChecks.EDIT_QUESTIONS_SHOWN);
+		TestingTransactions.check(TTChecks.NEW_QUESTION_SUBMITTED);
 	}
 
 	private void resetEditQuestionLayout(RelativeLayout mainLayout) {
@@ -129,11 +183,15 @@ public class EditQuestionActivity extends Activity {
 	 * 
 	 * @return The number of the previously described errors.
 	 */
-	private int audit() {
+	public int audit() {
 		int errors = 0;
 
-		// TODO : think about listeners on EditTexts.
-
+		if (mQuestionBodyText.equals("")) {
+			errors++;
+		}
+		if (mTagsText.equals("")) {
+			errors++;
+		}
 		return errors;
 	}
 }

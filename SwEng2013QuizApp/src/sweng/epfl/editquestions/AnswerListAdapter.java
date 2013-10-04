@@ -14,6 +14,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import epfl.sweng.R;
+import epfl.sweng.testing.TestingTransactions;
+import epfl.sweng.testing.TestingTransactions.TTChecks;
 
 /**
  * Adapter used to display the elements of the <code>ListView</code> on the
@@ -133,10 +135,7 @@ class AnswerListAdapter extends BaseAdapter {
 	 */
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		RelativeLayout relatLayout = (RelativeLayout) convertView;
-		if (convertView == null) {
-			relatLayout = (RelativeLayout) this.mInflater.inflate(R.layout.submit_question_answer_row, parent, false);
-		}
+		RelativeLayout relatLayout = (RelativeLayout) this.mInflater.inflate(R.layout.submit_question_answer_row, parent, false);
 
 		EditText answerField = (EditText) relatLayout.findViewById(R.id.
 				submit_question_answer_text);
@@ -147,10 +146,14 @@ class AnswerListAdapter extends BaseAdapter {
 
 			@Override
 			public void afterTextChanged(Editable s) {
+				// TODO if (question hasn't changed) quit
 				if (!mSystemChanged) {
 					mAnswerList.remove(currentRowIndex);
-					mAnswerList.add(currentRowIndex, s.toString());
-				} else {
+					mAnswerList.add(currentRowIndex,s.toString());
+					mEditQuestionActivity.updateSubmitButton(audit() == 0);
+					TestingTransactions.check(TTChecks.QUESTION_EDITED);
+				}
+				else {
 					return;
 				}
 			}
@@ -225,7 +228,7 @@ class AnswerListAdapter extends BaseAdapter {
 	 * 
 	 * @return	The number of the previously described errors.
 	 */
-	private int audit() {
+	public int audit() {
 		int errors = 0;
 
 		if (mAnswerList.contains("")) {
