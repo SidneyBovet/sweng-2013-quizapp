@@ -14,21 +14,20 @@ import epfl.sweng.backend.QuizEditExecution;
 
 /**
  * @author Sidney
- *
+ * 
  */
 public class ServerInteractions {
-	
+
 	/**
 	 * Processes a request in an {@link AsyncTask}.
 	 * 
 	 * @return The parsed {@link Question}.
 	 */
 	public static Question getRandomQuestion() {
-		DownloadJSONFromServer asyncTaskRandomQuestionGetter =
-				new DownloadJSONFromServer();
-		String url = "https://sweng-quiz.appspot.com/quizquestions/random"; 
+		DownloadJSONFromServer asyncTaskRandomQuestionGetter = new DownloadJSONFromServer();
+		String url = "https://sweng-quiz.appspot.com/quizquestions/random";
 		asyncTaskRandomQuestionGetter.execute(url);
-		
+
 		Question question = null;
 		try {
 			question = Question
@@ -42,15 +41,24 @@ public class ServerInteractions {
 		}
 		return question;
 	}
-	
+
 	/**
 	 * Sends a new question to the SwEng server
-	 * @param The new {@link Question}
+	 * 
+	 * @param The
+	 *            new {@link Question}
 	 */
+<<<<<<< HEAD
 	public static void submitQuestion(List<String> listInputGUI) { 
 		Question questionToSubmit = Question.createQuestionFromList(listInputGUI); 
 		JSONObject jsonToSubmit = Question.createJSONFromQuestion(questionToSubmit); 
 		QuizEditExecution quizEditExecute = new QuizEditExecution(); 
+=======
+	public static void submitQuestion(List<String> listInputGUI) {
+		Question questionToSubmit = Question.createQuestionFromList(listInputGUI);
+		JSONObject jsonToSubmit = Question.createJSONFromQuestion(questionToSubmit);
+		QuizEditExecution quizEditExecute = new QuizEditExecution();
+>>>>>>> b022b3ad97883d8011261ea583d9aad09d349fc5
 		quizEditExecute.execute(jsonToSubmit);
 	}
 }

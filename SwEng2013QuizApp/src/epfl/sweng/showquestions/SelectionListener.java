@@ -3,9 +3,7 @@
  */
 package epfl.sweng.showquestions;
 
-
 import android.view.View;
-import android.webkit.WebView.FindListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
@@ -71,9 +69,11 @@ public class SelectionListener implements OnItemClickListener {
 				int solution = concernedQuestion.getSolutionIndex();
 				if (id == solution) {
 					buttonNext.setEnabled(true);
-					clickedAnswer.append(" " + 'V');
+					clickedAnswer.append(" " + parent.getContext().
+							getString(R.string.question_correct_answer));
 				} else {
-					clickedAnswer.append(" " + 'X');
+					clickedAnswer.append(" " + parent.getContext().
+							getString(R.string.question_wrong_answer));
 				}
 			}
 		}

@@ -92,14 +92,11 @@ public class Question {
 			jsonObject.put("tags", tags);
 			jsonObject.put("owner", owner);
 		} catch (JSONException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
 		return jsonObject;
 	}
-	
-
 
 	/**
 	 * Get one JSON object after the other, transform then to string and put
@@ -141,7 +138,7 @@ public class Question {
 		return new Question(questionText, answers,
 				solutionIndex, tagStrings);
 	}
-	
+
 	public static JSONObject createJSONFromQuestion(Question question) { 
 		JSONObject questionIntoJSON = new JSONObject(); 
 		JSONArray answersJSON = new JSONArray(); 

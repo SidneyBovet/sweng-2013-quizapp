@@ -7,8 +7,6 @@ import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.BasicResponseHandler;
 
-import epfl.sweng.backend.Question;
-
 import android.os.AsyncTask;
 
 /**

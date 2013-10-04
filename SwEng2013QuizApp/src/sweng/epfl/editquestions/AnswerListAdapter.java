@@ -32,8 +32,6 @@ class AnswerListAdapter extends BaseAdapter {
 	private ArrayList<String> mAnswerList;
 	private int mAnswerCount;
 	private int mCorrectAnswerIndex;
-
-	// TODO  test with reset
 	private boolean mSystemChanged;
 
 	/**
@@ -75,7 +73,7 @@ class AnswerListAdapter extends BaseAdapter {
 	 * 
 	 * @return The index of the correct answer.
 	 */
-	public int getCorrectIndex(){
+	public int getCorrectIndex() {
 		return mCorrectAnswerIndex;
 	}
 
@@ -140,7 +138,8 @@ class AnswerListAdapter extends BaseAdapter {
 			relatLayout = (RelativeLayout) this.mInflater.inflate(R.layout.submit_question_answer_row, parent, false);
 		}
 
-		EditText answerField = (EditText)relatLayout.findViewById(R.id.submit_question_answer_text);
+		EditText answerField = (EditText) relatLayout.findViewById(R.id.
+				submit_question_answer_text);
 		answerField.setText(mAnswerList.get(position));
 
 		final int currentRowIndex = position;
@@ -150,9 +149,8 @@ class AnswerListAdapter extends BaseAdapter {
 			public void afterTextChanged(Editable s) {
 				if (!mSystemChanged) {
 					mAnswerList.remove(currentRowIndex);
-					mAnswerList.add(currentRowIndex,s.toString());
-				}
-				else {
+					mAnswerList.add(currentRowIndex, s.toString());
+				} else {
 					return;
 				}
 			}
@@ -170,11 +168,11 @@ class AnswerListAdapter extends BaseAdapter {
 			}
 		});
 
-		Button switchCorrectButton = (Button)relatLayout.findViewById(R.id.submit_question_correct_switch);
+		Button switchCorrectButton = (Button) relatLayout.findViewById(R.
+				id.submit_question_correct_switch);
 		if (position == mCorrectAnswerIndex) {
 			switchCorrectButton.setText(R.string.question_correct_answer);
-		}
-		else {
+		} else {
 			switchCorrectButton.setText(R.string.question_wrong_answer);
 		}
 
@@ -190,11 +188,11 @@ class AnswerListAdapter extends BaseAdapter {
 			}
 		});
 
-		Button removeButton = (Button)relatLayout.findViewById(R.id.submit_question_remove_answer);
+		Button removeButton = (Button) relatLayout.findViewById(R.id.
+				submit_question_remove_answer);
 		if (getCount() <= 2) {
 			removeButton.setEnabled(false);
-		}
-		else {
+		} else {
 			removeButton.setEnabled(true);
 		}
 		removeButton.setOnClickListener(new OnClickListener() {
