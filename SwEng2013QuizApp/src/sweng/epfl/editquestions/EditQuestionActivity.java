@@ -14,6 +14,7 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 import epfl.sweng.R;
 import epfl.sweng.backend.Question;
+import epfl.sweng.servercomm.ServerInteractions;
 import epfl.sweng.testing.TestingTransactions;
 import epfl.sweng.testing.TestingTransactions.TTChecks;
 
@@ -98,7 +99,7 @@ public class EditQuestionActivity extends Activity {
 		listElem.add(indexGoodAnswerString);
 		listElem.add(questionTagsString);
 
-		Question.submitQuestion(listElem);
+		ServerInteractions.submitQuestion(listElem);
 
 		//FUNCTION : CLEAR VIEW OF QUIZ EDITION
 		resetEditQuestionLayout(mLayout);

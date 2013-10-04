@@ -99,13 +99,7 @@ public class Question {
 		return jsonObject;
 	}
 	
-	public static void submitQuestion(List<String> listInputGUI) {
-		Question questionToSubmit = createQuestionFromList(listInputGUI);
-		JSONObject jsonToSubmit = questionToSubmit.toJSON();
-		QuizEditExecution quizEditExecute = new QuizEditExecution();
-		quizEditExecute.execute(jsonToSubmit);
 
-	}
 
 	/**
 	 * Get one JSON object after the other, transform then to string and put
@@ -146,6 +140,26 @@ public class Question {
 
 		return new Question(questionText, answers,
 				solutionIndex, tagStrings);
+	}
+	
+	public static JSONObject createJSONFromQuestion(Question question) { 
+		JSONObject questionIntoJSON = new JSONObject(); 
+		JSONArray answersJSON = new JSONArray(); 
+		for (int i = 0; i < question.answers.size(); i++) { 
+			answersJSON.put(question.answers.get(i)); 
+			}
+		JSONArray tagsJSON = new JSONArray(); 
+		for (int i = 0; i < question.tags.size(); i++) { 
+			tagsJSON.put(question.tags.get(i)); 
+			} 
+		try { questionIntoJSON.put("question", question.questionContent); 
+		questionIntoJSON.put("answers", answersJSON); 
+		questionIntoJSON.put("solutionIndex", question.solutionIndex); 
+		questionIntoJSON.put("tags", tagsJSON); 
+		} catch (JSONException e) { e.printStackTrace(); }
+
+	return questionIntoJSON;
+
 	}
 
 	/**

@@ -3,11 +3,14 @@
  */
 package epfl.sweng.servercomm;
 
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import epfl.sweng.backend.Question;
+import epfl.sweng.backend.QuizEditExecution;
 
 /**
  * @author Sidney
@@ -44,7 +47,10 @@ public class ServerInteractions {
 	 * Sends a new question to the SwEng server
 	 * @param The new {@link Question}
 	 */
-	public static void sendQuestion(Question newQuestion) {
-		
+	public static void submitQuestion(List<String> listInputGUI) { 
+		Question questionToSubmit = Question.createQuestionFromList(listInputGUI); 
+		JSONObject jsonToSubmit = Question.createJSONFromQuestion(questionToSubmit); 
+		QuizEditExecution quizEditExecute = new QuizEditExecution(); 
+		quizEditExecute.execute(jsonToSubmit);
 	}
 }
