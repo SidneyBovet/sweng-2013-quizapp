@@ -1,6 +1,7 @@
 package epfl.sweng.backend;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -50,6 +51,19 @@ public class Question {
 		this.owner = questionOwner;
 	}
 
+	/**
+	 * Alternative constructor for sending a question (we don't have questionId nor owner)
+	 * @param questionStmt
+	 * @param questionAnswers
+	 * @param questionSolutionIndex
+	 * @param questionTags
+	 */
+	public Question(String questionStmt, List<String> questionAnswers,
+			int questionSolutionIndex, List<String> questionTags) {
+		this(-1, questionStmt, questionAnswers, questionSolutionIndex, questionTags, null);
+	}
+
+
 	public static Question createQuestionFromJSON(String questionJSON)
 		throws JSONException {
 
@@ -68,7 +82,7 @@ public class Question {
 		return new Question(id, question, answers, solutionIndex, tags, owner);
 	}
 
-	public JSONObject createJSONFromQuestion() {
+	public JSONObject toJSON() {
 		JSONObject jsonObject = new JSONObject();
 		try {
 			jsonObject.put("id", id);
@@ -83,6 +97,14 @@ public class Question {
 		}
 
 		return jsonObject;
+	}
+	
+	public static void submitQuestion(List<String> listInputGUI) {
+		Question questionToSubmit = createQuestionFromList(listInputGUI);
+		JSONObject jsonToSubmit = questionToSubmit.toJSON();
+		QuizEditExecution quizEditExecute = new QuizEditExecution();
+		quizEditExecute.execute(jsonToSubmit);
+
 	}
 
 	/**
@@ -102,6 +124,28 @@ public class Question {
 			}
 		}
 		return list;
+	}
+
+	public static Question createQuestionFromList(List<String> listElm) {
+
+		String questionText = listElm.remove(0);
+		String tagsInOneLine = listElm.remove(listElm.size() - 1);
+		int solutionIndex = Integer.parseInt(listElm.remove(listElm.size() - 1));
+		String formattedTags = tagsInOneLine.replaceAll("\\W", " ");
+		String[] tagsInArray = formattedTags.split(" ");
+
+		List<String> tagStrings = new ArrayList<String>();		
+		for (String tag : tagsInArray) {
+			tagStrings.add(tag);
+		}
+
+		List<String> answers = new ArrayList<String>();
+		for (String answer : listElm) {
+			answers.add(answer);
+		}
+
+		return new Question(questionText, answers,
+				solutionIndex, tagStrings);
 	}
 
 	/**

@@ -34,10 +34,6 @@
             android:label="@string/title_activity_display_question"
             android:screenOrientation="portrait">
         </activity>
-        <activity
-            android:name="epfl.sweng.SubmitQuizzActivity"
-            android:label="@string/title_activity_submit_quizz" >
-        </activity>
     </application>
 
 </manifest>
