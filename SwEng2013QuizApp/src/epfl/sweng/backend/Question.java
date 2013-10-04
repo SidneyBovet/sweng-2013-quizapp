@@ -99,13 +99,6 @@ public class Question {
 		return jsonObject;
 	}
 	
-	public static void submitQuestion(List<String> listInputGUI) {
-		Question questionToSubmit = createQuestionFromList(listInputGUI);
-		JSONObject jsonToSubmit = questionToSubmit.toJSON();
-		QuizEditExecution quizEditExecute = new QuizEditExecution();
-		quizEditExecute.execute(jsonToSubmit);
-
-	}
 
 	/**
 	 * Get one JSON object after the other, transform then to string and put

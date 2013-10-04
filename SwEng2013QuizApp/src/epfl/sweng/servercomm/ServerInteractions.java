@@ -3,29 +3,31 @@
  */
 package epfl.sweng.servercomm;
 
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import epfl.sweng.backend.Question;
+import epfl.sweng.backend.QuizEditExecution;
 
 /**
  * @author Sidney
- *
+ * 
  */
 public class ServerInteractions {
-	
+
 	/**
 	 * Processes a request in an {@link AsyncTask}.
 	 * 
 	 * @return The parsed {@link Question}.
 	 */
 	public static Question getRandomQuestion() {
-		DownloadJSONFromServer asyncTaskRandomQuestionGetter =
-				new DownloadJSONFromServer();
-		String url = "https://sweng-quiz.appspot.com/quizquestions/random"; 
+		DownloadJSONFromServer asyncTaskRandomQuestionGetter = new DownloadJSONFromServer();
+		String url = "https://sweng-quiz.appspot.com/quizquestions/random";
 		asyncTaskRandomQuestionGetter.execute(url);
-		
+
 		Question question = null;
 		try {
 			question = Question
@@ -39,12 +41,17 @@ public class ServerInteractions {
 		}
 		return question;
 	}
-	
+
 	/**
 	 * Sends a new question to the SwEng server
-	 * @param The new {@link Question}
+	 * 
+	 * @param The
+	 *            new {@link Question}
 	 */
-	public static void sendQuestion(Question newQuestion) {
-		
+	public static void submitQuestion(List<String> listInputGUI) {
+		Question questionToSubmit = Question.createQuestionFromList(listInputGUI);
+		JSONObject jsonToSubmit = questionToSubmit.toJSON();
+		QuizEditExecution quizEditExecute = new QuizEditExecution();
+		quizEditExecute.execute(jsonToSubmit);
 	}
 }
