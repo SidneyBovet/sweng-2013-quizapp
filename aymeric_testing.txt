@@ -1,0 +1,8 @@
+Transactions log:
+
+-> submit la question
+EDIT_QUESTION_SHOWN <--- en trop
+NEW_QUESTION_SUBMITTED
+EDIT_QUESTION_SHOWN
+
+//pas de QUESTION_EDITED quand on modifie un champ
