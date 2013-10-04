@@ -157,9 +157,7 @@ public class Question {
 		questionIntoJSON.put("solutionIndex", question.solutionIndex); 
 		questionIntoJSON.put("tags", tagsJSON); 
 		} catch (JSONException e) { e.printStackTrace(); }
-
 	return questionIntoJSON;
-
 	}
 
 	/**
