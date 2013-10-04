@@ -15,9 +15,9 @@ import org.json.JSONObject;
 public class Question {
 	private long id;
 	private String questionContent;
-	private ArrayList<String> answers;
+	private List<String> answers;
 	private int solutionIndex;
-	private ArrayList<String> tags;
+	private List<String> tags;
 	private String owner;
 
 	/**
@@ -40,8 +40,8 @@ public class Question {
 	 *            : Question owner.
 	 */
 	public Question(long questionId, String questionStmt,
-			ArrayList<String> questionAnswers, int questionSolutionIndex,
-			ArrayList<String> questionTags, String questionOwner) {
+			List<String> questionAnswers, int questionSolutionIndex,
+			List<String> questionTags, String questionOwner) {
 		this.id = questionId;
 		this.questionContent = questionStmt;
 		this.answers = questionAnswers;
@@ -129,7 +129,7 @@ public class Question {
 		return solutionIndex;
 	}
 
-	public ArrayList<String> getTags() {
+	public List<String> getTags() {
 		return tags;
 	}
 
@@ -141,7 +141,7 @@ public class Question {
 		return "question:" + questionContent;
 	}
 
-	public ArrayList<String> getAnswers() {
+	public List<String> getAnswers() {
 		return answers;
 	}
 
