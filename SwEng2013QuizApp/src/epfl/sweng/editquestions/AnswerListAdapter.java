@@ -1,4 +1,4 @@
-package sweng.epfl.editquestions;
+package epfl.sweng.editquestions;
 
 import java.util.ArrayList;
 import java.util.List;

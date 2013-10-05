@@ -1,4 +1,4 @@
-package sweng.epfl.editquestions;
+package epfl.sweng.editquestions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -192,8 +192,6 @@ public class EditQuestionActivity extends Activity {
 		if (mTagsText.equals("")) {
 			errors++;
 		}
-		
-		errors += mAnswerListAdapter.audit();
 		
 		return errors;
 	}

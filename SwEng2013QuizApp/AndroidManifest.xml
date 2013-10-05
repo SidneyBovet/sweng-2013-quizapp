@@ -26,7 +26,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="sweng.epfl.editquestions.EditQuestionActivity"
+            android:name="epfl.sweng.editquestions.EditQuestionActivity"
             android:label="@string/title_activity_submit_question" >
         </activity>
         <activity
