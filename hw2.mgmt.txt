@@ -7,7 +7,7 @@
 
         [x] 4.1 Fetch a random quiz question from the server           : David
         [x] 4.2 Link MainActivity to the quiz question functionality   : David
-        [ ] 4.3 Display a quiz question                                : Joanna
+        [X] 4.3 Display a quiz question                                : Joanna
         [ ] 4.4 Take a quiz                                            : Sidney
         [ ] 4.5 Testing hooks                                          : when everything done
 
