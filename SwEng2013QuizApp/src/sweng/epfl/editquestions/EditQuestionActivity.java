@@ -15,10 +15,6 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 import epfl.sweng.R;
-<<<<<<< HEAD
-import epfl.sweng.backend.Question;
-=======
->>>>>>> b022b3ad97883d8011261ea583d9aad09d349fc5
 import epfl.sweng.servercomm.ServerInteractions;
 import epfl.sweng.testing.TestingTransactions;
 import epfl.sweng.testing.TestingTransactions.TTChecks;

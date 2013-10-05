@@ -48,17 +48,10 @@ public class ServerInteractions {
 	 * @param The
 	 *            new {@link Question}
 	 */
-<<<<<<< HEAD
 	public static void submitQuestion(List<String> listInputGUI) { 
 		Question questionToSubmit = Question.createQuestionFromList(listInputGUI); 
 		JSONObject jsonToSubmit = Question.createJSONFromQuestion(questionToSubmit); 
-		QuizEditExecution quizEditExecute = new QuizEditExecution(); 
-=======
-	public static void submitQuestion(List<String> listInputGUI) {
-		Question questionToSubmit = Question.createQuestionFromList(listInputGUI);
-		JSONObject jsonToSubmit = Question.createJSONFromQuestion(questionToSubmit);
 		QuizEditExecution quizEditExecute = new QuizEditExecution();
->>>>>>> b022b3ad97883d8011261ea583d9aad09d349fc5
 		quizEditExecute.execute(jsonToSubmit);
 	}
 }
