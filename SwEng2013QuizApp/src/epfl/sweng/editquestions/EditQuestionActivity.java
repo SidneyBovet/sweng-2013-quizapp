@@ -20,14 +20,16 @@ import epfl.sweng.testing.TestingTransactions;
 import epfl.sweng.testing.TestingTransactions.TTChecks;
 
 /**
- * The user can now enter a question that will be saved on a server.
+ * Activity that allows the user to submit a new question to an internet server.
  * 
  * @author born4new
  * @author Merok
  * @author MelodyLucid
  * 
  */
+
 public class EditQuestionActivity extends Activity {
+	
 	private AnswerListAdapter mAnswerListAdapter;
 	private ListView mListview;
 	private RelativeLayout mLayout;
@@ -35,64 +37,70 @@ public class EditQuestionActivity extends Activity {
 	// fields related to the question
 	private String mQuestionBodyText;
 	private String mTagsText;
-
-	public void addMoreElements(View view) {
+	
+	/**
+	 * Adds a new empty answer to the <code>ListView</code>.
+	 * <p>
+	 * Used when the add button is clicked.
+	 * 
+	 * @param view
+	 */
+	
+	public void addMoreAnswer(View view) {
 		mAnswerListAdapter.add("");
-
 	}
-
-	public void updateSubmitButton(boolean value) {
-		Button submitButton = (Button) mLayout.findViewById(R.id.submit_question_button);
-		if (submitButton != null) {
-			submitButton.setEnabled(audit() == 0 && value);
-		}
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.submit_question, menu);
-
-		return true;
-	}
-
+	
+	/**
+	 * Retrieves the question and the answers data, put them in a list, and then
+	 * send it over the internet.
+	 * <p>
+	 * Used when the submit button is clicked.
+	 * 
+	 * @param view Reference to the widget that was clicked.
+	 */
+	
 	public void sendEditedQuestion(View view) {
 		Toast.makeText(this, "Quizz submitted to the server.",
 				Toast.LENGTH_SHORT).show();
-
-		// this was done in order to get the content of the EditText elements in
-		// the XML
-		// 	for (int i = 0; i < childCountInlayout; i++) {
-		// 		if (mLayout.getChildAt(i) instanceof EditText) {
-		// 		EditText currentEditText = (EditText) mLayout.getChildAt(i);
-		// 		String currentArgument = currentEditText.getText().toString();
-		// 		listElem.add(currentArgument);
-		// 	}
-		// }
-		// WARNING : you MUST follow this structure when you write the EditText
+		
+		// WARNING : you MUST follow this structure
 		// elements : Question1 => Answer1 => ... => indexOfAnswer => tags
-		List<String> listElem = new ArrayList<String>();
-
-		listElem.add(mQuestionBodyText);
-
+		List<String> listInputGUI = new ArrayList<String>();
+		
+		listInputGUI.add(mQuestionBodyText);
+		
 		List<String> listAnswers = mAnswerListAdapter.getAnswerList();
 		for (int i = 0; i < mAnswerListAdapter.getCount(); i++) {
-			listElem.add(listAnswers.get(i));
+			listInputGUI.add(listAnswers.get(i));
 		}
-
+		
 		int indexGoddAnswer = mAnswerListAdapter.getCorrectIndex();
 		String indexGoodAnswerString = Integer.toString(indexGoddAnswer);
-		listElem.add(indexGoodAnswerString);
-
-		listElem.add(mTagsText);
-
-		ServerInteractions.submitQuestion(listElem);
-
-		//FUNCTION : CLEAR VIEW OF QUIZ EDITION
-		resetEditQuestionLayout(mLayout);
+		listInputGUI.add(indexGoodAnswerString);
+		
+		listInputGUI.add(mTagsText);
+		
+		ServerInteractions.submitQuestion(listInputGUI);
+		
+		resetEditQuestionLayout();
+		
 		TestingTransactions.check(TTChecks.NEW_QUESTION_SUBMITTED);
 	}
-
+	
+	/**
+	 * Tries to update the status of the submit button with the value parameter,
+	 * along with the success of the {@link #audit()} method.
+	 * 
+	 * @param value The new status value of the submit button.
+	 */
+	
+	public void updateSubmitButton(boolean value) {
+		Button submitButton = (Button) mLayout.findViewById(R.id.submit_question_button);
+		if (submitButton != null) {
+			submitButton.setEnabled(value && audit() == 0);
+		}
+	}
+	
 	/**
 	 * Checks the following requirements :
 	 * <ul>
@@ -102,9 +110,10 @@ public class EditQuestionActivity extends Activity {
 	 * 
 	 * @return The number of the previously described errors.
 	 */
+	
 	public int audit() {
 		int errors = 0;
-
+		
 		if (mQuestionBodyText.equals("")) {
 			errors++;
 		}
@@ -114,46 +123,70 @@ public class EditQuestionActivity extends Activity {
 		
 		return errors;
 	}
-
+	
+	/**
+	 * Initializes the contents of the Activity's standard options menu.
+	 * <p>
+	 * This was not implemented.
+	 */
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.submit_question, menu);
+		
+		return true;
+	}
+	
+	/**
+	 * Initializes the activity :
+	 * <ul>
+	 * 	<li>Binds the {@link AnswerListAdapter} with the <code>ListView</code>
+	 * </li>
+	 * 	<li>Adds <code>TextWatcher</code> on the question and tags fields.
+	 * </li>
+	 * </ul>
+	 */
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_submit_question);
-
+		
 		mQuestionBodyText = "";
 		mTagsText = "";
-
+		
 		mLayout = (RelativeLayout) findViewById(R.id.layoutEditQuestion);
 		mAnswerListAdapter = new AnswerListAdapter(this);
 		mListview = (ListView) findViewById(R.id.submit_question_listview);
-
+		
 		mListview.setAdapter(mAnswerListAdapter);
 		EditText questionEditText = (EditText) findViewById(R.id.submit_question_text_body);
 		questionEditText.addTextChangedListener(new TextWatcher() {
-
+			
 			@Override
 			public void afterTextChanged(Editable s) {
 				// TODO if (question hasn't changed) quit
 				mQuestionBodyText = s.toString();
 				updateSubmitButton(mAnswerListAdapter.audit() == 0);
 			}
-
+			
 			@Override
 			public void beforeTextChanged(CharSequence s, int start,
 					int count, int after) {
 				// Nothing to do here
 			}
-
+			
 			@Override
 			public void onTextChanged(CharSequence s, int start, int count,
 					int after) {
 				// Nothing to do here
 			}
 		});
-
+		
 		EditText tagsEditText = (EditText) findViewById(R.id.submit_question_tags);
 		tagsEditText.addTextChangedListener(new TextWatcher() {
-
+			
 			@Override
 			public void afterTextChanged(Editable s) {
 				// TODO if (question hasn't changed) quit
@@ -173,15 +206,22 @@ public class EditQuestionActivity extends Activity {
 				// Nothing to do here
 			}
 		});
-
+		
 		TestingTransactions.check(TTChecks.EDIT_QUESTIONS_SHOWN);
 	}
-
-	private void resetEditQuestionLayout(RelativeLayout mainLayout) {
+	
+	/**
+	 * Resets the layout by emptying every <code>EditText</code> on the Activty,
+	 * and by resetting the <code>ListView</code> adapter.
+	 */
+	
+	private void resetEditQuestionLayout() {
+		mQuestionBodyText = "";
+		mTagsText = "";
 		EditText editTextToFocus = null;
-		for (int i = 0; i < mainLayout.getChildCount(); i++) {
-			if (mainLayout.getChildAt(i) instanceof EditText) {
-				EditText currentEditText = (EditText) mainLayout.getChildAt(i);
+		for (int i = 0; i < mLayout.getChildCount(); i++) {
+			if (mLayout.getChildAt(i) instanceof EditText) {
+				EditText currentEditText = (EditText) mLayout.getChildAt(i);
 				currentEditText.setText("");
 				if (i == 0) {
 					editTextToFocus = currentEditText;

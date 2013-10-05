@@ -49,7 +49,7 @@
         android:layout_height="wrap_content"
         android:layout_alignRight="@+id/submit_question_text_body"
         android:layout_below="@+id/submit_question_text_body"
-        android:onClick="addMoreElements"
+        android:onClick="addMoreAnswer"
         android:text="@string/submit_question_add_button" />
 
     <TextView

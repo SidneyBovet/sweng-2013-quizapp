@@ -19,28 +19,29 @@ import epfl.sweng.testing.TestingTransactions.TTChecks;
 
 /**
  * Adapter used to display the elements of the <code>ListView</code> on the
- * {@link EditQuestionActivity} with the actual answers data.
+ * {@link EditQuestionActivity} from the actual data.
  * 
  * @author MelodyLucid
  * 
  */
 
 class AnswerListAdapter extends BaseAdapter {
-
+	
 	private EditQuestionActivity mEditQuestionActivity;
 	private LayoutInflater mInflater;
-
+	
 	// fields related to Answers data
 	private ArrayList<String> mAnswerList;
 	private int mAnswerCount;
 	private int mCorrectAnswerIndex;
 	private boolean mSystemChanged;
-
+	
 	/**
 	 * Constructor
 	 * 
 	 * @param editQuestionActivity The associated {@link EditQuestionActivity}
 	 */
+	
 	public AnswerListAdapter(EditQuestionActivity editQuestionActivity) {
 		super();
 		mEditQuestionActivity = editQuestionActivity;
@@ -48,19 +49,19 @@ class AnswerListAdapter extends BaseAdapter {
 
 		reset();
 	}
-
+	
 	/**
 	 * Adds a new specific answer to the list.
 	 * 
 	 * @param newAnswer a new answer.
 	 */
-
+	
 	public void add(String newAnswer) {
 		mAnswerCount++;
 		mAnswerList.add(newAnswer);
 		notifyDataSetChanged();
 	}
-
+	
 	/**
 	 * Retrieves the entire list of answers, stored so far in the data.
 	 * 
@@ -69,7 +70,7 @@ class AnswerListAdapter extends BaseAdapter {
 	public List<String> getAnswerList() {
 		return mAnswerList;
 	}
-
+	
 	/**
 	 * Retrieves the index of the correct answer in the list.
 	 * 
@@ -78,7 +79,7 @@ class AnswerListAdapter extends BaseAdapter {
 	public int getCorrectIndex() {
 		return mCorrectAnswerIndex;
 	}
-
+	
 	/**
 	 * Resets the fields and the data of the <code>ListView</code>
 	 */
@@ -92,59 +93,64 @@ class AnswerListAdapter extends BaseAdapter {
 		mSystemChanged = false;
 		notifyDataSetChanged();
 	}
-
+	
 	/**
 	 * Notifies on a higher level that the data of the answers has changed.
 	 * <p>
 	 * Blocks the submit button on the {@link EditQuestionActivity} if the data
 	 * set violates the requirements.
 	 */
+	
 	@Override
 	public void notifyDataSetChanged() {
 		mEditQuestionActivity.updateSubmitButton(audit() == 0);
 		super.notifyDataSetChanged();
 	}
-
+	
 	/**
 	 * Retrieves the current count of answers.
 	 */
+	
 	@Override
 	public int getCount() {
 		return mAnswerCount;
 	}
-
+	
 	/**
 	 * Retrieves the current element at the position <code>index</code>.
 	 */
+	
 	@Override
 	public Object getItem(int index) {
 		return mAnswerList.get(index);
 	}
-
+	
 	/**
 	 * Retrieves the id of the current element at the position <code>index
 	 * </code>, which is the <code>index</code> itself.
 	 */
+	
 	@Override
 	public long getItemId(int index) {
 		return index;
 	}
-
+	
 	/**
 	 * Retrieves a layout that will take place at the <code>position</code>
 	 */
+	
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		RelativeLayout relatLayout = (RelativeLayout) this.mInflater.inflate(R.
 				layout.submit_question_answer_row, parent, false);
-
+		
 		EditText answerField = (EditText) relatLayout.findViewById(R.id.
 				submit_question_answer_text);
 		answerField.setText(mAnswerList.get(position));
-
+		
 		final int currentRowIndex = position;
 		answerField.addTextChangedListener(new TextWatcher() {
-
+			
 			@Override
 			public void afterTextChanged(Editable s) {
 				// TODO if (question hasn't changed) quit
@@ -157,20 +163,20 @@ class AnswerListAdapter extends BaseAdapter {
 					return;
 				}
 			}
-
+			
 			@Override
 			public void beforeTextChanged(CharSequence s, int start,
 					int count, int after) {
 				// Nothing to do here
 			}
-
+			
 			@Override
 			public void onTextChanged(CharSequence s, int start, int count,
 					int after) {
 				// Nothing to do here
 			}
 		});
-
+		
 		Button switchCorrectButton = (Button) relatLayout.findViewById(R.
 				id.submit_question_correct_switch);
 		if (position == mCorrectAnswerIndex) {
@@ -178,9 +184,9 @@ class AnswerListAdapter extends BaseAdapter {
 		} else {
 			switchCorrectButton.setText(R.string.question_wrong_answer);
 		}
-
+		
 		switchCorrectButton.setOnClickListener(new OnClickListener() {
-
+			
 			@Override
 			public void onClick(View v) {
 				if (currentRowIndex == mCorrectAnswerIndex) {
@@ -190,7 +196,7 @@ class AnswerListAdapter extends BaseAdapter {
 				notifyDataSetChanged();
 			}
 		});
-
+		
 		Button removeButton = (Button) relatLayout.findViewById(R.id.
 				submit_question_remove_answer);
 		if (getCount() <= 2) {
@@ -199,7 +205,7 @@ class AnswerListAdapter extends BaseAdapter {
 			removeButton.setEnabled(true);
 		}
 		removeButton.setOnClickListener(new OnClickListener() {
-
+			
 			@Override
 			public void onClick(View v) {
 				if (mAnswerCount <= 2) {
@@ -213,21 +219,24 @@ class AnswerListAdapter extends BaseAdapter {
 				notifyDataSetChanged();
 			}
 		});
-
+		
 		return relatLayout;
 	}
-
+	
 	/**
 	 * Checks the following requirements :
 	 * <ul>
 	 * 	<li>None of the answers must be an empty string.</li>
-	 * 	<li>The index of the correct answer must exist in the <code>ArrayList</code>.</li>
-	 * 	<li>The current count of answers must precisely be the size of the <code>ArrayList</code>.<l/i>
+	 * 	<li>The index of the correct answer must exist in the <code>ArrayList
+	 * </code>.</li>
+	 * 	<li>The current count of answers must precisely be the size of the
+	 * <code>ArrayList</code>.<l/i>
 	 * 	<li>There must be at least 2 answers</li>
 	 * </ul>
 	 * 
 	 * @return	The number of the previously described errors.
 	 */
+	
 	public int audit() {
 		int errors = 0;
 
