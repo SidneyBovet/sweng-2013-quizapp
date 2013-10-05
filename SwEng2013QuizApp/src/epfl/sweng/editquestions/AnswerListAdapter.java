@@ -207,7 +207,7 @@ class AnswerListAdapter extends BaseAdapter {
 				}
 				mAnswerList.remove(currentRowIndex);
 				mAnswerCount--;
-				if (currentRowIndex <= mCorrectAnswerIndex) {
+				if (currentRowIndex <= mCorrectAnswerIndex && currentRowIndex > 0) {
 					mCorrectAnswerIndex--;
 				}
 				notifyDataSetChanged();
