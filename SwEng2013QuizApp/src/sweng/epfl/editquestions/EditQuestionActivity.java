@@ -192,6 +192,9 @@ public class EditQuestionActivity extends Activity {
 		if (mTagsText.equals("")) {
 			errors++;
 		}
+		
+		errors += mAnswerListAdapter.audit();
+		
 		return errors;
 	}
 }
