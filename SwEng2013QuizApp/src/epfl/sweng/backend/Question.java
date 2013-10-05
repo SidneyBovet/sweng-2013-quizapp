@@ -144,17 +144,20 @@ public class Question {
 		JSONArray answersJSON = new JSONArray(); 
 		for (int i = 0; i < question.answers.size(); i++) { 
 			answersJSON.put(question.answers.get(i)); 
-			}
+		}
 		JSONArray tagsJSON = new JSONArray(); 
 		for (int i = 0; i < question.tags.size(); i++) { 
 			tagsJSON.put(question.tags.get(i)); 
-			} 
-		try { questionIntoJSON.put("question", question.questionContent); 
-		questionIntoJSON.put("answers", answersJSON); 
-		questionIntoJSON.put("solutionIndex", question.solutionIndex); 
-		questionIntoJSON.put("tags", tagsJSON); 
-		} catch (JSONException e) { e.printStackTrace(); }
-	return questionIntoJSON;
+		} 
+		try { 
+			questionIntoJSON.put("question", question.questionContent); 
+			questionIntoJSON.put("answers", answersJSON); 
+			questionIntoJSON.put("solutionIndex", question.solutionIndex); 
+			questionIntoJSON.put("tags", tagsJSON); 
+		} catch (JSONException e) {
+			e.printStackTrace(); 
+		}
+		return questionIntoJSON;
 	}
 
 	/**
