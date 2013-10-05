@@ -52,7 +52,9 @@ public class Question {
 	}
 
 	/**
-	 * Alternative constructor for sending a question (we don't have questionId nor owner)
+	 * Alternative constructor for sending a question (we don't have questionId
+	 * nor owner)
+	 * 
 	 * @param questionStmt
 	 * @param questionAnswers
 	 * @param questionSolutionIndex
@@ -60,26 +62,8 @@ public class Question {
 	 */
 	public Question(String questionStmt, List<String> questionAnswers,
 			int questionSolutionIndex, List<String> questionTags) {
-		this(-1, questionStmt, questionAnswers, questionSolutionIndex, questionTags, null);
-	}
-
-
-	public static Question createQuestionFromJSON(String questionJSON)
-		throws JSONException {
-
-		JSONObject jsonParser = new JSONObject(questionJSON);
-		long id = jsonParser.getLong("id");
-
-		String question = jsonParser.getString("question");
-		JSONArray answersJSON = jsonParser.getJSONArray("answers");
-		ArrayList<String> answers = getJSONArrayToStringArray(answersJSON);
-
-		int solutionIndex = jsonParser.getInt("solutionIndex");
-		JSONArray tagsJSON = jsonParser.getJSONArray("tags");
-		ArrayList<String> tags = getJSONArrayToStringArray(tagsJSON);
-		String owner = jsonParser.getString("owner");
-
-		return new Question(id, question, answers, solutionIndex, tags, owner);
+		this(-1, questionStmt, questionAnswers, questionSolutionIndex,
+				questionTags, null);
 	}
 
 	public JSONObject toJSON() {
@@ -99,68 +83,6 @@ public class Question {
 	}
 
 	/**
-	 * Get one JSON object after the other, transform then to string and put
-	 * them in an array list of string
-	 * 
-	 * @return an array list of string containing the JSONObjects
-	 */
-	private static ArrayList<String> getJSONArrayToStringArray(
-			JSONArray arrayToChange) {
-		ArrayList<String> list = new ArrayList<String>();
-		if (arrayToChange != null) {
-			for (int i = 0; i < arrayToChange.length(); i++) {
-				if (arrayToChange.optString(i) != null) {
-					list.add(arrayToChange.optString(i));
-				}
-			}
-		}
-		return list;
-	}
-
-	public static Question createQuestionFromList(List<String> listElm) {
-
-		String questionText = listElm.remove(0);
-		String tagsInOneLine = listElm.remove(listElm.size() - 1);
-		int solutionIndex = Integer.parseInt(listElm.remove(listElm.size() - 1));
-		String formattedTags = tagsInOneLine.replaceAll("\\W", " ");
-		String[] tagsInArray = formattedTags.split(" ");
-
-		List<String> tagStrings = new ArrayList<String>();		
-		for (String tag : tagsInArray) {
-			tagStrings.add(tag);
-		}
-
-		List<String> answers = new ArrayList<String>();
-		for (String answer : listElm) {
-			answers.add(answer);
-		}
-
-		return new Question(questionText, answers,
-				solutionIndex, tagStrings);
-	}
-
-	public static JSONObject createJSONFromQuestion(Question question) { 
-		JSONObject questionIntoJSON = new JSONObject(); 
-		JSONArray answersJSON = new JSONArray(); 
-		for (int i = 0; i < question.answers.size(); i++) { 
-			answersJSON.put(question.answers.get(i)); 
-		}
-		JSONArray tagsJSON = new JSONArray(); 
-		for (int i = 0; i < question.tags.size(); i++) { 
-			tagsJSON.put(question.tags.get(i)); 
-		} 
-		try { 
-			questionIntoJSON.put("question", question.questionContent); 
-			questionIntoJSON.put("answers", answersJSON); 
-			questionIntoJSON.put("solutionIndex", question.solutionIndex); 
-			questionIntoJSON.put("tags", tagsJSON); 
-		} catch (JSONException e) {
-			e.printStackTrace(); 
-		}
-		return questionIntoJSON;
-	}
-
-	/**
 	 * Returns all the tag together
 	 * 
 	 * @return all the tag delimited by ","
@@ -170,7 +92,7 @@ public class Question {
 		String tagsTogether = "tags: ";
 		for (int i = 0; i < tags.size(); i++) {
 			tagsTogether += tags.get(i);
-			if (i < tags.size()-1) {
+			if (i < tags.size() - 1) {
 				tagsTogether += ", ";
 			}
 		}
@@ -209,4 +131,84 @@ public class Question {
 				+ owner + "]";
 	}
 
+	public static Question createQuestionFromJSON(String questionJSON)
+		throws JSONException {
+
+		JSONObject jsonParser = new JSONObject(questionJSON);
+		long id = jsonParser.getLong("id");
+
+		String question = jsonParser.getString("question");
+		JSONArray answersJSON = jsonParser.getJSONArray("answers");
+		ArrayList<String> answers = getJSONArrayToStringArray(answersJSON);
+
+		int solutionIndex = jsonParser.getInt("solutionIndex");
+		JSONArray tagsJSON = jsonParser.getJSONArray("tags");
+		ArrayList<String> tags = getJSONArrayToStringArray(tagsJSON);
+		String owner = jsonParser.getString("owner");
+
+		return new Question(id, question, answers, solutionIndex, tags, owner);
+	}
+	
+
+	public static Question createQuestionFromList(List<String> listElm) {
+
+		String questionText = listElm.remove(0);
+		String tagsInOneLine = listElm.remove(listElm.size() - 1);
+		int solutionIndex = Integer
+				.parseInt(listElm.remove(listElm.size() - 1));
+		String formattedTags = tagsInOneLine.replaceAll("\\W", " ");
+		String[] tagsInArray = formattedTags.split(" ");
+
+		List<String> tagStrings = new ArrayList<String>();
+		for (String tag : tagsInArray) {
+			tagStrings.add(tag);
+		}
+
+		List<String> answers = new ArrayList<String>();
+		for (String answer : listElm) {
+			answers.add(answer);
+		}
+
+		return new Question(questionText, answers, solutionIndex, tagStrings);
+	}
+
+	public static JSONObject createJSONFromQuestion(Question question) {
+		JSONObject questionIntoJSON = new JSONObject();
+		JSONArray answersJSON = new JSONArray();
+		for (int i = 0; i < question.answers.size(); i++) {
+			answersJSON.put(question.answers.get(i));
+		}
+		JSONArray tagsJSON = new JSONArray();
+		for (int i = 0; i < question.tags.size(); i++) {
+			tagsJSON.put(question.tags.get(i));
+		}
+		try {
+			questionIntoJSON.put("question", question.questionContent);
+			questionIntoJSON.put("answers", answersJSON);
+			questionIntoJSON.put("solutionIndex", question.solutionIndex);
+			questionIntoJSON.put("tags", tagsJSON);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return questionIntoJSON;
+	}
+	
+	/**
+	 * Get one JSON object after the other, transform then to string and put
+	 * them in an array list of string
+	 * 
+	 * @return an array list of string containing the JSONObjects
+	 */
+	private static ArrayList<String> getJSONArrayToStringArray(
+			JSONArray arrayToChange) {
+		ArrayList<String> list = new ArrayList<String>();
+		if (arrayToChange != null) {
+			for (int i = 0; i < arrayToChange.length(); i++) {
+				if (arrayToChange.optString(i) != null) {
+					list.add(arrayToChange.optString(i));
+				}
+			}
+		}
+		return list;
+	}
 }
