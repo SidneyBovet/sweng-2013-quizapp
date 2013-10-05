@@ -47,7 +47,7 @@ class AnswerListAdapter extends BaseAdapter {
 		mEditQuestionActivity = editQuestionActivity;
 		this.mInflater = LayoutInflater.from(this.mEditQuestionActivity);
 
-		reset();
+		resetAnswerList();
 	}
 	
 	/**
@@ -67,6 +67,7 @@ class AnswerListAdapter extends BaseAdapter {
 	 * 
 	 * @return List of answer strings.
 	 */
+	
 	public List<String> getAnswerList() {
 		return mAnswerList;
 	}
@@ -76,6 +77,7 @@ class AnswerListAdapter extends BaseAdapter {
 	 * 
 	 * @return The index of the correct answer.
 	 */
+	
 	public int getCorrectIndex() {
 		return mCorrectAnswerIndex;
 	}
@@ -83,7 +85,8 @@ class AnswerListAdapter extends BaseAdapter {
 	/**
 	 * Resets the fields and the data of the <code>ListView</code>
 	 */
-	public void reset() {
+	
+	public void resetAnswerList() {
 		mSystemChanged = true;
 		mAnswerCount = 2;
 		mAnswerList = new ArrayList<String>();
@@ -136,7 +139,19 @@ class AnswerListAdapter extends BaseAdapter {
 	}
 	
 	/**
-	 * Retrieves a layout that will take place at the <code>position</code>
+	 * Creates the <code>position</code>-th layout of the <code>ListView</code>
+	 * :
+	 * 
+	 * <ul>
+	 * 	<li>Binds a <code>TextWatcher</code> on the answer field that updates
+	 * the data of the answer text body</li>
+	 * 	<li>Binds an <code>OnClickListener</code> on the switch correct button
+	 * that updates the index of the correct answer.</li>
+	 * 	<li>Binds an <code>OnClickListener</code> on the remove button that
+	 * removes an element from the data, if it's possible.</li>
+	 * </ul>
+	 * 
+	 * then returns it.
 	 */
 	
 	@Override
@@ -144,8 +159,8 @@ class AnswerListAdapter extends BaseAdapter {
 		RelativeLayout relatLayout = (RelativeLayout) this.mInflater.inflate(R.
 				layout.submit_question_answer_row, parent, false);
 		
-		EditText answerField = (EditText) relatLayout.findViewById(R.id.
-				submit_question_answer_text);
+		EditText answerField = (EditText) relatLayout.findViewById(R.
+				id.submit_question_answer_text);
 		answerField.setText(mAnswerList.get(position));
 		
 		final int currentRowIndex = position;
@@ -197,8 +212,8 @@ class AnswerListAdapter extends BaseAdapter {
 			}
 		});
 		
-		Button removeButton = (Button) relatLayout.findViewById(R.id.
-				submit_question_remove_answer);
+		Button removeButton = (Button) relatLayout.findViewById(R.
+				id.submit_question_remove_answer);
 		if (getCount() <= 2) {
 			removeButton.setEnabled(false);
 		} else {
@@ -213,7 +228,8 @@ class AnswerListAdapter extends BaseAdapter {
 				}
 				mAnswerList.remove(currentRowIndex);
 				mAnswerCount--;
-				if (currentRowIndex <= mCorrectAnswerIndex && currentRowIndex > 0) {
+				if (currentRowIndex <= mCorrectAnswerIndex
+						&& currentRowIndex > 0) {
 					mCorrectAnswerIndex--;
 				}
 				notifyDataSetChanged();
@@ -226,11 +242,11 @@ class AnswerListAdapter extends BaseAdapter {
 	/**
 	 * Checks the following requirements :
 	 * <ul>
+	 * 	<li>The current count of answers must precisely be the size of the
+	 * <code>ArrayList</code>.<l/i>
 	 * 	<li>None of the answers must be an empty string.</li>
 	 * 	<li>The index of the correct answer must exist in the <code>ArrayList
 	 * </code>.</li>
-	 * 	<li>The current count of answers must precisely be the size of the
-	 * <code>ArrayList</code>.<l/i>
 	 * 	<li>There must be at least 2 answers</li>
 	 * </ul>
 	 * 
@@ -239,21 +255,26 @@ class AnswerListAdapter extends BaseAdapter {
 	
 	public int audit() {
 		int errors = 0;
-
-		if (mAnswerList.contains("")) {
-			//TODO whitespaces
-			errors++;
-		}
-		if (mCorrectAnswerIndex >= mAnswerCount || mAnswerList.get(mCorrectAnswerIndex) == null) {
-			errors++;
-		}
+		
 		if (mAnswerCount != mAnswerList.size()) {
 			errors++;
 		}
+		
+		for (int i = 0; i < mAnswerCount; i++) {
+			if (mAnswerList.get(i).matches("\\s*")) {
+				errors++;
+			}
+		}
+		
+		if (mCorrectAnswerIndex >= mAnswerCount || mCorrectAnswerIndex < 0
+				|| mAnswerList.get(mCorrectAnswerIndex) == null) {
+			errors++;
+		}
+		
 		if (mAnswerCount < 2) {
 			errors++;
 		}
-
+		
 		return errors;
 	}
 }
