@@ -135,7 +135,8 @@ class AnswerListAdapter extends BaseAdapter {
 	 */
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		RelativeLayout relatLayout = (RelativeLayout) this.mInflater.inflate(R.layout.submit_question_answer_row, parent, false);
+		RelativeLayout relatLayout = (RelativeLayout) this.mInflater.inflate(R.
+				layout.submit_question_answer_row, parent, false);
 
 		EditText answerField = (EditText) relatLayout.findViewById(R.id.
 				submit_question_answer_text);
@@ -149,11 +150,10 @@ class AnswerListAdapter extends BaseAdapter {
 				// TODO if (question hasn't changed) quit
 				if (!mSystemChanged) {
 					mAnswerList.remove(currentRowIndex);
-					mAnswerList.add(currentRowIndex,s.toString());
+					mAnswerList.add(currentRowIndex, s.toString());
 					mEditQuestionActivity.updateSubmitButton(audit() == 0);
 					TestingTransactions.check(TTChecks.QUESTION_EDITED);
-				}
-				else {
+				} else {
 					return;
 				}
 			}
