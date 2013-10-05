@@ -31,7 +31,6 @@ public class QuizEditExecution extends AsyncTask<JSONObject, Void, Void> {
 			post.setEntity(new StringEntity(jsonObject[0].toString()));
 			post.setHeader("Content-type", "application/json");
 			SwengHttpClientFactory.getInstance().execute(post, handler);
-			TestingTransactions.check(TTChecks.NEW_QUESTION_SUBMITTED);
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		} catch (IOException e) {

@@ -48,6 +48,7 @@ public class EditQuestionActivity extends Activity {
 	
 	public void addMoreAnswer(View view) {
 		mAnswerListAdapter.add("");
+		TestingTransactions.check(TTChecks.QUESTION_EDITED);
 	}
 	
 	/**
@@ -74,14 +75,13 @@ public class EditQuestionActivity extends Activity {
 			listInputGUI.add(listAnswers.get(i));
 		}
 		
-		int indexGoddAnswer = mAnswerListAdapter.getCorrectIndex();
-		String indexGoodAnswerString = Integer.toString(indexGoddAnswer);
-		listInputGUI.add(indexGoodAnswerString);
+		int indexGoodAnswer = mAnswerListAdapter.getCorrectIndex();
+		String indexGoodAnswerString = Integer.toString(indexGoodAnswer);
 		
+		listInputGUI.add(indexGoodAnswerString);
 		listInputGUI.add(mTagsText);
 		
 		ServerInteractions.submitQuestion(listInputGUI);
-		
 		resetEditQuestionLayout();
 		
 		TestingTransactions.check(TTChecks.NEW_QUESTION_SUBMITTED);
@@ -95,8 +95,7 @@ public class EditQuestionActivity extends Activity {
 	 */
 	
 	public void updateSubmitButton(boolean value) {
-		Button submitButton = (Button) mLayout.findViewById(R.
-				id.submit_question_button);
+		Button submitButton = (Button) mLayout.findViewById(R.id.submit_question_button);
 		if (submitButton != null) {
 			submitButton.setEnabled(value && audit() == 0);
 		}
@@ -115,10 +114,10 @@ public class EditQuestionActivity extends Activity {
 	public int audit() {
 		int errors = 0;
 		
-		if (mQuestionBodyText.matches("\\s*")) {
+		if (mQuestionBodyText.equals("")) {
 			errors++;
 		}
-		if (mTagsText.matches("\\s*")) {
+		if (mTagsText.equals("")) {
 			errors++;
 		}
 		
@@ -163,8 +162,9 @@ public class EditQuestionActivity extends Activity {
 		mListview = (ListView) findViewById(R.id.submit_question_listview);
 		
 		mListview.setAdapter(mAnswerListAdapter);
-		EditText questionEditText = (EditText) findViewById(R.
-				id.submit_question_text_body);
+		EditText questionEditText = (EditText) findViewById(R.id.submit_question_text_body_edit);
+		
+		// TextChanged Listener for questionEditText
 		questionEditText.addTextChangedListener(new TextWatcher() {
 			
 			@Override
@@ -172,6 +172,7 @@ public class EditQuestionActivity extends Activity {
 				// TODO if (question hasn't changed) quit
 				mQuestionBodyText = s.toString();
 				updateSubmitButton(mAnswerListAdapter.audit() == 0);
+				TestingTransactions.check(TTChecks.QUESTION_EDITED);
 			}
 			
 			@Override
@@ -187,8 +188,7 @@ public class EditQuestionActivity extends Activity {
 			}
 		});
 		
-		EditText tagsEditText = (EditText) findViewById(R.
-				id.submit_question_tags);
+		EditText tagsEditText = (EditText) findViewById(R.id.submit_question_tags);
 		tagsEditText.addTextChangedListener(new TextWatcher() {
 			
 			@Override
@@ -196,6 +196,7 @@ public class EditQuestionActivity extends Activity {
 				// TODO if (question hasn't changed) quit
 				mTagsText = s.toString();
 				updateSubmitButton(mAnswerListAdapter.audit() == 0);
+				TestingTransactions.check(TTChecks.QUESTION_EDITED);
 			}
 
 			@Override
@@ -234,5 +235,6 @@ public class EditQuestionActivity extends Activity {
 		}
 		mAnswerListAdapter.resetAnswerList();
 		editTextToFocus.requestFocus();
+		TestingTransactions.check(TTChecks.EDIT_QUESTIONS_SHOWN);
 	}
 }

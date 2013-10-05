@@ -10,7 +10,7 @@
     tools:context=".EditQuestionActivity" >
 
     <EditText
-        android:id="@+id/submit_question_text_body"
+        android:id="@+id/submit_question_text_body_edit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/submit_question_text_body" />
@@ -47,8 +47,8 @@
         android:id="@+id/submit_question_add_button"
         android:layout_width="40dp"
         android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/submit_question_text_body"
-        android:layout_below="@+id/submit_question_text_body"
+        android:layout_alignRight="@+id/submit_question_text_body_edit"
+        android:layout_below="@+id/submit_question_text_body_edit"
         android:onClick="addMoreAnswer"
         android:text="@string/submit_question_add_button" />
 
@@ -57,7 +57,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/submit_question_add_button"
-        android:layout_alignLeft="@+id/submit_question_text_body"
+        android:layout_alignLeft="@+id/submit_question_text_body_edit"
         android:layout_alignTop="@+id/submit_question_add_button"
         android:layout_toLeftOf="@+id/submit_question_add_button"
         android:gravity="center"
