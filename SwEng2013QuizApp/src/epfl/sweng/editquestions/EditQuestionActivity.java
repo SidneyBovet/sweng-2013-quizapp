@@ -24,7 +24,7 @@ import epfl.sweng.testing.TestingTransactions.TTChecks;
  * 
  * @author born4new
  * @author Merok
- * @author Aymeric Genet
+ * @author MelodyLucid
  * 
  */
 public class EditQuestionActivity extends Activity {
@@ -46,6 +46,73 @@ public class EditQuestionActivity extends Activity {
 		if (submitButton != null) {
 			submitButton.setEnabled(audit() == 0 && value);
 		}
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.submit_question, menu);
+
+		return true;
+	}
+
+	public void sendEditedQuestion(View view) {
+		Toast.makeText(this, "Quizz submitted to the server.",
+				Toast.LENGTH_SHORT).show();
+
+		// this was done in order to get the content of the EditText elements in
+		// the XML
+		// 	for (int i = 0; i < childCountInlayout; i++) {
+		// 		if (mLayout.getChildAt(i) instanceof EditText) {
+		// 		EditText currentEditText = (EditText) mLayout.getChildAt(i);
+		// 		String currentArgument = currentEditText.getText().toString();
+		// 		listElem.add(currentArgument);
+		// 	}
+		// }
+		// WARNING : you MUST follow this structure when you write the EditText
+		// elements : Question1 => Answer1 => ... => indexOfAnswer => tags
+		List<String> listElem = new ArrayList<String>();
+
+		listElem.add(mQuestionBodyText);
+
+		List<String> listAnswers = mAnswerListAdapter.getAnswerList();
+		for (int i = 0; i < mAnswerListAdapter.getCount(); i++) {
+			listElem.add(listAnswers.get(i));
+		}
+
+		int indexGoddAnswer = mAnswerListAdapter.getCorrectIndex();
+		String indexGoodAnswerString = Integer.toString(indexGoddAnswer);
+		listElem.add(indexGoodAnswerString);
+
+		listElem.add(mTagsText);
+
+		ServerInteractions.submitQuestion(listElem);
+
+		//FUNCTION : CLEAR VIEW OF QUIZ EDITION
+		resetEditQuestionLayout(mLayout);
+		TestingTransactions.check(TTChecks.NEW_QUESTION_SUBMITTED);
+	}
+
+	/**
+	 * Checks the following requirements :
+	 * <ul>
+	 * 	<li>The question field must not be an empty string</li>
+	 * 	<li>The tags field must not be an empty string.</li>
+	 * </ul>
+	 * 
+	 * @return The number of the previously described errors.
+	 */
+	public int audit() {
+		int errors = 0;
+
+		if (mQuestionBodyText.equals("")) {
+			errors++;
+		}
+		if (mTagsText.equals("")) {
+			errors++;
+		}
+		
+		return errors;
 	}
 
 	@Override
@@ -110,55 +177,6 @@ public class EditQuestionActivity extends Activity {
 		TestingTransactions.check(TTChecks.EDIT_QUESTIONS_SHOWN);
 	}
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.submit_question, menu);
-
-		return true;
-	}
-
-	public void sendEditedQuestion(View view) {
-		Toast.makeText(this, "Quizz submitted to the server.",
-				Toast.LENGTH_SHORT).show();
-
-		// this was done in order to get the content of the EditText elements in
-		// the XML
-		// 	for (int i = 0; i < childCountInlayout; i++) {
-		// 		if (mLayout.getChildAt(i) instanceof EditText) {
-		// 		EditText currentEditText = (EditText) mLayout.getChildAt(i);
-		// 		String currentArgument = currentEditText.getText().toString();
-		// 		listElem.add(currentArgument);
-		// 	}
-		// }
-		// WARNING : you MUST follow this structure when you write the EditText
-		// elements : Question1 => Answer1 => ... => indexOfAnswer => tags
-		List<String> listElem = new ArrayList<String>();
-
-		EditText questionBodyEditText = (EditText) mLayout.findViewById(R.id.submit_question_text_body);
-		String questionBodyString = questionBodyEditText.getText().toString();
-		int indexGoddAnswer = mAnswerListAdapter.getCorrectIndex();
-		String indexGoodAnswerString = Integer.toString(indexGoddAnswer);
-		listElem.add(questionBodyString);
-
-		List<String> listAnswers = mAnswerListAdapter.getAnswerList();
-
-		for (int i = 0; i < mAnswerListAdapter.getCount(); i++) {
-			listElem.add(listAnswers.get(i));
-		}
-
-		EditText questionTagsEditText = (EditText) mLayout.findViewById(R.id.submit_question_tags);
-		String questionTagsString = questionTagsEditText.getText().toString();
-		listElem.add(indexGoodAnswerString);
-		listElem.add(questionTagsString);
-
-		ServerInteractions.submitQuestion(listElem);
-
-		//FUNCTION : CLEAR VIEW OF QUIZ EDITION
-		resetEditQuestionLayout(mLayout);
-		TestingTransactions.check(TTChecks.NEW_QUESTION_SUBMITTED);
-	}
-
 	private void resetEditQuestionLayout(RelativeLayout mainLayout) {
 		EditText editTextToFocus = null;
 		for (int i = 0; i < mainLayout.getChildCount(); i++) {
@@ -172,27 +190,5 @@ public class EditQuestionActivity extends Activity {
 		}
 		mAnswerListAdapter.reset();
 		editTextToFocus.requestFocus();
-	}
-
-	/**
-	 * Checks the following requirements :
-	 * <ul>
-	 * 	<li>The question field must not be an empty string</li>
-	 * 	<li>The tags field must not be an empty string.</li>
-	 * </ul>
-	 * 
-	 * @return The number of the previously described errors.
-	 */
-	public int audit() {
-		int errors = 0;
-
-		if (mQuestionBodyText.equals("")) {
-			errors++;
-		}
-		if (mTagsText.equals("")) {
-			errors++;
-		}
-		
-		return errors;
 	}
 }

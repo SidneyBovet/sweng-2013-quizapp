@@ -21,7 +21,7 @@ import epfl.sweng.testing.TestingTransactions.TTChecks;
  * Adapter used to display the elements of the <code>ListView</code> on the
  * {@link EditQuestionActivity} with the actual answers data.
  * 
- * @author Aymeric Genet
+ * @author MelodyLucid
  * 
  */
 
