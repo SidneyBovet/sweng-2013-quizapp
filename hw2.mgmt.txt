@@ -12,13 +12,13 @@
         [ ] 4.5 Testing hooks                                          : when everything done
 
         [ ] 5.1 Link MainActivity to the quiz question functionnality  : John
-        [ ] 5.2 GUI for editing and submitting questions               : Aymeric
+        [x] 5.2 GUI for editing and submitting questions               : Aymeric
         [ ] 5.3 Submit the question to the SwEng quiz server           : John	
         [ ] 5.4 Testing hooks                                          : when everything done
 
-        [ ] 6   Generating JavaDoc and Class Diagram (+ checkstyle)    : Aymeric (if not already done)
+        [x] 6   Generating JavaDoc and Class Diagram (+ checkstyle)    : Aymeric (if not already done)
 
-        [ ] 7   Work time of everyone                                  : last thing to think of
+        [x] 7   Work time of everyone                                  : last thing to think of
 
     Comments :
         Fill in with a little "x" as you commit your work.

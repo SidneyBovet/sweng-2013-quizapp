@@ -25,6 +25,7 @@ import epfl.sweng.testing.TestingTransactions.TTChecks;
  */
 
 public class ShowQuestionsActivity extends Activity {
+	
 	@Override
 	protected void onCreate(final Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -33,10 +34,9 @@ public class ShowQuestionsActivity extends Activity {
 		setDisplayView();
 	}
 	/**
-	 * Sets all the view in this activity.
-	 * <p>
-	 * More precisely disable the button, fill the textView, initialize the
-	 * <code>ListView</code> with his adapter and put it under listening.
+	 * Sets all the view in this activity, by disabling the button, filling the
+	 * <code>TextView</code>, initializing the <code>ListView</code> bounded
+	 * with its adapter and putting it under a listener.
 	 */
 	
 	private void setDisplayView() {
@@ -79,6 +79,7 @@ public class ShowQuestionsActivity extends Activity {
 	 * 
 	 * @param view Element that was clicked, which is the send button. 
 	 */
+	
 	public void displayAgainRandomQuestion(View view) {
 		setDisplayView();
 	}

@@ -31,7 +31,7 @@ public class SelectionListener implements OnItemClickListener {
 	 * Creates a listener that will react to user input within a
 	 * {@link ShowQuestionsActivity}.
 	 * 
-	 * @param bNext The "Next Question" button of UI.
+	 * @param bNext The next question button
 	 * @param lwQuestions The list of displayed answers.
 	 */
 	

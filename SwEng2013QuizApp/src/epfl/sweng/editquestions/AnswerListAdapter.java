@@ -5,7 +5,6 @@ import java.util.List;
 
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -212,7 +211,6 @@ class AnswerListAdapter extends BaseAdapter {
 				
 				if (currentRowIndex < 0 || currentRowIndex >= mAnswerCount) {
 					// error
-					System.out.println("Well, fuck.");
 					TestingTransactions.check(TTChecks.QUESTION_EDITED);
 					return;
 				}
@@ -220,8 +218,7 @@ class AnswerListAdapter extends BaseAdapter {
 				mAnswerCount--;
 				if (currentRowIndex == mCorrectAnswerIndex) {
 					mCorrectAnswerIndex = -1;
-				}
-				if (currentRowIndex <= mCorrectAnswerIndex && currentRowIndex > 0) {
+				} else if (currentRowIndex < mCorrectAnswerIndex) {
 					mCorrectAnswerIndex--;
 				}
 				notifyDataSetChanged();
