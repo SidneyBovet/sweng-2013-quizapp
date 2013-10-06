@@ -2,19 +2,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:onClick="displayRandomQuestion"
     android:orientation="vertical"
     android:text="@string/displayRandomQuestionButton" >
     
-<Button
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:onClick="displayRandomQuestion"
-    android:text="@string/displayRandomQuestionButton" />
-<Button
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:onClick="submitQuestion"
-    android:text="@string/submitQuestionButton" />
-
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="displayRandomQuestion"
+        android:text="@string/displayRandomQuestionButton" />
+    
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="submitQuestion"
+        android:text="@string/submitQuestionButton" />
+    
 </LinearLayout>
