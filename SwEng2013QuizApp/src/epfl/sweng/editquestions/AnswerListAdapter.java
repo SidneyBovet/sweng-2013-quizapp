@@ -5,6 +5,7 @@ import java.util.List;
 
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -83,9 +84,8 @@ class AnswerListAdapter extends BaseAdapter {
 	 * Resets the fields and the data of the <code>ListView</code>
 	 */
 	public void resetAnswerList() {
-		mAnswerCount = 2;
+		mAnswerCount = 1;
 		mAnswerList = new ArrayList<String>();
-		mAnswerList.add("");
 		mAnswerList.add("");
 		mCorrectAnswerIndex = -1;
 		notifyDataSetChanged();
@@ -205,14 +205,15 @@ class AnswerListAdapter extends BaseAdapter {
 		Button removeButton = (Button) relatLayout.findViewById(R.id.
 				submit_question_remove_answer_edit);
 		
-		removeButton.setEnabled(getCount() > 2);
-		
 		removeButton.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
 				
-				if (mAnswerCount <= 2) {
+				if (currentRowIndex < 0 || currentRowIndex >= mAnswerCount) {
+					// error
+					System.out.println("Well, fuck.");
+					TestingTransactions.check(TTChecks.QUESTION_EDITED);
 					return;
 				}
 				mAnswerList.remove(currentRowIndex);
