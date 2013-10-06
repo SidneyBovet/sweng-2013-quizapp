@@ -10,7 +10,7 @@ digraph G {
 	nodesep=0.25;
 	ranksep=0.5;
 	// epfl.sweng.backend.Question
-	c726 [label=<<table title="epfl.sweng.backend.Question" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="../backend/Question.html">
+	c696 [label=<<table title="epfl.sweng.backend.Question" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="../backend/Question.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> Question </td></tr>
 		</table></td></tr>
@@ -18,15 +18,9 @@ digraph G {
 <tr><td align="left" balign="left">  </td></tr>
 		</table></td></tr>
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="left" balign="left"> + Question(questionId : long, questionStmt : String, questionAnswers : List&lt;String&gt;, questionSolutionIndex : int, questionTags : List&lt;String&gt;, questionOwner : String) </td></tr>
-<tr><td align="left" balign="left"> + Question(questionStmt : String, questionAnswers : List&lt;String&gt;, questionSolutionIndex : int, questionTags : List&lt;String&gt;) </td></tr>
+<tr><td align="left" balign="left"> + Question(id : long, content : String, answers : List&lt;String&gt;, solutionIndex : int, tags : List&lt;String&gt;, owner : String) </td></tr>
+<tr><td align="left" balign="left"> + Question(content : String, answers : List&lt;String&gt;, solutionIndex : int, tags : List&lt;String&gt;) </td></tr>
 <tr><td align="left" balign="left"> + toJSON() : JSONObject </td></tr>
-<tr><td align="left" balign="left"> + setId(id : long) </td></tr>
-<tr><td align="left" balign="left"> + setQuestionContent(questionContent : String) </td></tr>
-<tr><td align="left" balign="left"> + setAnswers(answers : List&lt;String&gt;) </td></tr>
-<tr><td align="left" balign="left"> + setSolutionIndex(solutionIndex : int) </td></tr>
-<tr><td align="left" balign="left"> + setTags(tags : List&lt;String&gt;) </td></tr>
-<tr><td align="left" balign="left"> + setOwner(owner : String) </td></tr>
 <tr><td align="left" balign="left"> + getTagsToString() : String </td></tr>
 <tr><td align="left" balign="left"> + getOwner() : String </td></tr>
 <tr><td align="left" balign="left"> + getSolutionIndex() : int </td></tr>
@@ -41,7 +35,7 @@ digraph G {
 		</table></td></tr>
 		</table>>, URL="../backend/Question.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// epfl.sweng.showquestions.SelectionListener
-	c733 [label=<<table title="epfl.sweng.showquestions.SelectionListener" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./SelectionListener.html">
+	c703 [label=<<table title="epfl.sweng.showquestions.SelectionListener" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./SelectionListener.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> SelectionListener </td></tr>
 		</table></td></tr>
@@ -54,17 +48,19 @@ digraph G {
 		</table></td></tr>
 		</table>>, URL="./SelectionListener.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	//epfl.sweng.showquestions.SelectionListener implements android.widget.AdapterView.OnItemClickListener
-	c749:p -> c733:p [dir=back,arrowtail=empty,style=dashed];
+	c719:p -> c703:p [dir=back,arrowtail=empty,style=dashed];
 	// epfl.sweng.showquestions.SelectionListener DEPEND android.widget.Button
-	c733:p -> c750:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
-	// epfl.sweng.showquestions.SelectionListener DEPEND android.view.View
-	c733:p -> c751:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
+	c703:p -> c720:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
 	// epfl.sweng.showquestions.SelectionListener DEPEND android.widget.AdapterView<T extends android.widget.Adapter>
-	c733:p -> c752:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
+	c703:p -> c721:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
+	// epfl.sweng.showquestions.SelectionListener DEPEND android.widget.AdapterView<T extends android.widget.Adapter>
+	c703:p -> c721:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
+	// epfl.sweng.showquestions.SelectionListener DEPEND android.view.View
+	c703:p -> c722:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
 	// epfl.sweng.showquestions.SelectionListener DEPEND epfl.sweng.backend.Question
-	c733:p -> c726:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
+	c703:p -> c696:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
 	// android.view.View
-	c751 [label=<<table title="android.view.View" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="http://java.sun.com/j2se/1.4.2/docs/api/android/view/View.html">
+	c722 [label=<<table title="android.view.View" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="http://java.sun.com/j2se/1.4.2/docs/api/android/view/View.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> View </td></tr>
 		</table></td></tr>
@@ -617,7 +613,7 @@ digraph G {
 		</table></td></tr>
 		</table>>, URL="http://java.sun.com/j2se/1.4.2/docs/api/android/view/View.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// android.widget.AdapterView<T extends android.widget.Adapter>
-	c752 [label=<<table title="android.widget.AdapterView" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="http://java.sun.com/j2se/1.4.2/docs/api/android/widget/AdapterView.html">
+	c721 [label=<<table title="android.widget.AdapterView" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="http://java.sun.com/j2se/1.4.2/docs/api/android/widget/AdapterView.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"><font face="Helvetica-Oblique"> AdapterView&lt;T extends Adapter&gt; </font></td></tr>
 		</table></td></tr>
@@ -675,7 +671,7 @@ digraph G {
 		</table></td></tr>
 		</table>>, URL="http://java.sun.com/j2se/1.4.2/docs/api/android/widget/AdapterView.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// android.widget.Button
-	c750 [label=<<table title="android.widget.Button" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="http://java.sun.com/j2se/1.4.2/docs/api/android/widget/Button.html">
+	c720 [label=<<table title="android.widget.Button" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="http://java.sun.com/j2se/1.4.2/docs/api/android/widget/Button.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> Button </td></tr>
 		</table></td></tr>
@@ -691,7 +687,7 @@ digraph G {
 		</table></td></tr>
 		</table>>, URL="http://java.sun.com/j2se/1.4.2/docs/api/android/widget/Button.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// android.widget.AdapterView.OnItemClickListener
-	c749 [label=<<table title="android.widget.AdapterView.OnItemClickListener" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="http://java.sun.com/j2se/1.4.2/docs/api/android/widget/AdapterView/OnItemClickListener.html">
+	c719 [label=<<table title="android.widget.AdapterView.OnItemClickListener" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="http://java.sun.com/j2se/1.4.2/docs/api/android/widget/AdapterView/OnItemClickListener.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
 <tr><td align="center" balign="center"> OnItemClickListener </td></tr>

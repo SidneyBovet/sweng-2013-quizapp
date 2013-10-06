@@ -10,7 +10,7 @@ digraph G {
 	nodesep=0.25;
 	ranksep=0.5;
 	// epfl.sweng.servercomm.DownloadJSONFromServer
-	c77 [label=<<table title="epfl.sweng.servercomm.DownloadJSONFromServer" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./DownloadJSONFromServer.html">
+	c73 [label=<<table title="epfl.sweng.servercomm.DownloadJSONFromServer" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./DownloadJSONFromServer.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> DownloadJSONFromServer </td></tr>
 		</table></td></tr>
@@ -23,7 +23,7 @@ digraph G {
 		</table></td></tr>
 		</table>>, URL="./DownloadJSONFromServer.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// epfl.sweng.servercomm.SwengHttpClientFactory
-	c78 [label=<<table title="epfl.sweng.servercomm.SwengHttpClientFactory" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./SwengHttpClientFactory.html">
+	c74 [label=<<table title="epfl.sweng.servercomm.SwengHttpClientFactory" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./SwengHttpClientFactory.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> SwengHttpClientFactory </td></tr>
 		</table></td></tr>
@@ -37,7 +37,7 @@ digraph G {
 		</table></td></tr>
 		</table>>, URL="./SwengHttpClientFactory.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// epfl.sweng.servercomm.QuizEditExecution
-	c79 [label=<<table title="epfl.sweng.servercomm.QuizEditExecution" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./QuizEditExecution.html">
+	c75 [label=<<table title="epfl.sweng.servercomm.QuizEditExecution" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./QuizEditExecution.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> QuizEditExecution </td></tr>
 		</table></td></tr>
@@ -46,11 +46,11 @@ digraph G {
 		</table></td></tr>
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="left" balign="left"> + QuizEditExecution() </td></tr>
-<tr><td align="left" balign="left"> # doInBackground(listElem : ArrayList&lt;String&gt;[]) : String </td></tr>
+<tr><td align="left" balign="left"> # doInBackground(jsonObject : JSONObject[]) : Void </td></tr>
 		</table></td></tr>
 		</table>>, URL="./QuizEditExecution.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// epfl.sweng.servercomm.ServerInteractions
-	c80 [label=<<table title="epfl.sweng.servercomm.ServerInteractions" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ServerInteractions.html">
+	c76 [label=<<table title="epfl.sweng.servercomm.ServerInteractions" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ServerInteractions.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> ServerInteractions </td></tr>
 		</table></td></tr>

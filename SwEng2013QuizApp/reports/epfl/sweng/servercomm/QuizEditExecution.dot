@@ -9,27 +9,29 @@ digraph G {
 	node [fontname="Helvetica",fontsize=10,shape=plaintext];
 	nodesep=0.25;
 	ranksep=0.5;
-	// epfl.sweng.servercomm.DownloadJSONFromServer
-	c236 [label=<<table title="epfl.sweng.servercomm.DownloadJSONFromServer" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./DownloadJSONFromServer.html">
+	// epfl.sweng.servercomm.QuizEditExecution
+	c466 [label=<<table title="epfl.sweng.servercomm.QuizEditExecution" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./QuizEditExecution.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"> DownloadJSONFromServer </td></tr>
+<tr><td align="center" balign="center"> QuizEditExecution </td></tr>
 		</table></td></tr>
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="left" balign="left">  </td></tr>
 		</table></td></tr>
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="left" balign="left"> + DownloadJSONFromServer() </td></tr>
-<tr><td align="left" balign="left"> # doInBackground(url : String[]) : String </td></tr>
+<tr><td align="left" balign="left"> + QuizEditExecution() </td></tr>
+<tr><td align="left" balign="left"> # doInBackground(jsonObject : JSONObject[]) : Void </td></tr>
 		</table></td></tr>
-		</table>>, URL="./DownloadJSONFromServer.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
-	//epfl.sweng.servercomm.DownloadJSONFromServer extends android.os.AsyncTask<java.lang.String, java.lang.Void, java.lang.String>
-	c261:p -> c236:p [dir=back,arrowtail=empty];
-	// epfl.sweng.servercomm.DownloadJSONFromServer DEPEND java.lang.String
-	c236:p -> c270:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
-	// epfl.sweng.servercomm.DownloadJSONFromServer DEPEND java.lang.String
-	c236:p -> c270:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
+		</table>>, URL="./QuizEditExecution.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	//epfl.sweng.servercomm.QuizEditExecution extends android.os.AsyncTask<org.json.JSONObject, java.lang.Void, java.lang.Void>
+	c484:p -> c466:p [dir=back,arrowtail=empty];
+	// epfl.sweng.servercomm.QuizEditExecution DEPEND java.lang.String
+	c466:p -> c485:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
+	// epfl.sweng.servercomm.QuizEditExecution DEPEND java.lang.Void
+	c466:p -> c487:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
+	// epfl.sweng.servercomm.QuizEditExecution DEPEND org.json.JSONObject
+	c466:p -> c488:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
 	// java.lang.String
-	c270 [label=<<table title="java.lang.String" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html">
+	c485 [label=<<table title="java.lang.String" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> String </td></tr>
 		</table></td></tr>
@@ -120,7 +122,7 @@ digraph G {
 		</table></td></tr>
 		</table>>, URL="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// android.os.AsyncTask<Params, Progress, Result>
-	c261 [label=<<table title="android.os.AsyncTask" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="http://java.sun.com/j2se/1.4.2/docs/api/android/os/AsyncTask.html">
+	c484 [label=<<table title="android.os.AsyncTask" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="http://java.sun.com/j2se/1.4.2/docs/api/android/os/AsyncTask.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"><font face="Helvetica-Oblique"> AsyncTask&lt;Params, Progress, Result&gt; </font></td></tr>
 		</table></td></tr>
@@ -147,5 +149,72 @@ digraph G {
 <tr><td align="left" balign="left"> # publishProgress(arg0 : Progress[]) </td></tr>
 		</table></td></tr>
 		</table>>, URL="http://java.sun.com/j2se/1.4.2/docs/api/android/os/AsyncTask.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// org.json.JSONObject
+	c488 [label=<<table title="org.json.JSONObject" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="http://java.sun.com/j2se/1.4.2/docs/api/org/json/JSONObject.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> JSONObject </td></tr>
+		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left"> + NULL : Object </td></tr>
+		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left"> + JSONObject() </td></tr>
+<tr><td align="left" balign="left"> + JSONObject(arg0 : Map&lt;&gt;) </td></tr>
+<tr><td align="left" balign="left"> + JSONObject(arg0 : JSONTokener) </td></tr>
+<tr><td align="left" balign="left"> + JSONObject(arg0 : String) </td></tr>
+<tr><td align="left" balign="left"> + JSONObject(arg0 : JSONObject, arg1 : String[]) </td></tr>
+<tr><td align="left" balign="left"> + length() : int </td></tr>
+<tr><td align="left" balign="left"> + put(arg0 : String, arg1 : boolean) : JSONObject </td></tr>
+<tr><td align="left" balign="left"> + put(arg0 : String, arg1 : double) : JSONObject </td></tr>
+<tr><td align="left" balign="left"> + put(arg0 : String, arg1 : int) : JSONObject </td></tr>
+<tr><td align="left" balign="left"> + put(arg0 : String, arg1 : long) : JSONObject </td></tr>
+<tr><td align="left" balign="left"> + put(arg0 : String, arg1 : Object) : JSONObject </td></tr>
+<tr><td align="left" balign="left"> + putOpt(arg0 : String, arg1 : Object) : JSONObject </td></tr>
+<tr><td align="left" balign="left"> + accumulate(arg0 : String, arg1 : Object) : JSONObject </td></tr>
+<tr><td align="left" balign="left"> + remove(arg0 : String) : Object </td></tr>
+<tr><td align="left" balign="left"> + isNull(arg0 : String) : boolean </td></tr>
+<tr><td align="left" balign="left"> + has(arg0 : String) : boolean </td></tr>
+<tr><td align="left" balign="left"> + get(arg0 : String) : Object </td></tr>
+<tr><td align="left" balign="left"> + opt(arg0 : String) : Object </td></tr>
+<tr><td align="left" balign="left"> + getBoolean(arg0 : String) : boolean </td></tr>
+<tr><td align="left" balign="left"> + optBoolean(arg0 : String) : boolean </td></tr>
+<tr><td align="left" balign="left"> + optBoolean(arg0 : String, arg1 : boolean) : boolean </td></tr>
+<tr><td align="left" balign="left"> + getDouble(arg0 : String) : double </td></tr>
+<tr><td align="left" balign="left"> + optDouble(arg0 : String) : double </td></tr>
+<tr><td align="left" balign="left"> + optDouble(arg0 : String, arg1 : double) : double </td></tr>
+<tr><td align="left" balign="left"> + getInt(arg0 : String) : int </td></tr>
+<tr><td align="left" balign="left"> + optInt(arg0 : String) : int </td></tr>
+<tr><td align="left" balign="left"> + optInt(arg0 : String, arg1 : int) : int </td></tr>
+<tr><td align="left" balign="left"> + getLong(arg0 : String) : long </td></tr>
+<tr><td align="left" balign="left"> + optLong(arg0 : String) : long </td></tr>
+<tr><td align="left" balign="left"> + optLong(arg0 : String, arg1 : long) : long </td></tr>
+<tr><td align="left" balign="left"> + getString(arg0 : String) : String </td></tr>
+<tr><td align="left" balign="left"> + optString(arg0 : String) : String </td></tr>
+<tr><td align="left" balign="left"> + optString(arg0 : String, arg1 : String) : String </td></tr>
+<tr><td align="left" balign="left"> + getJSONArray(arg0 : String) : JSONArray </td></tr>
+<tr><td align="left" balign="left"> + optJSONArray(arg0 : String) : JSONArray </td></tr>
+<tr><td align="left" balign="left"> + getJSONObject(arg0 : String) : JSONObject </td></tr>
+<tr><td align="left" balign="left"> + optJSONObject(arg0 : String) : JSONObject </td></tr>
+<tr><td align="left" balign="left"> + toJSONArray(arg0 : JSONArray) : JSONArray </td></tr>
+<tr><td align="left" balign="left"> + keys() : Iterator&lt;&gt; </td></tr>
+<tr><td align="left" balign="left"> + names() : JSONArray </td></tr>
+<tr><td align="left" balign="left"> + toString() : String </td></tr>
+<tr><td align="left" balign="left"> + toString(arg0 : int) : String </td></tr>
+<tr><td align="left" balign="left"> + numberToString(arg0 : Number) : String </td></tr>
+<tr><td align="left" balign="left"> + quote(arg0 : String) : String </td></tr>
+		</table></td></tr>
+		</table>>, URL="http://java.sun.com/j2se/1.4.2/docs/api/org/json/JSONObject.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// java.lang.Void
+	c487 [label=<<table title="java.lang.Void" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Void.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> Void </td></tr>
+		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left"> + TYPE : Class&lt;Void&gt; </td></tr>
+		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left">  </td></tr>
+		</table></td></tr>
+		</table>>, URL="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Void.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 }
 

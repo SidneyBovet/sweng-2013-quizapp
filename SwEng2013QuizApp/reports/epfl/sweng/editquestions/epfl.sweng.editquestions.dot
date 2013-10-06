@@ -10,7 +10,7 @@ digraph G {
 	nodesep=0.25;
 	ranksep=0.5;
 	// epfl.sweng.editquestions.EditQuestionActivity
-	c26 [label=<<table title="epfl.sweng.editquestions.EditQuestionActivity" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./EditQuestionActivity.html">
+	c24 [label=<<table title="epfl.sweng.editquestions.EditQuestionActivity" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./EditQuestionActivity.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> EditQuestionActivity </td></tr>
 		</table></td></tr>
@@ -28,9 +28,9 @@ digraph G {
 		</table></td></tr>
 		</table>>, URL="./EditQuestionActivity.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// epfl.sweng.editquestions.EditQuestionActivity DEPEND epfl.sweng.editquestions.AnswerListAdapter
-	c26:p -> c48:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
+	c24:p -> c46:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
 	// epfl.sweng.editquestions.AnswerListAdapter
-	c48 [label=<<table title="epfl.sweng.editquestions.AnswerListAdapter" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="http://java.sun.com/j2se/1.4.2/docs/api/epfl/sweng/editquestions/AnswerListAdapter.html">
+	c46 [label=<<table title="epfl.sweng.editquestions.AnswerListAdapter" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="http://java.sun.com/j2se/1.4.2/docs/api/epfl/sweng/editquestions/AnswerListAdapter.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> AnswerListAdapter </td></tr>
 		</table></td></tr>
@@ -42,7 +42,7 @@ digraph G {
 <tr><td align="left" balign="left"> + add(newAnswer : String) </td></tr>
 <tr><td align="left" balign="left"> + getAnswerList() : List&lt;String&gt; </td></tr>
 <tr><td align="left" balign="left"> + getCorrectIndex() : int </td></tr>
-<tr><td align="left" balign="left"> + reset() </td></tr>
+<tr><td align="left" balign="left"> + resetAnswerList() </td></tr>
 <tr><td align="left" balign="left"> + notifyDataSetChanged() </td></tr>
 <tr><td align="left" balign="left"> + getCount() : int </td></tr>
 <tr><td align="left" balign="left"> + getItem(index : int) : Object </td></tr>

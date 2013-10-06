@@ -10,7 +10,7 @@ digraph G {
 	nodesep=0.25;
 	ranksep=0.5;
 	// epfl.sweng.servercomm.SwengHttpClientFactory
-	c811 [label=<<table title="epfl.sweng.servercomm.SwengHttpClientFactory" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./SwengHttpClientFactory.html">
+	c778 [label=<<table title="epfl.sweng.servercomm.SwengHttpClientFactory" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./SwengHttpClientFactory.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> SwengHttpClientFactory </td></tr>
 		</table></td></tr>
@@ -23,18 +23,18 @@ digraph G {
 <tr><td align="left" balign="left"> + setInstance(instance : AbstractHttpClient) </td></tr>
 		</table></td></tr>
 		</table>>, URL="./SwengHttpClientFactory.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
-	// epfl.sweng.servercomm.SwengHttpClientFactory DEPEND org.apache.http.HttpRequestInterceptor
-	c811:p -> c832:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
-	// epfl.sweng.servercomm.SwengHttpClientFactory DEPEND org.apache.http.client.RedirectHandler
-	c811:p -> c835:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
-	// epfl.sweng.servercomm.SwengHttpClientFactory DEPEND org.apache.http.client.CookieStore
-	c811:p -> c838:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
-	// epfl.sweng.servercomm.SwengHttpClientFactory DEPEND org.apache.http.impl.client.AbstractHttpClient
-	c811:p -> c858:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
 	// epfl.sweng.servercomm.SwengHttpClientFactory DEPEND org.apache.http.HttpResponseInterceptor
-	c811:p -> c859:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
+	c778:p -> c799:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
+	// epfl.sweng.servercomm.SwengHttpClientFactory DEPEND org.apache.http.HttpRequestInterceptor
+	c778:p -> c801:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
+	// epfl.sweng.servercomm.SwengHttpClientFactory DEPEND org.apache.http.impl.client.AbstractHttpClient
+	c778:p -> c821:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
+	// epfl.sweng.servercomm.SwengHttpClientFactory DEPEND org.apache.http.client.CookieStore
+	c778:p -> c824:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
+	// epfl.sweng.servercomm.SwengHttpClientFactory DEPEND org.apache.http.client.RedirectHandler
+	c778:p -> c826:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
 	// org.apache.http.client.CookieStore
-	c838 [label=<<table title="org.apache.http.client.CookieStore" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="http://java.sun.com/j2se/1.4.2/docs/api/org/apache/http/client/CookieStore.html">
+	c824 [label=<<table title="org.apache.http.client.CookieStore" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="http://java.sun.com/j2se/1.4.2/docs/api/org/apache/http/client/CookieStore.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
 <tr><td align="center" balign="center"> CookieStore </td></tr>
@@ -50,7 +50,7 @@ digraph G {
 		</table></td></tr>
 		</table>>, URL="http://java.sun.com/j2se/1.4.2/docs/api/org/apache/http/client/CookieStore.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.apache.http.impl.client.AbstractHttpClient
-	c858 [label=<<table title="org.apache.http.impl.client.AbstractHttpClient" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="http://java.sun.com/j2se/1.4.2/docs/api/org/apache/http/impl/client/AbstractHttpClient.html">
+	c821 [label=<<table title="org.apache.http.impl.client.AbstractHttpClient" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="http://java.sun.com/j2se/1.4.2/docs/api/org/apache/http/impl/client/AbstractHttpClient.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"><font face="Helvetica-Oblique"> AbstractHttpClient </font></td></tr>
 		</table></td></tr>
@@ -130,7 +130,7 @@ digraph G {
 		</table></td></tr>
 		</table>>, URL="http://java.sun.com/j2se/1.4.2/docs/api/org/apache/http/impl/client/AbstractHttpClient.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.apache.http.client.RedirectHandler
-	c835 [label=<<table title="org.apache.http.client.RedirectHandler" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="http://java.sun.com/j2se/1.4.2/docs/api/org/apache/http/client/RedirectHandler.html">
+	c826 [label=<<table title="org.apache.http.client.RedirectHandler" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="http://java.sun.com/j2se/1.4.2/docs/api/org/apache/http/client/RedirectHandler.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
 <tr><td align="center" balign="center"> RedirectHandler </td></tr>
@@ -144,7 +144,7 @@ digraph G {
 		</table></td></tr>
 		</table>>, URL="http://java.sun.com/j2se/1.4.2/docs/api/org/apache/http/client/RedirectHandler.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.apache.http.HttpRequestInterceptor
-	c832 [label=<<table title="org.apache.http.HttpRequestInterceptor" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="http://java.sun.com/j2se/1.4.2/docs/api/org/apache/http/HttpRequestInterceptor.html">
+	c801 [label=<<table title="org.apache.http.HttpRequestInterceptor" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="http://java.sun.com/j2se/1.4.2/docs/api/org/apache/http/HttpRequestInterceptor.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
 <tr><td align="center" balign="center"> HttpRequestInterceptor </td></tr>
@@ -157,7 +157,7 @@ digraph G {
 		</table></td></tr>
 		</table>>, URL="http://java.sun.com/j2se/1.4.2/docs/api/org/apache/http/HttpRequestInterceptor.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.apache.http.HttpResponseInterceptor
-	c859 [label=<<table title="org.apache.http.HttpResponseInterceptor" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="http://java.sun.com/j2se/1.4.2/docs/api/org/apache/http/HttpResponseInterceptor.html">
+	c799 [label=<<table title="org.apache.http.HttpResponseInterceptor" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="http://java.sun.com/j2se/1.4.2/docs/api/org/apache/http/HttpResponseInterceptor.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
 <tr><td align="center" balign="center"> HttpResponseInterceptor </td></tr>

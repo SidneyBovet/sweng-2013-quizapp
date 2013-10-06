@@ -10,7 +10,7 @@ digraph G {
 	nodesep=0.25;
 	ranksep=0.5;
 	// epfl.sweng.showquestions.ShowQuestionsActivity
-	c787 [label=<<table title="epfl.sweng.showquestions.ShowQuestionsActivity" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./ShowQuestionsActivity.html">
+	c755 [label=<<table title="epfl.sweng.showquestions.ShowQuestionsActivity" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./ShowQuestionsActivity.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> ShowQuestionsActivity </td></tr>
 		</table></td></tr>
@@ -25,15 +25,15 @@ digraph G {
 		</table></td></tr>
 		</table>>, URL="./ShowQuestionsActivity.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	//epfl.sweng.showquestions.ShowQuestionsActivity extends android.app.Activity
-	c802:p -> c787:p [dir=back,arrowtail=empty];
-	// epfl.sweng.showquestions.ShowQuestionsActivity DEPEND android.view.Menu
-	c787:p -> c803:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
-	// epfl.sweng.showquestions.ShowQuestionsActivity DEPEND android.os.Bundle
-	c787:p -> c804:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
+	c770:p -> c755:p [dir=back,arrowtail=empty];
 	// epfl.sweng.showquestions.ShowQuestionsActivity DEPEND android.view.View
-	c787:p -> c805:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
+	c755:p -> c771:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
+	// epfl.sweng.showquestions.ShowQuestionsActivity DEPEND android.view.Menu
+	c755:p -> c772:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
+	// epfl.sweng.showquestions.ShowQuestionsActivity DEPEND android.os.Bundle
+	c755:p -> c773:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
 	// android.view.View
-	c805 [label=<<table title="android.view.View" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="http://java.sun.com/j2se/1.4.2/docs/api/android/view/View.html">
+	c771 [label=<<table title="android.view.View" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="http://java.sun.com/j2se/1.4.2/docs/api/android/view/View.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> View </td></tr>
 		</table></td></tr>
@@ -586,7 +586,7 @@ digraph G {
 		</table></td></tr>
 		</table>>, URL="http://java.sun.com/j2se/1.4.2/docs/api/android/view/View.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// android.app.Activity
-	c802 [label=<<table title="android.app.Activity" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="http://java.sun.com/j2se/1.4.2/docs/api/android/app/Activity.html">
+	c770 [label=<<table title="android.app.Activity" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="http://java.sun.com/j2se/1.4.2/docs/api/android/app/Activity.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> Activity </td></tr>
 		</table></td></tr>
@@ -790,7 +790,7 @@ digraph G {
 		</table></td></tr>
 		</table>>, URL="http://java.sun.com/j2se/1.4.2/docs/api/android/app/Activity.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// android.view.Menu
-	c803 [label=<<table title="android.view.Menu" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="http://java.sun.com/j2se/1.4.2/docs/api/android/view/Menu.html">
+	c772 [label=<<table title="android.view.Menu" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="http://java.sun.com/j2se/1.4.2/docs/api/android/view/Menu.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
 <tr><td align="center" balign="center"> Menu </td></tr>
@@ -834,7 +834,7 @@ digraph G {
 		</table></td></tr>
 		</table>>, URL="http://java.sun.com/j2se/1.4.2/docs/api/android/view/Menu.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// android.os.Bundle
-	c804 [label=<<table title="android.os.Bundle" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="http://java.sun.com/j2se/1.4.2/docs/api/android/os/Bundle.html">
+	c773 [label=<<table title="android.os.Bundle" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="http://java.sun.com/j2se/1.4.2/docs/api/android/os/Bundle.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> Bundle </td></tr>
 		</table></td></tr>

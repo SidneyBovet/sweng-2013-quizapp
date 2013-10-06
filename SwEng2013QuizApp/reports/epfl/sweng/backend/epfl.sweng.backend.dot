@@ -9,21 +9,8 @@ digraph G {
 	node [fontname="Helvetica",fontsize=10,shape=plaintext];
 	nodesep=0.25;
 	ranksep=0.5;
-	// epfl.sweng.backend.QuizEditExecution
-	c0 [label=<<table title="epfl.sweng.backend.QuizEditExecution" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./QuizEditExecution.html">
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"> QuizEditExecution </td></tr>
-		</table></td></tr>
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="left" balign="left">  </td></tr>
-		</table></td></tr>
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="left" balign="left"> + QuizEditExecution() </td></tr>
-<tr><td align="left" balign="left"> # doInBackground(jsonObject : JSONObject[]) : Void </td></tr>
-		</table></td></tr>
-		</table>>, URL="./QuizEditExecution.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// epfl.sweng.backend.Question
-	c1 [label=<<table title="epfl.sweng.backend.Question" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Question.html">
+	c0 [label=<<table title="epfl.sweng.backend.Question" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Question.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> Question </td></tr>
 		</table></td></tr>
@@ -31,15 +18,9 @@ digraph G {
 <tr><td align="left" balign="left">  </td></tr>
 		</table></td></tr>
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="left" balign="left"> + Question(questionId : long, questionStmt : String, questionAnswers : List&lt;String&gt;, questionSolutionIndex : int, questionTags : List&lt;String&gt;, questionOwner : String) </td></tr>
-<tr><td align="left" balign="left"> + Question(questionStmt : String, questionAnswers : List&lt;String&gt;, questionSolutionIndex : int, questionTags : List&lt;String&gt;) </td></tr>
+<tr><td align="left" balign="left"> + Question(id : long, content : String, answers : List&lt;String&gt;, solutionIndex : int, tags : List&lt;String&gt;, owner : String) </td></tr>
+<tr><td align="left" balign="left"> + Question(content : String, answers : List&lt;String&gt;, solutionIndex : int, tags : List&lt;String&gt;) </td></tr>
 <tr><td align="left" balign="left"> + toJSON() : JSONObject </td></tr>
-<tr><td align="left" balign="left"> + setId(id : long) </td></tr>
-<tr><td align="left" balign="left"> + setQuestionContent(questionContent : String) </td></tr>
-<tr><td align="left" balign="left"> + setAnswers(answers : List&lt;String&gt;) </td></tr>
-<tr><td align="left" balign="left"> + setSolutionIndex(solutionIndex : int) </td></tr>
-<tr><td align="left" balign="left"> + setTags(tags : List&lt;String&gt;) </td></tr>
-<tr><td align="left" balign="left"> + setOwner(owner : String) </td></tr>
 <tr><td align="left" balign="left"> + getTagsToString() : String </td></tr>
 <tr><td align="left" balign="left"> + getOwner() : String </td></tr>
 <tr><td align="left" balign="left"> + getSolutionIndex() : int </td></tr>

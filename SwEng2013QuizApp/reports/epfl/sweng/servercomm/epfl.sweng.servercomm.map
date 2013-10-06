@@ -1,10 +1,10 @@
 <map id="G" name="G">
-<area shape="rect" id="c77" href="./DownloadJSONFromServer.html" title="epfl.sweng.servercomm.DownloadJSONFromServer" alt="" coords="16,19,264,109"/>
+<area shape="rect" id="c73" href="./DownloadJSONFromServer.html" title="epfl.sweng.servercomm.DownloadJSONFromServer" alt="" coords="16,19,264,109"/>
 <area shape="rect" id="node1" href="./DownloadJSONFromServer.html" title="&lt;TABLE&gt;" alt="" coords="5,14,275,114"/>
-<area shape="rect" id="c78" href="./SwengHttpClientFactory.html" title="epfl.sweng.servercomm.SwengHttpClientFactory" alt="" coords="309,11,587,117"/>
+<area shape="rect" id="c74" href="./SwengHttpClientFactory.html" title="epfl.sweng.servercomm.SwengHttpClientFactory" alt="" coords="309,11,587,117"/>
 <area shape="rect" id="node2" href="./SwengHttpClientFactory.html" title="&lt;TABLE&gt;" alt="" coords="299,6,597,122"/>
-<area shape="rect" id="c79" href="./QuizEditExecution.html" title="epfl.sweng.servercomm.QuizEditExecution" alt="" coords="632,19,981,109"/>
-<area shape="rect" id="node3" href="./QuizEditExecution.html" title="&lt;TABLE&gt;" alt="" coords="621,14,992,114"/>
-<area shape="rect" id="c80" href="./ServerInteractions.html" title="epfl.sweng.servercomm.ServerInteractions" alt="" coords="1027,11,1312,117"/>
-<area shape="rect" id="node4" href="./ServerInteractions.html" title="&lt;TABLE&gt;" alt="" coords="1016,6,1323,122"/>
+<area shape="rect" id="c75" href="./QuizEditExecution.html" title="epfl.sweng.servercomm.QuizEditExecution" alt="" coords="632,19,960,109"/>
+<area shape="rect" id="node3" href="./QuizEditExecution.html" title="&lt;TABLE&gt;" alt="" coords="621,14,971,114"/>
+<area shape="rect" id="c76" href="./ServerInteractions.html" title="epfl.sweng.servercomm.ServerInteractions" alt="" coords="1005,11,1291,117"/>
+<area shape="rect" id="node4" href="./ServerInteractions.html" title="&lt;TABLE&gt;" alt="" coords="995,6,1301,122"/>
 </map>

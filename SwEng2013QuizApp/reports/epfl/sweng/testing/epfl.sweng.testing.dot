@@ -10,7 +10,7 @@ digraph G {
 	nodesep=0.25;
 	ranksep=0.5;
 	// epfl.sweng.testing.TestingTransactionsError
-	c131 [label=<<table title="epfl.sweng.testing.TestingTransactionsError" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./TestingTransactionsError.html">
+	c125 [label=<<table title="epfl.sweng.testing.TestingTransactionsError" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./TestingTransactionsError.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> TestingTransactionsError </td></tr>
 		</table></td></tr>
@@ -22,7 +22,7 @@ digraph G {
 		</table></td></tr>
 		</table>>, URL="./TestingTransactionsError.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// epfl.sweng.testing.TestingTransaction
-	c132 [label=<<table title="epfl.sweng.testing.TestingTransaction" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./TestingTransaction.html">
+	c126 [label=<<table title="epfl.sweng.testing.TestingTransaction" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./TestingTransaction.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
 <tr><td align="center" balign="center"> TestingTransaction </td></tr>
@@ -36,7 +36,7 @@ digraph G {
 		</table></td></tr>
 		</table>>, URL="./TestingTransaction.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// epfl.sweng.testing.TestingTransactions
-	c133 [label=<<table title="epfl.sweng.testing.TestingTransactions" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./TestingTransactions.html">
+	c127 [label=<<table title="epfl.sweng.testing.TestingTransactions" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./TestingTransactions.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> TestingTransactions </td></tr>
 		</table></td></tr>
@@ -49,7 +49,7 @@ digraph G {
 		</table></td></tr>
 		</table>>, URL="./TestingTransactions.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// epfl.sweng.testing.TestingTransactions.TTChecks
-	c134 [label=<<table title="epfl.sweng.testing.TestingTransactions.TTChecks" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./TestingTransactions.TTChecks.html">
+	c128 [label=<<table title="epfl.sweng.testing.TestingTransactions.TTChecks" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./TestingTransactions.TTChecks.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;enumeration&#187; </td></tr>
 <tr><td align="center" balign="center"> TTChecks </td></tr>
@@ -72,15 +72,15 @@ digraph G {
 		</table></td></tr>
 		</table>>, URL="./TestingTransactions.TTChecks.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// epfl.sweng.testing.TestingTransaction DEPEND epfl.sweng.testing.TestingTransactions.TTChecks
-	c132:p -> c134:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
-	// epfl.sweng.testing.TestingTransactions DEPEND epfl.sweng.testing.TestingTransaction
-	c133:p -> c132:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
-	// epfl.sweng.testing.TestingTransactions DEPEND epfl.sweng.testing.TestingTransactions.TTState
-	c133:p -> c145:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
+	c126:p -> c128:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
 	// epfl.sweng.testing.TestingTransactions DEPEND epfl.sweng.testing.TestingTransactions.TTChecks
-	c133:p -> c134:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
+	c127:p -> c128:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
+	// epfl.sweng.testing.TestingTransactions DEPEND epfl.sweng.testing.TestingTransactions.TTState
+	c127:p -> c139:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
+	// epfl.sweng.testing.TestingTransactions DEPEND epfl.sweng.testing.TestingTransaction
+	c127:p -> c126:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
 	// epfl.sweng.testing.TestingTransactions.TTState
-	c145 [label=<<table title="epfl.sweng.testing.TestingTransactions.TTState" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="http://java.sun.com/j2se/1.4.2/docs/api/epfl/sweng/testing/TestingTransactions/TTState.html">
+	c139 [label=<<table title="epfl.sweng.testing.TestingTransactions.TTState" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="http://java.sun.com/j2se/1.4.2/docs/api/epfl/sweng/testing/TestingTransactions/TTState.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;enumeration&#187; </td></tr>
 <tr><td align="center" balign="center"> TTState </td></tr>

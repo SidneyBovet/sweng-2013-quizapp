@@ -10,7 +10,7 @@ digraph G {
 	nodesep=0.25;
 	ranksep=0.5;
 	// epfl.sweng.showquestions.SelectionListener
-	c105 [label=<<table title="epfl.sweng.showquestions.SelectionListener" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./SelectionListener.html">
+	c100 [label=<<table title="epfl.sweng.showquestions.SelectionListener" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./SelectionListener.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> SelectionListener </td></tr>
 		</table></td></tr>
@@ -23,7 +23,7 @@ digraph G {
 		</table></td></tr>
 		</table>>, URL="./SelectionListener.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// epfl.sweng.showquestions.ShowQuestionsActivity
-	c106 [label=<<table title="epfl.sweng.showquestions.ShowQuestionsActivity" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ShowQuestionsActivity.html">
+	c101 [label=<<table title="epfl.sweng.showquestions.ShowQuestionsActivity" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ShowQuestionsActivity.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> ShowQuestionsActivity </td></tr>
 		</table></td></tr>

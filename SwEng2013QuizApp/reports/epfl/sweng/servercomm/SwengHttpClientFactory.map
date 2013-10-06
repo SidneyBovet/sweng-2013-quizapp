@@ -1,14 +1,14 @@
 <map id="G" name="G">
-<area shape="rect" id="c811" href="./SwengHttpClientFactory.html" title="epfl.sweng.servercomm.SwengHttpClientFactory" alt="" coords="853,11,1131,117"/>
-<area shape="rect" id="node1" href="./SwengHttpClientFactory.html" title="&lt;TABLE&gt;" alt="" coords="843,6,1141,122"/>
-<area shape="rect" id="c832" href="http://java.sun.com/j2se/1.4.2/docs/api/org/apache/http/HttpRequestInterceptor.html" title="org.apache.http.HttpRequestInterceptor" alt="" coords="15,713,329,802"/>
-<area shape="rect" id="node3" href="http://java.sun.com/j2se/1.4.2/docs/api/org/apache/http/HttpRequestInterceptor.html" title="&lt;TABLE&gt;" alt="" coords="5,707,339,807"/>
-<area shape="rect" id="c835" href="http://java.sun.com/j2se/1.4.2/docs/api/org/apache/http/client/RedirectHandler.html" title="org.apache.http.client.RedirectHandler" alt="" coords="373,705,830,810"/>
-<area shape="rect" id="node5" href="http://java.sun.com/j2se/1.4.2/docs/api/org/apache/http/client/RedirectHandler.html" title="&lt;TABLE&gt;" alt="" coords="363,699,840,815"/>
-<area shape="rect" id="c838" href="http://java.sun.com/j2se/1.4.2/docs/api/org/apache/http/client/CookieStore.html" title="org.apache.http.client.CookieStore" alt="" coords="875,689,1109,826"/>
-<area shape="rect" id="node7" href="http://java.sun.com/j2se/1.4.2/docs/api/org/apache/http/client/CookieStore.html" title="&lt;TABLE&gt;" alt="" coords="864,683,1120,831"/>
-<area shape="rect" id="c858" href="http://java.sun.com/j2se/1.4.2/docs/api/org/apache/http/impl/client/AbstractHttpClient.html" title="org.apache.http.impl.client.AbstractHttpClient" alt="" coords="1154,177,3483,1338"/>
-<area shape="rect" id="node9" href="http://java.sun.com/j2se/1.4.2/docs/api/org/apache/http/impl/client/AbstractHttpClient.html" title="&lt;TABLE&gt;" alt="" coords="1144,171,3493,1343"/>
-<area shape="rect" id="c859" href="http://java.sun.com/j2se/1.4.2/docs/api/org/apache/http/HttpResponseInterceptor.html" title="org.apache.http.HttpResponseInterceptor" alt="" coords="3527,713,3851,802"/>
-<area shape="rect" id="node11" href="http://java.sun.com/j2se/1.4.2/docs/api/org/apache/http/HttpResponseInterceptor.html" title="&lt;TABLE&gt;" alt="" coords="3517,707,3861,807"/>
+<area shape="rect" id="c778" href="./SwengHttpClientFactory.html" title="epfl.sweng.servercomm.SwengHttpClientFactory" alt="" coords="1767,11,2044,117"/>
+<area shape="rect" id="node1" href="./SwengHttpClientFactory.html" title="&lt;TABLE&gt;" alt="" coords="1756,6,2055,122"/>
+<area shape="rect" id="c799" href="http://java.sun.com/j2se/1.4.2/docs/api/org/apache/http/HttpResponseInterceptor.html" title="org.apache.http.HttpResponseInterceptor" alt="" coords="15,713,339,802"/>
+<area shape="rect" id="node3" href="http://java.sun.com/j2se/1.4.2/docs/api/org/apache/http/HttpResponseInterceptor.html" title="&lt;TABLE&gt;" alt="" coords="5,707,349,807"/>
+<area shape="rect" id="c801" href="http://java.sun.com/j2se/1.4.2/docs/api/org/apache/http/HttpRequestInterceptor.html" title="org.apache.http.HttpRequestInterceptor" alt="" coords="383,713,697,802"/>
+<area shape="rect" id="node5" href="http://java.sun.com/j2se/1.4.2/docs/api/org/apache/http/HttpRequestInterceptor.html" title="&lt;TABLE&gt;" alt="" coords="373,707,707,807"/>
+<area shape="rect" id="c821" href="http://java.sun.com/j2se/1.4.2/docs/api/org/apache/http/impl/client/AbstractHttpClient.html" title="org.apache.http.impl.client.AbstractHttpClient" alt="" coords="741,177,3070,1338"/>
+<area shape="rect" id="node7" href="http://java.sun.com/j2se/1.4.2/docs/api/org/apache/http/impl/client/AbstractHttpClient.html" title="&lt;TABLE&gt;" alt="" coords="731,171,3080,1343"/>
+<area shape="rect" id="c824" href="http://java.sun.com/j2se/1.4.2/docs/api/org/apache/http/client/CookieStore.html" title="org.apache.http.client.CookieStore" alt="" coords="3115,689,3349,826"/>
+<area shape="rect" id="node9" href="http://java.sun.com/j2se/1.4.2/docs/api/org/apache/http/client/CookieStore.html" title="&lt;TABLE&gt;" alt="" coords="3104,683,3360,831"/>
+<area shape="rect" id="c826" href="http://java.sun.com/j2se/1.4.2/docs/api/org/apache/http/client/RedirectHandler.html" title="org.apache.http.client.RedirectHandler" alt="" coords="3394,705,3851,810"/>
+<area shape="rect" id="node11" href="http://java.sun.com/j2se/1.4.2/docs/api/org/apache/http/client/RedirectHandler.html" title="&lt;TABLE&gt;" alt="" coords="3384,699,3861,815"/>
 </map>
