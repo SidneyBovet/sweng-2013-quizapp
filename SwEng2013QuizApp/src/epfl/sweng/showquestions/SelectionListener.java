@@ -23,7 +23,7 @@ public class SelectionListener implements OnItemClickListener {
 	
 	private Button buttonNext;
 	private Question concernedQuestion;
-	private boolean alreadyAnswered;
+	private boolean rightAnswerSelected;
 	
 	/**
 	 * Creates a listener to react to user input within a {@link ShowQuestionsActivity}.
@@ -35,7 +35,7 @@ public class SelectionListener implements OnItemClickListener {
 			Question question) {
 		this.buttonNext = bNext;
 		this.concernedQuestion = question;
-		this.alreadyAnswered = false;
+		this.rightAnswerSelected = false;
 	}
 	
 	@Override
@@ -54,8 +54,7 @@ public class SelectionListener implements OnItemClickListener {
 		 * 
 		 * 									Sidney
 		 */
-		if (!alreadyAnswered) {
-			alreadyAnswered = true;
+		if (!rightAnswerSelected) {
 			TextView clickedAnswer;
 			try {
 				clickedAnswer = (TextView) parent.getChildAt(position);
@@ -68,6 +67,7 @@ public class SelectionListener implements OnItemClickListener {
 			if (clickedAnswer != null) {
 				int solution = concernedQuestion.getSolutionIndex();
 				if (id == solution) {
+					rightAnswerSelected = true;
 					buttonNext.setEnabled(true);
 					clickedAnswer.append(" " + parent.getContext().
 							getString(R.string.question_correct_answer));
