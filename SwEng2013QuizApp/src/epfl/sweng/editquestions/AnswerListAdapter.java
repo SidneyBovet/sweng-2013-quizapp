@@ -162,8 +162,6 @@ class AnswerListAdapter extends BaseAdapter {
 					mAnswerList.add(currentRowIndex, s.toString());
 					mEditQuestionActivity.updateSubmitButton(audit() == 0);
 					TestingTransactions.check(TTChecks.QUESTION_EDITED);
-				} else {
-					return;
 				}
 			}
 			
@@ -195,6 +193,7 @@ class AnswerListAdapter extends BaseAdapter {
 				if (currentRowIndex == mCorrectAnswerIndex) {
 					mCorrectAnswerIndex = -1;
 					notifyDataSetChanged();
+					TestingTransactions.check(TTChecks.QUESTION_EDITED);
 				} else {
 					mCorrectAnswerIndex = currentRowIndex;
 					notifyDataSetChanged();
