@@ -10,8 +10,9 @@ import org.apache.http.impl.client.BasicResponseHandler;
 import android.os.AsyncTask;
 
 /**
- * Runs a background thread that fetches a new {@link Question} from the SwEng
- * sever.
+ * Asyncronous task that runs a background thread that fetches a new {@link 
+ * Question} from the SwEng server.
+ * 
  * @author Joanna
  * 
  */
@@ -35,5 +36,4 @@ public class DownloadJSONFromServer extends AsyncTask<String, Void, String> {
 		return randomQuestionJSON;
 	}
 	
-
 }

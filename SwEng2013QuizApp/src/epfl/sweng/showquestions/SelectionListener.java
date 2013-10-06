@@ -1,6 +1,3 @@
-/**
- * 
- */
 package epfl.sweng.showquestions;
 
 import android.view.View;
@@ -14,6 +11,9 @@ import epfl.sweng.testing.TestingTransactions;
 import epfl.sweng.testing.TestingTransactions.TTChecks;
 
 /**
+ * The <code>SelectionListener</code> allows to implement a custom
+ * implementation for the button.
+ * 
  * @author Sidney
  * 
  * @see OnItemClickListener
@@ -26,23 +26,21 @@ public class SelectionListener implements OnItemClickListener {
 	private boolean rightAnswerSelected;
 	
 	/**
-	 * Creates a listener to react to user input within a {@link ShowQuestionsActivity}.
+	 * Creates a listener that will react to user input within a
+	 * {@link ShowQuestionsActivity}.
+	 * 
 	 * @param bNext The "Next Question" button of UI.
 	 * @param lwQuestions The list of displayed answers.
 	 */
-	public SelectionListener(
-			Button bNext,
-			Question question) {
+	
+	public SelectionListener(Button bNext, Question question) {
 		this.buttonNext = bNext;
 		this.concernedQuestion = question;
 		this.rightAnswerSelected = false;
 	}
 	
 	@Override
-	public void onItemClick(
-			AdapterView<?> parent,
-			View view,
-			int position,
+	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
 		/* /!\ 	"position" and "id" seem to be the same (same value) but we've
 		 * 		got to be careful since they don't have the same description:

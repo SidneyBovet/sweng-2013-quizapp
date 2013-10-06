@@ -18,9 +18,12 @@ import epfl.sweng.testing.TestingTransactions.TTChecks;
 
 /***
  * Activity used to display a random question to the user.
- * @author born4new & JoTearoom
+ * 
+ * @author born4new 
+ * @author JoTearoom
  *
  */
+
 public class ShowQuestionsActivity extends Activity {
 	@Override
 	protected void onCreate(final Bundle savedInstanceState) {
@@ -29,11 +32,13 @@ public class ShowQuestionsActivity extends Activity {
 
 		setDisplayView();
 	}
-/**
- * Set all the view in this activity.
- * More precisely disable the button, fill the textView,
- * initialize the ListView with his adapter and put it under listening.
- */
+	/**
+	 * Sets all the view in this activity.
+	 * <p>
+	 * More precisely disable the button, fill the textView, initialize the
+	 * <code>ListView</code> with his adapter and put it under listening.
+	 */
+	
 	private void setDisplayView() {
 		// setting button look
 		Button buttonNext = (Button) findViewById(R.id.buttonNext);
@@ -70,8 +75,9 @@ public class ShowQuestionsActivity extends Activity {
 	}
 
 	/**
-	 * Go back to the state when the current activity was started.
-	 * @param view that was clicked (here the button send) 
+	 * Goes back to the state when the current activity was started.
+	 * 
+	 * @param view Element that was clicked, which is the send button. 
 	 */
 	public void displayAgainRandomQuestion(View view) {
 		setDisplayView();

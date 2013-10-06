@@ -1,6 +1,3 @@
-/**
- * 
- */
 package epfl.sweng.servercomm;
 
 import java.util.List;
@@ -13,16 +10,22 @@ import epfl.sweng.backend.Question;
 import epfl.sweng.backend.QuizEditExecution;
 
 /**
+ * The <code>ServerInteractions</code> class contains methods for performing
+ * network operations, such as {@link #getRandomQuestion()} and {@link
+ * #submitQuestion(List)}. 
+ * 
  * @author Sidney
  * 
  */
 public class ServerInteractions {
 
 	/**
-	 * Processes a request in an {@link AsyncTask}.
+	 * Gets a question from the SwEng server. The request is an {@link
+	 * AsyncTask} process.
 	 * 
-	 * @return The parsed {@link Question}.
+	 * @return A random {@link Question}.
 	 */
+	
 	public static Question getRandomQuestion() {
 		DownloadJSONFromServer asyncTaskRandomQuestionGetter = new DownloadJSONFromServer();
 		String url = "https://sweng-quiz.appspot.com/quizquestions/random";
@@ -43,11 +46,12 @@ public class ServerInteractions {
 	}
 
 	/**
-	 * Sends a new question to the SwEng server
+	 * Sends a new question to the SwEng server. The request is an {@link
+	 * AsyncTask} process.
 	 * 
-	 * @param The
-	 *            new {@link Question}
+	 * @param The {@link Question} to send.
 	 */
+	
 	public static void submitQuestion(List<String> listInputGUI) { 
 		Question questionToSubmit = Question.createQuestionFromList(listInputGUI); 
 		JSONObject jsonToSubmit = Question.createJSONFromQuestion(questionToSubmit); 
