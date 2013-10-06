@@ -156,7 +156,7 @@ public class Question {
 		String tagsInOneLine = listElm.remove(listElm.size() - 1);
 		int solutionIndex = Integer
 				.parseInt(listElm.remove(listElm.size() - 1));
-		String formattedTags = tagsInOneLine.replaceAll("\\W", " ");
+		String formattedTags = tagsInOneLine.replaceAll("(\\s*)\\W+(\\s*)", " ");
 		String[] tagsInArray = formattedTags.split(" ");
 
 		List<String> tagStrings = new ArrayList<String>();
