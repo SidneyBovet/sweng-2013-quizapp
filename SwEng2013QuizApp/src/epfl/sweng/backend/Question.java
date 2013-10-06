@@ -1,6 +1,7 @@
 package epfl.sweng.backend;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import org.json.JSONArray;
@@ -230,18 +231,20 @@ public class Question {
 				.parseInt(listElm.remove(listElm.size() - 1));
 		String formattedTags = tagsInOneLine.replaceAll("\\s*(\\W+)\\s*", " ");
 		String[] tagsInArray = formattedTags.trim().split(" ");
-		
 		List<String> tagStrings = new ArrayList<String>();
 		for (String tag : tagsInArray) {
 			tagStrings.add(tag);
 		}
+		// Delete duplicates Tags...
+		List<String> tagsInSet = new ArrayList<String>(new HashSet<String>(tagStrings));
+		
 		
 		List<String> answers = new ArrayList<String>();
 		for (String answer : listElm) {
 			answers.add(answer);
 		}
 		
-		return new Question(questionText, answers, solutionIndex, tagStrings);
+		return new Question(questionText, answers, solutionIndex, tagsInSet);
 	}
 
 	/**
