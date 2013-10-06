@@ -193,11 +193,13 @@ class AnswerListAdapter extends BaseAdapter {
 			@Override
 			public void onClick(View v) {
 				if (currentRowIndex == mCorrectAnswerIndex) {
-					return;
+					mCorrectAnswerIndex = -1;
+					notifyDataSetChanged();
+				} else {
+					mCorrectAnswerIndex = currentRowIndex;
+					notifyDataSetChanged();
+					TestingTransactions.check(TTChecks.QUESTION_EDITED);
 				}
-				mCorrectAnswerIndex = currentRowIndex;
-				notifyDataSetChanged();
-				TestingTransactions.check(TTChecks.QUESTION_EDITED);
 			}
 		});
 		
