@@ -5,12 +5,12 @@
 #
 
 digraph G {
-	edge [fontname="arial",fontsize=10,labelfontname="arial",labelfontsize=10];
-	node [fontname="arial",fontsize=10,shape=plaintext];
+	edge [fontname="Helvetica",fontsize=10,labelfontname="Helvetica",labelfontsize=10];
+	node [fontname="Helvetica",fontsize=10,shape=plaintext];
 	nodesep=0.25;
 	ranksep=0.5;
 	// epfl.sweng.backend.Question
-	c641 [label=<<table title="epfl.sweng.backend.Question" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="../backend/Question.html">
+	c726 [label=<<table title="epfl.sweng.backend.Question" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="../backend/Question.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> Question </td></tr>
 		</table></td></tr>
@@ -20,10 +20,13 @@ digraph G {
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="left" balign="left"> + Question(questionId : long, questionStmt : String, questionAnswers : List&lt;String&gt;, questionSolutionIndex : int, questionTags : List&lt;String&gt;, questionOwner : String) </td></tr>
 <tr><td align="left" balign="left"> + Question(questionStmt : String, questionAnswers : List&lt;String&gt;, questionSolutionIndex : int, questionTags : List&lt;String&gt;) </td></tr>
-<tr><td align="left" balign="left"> + createQuestionFromJSON(questionJSON : String) : Question </td></tr>
 <tr><td align="left" balign="left"> + toJSON() : JSONObject </td></tr>
-<tr><td align="left" balign="left"> + createQuestionFromList(listElm : List&lt;String&gt;) : Question </td></tr>
-<tr><td align="left" balign="left"> + createJSONFromQuestion(question : Question) : JSONObject </td></tr>
+<tr><td align="left" balign="left"> + setId(id : long) </td></tr>
+<tr><td align="left" balign="left"> + setQuestionContent(questionContent : String) </td></tr>
+<tr><td align="left" balign="left"> + setAnswers(answers : List&lt;String&gt;) </td></tr>
+<tr><td align="left" balign="left"> + setSolutionIndex(solutionIndex : int) </td></tr>
+<tr><td align="left" balign="left"> + setTags(tags : List&lt;String&gt;) </td></tr>
+<tr><td align="left" balign="left"> + setOwner(owner : String) </td></tr>
 <tr><td align="left" balign="left"> + getTagsToString() : String </td></tr>
 <tr><td align="left" balign="left"> + getOwner() : String </td></tr>
 <tr><td align="left" balign="left"> + getSolutionIndex() : int </td></tr>
@@ -32,10 +35,13 @@ digraph G {
 <tr><td align="left" balign="left"> + getQuestionContent() : String </td></tr>
 <tr><td align="left" balign="left"> + getAnswers() : List&lt;String&gt; </td></tr>
 <tr><td align="left" balign="left"> + toString() : String </td></tr>
+<tr><td align="left" balign="left"> + createQuestionFromJSON(questionJSON : String) : Question </td></tr>
+<tr><td align="left" balign="left"> + createQuestionFromList(listElm : List&lt;String&gt;) : Question </td></tr>
+<tr><td align="left" balign="left"> + createJSONFromQuestion(question : Question) : JSONObject </td></tr>
 		</table></td></tr>
-		</table>>, URL="../backend/Question.html", fontname="arial", fontcolor="black", fontsize=10.0];
+		</table>>, URL="../backend/Question.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// epfl.sweng.showquestions.SelectionListener
-	c648 [label=<<table title="epfl.sweng.showquestions.SelectionListener" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./SelectionListener.html">
+	c733 [label=<<table title="epfl.sweng.showquestions.SelectionListener" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./SelectionListener.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> SelectionListener </td></tr>
 		</table></td></tr>
@@ -46,19 +52,19 @@ digraph G {
 <tr><td align="left" balign="left"> + SelectionListener(bNext : Button, question : Question) </td></tr>
 <tr><td align="left" balign="left"> + onItemClick(parent : AdapterView&lt;?&gt;, view : View, position : int, id : long) </td></tr>
 		</table></td></tr>
-		</table>>, URL="./SelectionListener.html", fontname="arial", fontcolor="black", fontsize=10.0];
+		</table>>, URL="./SelectionListener.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	//epfl.sweng.showquestions.SelectionListener implements android.widget.AdapterView.OnItemClickListener
-	c663:p -> c648:p [dir=back,arrowtail=empty,style=dashed];
-	// epfl.sweng.showquestions.SelectionListener DEPEND android.widget.AdapterView<T extends android.widget.Adapter>
-	c648:p -> c664:p [taillabel="", label="", headlabel="", fontname="arial", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
+	c749:p -> c733:p [dir=back,arrowtail=empty,style=dashed];
 	// epfl.sweng.showquestions.SelectionListener DEPEND android.widget.Button
-	c648:p -> c665:p [taillabel="", label="", headlabel="", fontname="arial", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
-	// epfl.sweng.showquestions.SelectionListener DEPEND epfl.sweng.backend.Question
-	c648:p -> c641:p [taillabel="", label="", headlabel="", fontname="arial", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
+	c733:p -> c750:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
 	// epfl.sweng.showquestions.SelectionListener DEPEND android.view.View
-	c648:p -> c666:p [taillabel="", label="", headlabel="", fontname="arial", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
+	c733:p -> c751:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
+	// epfl.sweng.showquestions.SelectionListener DEPEND android.widget.AdapterView<T extends android.widget.Adapter>
+	c733:p -> c752:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
+	// epfl.sweng.showquestions.SelectionListener DEPEND epfl.sweng.backend.Question
+	c733:p -> c726:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
 	// android.view.View
-	c666 [label=<<table title="android.view.View" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="http://java.sun.com/j2se/1.4.2/docs/api/android/view/View.html">
+	c751 [label=<<table title="android.view.View" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="http://java.sun.com/j2se/1.4.2/docs/api/android/view/View.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> View </td></tr>
 		</table></td></tr>
@@ -609,11 +615,11 @@ digraph G {
 <tr><td align="left" balign="left"> + generateViewId() : int </td></tr>
 <tr><td align="left" balign="left"> + animate() : ViewPropertyAnimator </td></tr>
 		</table></td></tr>
-		</table>>, URL="http://java.sun.com/j2se/1.4.2/docs/api/android/view/View.html", fontname="arial", fontcolor="black", fontsize=10.0];
+		</table>>, URL="http://java.sun.com/j2se/1.4.2/docs/api/android/view/View.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// android.widget.AdapterView<T extends android.widget.Adapter>
-	c664 [label=<<table title="android.widget.AdapterView" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="http://java.sun.com/j2se/1.4.2/docs/api/android/widget/AdapterView.html">
+	c752 [label=<<table title="android.widget.AdapterView" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="http://java.sun.com/j2se/1.4.2/docs/api/android/widget/AdapterView.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"><font face="arial italic"> AdapterView&lt;T extends Adapter&gt; </font></td></tr>
+<tr><td align="center" balign="center"><font face="Helvetica-Oblique"> AdapterView&lt;T extends Adapter&gt; </font></td></tr>
 		</table></td></tr>
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="left" balign="left"> + ITEM_VIEW_TYPE_IGNORE : int </td></tr>
@@ -632,8 +638,8 @@ digraph G {
 <tr><td align="left" balign="left"> + getOnItemLongClickListener() : AdapterView.OnItemLongClickListener </td></tr>
 <tr><td align="left" balign="left"> + setOnItemSelectedListener(arg0 : AdapterView.OnItemSelectedListener) </td></tr>
 <tr><td align="left" balign="left"> + getOnItemSelectedListener() : AdapterView.OnItemSelectedListener </td></tr>
-<tr><td align="left" balign="left"><font face="arial italic" point-size="10.0"> + getAdapter() : T </font></td></tr>
-<tr><td align="left" balign="left"><font face="arial italic" point-size="10.0"> + setAdapter(arg0 : T) </font></td></tr>
+<tr><td align="left" balign="left"><font face="Helvetica-Oblique" point-size="10.0"> + getAdapter() : T </font></td></tr>
+<tr><td align="left" balign="left"><font face="Helvetica-Oblique" point-size="10.0"> + setAdapter(arg0 : T) </font></td></tr>
 <tr><td align="left" balign="left"> + addView(arg0 : View) </td></tr>
 <tr><td align="left" balign="left"> + addView(arg0 : View, arg1 : int) </td></tr>
 <tr><td align="left" balign="left"> + addView(arg0 : View, arg1 : ViewGroup.LayoutParams) </td></tr>
@@ -644,13 +650,13 @@ digraph G {
 <tr><td align="left" balign="left"> # onLayout(arg0 : boolean, arg1 : int, arg2 : int, arg3 : int, arg4 : int) </td></tr>
 <tr><td align="left" balign="left"> + getSelectedItemPosition() : int </td></tr>
 <tr><td align="left" balign="left"> + getSelectedItemId() : long </td></tr>
-<tr><td align="left" balign="left"><font face="arial italic" point-size="10.0"> + getSelectedView() : View </font></td></tr>
+<tr><td align="left" balign="left"><font face="Helvetica-Oblique" point-size="10.0"> + getSelectedView() : View </font></td></tr>
 <tr><td align="left" balign="left"> + getSelectedItem() : Object </td></tr>
 <tr><td align="left" balign="left"> + getCount() : int </td></tr>
 <tr><td align="left" balign="left"> + getPositionForView(arg0 : View) : int </td></tr>
 <tr><td align="left" balign="left"> + getFirstVisiblePosition() : int </td></tr>
 <tr><td align="left" balign="left"> + getLastVisiblePosition() : int </td></tr>
-<tr><td align="left" balign="left"><font face="arial italic" point-size="10.0"> + setSelection(arg0 : int) </font></td></tr>
+<tr><td align="left" balign="left"><font face="Helvetica-Oblique" point-size="10.0"> + setSelection(arg0 : int) </font></td></tr>
 <tr><td align="left" balign="left"> + setEmptyView(arg0 : View) </td></tr>
 <tr><td align="left" balign="left"> + getEmptyView() : View </td></tr>
 <tr><td align="left" balign="left"> + setFocusable(arg0 : boolean) </td></tr>
@@ -667,9 +673,9 @@ digraph G {
 <tr><td align="left" balign="left"> + onInitializeAccessibilityEvent(arg0 : AccessibilityEvent) </td></tr>
 <tr><td align="left" balign="left"> # canAnimate() : boolean </td></tr>
 		</table></td></tr>
-		</table>>, URL="http://java.sun.com/j2se/1.4.2/docs/api/android/widget/AdapterView.html", fontname="arial", fontcolor="black", fontsize=10.0];
+		</table>>, URL="http://java.sun.com/j2se/1.4.2/docs/api/android/widget/AdapterView.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// android.widget.Button
-	c665 [label=<<table title="android.widget.Button" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="http://java.sun.com/j2se/1.4.2/docs/api/android/widget/Button.html">
+	c750 [label=<<table title="android.widget.Button" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="http://java.sun.com/j2se/1.4.2/docs/api/android/widget/Button.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> Button </td></tr>
 		</table></td></tr>
@@ -683,9 +689,9 @@ digraph G {
 <tr><td align="left" balign="left"> + onInitializeAccessibilityEvent(arg0 : AccessibilityEvent) </td></tr>
 <tr><td align="left" balign="left"> + onInitializeAccessibilityNodeInfo(arg0 : AccessibilityNodeInfo) </td></tr>
 		</table></td></tr>
-		</table>>, URL="http://java.sun.com/j2se/1.4.2/docs/api/android/widget/Button.html", fontname="arial", fontcolor="black", fontsize=10.0];
+		</table>>, URL="http://java.sun.com/j2se/1.4.2/docs/api/android/widget/Button.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// android.widget.AdapterView.OnItemClickListener
-	c663 [label=<<table title="android.widget.AdapterView.OnItemClickListener" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="http://java.sun.com/j2se/1.4.2/docs/api/android/widget/AdapterView/OnItemClickListener.html">
+	c749 [label=<<table title="android.widget.AdapterView.OnItemClickListener" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="http://java.sun.com/j2se/1.4.2/docs/api/android/widget/AdapterView/OnItemClickListener.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
 <tr><td align="center" balign="center"> OnItemClickListener </td></tr>
@@ -696,6 +702,6 @@ digraph G {
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="left" balign="left"> + onItemClick(arg0 : AdapterView&lt;?&gt;, arg1 : View, arg2 : int, arg3 : long) </td></tr>
 		</table></td></tr>
-		</table>>, URL="http://java.sun.com/j2se/1.4.2/docs/api/android/widget/AdapterView/OnItemClickListener.html", fontname="arial", fontcolor="black", fontsize=10.0];
+		</table>>, URL="http://java.sun.com/j2se/1.4.2/docs/api/android/widget/AdapterView/OnItemClickListener.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 }
 

@@ -5,12 +5,12 @@
 #
 
 digraph G {
-	edge [fontname="arial",fontsize=10,labelfontname="arial",labelfontsize=10];
-	node [fontname="arial",fontsize=10,shape=plaintext];
+	edge [fontname="Helvetica",fontsize=10,labelfontname="Helvetica",labelfontsize=10];
+	node [fontname="Helvetica",fontsize=10,shape=plaintext];
 	nodesep=0.25;
 	ranksep=0.5;
 	// epfl.sweng.testing.TestingTransactionsError
-	c101 [label=<<table title="epfl.sweng.testing.TestingTransactionsError" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./TestingTransactionsError.html">
+	c131 [label=<<table title="epfl.sweng.testing.TestingTransactionsError" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./TestingTransactionsError.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> TestingTransactionsError </td></tr>
 		</table></td></tr>
@@ -20,9 +20,23 @@ digraph G {
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="left" balign="left"> + TestingTransactionsError(msg : String) </td></tr>
 		</table></td></tr>
-		</table>>, URL="./TestingTransactionsError.html", fontname="arial", fontcolor="black", fontsize=10.0];
+		</table>>, URL="./TestingTransactionsError.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// epfl.sweng.testing.TestingTransaction
+	c132 [label=<<table title="epfl.sweng.testing.TestingTransaction" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./TestingTransaction.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
+<tr><td align="center" balign="center"> TestingTransaction </td></tr>
+		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left">  </td></tr>
+		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left"> + initiate() </td></tr>
+<tr><td align="left" balign="left"> + verify(completedCheck : TestingTransactions.TTChecks) </td></tr>
+		</table></td></tr>
+		</table>>, URL="./TestingTransaction.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// epfl.sweng.testing.TestingTransactions
-	c102 [label=<<table title="epfl.sweng.testing.TestingTransactions" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./TestingTransactions.html">
+	c133 [label=<<table title="epfl.sweng.testing.TestingTransactions" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./TestingTransactions.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> TestingTransactions </td></tr>
 		</table></td></tr>
@@ -33,9 +47,9 @@ digraph G {
 <tr><td align="left" balign="left"> + run(instr : Instrumentation, t : TestingTransaction) </td></tr>
 <tr><td align="left" balign="left"> + check(completedCheck : TestingTransactions.TTChecks) </td></tr>
 		</table></td></tr>
-		</table>>, URL="./TestingTransactions.html", fontname="arial", fontcolor="black", fontsize=10.0];
+		</table>>, URL="./TestingTransactions.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// epfl.sweng.testing.TestingTransactions.TTChecks
-	c103 [label=<<table title="epfl.sweng.testing.TestingTransactions.TTChecks" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./TestingTransactions.TTChecks.html">
+	c134 [label=<<table title="epfl.sweng.testing.TestingTransactions.TTChecks" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./TestingTransactions.TTChecks.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;enumeration&#187; </td></tr>
 <tr><td align="center" balign="center"> TTChecks </td></tr>
@@ -56,31 +70,17 @@ digraph G {
 <tr><td align="left" balign="left"> AUTHENTICATION_ACTIVITY_SHOWN </td></tr>
 <tr><td align="left" balign="left"> LOGGED_OUT </td></tr>
 		</table></td></tr>
-		</table>>, URL="./TestingTransactions.TTChecks.html", fontname="arial", fontcolor="black", fontsize=10.0];
-	// epfl.sweng.testing.TestingTransaction
-	c104 [label=<<table title="epfl.sweng.testing.TestingTransaction" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./TestingTransaction.html">
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
-<tr><td align="center" balign="center"> TestingTransaction </td></tr>
-		</table></td></tr>
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="left" balign="left">  </td></tr>
-		</table></td></tr>
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="left" balign="left"> + initiate() </td></tr>
-<tr><td align="left" balign="left"> + verify(completedCheck : TestingTransactions.TTChecks) </td></tr>
-		</table></td></tr>
-		</table>>, URL="./TestingTransaction.html", fontname="arial", fontcolor="black", fontsize=10.0];
-	// epfl.sweng.testing.TestingTransactions DEPEND epfl.sweng.testing.TestingTransactions.TTChecks
-	c102:p -> c103:p [taillabel="", label="", headlabel="", fontname="arial", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
-	// epfl.sweng.testing.TestingTransactions DEPEND epfl.sweng.testing.TestingTransaction
-	c102:p -> c104:p [taillabel="", label="", headlabel="", fontname="arial", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
-	// epfl.sweng.testing.TestingTransactions DEPEND epfl.sweng.testing.TestingTransactions.TTState
-	c102:p -> c115:p [taillabel="", label="", headlabel="", fontname="arial", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
+		</table>>, URL="./TestingTransactions.TTChecks.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// epfl.sweng.testing.TestingTransaction DEPEND epfl.sweng.testing.TestingTransactions.TTChecks
-	c104:p -> c103:p [taillabel="", label="", headlabel="", fontname="arial", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
+	c132:p -> c134:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
+	// epfl.sweng.testing.TestingTransactions DEPEND epfl.sweng.testing.TestingTransaction
+	c133:p -> c132:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
+	// epfl.sweng.testing.TestingTransactions DEPEND epfl.sweng.testing.TestingTransactions.TTState
+	c133:p -> c145:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
+	// epfl.sweng.testing.TestingTransactions DEPEND epfl.sweng.testing.TestingTransactions.TTChecks
+	c133:p -> c134:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
 	// epfl.sweng.testing.TestingTransactions.TTState
-	c115 [label=<<table title="epfl.sweng.testing.TestingTransactions.TTState" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="http://java.sun.com/j2se/1.4.2/docs/api/epfl/sweng/testing/TestingTransactions/TTState.html">
+	c145 [label=<<table title="epfl.sweng.testing.TestingTransactions.TTState" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="http://java.sun.com/j2se/1.4.2/docs/api/epfl/sweng/testing/TestingTransactions/TTState.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;enumeration&#187; </td></tr>
 <tr><td align="center" balign="center"> TTState </td></tr>
@@ -93,6 +93,6 @@ digraph G {
 <tr><td align="left" balign="left"> INITIATED </td></tr>
 <tr><td align="left" balign="left"> COMPLETED </td></tr>
 		</table></td></tr>
-		</table>>, URL="http://java.sun.com/j2se/1.4.2/docs/api/epfl/sweng/testing/TestingTransactions/TTState.html", fontname="arial", fontcolor="black", fontsize=10.0];
+		</table>>, URL="http://java.sun.com/j2se/1.4.2/docs/api/epfl/sweng/testing/TestingTransactions/TTState.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 }
 

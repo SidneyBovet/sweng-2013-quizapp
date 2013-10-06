@@ -5,12 +5,12 @@
 #
 
 digraph G {
-	edge [fontname="arial",fontsize=10,labelfontname="arial",labelfontsize=10];
-	node [fontname="arial",fontsize=10,shape=plaintext];
+	edge [fontname="Helvetica",fontsize=10,labelfontname="Helvetica",labelfontsize=10];
+	node [fontname="Helvetica",fontsize=10,shape=plaintext];
 	nodesep=0.25;
 	ranksep=0.5;
 	// epfl.sweng.entry.MainActivity
-	c25 [label=<<table title="epfl.sweng.entry.MainActivity" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./MainActivity.html">
+	c52 [label=<<table title="epfl.sweng.entry.MainActivity" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./MainActivity.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> MainActivity </td></tr>
 		</table></td></tr>
@@ -24,6 +24,6 @@ digraph G {
 <tr><td align="left" balign="left"> + displayRandomQuestion(view : View) </td></tr>
 <tr><td align="left" balign="left"> + submitQuestion(view : View) </td></tr>
 		</table></td></tr>
-		</table>>, URL="./MainActivity.html", fontname="arial", fontcolor="black", fontsize=10.0];
+		</table>>, URL="./MainActivity.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 }
 

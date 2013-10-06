@@ -5,12 +5,12 @@
 #
 
 digraph G {
-	edge [fontname="arial",fontsize=10,labelfontname="arial",labelfontsize=10];
-	node [fontname="arial",fontsize=10,shape=plaintext];
+	edge [fontname="Helvetica",fontsize=10,labelfontname="Helvetica",labelfontsize=10];
+	node [fontname="Helvetica",fontsize=10,shape=plaintext];
 	nodesep=0.25;
 	ranksep=0.5;
 	// epfl.sweng.R.string
-	c614 [label=<<table title="epfl.sweng.R.string" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./R.string.html">
+	c698 [label=<<table title="epfl.sweng.R.string" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./R.string.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> string </td></tr>
 		</table></td></tr>
@@ -43,6 +43,6 @@ digraph G {
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="left" balign="left"> + R.string() </td></tr>
 		</table></td></tr>
-		</table>>, URL="./R.string.html", fontname="arial", fontcolor="black", fontsize=10.0];
+		</table>>, URL="./R.string.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 }
 

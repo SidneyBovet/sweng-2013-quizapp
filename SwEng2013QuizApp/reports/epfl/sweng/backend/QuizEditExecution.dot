@@ -5,12 +5,12 @@
 #
 
 digraph G {
-	edge [fontname="arial",fontsize=10,labelfontname="arial",labelfontsize=10];
-	node [fontname="arial",fontsize=10,shape=plaintext];
+	edge [fontname="Helvetica",fontsize=10,labelfontname="Helvetica",labelfontsize=10];
+	node [fontname="Helvetica",fontsize=10,shape=plaintext];
 	nodesep=0.25;
 	ranksep=0.5;
 	// epfl.sweng.backend.QuizEditExecution
-	c405 [label=<<table title="epfl.sweng.backend.QuizEditExecution" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./QuizEditExecution.html">
+	c480 [label=<<table title="epfl.sweng.backend.QuizEditExecution" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./QuizEditExecution.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> QuizEditExecution </td></tr>
 		</table></td></tr>
@@ -21,17 +21,17 @@ digraph G {
 <tr><td align="left" balign="left"> + QuizEditExecution() </td></tr>
 <tr><td align="left" balign="left"> # doInBackground(jsonObject : JSONObject[]) : Void </td></tr>
 		</table></td></tr>
-		</table>>, URL="./QuizEditExecution.html", fontname="arial", fontcolor="black", fontsize=10.0];
+		</table>>, URL="./QuizEditExecution.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	//epfl.sweng.backend.QuizEditExecution extends android.os.AsyncTask<org.json.JSONObject, java.lang.Void, java.lang.Void>
-	c428:p -> c405:p [dir=back,arrowtail=empty];
-	// epfl.sweng.backend.QuizEditExecution DEPEND org.json.JSONObject
-	c405:p -> c429:p [taillabel="", label="", headlabel="", fontname="arial", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
-	// epfl.sweng.backend.QuizEditExecution DEPEND java.lang.String
-	c405:p -> c430:p [taillabel="", label="", headlabel="", fontname="arial", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
+	c504:p -> c480:p [dir=back,arrowtail=empty];
 	// epfl.sweng.backend.QuizEditExecution DEPEND java.lang.Void
-	c405:p -> c432:p [taillabel="", label="", headlabel="", fontname="arial", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
+	c480:p -> c506:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
+	// epfl.sweng.backend.QuizEditExecution DEPEND org.json.JSONObject
+	c480:p -> c507:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
+	// epfl.sweng.backend.QuizEditExecution DEPEND java.lang.String
+	c480:p -> c508:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
 	// java.lang.String
-	c430 [label=<<table title="java.lang.String" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html">
+	c508 [label=<<table title="java.lang.String" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> String </td></tr>
 		</table></td></tr>
@@ -120,11 +120,11 @@ digraph G {
 <tr><td align="left" balign="left"> + valueOf(arg0 : double) : String </td></tr>
 <tr><td align="left" balign="left"> + intern() : String </td></tr>
 		</table></td></tr>
-		</table>>, URL="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html", fontname="arial", fontcolor="black", fontsize=10.0];
+		</table>>, URL="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// android.os.AsyncTask<Params, Progress, Result>
-	c428 [label=<<table title="android.os.AsyncTask" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="http://java.sun.com/j2se/1.4.2/docs/api/android/os/AsyncTask.html">
+	c504 [label=<<table title="android.os.AsyncTask" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="http://java.sun.com/j2se/1.4.2/docs/api/android/os/AsyncTask.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"><font face="arial italic"> AsyncTask&lt;Params, Progress, Result&gt; </font></td></tr>
+<tr><td align="center" balign="center"><font face="Helvetica-Oblique"> AsyncTask&lt;Params, Progress, Result&gt; </font></td></tr>
 		</table></td></tr>
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="left" balign="left"> + THREAD_POOL_EXECUTOR : Executor </td></tr>
@@ -133,7 +133,7 @@ digraph G {
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="left" balign="left"> + AsyncTask() </td></tr>
 <tr><td align="left" balign="left"> + getStatus() : AsyncTask.Status </td></tr>
-<tr><td align="left" balign="left"><font face="arial italic" point-size="10.0"> # doInBackground(arg0 : Params[]) : Result </font></td></tr>
+<tr><td align="left" balign="left"><font face="Helvetica-Oblique" point-size="10.0"> # doInBackground(arg0 : Params[]) : Result </font></td></tr>
 <tr><td align="left" balign="left"> # onPreExecute() </td></tr>
 <tr><td align="left" balign="left"> # onPostExecute(arg0 : Result) </td></tr>
 <tr><td align="left" balign="left"> # onProgressUpdate(arg0 : Progress[]) </td></tr>
@@ -148,9 +148,9 @@ digraph G {
 <tr><td align="left" balign="left"> + execute(arg0 : Runnable) </td></tr>
 <tr><td align="left" balign="left"> # publishProgress(arg0 : Progress[]) </td></tr>
 		</table></td></tr>
-		</table>>, URL="http://java.sun.com/j2se/1.4.2/docs/api/android/os/AsyncTask.html", fontname="arial", fontcolor="black", fontsize=10.0];
+		</table>>, URL="http://java.sun.com/j2se/1.4.2/docs/api/android/os/AsyncTask.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.json.JSONObject
-	c429 [label=<<table title="org.json.JSONObject" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="http://java.sun.com/j2se/1.4.2/docs/api/org/json/JSONObject.html">
+	c507 [label=<<table title="org.json.JSONObject" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="http://java.sun.com/j2se/1.4.2/docs/api/org/json/JSONObject.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> JSONObject </td></tr>
 		</table></td></tr>
@@ -203,9 +203,9 @@ digraph G {
 <tr><td align="left" balign="left"> + numberToString(arg0 : Number) : String </td></tr>
 <tr><td align="left" balign="left"> + quote(arg0 : String) : String </td></tr>
 		</table></td></tr>
-		</table>>, URL="http://java.sun.com/j2se/1.4.2/docs/api/org/json/JSONObject.html", fontname="arial", fontcolor="black", fontsize=10.0];
+		</table>>, URL="http://java.sun.com/j2se/1.4.2/docs/api/org/json/JSONObject.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// java.lang.Void
-	c432 [label=<<table title="java.lang.Void" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Void.html">
+	c506 [label=<<table title="java.lang.Void" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Void.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> Void </td></tr>
 		</table></td></tr>
@@ -215,6 +215,6 @@ digraph G {
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="left" balign="left">  </td></tr>
 		</table></td></tr>
-		</table>>, URL="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Void.html", fontname="arial", fontcolor="black", fontsize=10.0];
+		</table>>, URL="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Void.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 }
 

@@ -5,12 +5,12 @@
 #
 
 digraph G {
-	edge [fontname="arial",fontsize=10,labelfontname="arial",labelfontsize=10];
-	node [fontname="arial",fontsize=10,shape=plaintext];
+	edge [fontname="Helvetica",fontsize=10,labelfontname="Helvetica",labelfontsize=10];
+	node [fontname="Helvetica",fontsize=10,shape=plaintext];
 	nodesep=0.25;
 	ranksep=0.5;
 	// epfl.sweng.R
-	c129 [label=<<table title="epfl.sweng.R" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./R.html">
+	c160 [label=<<table title="epfl.sweng.R" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./R.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> R </td></tr>
 		</table></td></tr>
@@ -20,9 +20,9 @@ digraph G {
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="left" balign="left"> + R() </td></tr>
 		</table></td></tr>
-		</table>>, URL="./R.html", fontname="arial", fontcolor="black", fontsize=10.0];
+		</table>>, URL="./R.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// epfl.sweng.R.attr
-	c130 [label=<<table title="epfl.sweng.R.attr" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./R.attr.html">
+	c161 [label=<<table title="epfl.sweng.R.attr" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./R.attr.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> attr </td></tr>
 		</table></td></tr>
@@ -32,9 +32,9 @@ digraph G {
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="left" balign="left"> + R.attr() </td></tr>
 		</table></td></tr>
-		</table>>, URL="./R.attr.html", fontname="arial", fontcolor="black", fontsize=10.0];
+		</table>>, URL="./R.attr.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// epfl.sweng.R.dimen
-	c131 [label=<<table title="epfl.sweng.R.dimen" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./R.dimen.html">
+	c162 [label=<<table title="epfl.sweng.R.dimen" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./R.dimen.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> dimen </td></tr>
 		</table></td></tr>
@@ -45,9 +45,9 @@ digraph G {
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="left" balign="left"> + R.dimen() </td></tr>
 		</table></td></tr>
-		</table>>, URL="./R.dimen.html", fontname="arial", fontcolor="black", fontsize=10.0];
+		</table>>, URL="./R.dimen.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// epfl.sweng.R.drawable
-	c132 [label=<<table title="epfl.sweng.R.drawable" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./R.drawable.html">
+	c163 [label=<<table title="epfl.sweng.R.drawable" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./R.drawable.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> drawable </td></tr>
 		</table></td></tr>
@@ -57,9 +57,9 @@ digraph G {
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="left" balign="left"> + R.drawable() </td></tr>
 		</table></td></tr>
-		</table>>, URL="./R.drawable.html", fontname="arial", fontcolor="black", fontsize=10.0];
+		</table>>, URL="./R.drawable.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// epfl.sweng.R.id
-	c133 [label=<<table title="epfl.sweng.R.id" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./R.id.html">
+	c164 [label=<<table title="epfl.sweng.R.id" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./R.id.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> id </td></tr>
 		</table></td></tr>
@@ -76,16 +76,16 @@ digraph G {
 <tr><td align="left" balign="left"> + submit_question_button : int </td></tr>
 <tr><td align="left" balign="left"> + submit_question_correct_switch : int </td></tr>
 <tr><td align="left" balign="left"> + submit_question_listview : int </td></tr>
-<tr><td align="left" balign="left"> + submit_question_remove_answer : int </td></tr>
+<tr><td align="left" balign="left"> + submit_question_remove_answer_edit : int </td></tr>
 <tr><td align="left" balign="left"> + submit_question_tags : int </td></tr>
-<tr><td align="left" balign="left"> + submit_question_text_body : int </td></tr>
+<tr><td align="left" balign="left"> + submit_question_text_body_edit : int </td></tr>
 		</table></td></tr>
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="left" balign="left"> + R.id() </td></tr>
 		</table></td></tr>
-		</table>>, URL="./R.id.html", fontname="arial", fontcolor="black", fontsize=10.0];
+		</table>>, URL="./R.id.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// epfl.sweng.R.layout
-	c134 [label=<<table title="epfl.sweng.R.layout" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./R.layout.html">
+	c165 [label=<<table title="epfl.sweng.R.layout" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./R.layout.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> layout </td></tr>
 		</table></td></tr>
@@ -98,9 +98,9 @@ digraph G {
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="left" balign="left"> + R.layout() </td></tr>
 		</table></td></tr>
-		</table>>, URL="./R.layout.html", fontname="arial", fontcolor="black", fontsize=10.0];
+		</table>>, URL="./R.layout.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// epfl.sweng.R.menu
-	c135 [label=<<table title="epfl.sweng.R.menu" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./R.menu.html">
+	c166 [label=<<table title="epfl.sweng.R.menu" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./R.menu.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> menu </td></tr>
 		</table></td></tr>
@@ -112,9 +112,9 @@ digraph G {
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="left" balign="left"> + R.menu() </td></tr>
 		</table></td></tr>
-		</table>>, URL="./R.menu.html", fontname="arial", fontcolor="black", fontsize=10.0];
+		</table>>, URL="./R.menu.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// epfl.sweng.R.string
-	c136 [label=<<table title="epfl.sweng.R.string" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./R.string.html">
+	c167 [label=<<table title="epfl.sweng.R.string" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./R.string.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> string </td></tr>
 		</table></td></tr>
@@ -147,9 +147,9 @@ digraph G {
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="left" balign="left"> + R.string() </td></tr>
 		</table></td></tr>
-		</table>>, URL="./R.string.html", fontname="arial", fontcolor="black", fontsize=10.0];
+		</table>>, URL="./R.string.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// epfl.sweng.R.style
-	c137 [label=<<table title="epfl.sweng.R.style" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./R.style.html">
+	c168 [label=<<table title="epfl.sweng.R.style" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./R.style.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> style </td></tr>
 		</table></td></tr>
@@ -160,9 +160,9 @@ digraph G {
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="left" balign="left"> + R.style() </td></tr>
 		</table></td></tr>
-		</table>>, URL="./R.style.html", fontname="arial", fontcolor="black", fontsize=10.0];
+		</table>>, URL="./R.style.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// epfl.sweng.BuildConfig
-	c138 [label=<<table title="epfl.sweng.BuildConfig" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./BuildConfig.html">
+	c169 [label=<<table title="epfl.sweng.BuildConfig" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./BuildConfig.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> BuildConfig </td></tr>
 		</table></td></tr>
@@ -172,6 +172,6 @@ digraph G {
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="left" balign="left"> + BuildConfig() </td></tr>
 		</table></td></tr>
-		</table>>, URL="./BuildConfig.html", fontname="arial", fontcolor="black", fontsize=10.0];
+		</table>>, URL="./BuildConfig.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 }
 
