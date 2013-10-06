@@ -49,6 +49,13 @@
         android:dividerHeight="1dp"
         android:paddingLeft="2dp" />
     
+    <EditText
+        android:id="@+id/submit_question_tags"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/submit_question_button"
+        android:hint="@string/submit_question_tags" />
+    
     <Button
         android:id="@+id/submit_question_button"
         android:layout_width="match_parent"
@@ -56,12 +63,5 @@
         android:layout_alignParentBottom="true"
         android:onClick="sendEditedQuestion"
         android:hint="@string/submit_question_button" />
-    
-    <EditText
-        android:id="@+id/submit_question_tags"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/submit_question_button"
-        android:hint="@string/submit_question_tags" />
     
 </RelativeLayout>
