@@ -95,7 +95,8 @@ public class EditQuestionActivity extends Activity {
 	 */
 	
 	public void updateSubmitButton(boolean value) {
-		Button submitButton = (Button) mLayout.findViewById(R.id.submit_question_button);
+		Button submitButton = (Button) mLayout.findViewById(R.
+				id.submit_question_button);
 		if (submitButton != null) {
 			submitButton.setEnabled(value && audit() == 0);
 		}
@@ -114,10 +115,10 @@ public class EditQuestionActivity extends Activity {
 	public int audit() {
 		int errors = 0;
 		
-		if (mQuestionBodyText.equals("")) {
+		if (mQuestionBodyText.matches("\\s*")) {
 			errors++;
 		}
-		if (mTagsText.equals("")) {
+		if (mTagsText.matches("\\s*")) {
 			errors++;
 		}
 		
@@ -162,7 +163,8 @@ public class EditQuestionActivity extends Activity {
 		mListview = (ListView) findViewById(R.id.submit_question_listview);
 		
 		mListview.setAdapter(mAnswerListAdapter);
-		EditText questionEditText = (EditText) findViewById(R.id.submit_question_text_body_edit);
+		EditText questionEditText = (EditText) findViewById(R.
+				id.submit_question_text_body_edit);
 		
 		// TextChanged Listener for questionEditText
 		questionEditText.addTextChangedListener(new TextWatcher() {
@@ -190,7 +192,8 @@ public class EditQuestionActivity extends Activity {
 			}
 		});
 		
-		EditText tagsEditText = (EditText) findViewById(R.id.submit_question_tags);
+		EditText tagsEditText = (EditText) findViewById(R.
+				id.submit_question_tags);
 		tagsEditText.addTextChangedListener(new TextWatcher() {
 			
 			@Override

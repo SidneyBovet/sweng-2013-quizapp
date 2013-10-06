@@ -46,7 +46,7 @@ class AnswerListAdapter extends BaseAdapter {
 		mEditQuestionActivity = editQuestionActivity;
 		this.mInflater = LayoutInflater.from(this.mEditQuestionActivity);
 
-		reset();
+		resetAnswerList();
 	}
 	
 	/**
@@ -82,7 +82,7 @@ class AnswerListAdapter extends BaseAdapter {
 	/**
 	 * Resets the fields and the data of the <code>ListView</code>
 	 */
-	public void reset() {
+	public void resetAnswerList() {
 		mAnswerCount = 2;
 		mAnswerList = new ArrayList<String>();
 		mAnswerList.add("");
@@ -114,7 +114,19 @@ class AnswerListAdapter extends BaseAdapter {
 	}
 	
 	/**
-	 * Retrieves the current element at the position <code>index</code>.
+	 * Creates the <code>position</code>-th layout of the <code>ListView</code>
+	 * :
+	 * 
+	 * <ul>
+	 *   <li>Binds a <code>TextWatcher</code> on the answer field that updates
+	 * the data of the answer text body</li>
+	 *   <li>Binds an <code>OnClickListener</code> on the switch correct button
+	 * that updates the index of the correct answer.</li>
+	 *   <li>Binds an <code>OnClickListener</code> on the remove button that
+	 * removes an element from the data, if it's possible.</li>
+	 * </ul>
+	 * 
+	 * then returns it.
 	 */
 	
 	@Override
@@ -221,13 +233,14 @@ class AnswerListAdapter extends BaseAdapter {
 	}
 	
 	/**
+	 * 
 	 * Checks the following requirements :
 	 * <ul>
+	 * <li>The current count of answers must precisely be the size of the
+	 * <code>ArrayList</code>.</li>
 	 * 	<li>None of the answers must be an empty string.</li>
 	 * 	<li>The index of the correct answer must exist in the <code>ArrayList
 	 * </code>.</li>
-	 * 	<li>The current count of answers must precisely be the size of the
-	 * <code>ArrayList</code>.<l/i>
 	 * 	<li>There must be at least 2 answers</li>
 	 * </ul>
 	 * 
@@ -237,14 +250,16 @@ class AnswerListAdapter extends BaseAdapter {
 	public int audit() {
 		int errors = 0;
 
-		if (mAnswerList.contains("")) {
-			//TODO whitespaces
-			errors++;
-		}
-		if (mCorrectAnswerIndex >= mAnswerCount || mAnswerList.get(mCorrectAnswerIndex) == null) {
-			errors++;
-		}
 		if (mAnswerCount != mAnswerList.size()) {
+			errors++;
+		}
+		for (int i = 0; i < mAnswerCount; i++) {
+			if (mAnswerList.get(i).matches("\\s*")) {
+				errors++;
+			}
+		}
+		if (mCorrectAnswerIndex >= mAnswerCount || mCorrectAnswerIndex < 0
+			|| mAnswerList.get(mCorrectAnswerIndex) == null) {
 			errors++;
 		}
 		if (mAnswerCount < 2) {
