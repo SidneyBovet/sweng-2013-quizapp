@@ -11,8 +11,6 @@ import org.json.JSONObject;
 
 import android.os.AsyncTask;
 import epfl.sweng.servercomm.SwengHttpClientFactory;
-import epfl.sweng.testing.TestingTransactions;
-import epfl.sweng.testing.TestingTransactions.TTChecks;
 
 /**
  * 

@@ -34,7 +34,6 @@ class AnswerListAdapter extends BaseAdapter {
 	private ArrayList<String> mAnswerList;
 	private int mAnswerCount;
 	private int mCorrectAnswerIndex;
-	private boolean mSystemChanged;
 	
 	/**
 	 * Constructor
@@ -84,14 +83,11 @@ class AnswerListAdapter extends BaseAdapter {
 	 * Resets the fields and the data of the <code>ListView</code>
 	 */
 	public void reset() {
-		// TODO: Why is it set to true?
-		mSystemChanged = true;
 		mAnswerCount = 2;
 		mAnswerList = new ArrayList<String>();
 		mAnswerList.add("");
 		mAnswerList.add("");
 		mCorrectAnswerIndex = 0;
-		mSystemChanged = false;
 		notifyDataSetChanged();
 	}
 	
