@@ -20,7 +20,7 @@ import epfl.sweng.testing.TestingTransactions;
 import epfl.sweng.testing.TestingTransactions.TTChecks;
 
 /**
- * Activity that allows the user to submit a new question to an internet server.
+ * Activity that allows the user to submit a new question to the SwEng server.
  * 
  * @author born4new
  * @author Merok
@@ -53,7 +53,7 @@ public class EditQuestionActivity extends Activity {
 	
 	/**
 	 * Retrieves the question and the answers data, put them in a list, and then
-	 * send it over the internet.
+	 * send it to the SwEng server.
 	 * <p>
 	 * Used when the submit button is clicked.
 	 * 
@@ -140,14 +140,9 @@ public class EditQuestionActivity extends Activity {
 	}
 	
 	/**
-	 * Initializes the activity :
-	 * 
-	 * <ul>
-	 * 	<li>Binds the {@link AnswerListAdapter} with the <code>ListView</code>
-	 * </li>
-	 * 	<li>Adds <code>TextWatcher</code> on the question and tags fields.
-	 * </li>
-	 * </ul>
+	 * Initializes the activity by binding the {@link AnswerListAdapter} with
+	 * the <code>ListView</code>, and adding a <code>TextWatcher</code> on the
+	 * question and tags fields.
 	 */
 	
 	@Override

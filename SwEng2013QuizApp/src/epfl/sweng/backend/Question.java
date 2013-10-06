@@ -204,11 +204,11 @@ public class Question {
 		
 		String question = jsonParser.getString("question");
 		JSONArray answersJSON = jsonParser.getJSONArray("answers");
-		List<String> answers = JSONArrayToStringArray(answersJSON);
+		List<String> answers = jsonArrayToStringArray(answersJSON);
 		
 		int solutionIndex = jsonParser.getInt("solutionIndex");
 		JSONArray tagsJSON = jsonParser.getJSONArray("tags");
-		List<String> tags = JSONArrayToStringArray(tagsJSON);
+		List<String> tags = jsonArrayToStringArray(tagsJSON);
 		String owner = jsonParser.getString("owner");
 		
 		return new Question(id, question, answers, solutionIndex, tags, owner);
@@ -273,15 +273,13 @@ public class Question {
 	}
 	
 	/**
-	 * Gets a list of converted {@link JSONObject} into <code>String</code>,
-	 * retrieved from a {@link JSONArray}.
+	 * Converts a {@link JSONArray} into a list of String.
 	 * 
 	 * @param arrayToConvert The {@link JSONArray} to convert.
 	 * @return An <code>ArrayList</code> of the <code>JSONObjects</code> string
 	 *            field.
 	 */
-	// TODO refactor name
-	private static List<String> JSONArrayToStringArray(
+	private static List<String> jsonArrayToStringArray(
 			JSONArray arrayToConvert) {
 		ArrayList<String> list = new ArrayList<String>();
 		if (arrayToConvert != null) {

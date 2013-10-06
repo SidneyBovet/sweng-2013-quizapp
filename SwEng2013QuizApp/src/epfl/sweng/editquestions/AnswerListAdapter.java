@@ -114,19 +114,9 @@ class AnswerListAdapter extends BaseAdapter {
 	}
 	
 	/**
-	 * Creates the <code>position</code>-th layout of the <code>ListView</code>
-	 * :
+	 * Retrieves the current element at the specified <code>index</code>.
 	 * 
-	 * <ul>
-	 *   <li>Binds a <code>TextWatcher</code> on the answer field that updates
-	 * the data of the answer text body</li>
-	 *   <li>Binds an <code>OnClickListener</code> on the switch correct button
-	 * that updates the index of the correct answer.</li>
-	 *   <li>Binds an <code>OnClickListener</code> on the remove button that
-	 * removes an element from the data, if it's possible.</li>
-	 * </ul>
-	 * 
-	 * then returns it.
+	 * @param index The index of the element to retrieve.
 	 */
 	
 	@Override
@@ -135,8 +125,10 @@ class AnswerListAdapter extends BaseAdapter {
 	}
 	
 	/**
-	 * Retrieves the id of the current element at the position <code>index
+	 * Retrieves the id of the current element at the specified <code>index
 	 * </code>, which is the <code>index</code> itself.
+	 * 
+	 * @param index The index of the id to retrieve.
 	 */
 	
 	@Override
@@ -145,7 +137,10 @@ class AnswerListAdapter extends BaseAdapter {
 	}
 	
 	/**
-	 * Retrieves a layout that will take place at the <code>position</code>
+	 * Creates and returns the <code>position</code>-th layout by adding a
+	 * <code>TextWatcher</code> on the answer field, and binding
+	 * <code>OnClickListener</code> to the switch correct answer and remove
+	 * buttons.
 	 */
 	
 	@Override

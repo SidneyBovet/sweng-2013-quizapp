@@ -21,11 +21,11 @@ import epfl.sweng.testing.TestingTransactions.TTChecks;
  */
 public class SelectionListener implements OnItemClickListener {
 	
-	private Button buttonNext;
-	private Question concernedQuestion;
-	private boolean rightAnswerSelected;
+	private Button mButtonNext;
+	private Question mConcernedQuestion;
+	private boolean mRightAnswerSelected;
 	
-	private int lastSelectedQuestion;
+	private int mLastSelectedQuestion;
 	
 	/**
 	 * Creates a listener that will react to user input within a
@@ -36,10 +36,10 @@ public class SelectionListener implements OnItemClickListener {
 	 */
 	
 	public SelectionListener(Button bNext, Question question) {
-		this.buttonNext = bNext;
-		this.concernedQuestion = question;
-		this.rightAnswerSelected = false;
-		this.lastSelectedQuestion = -1;
+		this.mButtonNext = bNext;
+		this.mConcernedQuestion = question;
+		this.mRightAnswerSelected = false;
+		this.mLastSelectedQuestion = -1;
 	}
 	
 	@Override
@@ -55,7 +55,7 @@ public class SelectionListener implements OnItemClickListener {
 		 * 
 		 * 									Sidney
 		 */
-		if (!rightAnswerSelected) {
+		if (!mRightAnswerSelected) {
 			TextView clickedAnswer;
 			try {
 				clickedAnswer = (TextView) parent.getChildAt(position);
@@ -66,14 +66,14 @@ public class SelectionListener implements OnItemClickListener {
 				clickedAnswer = null;
 			}
 			if (clickedAnswer != null) {
-				int solution = concernedQuestion.getSolutionIndex();
+				int solution = mConcernedQuestion.getSolutionIndex();
 				
 				resetAnswerStatements(parent);
-				this.lastSelectedQuestion = (int) id;
+				this.mLastSelectedQuestion = (int) id;
 				
 				if (id == solution) {
-					rightAnswerSelected = true;
-					buttonNext.setEnabled(true);
+					mRightAnswerSelected = true;
+					mButtonNext.setEnabled(true);
 					clickedAnswer.append(" " + parent.getContext().
 							getString(R.string.question_correct_answer));
 				} else {
@@ -88,12 +88,14 @@ public class SelectionListener implements OnItemClickListener {
 	}
 
 	/**
+	 * Resets the selection of answer, so only one selection of answer can be
+	 * shown.
 	 * 
 	 * @param The parent {@link AdapterView} that called this listener
 	 */
 	private void resetAnswerStatements(AdapterView<?> parent) {
-		if (lastSelectedQuestion != -1) {
-			TextView child = (TextView) parent.getChildAt(lastSelectedQuestion);
+		if (mLastSelectedQuestion != -1) {
+			TextView child = (TextView) parent.getChildAt(mLastSelectedQuestion);
 			CharSequence childsContent = child.getText().toString();
 			CharSequence newContent = childsContent.subSequence(0,
 					childsContent.length()-2);

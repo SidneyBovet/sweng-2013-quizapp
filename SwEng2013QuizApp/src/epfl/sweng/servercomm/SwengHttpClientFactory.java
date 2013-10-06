@@ -37,8 +37,7 @@ import android.util.Log;
  */
 public class SwengHttpClientFactory {
 	
-	// XXX : Well, there is only one instance... it's not a factory
-	private static AbstractHttpClient httpClient;
+	private static AbstractHttpClient sHttpClient;
 	private static final int HTTP_PORT = 80;
 	private final static int HTTPS_PORT = 443;
 	
@@ -50,11 +49,11 @@ public class SwengHttpClientFactory {
 	 */
 	
 	public static synchronized AbstractHttpClient getInstance() {
-		if (httpClient == null) {
-			httpClient = create();
+		if (sHttpClient == null) {
+			sHttpClient = create();
 		}
 
-		return httpClient;
+		return sHttpClient;
 	}
 	
 	/**
@@ -65,7 +64,7 @@ public class SwengHttpClientFactory {
 	 */
 	
 	public static synchronized void setInstance(AbstractHttpClient instance) {
-		httpClient = instance;
+		sHttpClient = instance;
 	}
 	
 	final static private RedirectHandler REDIRECT_NO_FOLLOW = new RedirectHandler() {
