@@ -89,7 +89,7 @@ public class Question {
 	 * @throws JSONException
 	 */
 	public String getTagsToString() throws JSONException {
-		String tagsTogether = "tags: ";
+		String tagsTogether = "Tags: ";
 		for (int i = 0; i < tags.size(); i++) {
 			tagsTogether += tags.get(i);
 			if (i < tags.size() - 1) {
@@ -116,7 +116,7 @@ public class Question {
 	}
 
 	public String getQuestionContent() {
-		return "question:" + questionContent;
+		return "Question: " + questionContent;
 	}
 
 	public List<String> getAnswers() {
