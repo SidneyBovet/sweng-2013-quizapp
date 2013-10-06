@@ -25,6 +25,8 @@ public class SelectionListener implements OnItemClickListener {
 	private Question concernedQuestion;
 	private boolean rightAnswerSelected;
 	
+	private int lastSelectedQuestion;
+	
 	/**
 	 * Creates a listener that will react to user input within a
 	 * {@link ShowQuestionsActivity}.
@@ -37,6 +39,7 @@ public class SelectionListener implements OnItemClickListener {
 		this.buttonNext = bNext;
 		this.concernedQuestion = question;
 		this.rightAnswerSelected = false;
+		this.lastSelectedQuestion = -1;
 	}
 	
 	@Override
@@ -64,6 +67,10 @@ public class SelectionListener implements OnItemClickListener {
 			}
 			if (clickedAnswer != null) {
 				int solution = concernedQuestion.getSolutionIndex();
+				
+				resetAnswerStatements(parent);
+				this.lastSelectedQuestion = (int) id;
+				
 				if (id == solution) {
 					rightAnswerSelected = true;
 					buttonNext.setEnabled(true);
@@ -78,6 +85,20 @@ public class SelectionListener implements OnItemClickListener {
 		
 		// Notifying the testing interface
 		TestingTransactions.check(TTChecks.ANSWER_SELECTED);
+	}
+
+	/**
+	 * 
+	 * @param The parent {@link AdapterView} that called this listener
+	 */
+	private void resetAnswerStatements(AdapterView<?> parent) {
+		if (lastSelectedQuestion != -1) {
+			TextView child = (TextView) parent.getChildAt(lastSelectedQuestion);
+			CharSequence childsContent = child.getText().toString();
+			CharSequence newContent = childsContent.subSequence(0,
+					childsContent.length()-2);
+			child.setText(newContent);
+		}
 	}
 
 }
