@@ -9,16 +9,16 @@
     <string name="title_activity_submit_question">SubmitQuestionActivity</string>
     <string name="title_activity_display_question">DisplayQuestionActivity</string>
     <string name="nextRandomQuestion">Next question</string>
-    <string name="write_question1">Type in the question's text body.</string>
+    <string name="write_question1">Type in the question\'s text body.</string>
     <string name="answer_question1">Type in the answer.</string>
     <string name="answer_question2">Type in the answer</string>
-    <string name="tags_question">Type in the question's tags.</string>
+    <string name="tags_question">Type in the question\'s tags.</string>
     
     <string name="submit_Edited_Question_Button">Submit.</string>
     <string name="title_activity_submit_quizz">SubmitQuizzActivity</string>
 
-    <string name="submit_question_text_body">Type in the question's text body</string>
-    <string name="submit_question_tags">Type in the question's tags</string>
+    <string name="submit_question_text_body">Type in the question\'s text body</string>
+    <string name="submit_question_tags">Type in the question\'s tags</string>
     <string name="submit_question_button">Submit</string>
     <string name="submit_question_add_text">Answers</string>
     <string name="submit_question_add_button">+</string>
