@@ -154,8 +154,7 @@ class AnswerListAdapter extends BaseAdapter {
 			
 			@Override
 			public void afterTextChanged(Editable s) {
-				// TODO if (question hasn't changed) quit
-				if (!mSystemChanged) {
+				if (!mAnswerList.get(currentRowIndex).equals(s.toString())) {
 					mAnswerList.remove(currentRowIndex);
 					mAnswerList.add(currentRowIndex, s.toString());
 					mEditQuestionActivity.updateSubmitButton(audit() == 0);

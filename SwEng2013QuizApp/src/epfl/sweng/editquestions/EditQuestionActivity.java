@@ -36,7 +36,7 @@ public class EditQuestionActivity extends Activity {
 	
 	// fields related to the question
 	private String mQuestionBodyText;
-	private String mTagsText;
+	private String mTagsText; 
 	
 	/**
 	 * Adds a new empty answer to the <code>ListView</code>.
@@ -169,10 +169,12 @@ public class EditQuestionActivity extends Activity {
 			
 			@Override
 			public void afterTextChanged(Editable s) {
-				// TODO if (question hasn't changed) quit
-				mQuestionBodyText = s.toString();
-				updateSubmitButton(mAnswerListAdapter.audit() == 0);
-				TestingTransactions.check(TTChecks.QUESTION_EDITED);
+				// Proceed only if there has been changes.
+				if (!mQuestionBodyText.equals(s.toString())) {
+					mQuestionBodyText = s.toString();
+					updateSubmitButton(mAnswerListAdapter.audit() == 0);
+					TestingTransactions.check(TTChecks.QUESTION_EDITED);
+				}
 			}
 			
 			@Override
@@ -193,10 +195,11 @@ public class EditQuestionActivity extends Activity {
 			
 			@Override
 			public void afterTextChanged(Editable s) {
-				// TODO if (question hasn't changed) quit
-				mTagsText = s.toString();
-				updateSubmitButton(mAnswerListAdapter.audit() == 0);
-				TestingTransactions.check(TTChecks.QUESTION_EDITED);
+				if (!mTagsText.equals(s.toString())) {
+					mTagsText = s.toString();
+					updateSubmitButton(mAnswerListAdapter.audit() == 0);
+					TestingTransactions.check(TTChecks.QUESTION_EDITED);
+				}
 			}
 
 			@Override

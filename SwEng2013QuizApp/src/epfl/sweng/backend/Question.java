@@ -82,6 +82,30 @@ public class Question {
 		return jsonObject;
 	}
 
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	public void setQuestionContent(String questionContent) {
+		this.questionContent = questionContent;
+	}
+
+	public void setAnswers(List<String> answers) {
+		this.answers = answers;
+	}
+
+	public void setSolutionIndex(int solutionIndex) {
+		this.solutionIndex = solutionIndex;
+	}
+
+	public void setTags(List<String> tags) {
+		this.tags = tags;
+	}
+
+	public void setOwner(String owner) {
+		this.owner = owner;
+	}
+
 	/**
 	 * Returns all the tag together
 	 * 
