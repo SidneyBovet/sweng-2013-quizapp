@@ -7,7 +7,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import epfl.sweng.backend.Question;
-import epfl.sweng.backend.QuizEditExecution;
 
 /**
  * The <code>ServerInteractions</code> class contains methods for performing
