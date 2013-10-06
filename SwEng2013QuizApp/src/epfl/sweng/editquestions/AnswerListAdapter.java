@@ -87,7 +87,7 @@ class AnswerListAdapter extends BaseAdapter {
 		mAnswerList = new ArrayList<String>();
 		mAnswerList.add("");
 		mAnswerList.add("");
-		mCorrectAnswerIndex = 0;
+		mCorrectAnswerIndex = -1;
 		notifyDataSetChanged();
 	}
 	
@@ -216,6 +216,9 @@ class AnswerListAdapter extends BaseAdapter {
 				}
 				mAnswerList.remove(currentRowIndex);
 				mAnswerCount--;
+				if (currentRowIndex == mCorrectAnswerIndex) {
+					mCorrectAnswerIndex = -1;
+				}
 				if (currentRowIndex <= mCorrectAnswerIndex && currentRowIndex > 0) {
 					mCorrectAnswerIndex--;
 				}
