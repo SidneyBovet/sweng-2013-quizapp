@@ -239,7 +239,7 @@ public class EditQuestionActivity extends Activity {
 				}
 			}
 		}
-		mAnswerListAdapter.reset();
+		mAnswerListAdapter.resetAnswerList();
 		editTextToFocus.requestFocus();
 		TestingTransactions.check(TTChecks.EDIT_QUESTIONS_SHOWN);
 	}
