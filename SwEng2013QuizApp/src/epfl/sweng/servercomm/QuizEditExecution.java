@@ -13,10 +13,12 @@ import android.os.AsyncTask;
 import epfl.sweng.testing.TestingTransactions;
 import epfl.sweng.testing.TestingTransactions.TTChecks;
 /**
+ * Asyncrounous task that executes smthing in background.
  * 
  * @author Merok
  *
  */
+// TODO : change to QuizEditTask
 public class QuizEditExecution extends
 		AsyncTask<ArrayList<String>, Void, String> {
 	private final static String SERVER_URL = "https://sweng-quiz.appspot.com";
