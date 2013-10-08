@@ -19,7 +19,7 @@ import epfl.sweng.testing.TestingTransactions.TTChecks;
  * @see OnItemClickListener
  *
  */
-public class SelectionListener implements OnItemClickListener {
+public class AnswerSelectionListener implements OnItemClickListener {
 	
 	private Button mButtonNext;
 	private Question mConcernedQuestion;
@@ -35,7 +35,7 @@ public class SelectionListener implements OnItemClickListener {
 	 * @param lwQuestions The list of displayed answers.
 	 */
 	
-	public SelectionListener(Button bNext, Question question) {
+	public AnswerSelectionListener(Button bNext, Question question) {
 		this.mButtonNext = bNext;
 		this.mConcernedQuestion = question;
 		this.mRightAnswerSelected = false;

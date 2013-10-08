@@ -67,8 +67,8 @@ public class ShowQuestionsActivity extends Activity {
 		displayAnswers.setAdapter(adapter);
 		
 		//put answer list under listening
-		SelectionListener listener =
-				new SelectionListener(buttonNext, randomQuestion);
+		AnswerSelectionListener listener =
+				new AnswerSelectionListener(buttonNext, randomQuestion);
 		displayAnswers.setOnItemClickListener(listener);
 		
 		TestingTransactions.check(TTChecks.QUESTION_SHOWN);
