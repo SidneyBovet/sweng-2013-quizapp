@@ -19,12 +19,6 @@ import epfl.sweng.testing.TestingTransactions.TTChecks;
  *
  */
 public class MainActivity extends Activity {
-
-//	@Override
-//	protected void onResume() {
-//		super.onResume();
-//		TestingTransactions.check(TTChecks.MAIN_ACTIVITY_SHOWN);
-//	}
 	
 	/**
 	 * Launches the {@link ShowQuestionActivity}.

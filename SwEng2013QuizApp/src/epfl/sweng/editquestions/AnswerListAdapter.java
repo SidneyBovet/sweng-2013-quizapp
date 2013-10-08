@@ -83,11 +83,10 @@ class AnswerListAdapter extends BaseAdapter {
 	 * Resets the fields and the data of the <code>ListView</code>
 	 */
 	public void resetAnswerList() {
-		mAnswerCount = 2;
+		mAnswerCount = 1;
 		mAnswerList = new ArrayList<String>();
 		mAnswerList.add("");
-		mAnswerList.add("");
-		mCorrectAnswerIndex = 0;
+		mCorrectAnswerIndex = -1;
 		notifyDataSetChanged();
 	}
 	
@@ -162,8 +161,6 @@ class AnswerListAdapter extends BaseAdapter {
 					mAnswerList.add(currentRowIndex, s.toString());
 					mEditQuestionActivity.updateSubmitButton(audit() == 0);
 					TestingTransactions.check(TTChecks.QUESTION_EDITED);
-				} else {
-					return;
 				}
 			}
 			
@@ -193,30 +190,35 @@ class AnswerListAdapter extends BaseAdapter {
 			@Override
 			public void onClick(View v) {
 				if (currentRowIndex == mCorrectAnswerIndex) {
-					return;
+					mCorrectAnswerIndex = -1;
+					notifyDataSetChanged();
+					TestingTransactions.check(TTChecks.QUESTION_EDITED);
+				} else {
+					mCorrectAnswerIndex = currentRowIndex;
+					notifyDataSetChanged();
+					TestingTransactions.check(TTChecks.QUESTION_EDITED);
 				}
-				mCorrectAnswerIndex = currentRowIndex;
-				notifyDataSetChanged();
-				TestingTransactions.check(TTChecks.QUESTION_EDITED);
 			}
 		});
 		
 		Button removeButton = (Button) relatLayout.findViewById(R.id.
 				submit_question_remove_answer_edit);
 		
-		removeButton.setEnabled(getCount() > 2);
-		
 		removeButton.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
 				
-				if (mAnswerCount <= 2) {
+				if (currentRowIndex < 0 || currentRowIndex >= mAnswerCount) {
+					// error
+					TestingTransactions.check(TTChecks.QUESTION_EDITED);
 					return;
 				}
 				mAnswerList.remove(currentRowIndex);
 				mAnswerCount--;
-				if (currentRowIndex <= mCorrectAnswerIndex && currentRowIndex > 0) {
+				if (currentRowIndex == mCorrectAnswerIndex) {
+					mCorrectAnswerIndex = -1;
+				} else if (currentRowIndex < mCorrectAnswerIndex) {
 					mCorrectAnswerIndex--;
 				}
 				notifyDataSetChanged();

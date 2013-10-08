@@ -83,8 +83,6 @@ public class EditQuestionActivity extends Activity {
 		
 		ServerInteractions.submitQuestion(listInputGUI);
 		resetEditQuestionLayout();
-		
-		TestingTransactions.check(TTChecks.NEW_QUESTION_SUBMITTED);
 	}
 	
 	/**
@@ -236,6 +234,5 @@ public class EditQuestionActivity extends Activity {
 		}
 		mAnswerListAdapter.resetAnswerList();
 		editTextToFocus.requestFocus();
-		TestingTransactions.check(TTChecks.EDIT_QUESTIONS_SHOWN);
 	}
 }

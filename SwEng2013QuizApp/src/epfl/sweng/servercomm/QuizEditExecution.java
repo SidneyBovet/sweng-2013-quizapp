@@ -9,6 +9,9 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.json.JSONObject;
 
+import epfl.sweng.testing.TestingTransactions;
+import epfl.sweng.testing.TestingTransactions.TTChecks;
+
 import android.os.AsyncTask;
 
 /**
@@ -35,7 +38,8 @@ public class QuizEditExecution extends AsyncTask<JSONObject, Void, Void> {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
+		
+		TestingTransactions.check(TTChecks.NEW_QUESTION_SUBMITTED);
 		return null;
 	}
 }
