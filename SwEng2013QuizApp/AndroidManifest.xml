@@ -32,7 +32,11 @@
         <activity
             android:name="epfl.sweng.showquestions.ShowQuestionsActivity"
             android:label="@string/title_activity_display_question"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="epfl.sweng.entry.AuthenticationActivity"
+            android:label="@string/title_activity_authentication" >
         </activity>
     </application>
 
