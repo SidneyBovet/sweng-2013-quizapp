@@ -71,9 +71,7 @@ public class EditQuestionActivity extends Activity {
 		listInputGUI.add(mQuestionBodyText);
 		
 		List<String> listAnswers = mAnswerListAdapter.getAnswerList();
-		for (int i = 0; i < mAnswerListAdapter.getCount(); i++) {
-			listInputGUI.add(listAnswers.get(i));
-		}
+		listInputGUI.addAll(listAnswers);
 		
 		int indexGoodAnswer = mAnswerListAdapter.getCorrectIndex();
 		String indexGoodAnswerString = Integer.toString(indexGoodAnswer);
