@@ -1,8 +1,10 @@
 package epfl.sweng.backend;
 
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -20,7 +22,7 @@ public class Question {
 	private String mQuestionContent;
 	private List<String> mAnswers;
 	private int mSolutionIndex;
-	private List<String> mTags;
+	private Set<String> mTags;
 	private String mOwner;
 	
 	/**
@@ -44,7 +46,7 @@ public class Question {
 	
 	public Question(long id, String content,
 			List<String> answers, int solutionIndex,
-			List<String> tags, String owner) {
+			Set<String> tags, String owner) {
 		this.mId = id;
 		this.mQuestionContent = content;
 		this.mAnswers = answers;
@@ -69,7 +71,7 @@ public class Question {
 	 */
 	
 	public Question(String content, List<String> answers,
-			int solutionIndex, List<String> tags) {
+			int solutionIndex, Set<String> tags) {
 		this(-1, content, answers, solutionIndex,
 				tags, null);
 	}
@@ -105,10 +107,11 @@ public class Question {
 	 */
 	
 	public String getTagsToString() throws JSONException {
+		Iterator<String> tagsIterator = mTags.iterator();
 		String tagsTogether = "Tags: ";
-		for (int i = 0; i < mTags.size(); i++) {
-			tagsTogether += mTags.get(i);
-			if (i < mTags.size() - 1) {
+		while (tagsIterator.hasNext()) {
+			tagsTogether += tagsIterator.next();
+			if (tagsIterator.hasNext()) {
 				tagsTogether += ", ";
 			}
 		}
@@ -141,7 +144,7 @@ public class Question {
 	 * @return list of tags of the question.
 	 */
 	
-	public List<String> getTags() {
+	public Set<String> getTags() {
 		return mTags;
 	}
 	
@@ -209,7 +212,7 @@ public class Question {
 		
 		int solutionIndex = jsonParser.getInt("solutionIndex");
 		JSONArray tagsJSON = jsonParser.getJSONArray("tags");
-		List<String> tags = jsonArrayToStringArray(tagsJSON);
+		Set<String> tags = jsonArrayToStringSet(tagsJSON);
 		String owner = jsonParser.getString("owner");
 		
 		return new Question(id, question, answers, solutionIndex, tags, owner);
@@ -231,20 +234,17 @@ public class Question {
 				.parseInt(listElm.remove(listElm.size() - 1));
 		String formattedTags = tagsInOneLine.replaceAll("\\s*(\\W+)\\s*", " ");
 		String[] tagsInArray = formattedTags.trim().split(" ");
-		List<String> tagStrings = new ArrayList<String>();
+		Set<String> tagStrings = new TreeSet<String>();
 		for (String tag : tagsInArray) {
 			tagStrings.add(tag);
 		}
-		// Delete duplicates Tags...
-		List<String> tagsInSet = new ArrayList<String>(new HashSet<String>(tagStrings));
-		
 		
 		List<String> answers = new ArrayList<String>();
 		for (String answer : listElm) {
 			answers.add(answer);
 		}
 		
-		return new Question(questionText, answers, solutionIndex, tagsInSet);
+		return new Question(questionText, answers, solutionIndex, tagStrings);
 	}
 
 	/**
@@ -261,8 +261,9 @@ public class Question {
 			answersJSON.put(question.mAnswers.get(i));
 		}
 		JSONArray tagsJSON = new JSONArray();
-		for (int i = 0; i < question.mTags.size(); i++) {
-			tagsJSON.put(question.mTags.get(i));
+		Iterator<String> tagsIterator = question.mTags.iterator();
+		while (tagsIterator.hasNext()) {
+			tagsJSON.put(tagsIterator.next());
 		}
 		try {
 			questionIntoJSON.put("question", question.mQuestionContent);
@@ -293,5 +294,25 @@ public class Question {
 			}
 		}
 		return list;
+	}
+	
+	/**
+	 * Converts a {@link JSONArray} into a set of String.
+	 * 
+	 * @param arrayToConvert The {@link JSONArray} to convert.
+	 * @return An <code>HashSet</code> of the <code>JSONObjects</code> string
+	 *            field.
+	 */
+	private static Set<String> jsonArrayToStringSet(
+			JSONArray arrayToConvert) {
+		TreeSet<String> set = new TreeSet<String>();
+		if (arrayToConvert != null) {
+			for (int i = 0; i < arrayToConvert.length(); i++) {
+				if (arrayToConvert.optString(i) != null) {
+					set.add(arrayToConvert.optString(i));
+				}
+			}
+		}
+		return set;
 	}
 }
