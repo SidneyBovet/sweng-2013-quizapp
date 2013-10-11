@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.Toast;
 import epfl.sweng.R;
+import epfl.sweng.backend.UserCreditentialsStorage;
 //import epfl.sweng.backend.UserCreditentialsStorage;
 import epfl.sweng.editquestions.EditQuestionActivity;
 import epfl.sweng.showquestions.ShowQuestionsActivity;
@@ -61,7 +62,7 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		//create the UserCreditentialStorage which use a SharedPreference
-		/*UserCreditentialsStorage persistentStorage =
+		UserCreditentialsStorage persistentStorage =
 				UserCreditentialsStorage.getSingletonInstanceOfStorage(
 				this.getApplicationContext());
 		int dummySessionID = 21;
@@ -71,7 +72,8 @@ public class MainActivity extends Activity {
 		} else {
 			Toast.makeText(this, "Not Authentificated", 
 					Toast.LENGTH_SHORT).show();
-		}*/
+		}
+		
 		// Transaction testing.
 		TestingTransactions.check(TTChecks.MAIN_ACTIVITY_SHOWN);
 	}

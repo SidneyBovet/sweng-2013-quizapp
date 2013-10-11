@@ -1,5 +1,6 @@
 package epfl.sweng.test;
 import android.test.ActivityInstrumentationTestCase2;
+import epfl.sweng.backend.UserCreditentialsStorage;
 import epfl.sweng.entry.MainActivity;
 
 public class UserCreditentialsStorageTest extends ActivityInstrumentationTestCase2<MainActivity> {
@@ -7,9 +8,10 @@ public class UserCreditentialsStorageTest extends ActivityInstrumentationTestCas
 	public UserCreditentialsStorageTest(
 			Class<MainActivity> activityClass) {
 		super(activityClass);
-		/*UserCreditentialsStorage persistentStorage =
+		/*TODO  get context of mainactivity
+		 * UserCreditentialsStorage persistentStorage =
 				UserCreditentialsStorage.getSingletonInstanceOfStorage(
-				MainActivity.getApplicationContext());*/
+				MainActivity.);*/
 	}
 	
 	public void testHello() {

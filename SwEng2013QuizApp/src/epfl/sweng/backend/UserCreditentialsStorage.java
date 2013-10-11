@@ -18,7 +18,6 @@ public final class UserCreditentialsStorage {
 	private String sharedPreferencesName = "user_session";
 	private String keySessionIDName = "SESSION_ID";
 
-	// TODO ev. clone interdit?
 	// XXX qu'une key et qu'une sessionID = value?
 
 	/**
@@ -53,7 +52,7 @@ public final class UserCreditentialsStorage {
 		// double-checked singleton: avoids calling costly synchronized if
 		// unnecessary
 		if (null == singletonStorage) {
-			synchronized (AuthenticatingUnit.class) {
+			synchronized (UserCreditentialsStorage.class) {
 				if (null == singletonStorage) {
 					singletonStorage = new UserCreditentialsStorage(context);
 				}
