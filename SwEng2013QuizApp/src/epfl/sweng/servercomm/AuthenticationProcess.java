@@ -11,6 +11,12 @@ import org.json.JSONObject;
 
 import android.os.AsyncTask;
 
+/**
+ * AsyncTask that performs the networking part of authentication with EPFL's
+ * Tequila server
+ * @author Sidney
+ *
+ */
 public class AuthenticationProcess extends AsyncTask<String, Void, String> {
 	private final String[] urls = {
 		"https://sweng-quiz.appspot.com/login",
