@@ -23,25 +23,28 @@ import android.util.Log;
  * TestingTransactions.check(TTChecks.THE_THING_I_JUST_DID) whenever a request
  * is completely done.
  */
-public class TestingTransactions {
-	private static final TestingTransactions instance = new TestingTransactions();
+public final class TestingTransactions {
+	private static final TestingTransactions INSTANCE = new TestingTransactions();
 
-	// / The tag used for logging
+	/** The tag used for logging */
 	private static final String TAG = "TestingTransaction";
 
-	// / The maximum time we wait for a transaction to complete, in milliseconds
+	/** The maximum time we wait for a transaction to complete, in milliseconds */
 	private static final long TRANSACTION_TIMEOUT = 5500;
 
-	// / The time when the current transaction was started
+	/** The time when the current transaction was started */
 	private long startTime;
 
-	// / The state of this transaction
+	/** The possible states of a transaction */
 	private enum TTState {
 		IDLE, INITIATED, COMPLETED
 	};
-
 	private TTState state = TTState.IDLE;
 
+	/**
+	 * The possible points at which transactions end. Each of these corresponds
+	 * to some finished action.
+	 */
 	public enum TTChecks {
 		NONE,
 		QUESTION_SHOWN,
@@ -68,9 +71,8 @@ public class TestingTransactions {
 			synchronized (tts) {
 				if (tts.state != TTState.IDLE) {
 					throw new TestingTransactionsError(
-							"Attempt to run transaction '"
-							+ t
-							+"', but another transaction is running.");
+							"Attempt to run transaction '" + t +
+							"', but another transaction is running.");
 				}
 				tts.startTime = System.currentTimeMillis();
 				Log.d(TAG, String.format("Starting transaction %s", t));
@@ -92,9 +94,8 @@ public class TestingTransactions {
 				// simultaneously, and set the state back to IDLE.
 				if (tts.state != TTState.INITIATED && tts.state != TTState.COMPLETED) {
 					throw new TestingTransactionsError(
-							"Attempt to wait for transaction '"
-							+ t
-							+ "', but it was aborted.");
+							"Attempt to wait for transaction '" + t +
+							"', but it was aborted.");
 				}
 				
 				// 2) wait for the transaction to complete (i.e., to call check)
@@ -161,6 +162,6 @@ public class TestingTransactions {
 
 	// Retrieve the singleton instance of TestingTransaction
 	private static TestingTransactions getInstance() {
-		return instance;
+		return INSTANCE;
 	}
 }

@@ -27,5 +27,8 @@
     <string name="add_answers_text">Answers</string>
     <string name="title_activity_authentication">AuthenticationActivity</string>
     <string name="hello_world">Hello world!</string>
+    <string name="login_user">GASPAR Username</string>
+    <string name="login_password">GASPAR Password</string>
+    <string name="login_button">Log in using Tequila</string>
 
 </resources>
