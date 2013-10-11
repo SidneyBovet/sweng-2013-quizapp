@@ -94,7 +94,10 @@ public class EditQuestionActivity extends Activity {
 		Button submitButton = (Button) mLayout.findViewById(R.
 				id.submit_question_button);
 		if (submitButton != null) {
-			submitButton.setEnabled(value && audit() == 0);
+			boolean newVal = value && audit() == 0;
+			if (submitButton.isEnabled() != newVal) {
+				submitButton.setEnabled(newVal);
+			}
 		}
 	}
 	
