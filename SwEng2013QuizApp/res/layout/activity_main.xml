@@ -4,17 +4,24 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:text="@string/displayRandomQuestionButton" >
-    
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/autenticationLoginButton"
+        android:hint="@string/autenticationLoginButton"
+        android:onClick="displayAuthenticationActivity" />
+
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="displayRandomQuestion"
         android:text="@string/displayRandomQuestionButton" />
-    
+
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="submitQuestion"
         android:text="@string/submitQuestionButton" />
-    
+
 </LinearLayout>
