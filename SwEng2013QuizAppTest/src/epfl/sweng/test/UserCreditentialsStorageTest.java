@@ -1,21 +1,43 @@
 package epfl.sweng.test;
+
+import android.content.Context;
 import android.test.ActivityInstrumentationTestCase2;
-import epfl.sweng.backend.UserCreditentialsStorage;
+import epfl.sweng.backend.UserCredentialsStorage;
 import epfl.sweng.entry.MainActivity;
 
-public class UserCreditentialsStorageTest extends ActivityInstrumentationTestCase2<MainActivity> {
+public class UserCreditentialsStorageTest extends
+		ActivityInstrumentationTestCase2<MainActivity> {
 
-	public UserCreditentialsStorageTest(
-			Class<MainActivity> activityClass) {
-		super(activityClass);
-		/*TODO  get context of mainactivity
-		 * UserCreditentialsStorage persistentStorage =
-				UserCreditentialsStorage.getSingletonInstanceOfStorage(
-				MainActivity.);*/
+	private Context contextOfMainActivity;
+	private UserCredentialsStorage persistentStorage;
+	
+	public UserCreditentialsStorageTest() {
+		super(MainActivity.class);
 	}
 	
-	public void testHello() {
-		fail("Not yet implemented");
-	}	
+	@Override
+	public void setUp() {
+		getActivity();
+		contextOfMainActivity = getInstrumentation()
+				.getTargetContext();
+		persistentStorage = UserCredentialsStorage.
+				getSingletonInstanceOfStorage(contextOfMainActivity);
+	}
+	
+	public void testAuthentication() {
+		String dummySessionID = "blabla";
+		assertFalse(persistentStorage.isAuthenticated());
+		persistentStorage.takeAuthentication(dummySessionID);
+		assertTrue(persistentStorage.isAuthenticated());
+		persistentStorage.releaseAuthentication();
+	}
 
+	public void testReleaseAuthentication() {
+		String dummySessionID = "blabla2";
+		assertFalse(persistentStorage.isAuthenticated());
+		persistentStorage.takeAuthentication(dummySessionID);
+		assertTrue(persistentStorage.isAuthenticated());
+		persistentStorage.releaseAuthentication();
+		assertFalse(persistentStorage.isAuthenticated());
+	}
 }
