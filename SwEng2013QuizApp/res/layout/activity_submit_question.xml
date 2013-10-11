@@ -63,6 +63,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:onClick="sendEditedQuestion"
-        android:hint="@string/submit_question_button" />
+        android:text="@string/submit_question_button" />
     
 </RelativeLayout>
