@@ -5,6 +5,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -232,19 +234,21 @@ public class Question {
 		String tagsInOneLine = listElm.remove(listElm.size() - 1);
 		int solutionIndex = Integer
 				.parseInt(listElm.remove(listElm.size() - 1));
-		String formattedTags = tagsInOneLine.replaceAll("\\s*(\\W+)\\s*", " ");
-		String[] tagsInArray = formattedTags.trim().split(" ");
-		Set<String> tagStrings = new TreeSet<String>();
-		for (String tag : tagsInArray) {
-			tagStrings.add(tag);
+		
+		Pattern pattern = Pattern.compile("(\\w+)", Pattern.CASE_INSENSITIVE);
+		Matcher matcher = pattern.matcher(tagsInOneLine);
+
+		Set<String> tagSet = new TreeSet<String>();
+		while (matcher.find()) {
+			tagSet.add(matcher.group(1));
 		}
 		
-		List<String> answers = new ArrayList<String>();
+		List<String> answerList = new ArrayList<String>();
 		for (String answer : listElm) {
-			answers.add(answer);
+			answerList.add(answer);
 		}
 		
-		return new Question(questionText, answers, solutionIndex, tagStrings);
+		return new Question(questionText, answerList, solutionIndex, tagSet);
 	}
 
 	/**
