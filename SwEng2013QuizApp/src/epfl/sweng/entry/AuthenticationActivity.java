@@ -1,12 +1,16 @@
 package epfl.sweng.entry;
 
-import epfl.sweng.R;
-import epfl.sweng.R.layout;
-import epfl.sweng.R.menu;
-import android.os.Bundle;
 import android.app.Activity;
+import android.os.Bundle;
 import android.view.Menu;
+import epfl.sweng.R;
 
+/**
+ * This class will take care of the authentication to the
+ * Tequila EPFL server. 
+ * @author born4new
+ *
+ */
 public class AuthenticationActivity extends Activity {
 
 	@Override
