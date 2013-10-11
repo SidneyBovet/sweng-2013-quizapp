@@ -8,7 +8,6 @@ import android.view.View;
 import android.widget.Toast;
 import epfl.sweng.R;
 import epfl.sweng.backend.UserCredentialsStorage;
-//import epfl.sweng.backend.UserCreditentialsStorage;
 import epfl.sweng.editquestions.EditQuestionActivity;
 import epfl.sweng.showquestions.ShowQuestionsActivity;
 import epfl.sweng.testing.TestingTransactions;
@@ -54,6 +53,13 @@ public class MainActivity extends Activity {
 		Intent submitQuestionActivityIntent = new Intent(this,
 				EditQuestionActivity.class);
 		startActivity(submitQuestionActivityIntent);
+	}
+
+	public void displayAuthenticationActivity(View view) {
+		Toast.makeText(this, "Please Log in", Toast.LENGTH_SHORT).show();
+		Intent submitAuthenticationActivityIntent = new Intent(this,
+				AuthenticationActivity.class);
+		startActivity(submitAuthenticationActivityIntent);
 	}
 
 	@Override

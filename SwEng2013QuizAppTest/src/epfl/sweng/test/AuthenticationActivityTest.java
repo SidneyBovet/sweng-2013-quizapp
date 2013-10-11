@@ -2,7 +2,11 @@ package epfl.sweng.test;
 
 import android.test.ActivityInstrumentationTestCase2;
 import android.widget.Button;
+import android.widget.EditText;
+
 import com.jayway.android.robotium.solo.Solo;
+
+import epfl.sweng.R.id;
 import epfl.sweng.entry.AuthenticationActivity;
 import epfl.sweng.testing.TestingTransaction;
 import epfl.sweng.testing.TestingTransactions;
@@ -36,18 +40,18 @@ public class AuthenticationActivityTest extends
 		assertFalse(loginButton.isEnabled());
 	}
 
-	// XXX HOW TO DO A TEST LIKE THAT ?
-//	public void testLoginButtonIsEnableWhenLoginAndPasswordFieldsAreCorrectlyCompleted() {
-//		getActivityAndWaitFor(TTChecks.AUTHENTICATION_ACTIVITY_SHOWN);
-//		EditText login = (EditText) solo.getEditText(id.username_login);
-//		EditText password = (EditText) solo.getEditText(id.password_login);
-//		Button loginButton = (Button) solo.getButton(id.buttonLogin);
-//		login.setText("    ");
-//		password.setText("     ");
-//		assertFalse("login and password fileds must be correctly filled", loginButton.isEnabled());
-//	}
-	
-	
+
+	public void testLoginButtonIsEnableWhenLoginAndPasswordFieldsAreCorrectlyCompleted() {
+		getActivityAndWaitFor(TTChecks.AUTHENTICATION_ACTIVITY_SHOWN);
+		EditText login = (EditText) solo.getEditText("GASPAR Username");
+		EditText password = (EditText) solo.getEditText("GASPAR Password");
+		Button loginButton = (Button) solo.getButton("Log in using Tequila");
+		solo.enterText(login, "     ");
+		solo.enterText(password, "     ");
+		
+		assertFalse("login and password fileds must be correctly filled",
+				loginButton.isEnabled());
+	}
 
 	private void getActivityAndWaitFor(
 			final TestingTransactions.TTChecks expected) {
