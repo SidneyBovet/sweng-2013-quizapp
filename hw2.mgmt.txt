@@ -8,13 +8,13 @@
         [x] 4.1 Fetch a random quiz question from the server           : David
         [x] 4.2 Link MainActivity to the quiz question functionality   : David
         [X] 4.3 Display a quiz question                                : Joanna
-        [ ] 4.4 Take a quiz                                            : Sidney
-        [ ] 4.5 Testing hooks                                          : when everything done
+        [x] 4.4 Take a quiz                                            : Sidney
+        [x] 4.5 Testing hooks                                          : when everything done
 
-        [ ] 5.1 Link MainActivity to the quiz question functionnality  : John
+        [x] 5.1 Link MainActivity to the quiz question functionnality  : John
         [x] 5.2 GUI for editing and submitting questions               : Aymeric
-        [ ] 5.3 Submit the question to the SwEng quiz server           : John	
-        [ ] 5.4 Testing hooks                                          : when everything done
+        [x] 5.3 Submit the question to the SwEng quiz server           : John	
+        [x] 5.4 Testing hooks                                          : when everything done
 
         [x] 6   Generating JavaDoc and Class Diagram (+ checkstyle)    : Aymeric (if not already done)
 
