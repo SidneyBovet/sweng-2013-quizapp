@@ -9,8 +9,8 @@ import android.view.Menu;
 import android.widget.Button;
 import android.widget.EditText;
 import epfl.sweng.R;
-import epfl.sweng.testing.TestingTransactions;
-import epfl.sweng.testing.TestingTransactions.TTChecks;
+import epfl.sweng.testing.TestCoordinator;
+import epfl.sweng.testing.TestCoordinator.TTChecks;
 
 /***
  *  * This class will take care of the authentication to the
@@ -28,7 +28,7 @@ public class AuthenticationActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_authentication);
 		setDisplayView();
-		TestingTransactions.check(TTChecks.AUTHENTICATION_ACTIVITY_SHOWN);
+		TestCoordinator.check(TTChecks.AUTHENTICATION_ACTIVITY_SHOWN);
 	}
 	/**
 	 * Sets all the view in this activity, by disabling the button, filling the

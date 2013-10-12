@@ -10,8 +10,8 @@ import epfl.sweng.R;
 import epfl.sweng.backend.UserCredentialsStorage;
 import epfl.sweng.editquestions.EditQuestionActivity;
 import epfl.sweng.showquestions.ShowQuestionsActivity;
-import epfl.sweng.testing.TestingTransactions;
-import epfl.sweng.testing.TestingTransactions.TTChecks;
+import epfl.sweng.testing.TestCoordinator;
+import epfl.sweng.testing.TestCoordinator.TTChecks;
 
 /***
  * Main activity of the quiz application, shown at launch.
@@ -78,6 +78,6 @@ public class MainActivity extends Activity {
 				.getApplicationContext());
 
 		// Transaction testing.
-		TestingTransactions.check(TTChecks.MAIN_ACTIVITY_SHOWN);
+		TestCoordinator.check(TTChecks.MAIN_ACTIVITY_SHOWN);
 	}
 }

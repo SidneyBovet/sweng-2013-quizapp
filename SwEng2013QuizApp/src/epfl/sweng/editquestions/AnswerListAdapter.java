@@ -14,8 +14,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import epfl.sweng.R;
-import epfl.sweng.testing.TestingTransactions;
-import epfl.sweng.testing.TestingTransactions.TTChecks;
+import epfl.sweng.testing.TestCoordinator;
+import epfl.sweng.testing.TestCoordinator.TTChecks;
 
 /**
  * Adapter used to display the elements of the <code>ListView</code> on the
@@ -160,7 +160,7 @@ class AnswerListAdapter extends BaseAdapter {
 					mAnswerList.remove(currentRowIndex);
 					mAnswerList.add(currentRowIndex, s.toString());
 					mEditQuestionActivity.updateSubmitButton(audit() == 0);
-					TestingTransactions.check(TTChecks.QUESTION_EDITED);
+					TestCoordinator.check(TTChecks.QUESTION_EDITED);
 				}
 			}
 			
@@ -192,11 +192,11 @@ class AnswerListAdapter extends BaseAdapter {
 				if (currentRowIndex == mCorrectAnswerIndex) {
 					mCorrectAnswerIndex = -1;
 					notifyDataSetChanged();
-					TestingTransactions.check(TTChecks.QUESTION_EDITED);
+					TestCoordinator.check(TTChecks.QUESTION_EDITED);
 				} else {
 					mCorrectAnswerIndex = currentRowIndex;
 					notifyDataSetChanged();
-					TestingTransactions.check(TTChecks.QUESTION_EDITED);
+					TestCoordinator.check(TTChecks.QUESTION_EDITED);
 				}
 			}
 		});
@@ -211,7 +211,7 @@ class AnswerListAdapter extends BaseAdapter {
 				
 				if (currentRowIndex < 0 || currentRowIndex >= mAnswerCount) {
 					// error
-					TestingTransactions.check(TTChecks.QUESTION_EDITED);
+					TestCoordinator.check(TTChecks.QUESTION_EDITED);
 					return;
 				}
 				mAnswerList.remove(currentRowIndex);
@@ -222,7 +222,7 @@ class AnswerListAdapter extends BaseAdapter {
 					mCorrectAnswerIndex--;
 				}
 				notifyDataSetChanged();
-				TestingTransactions.check(TTChecks.QUESTION_EDITED);
+				TestCoordinator.check(TTChecks.QUESTION_EDITED);
 			}
 		});
 		

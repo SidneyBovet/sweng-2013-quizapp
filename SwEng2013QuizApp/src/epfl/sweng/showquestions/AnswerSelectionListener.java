@@ -7,8 +7,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import epfl.sweng.R;
 import epfl.sweng.backend.Question;
-import epfl.sweng.testing.TestingTransactions;
-import epfl.sweng.testing.TestingTransactions.TTChecks;
+import epfl.sweng.testing.TestCoordinator;
+import epfl.sweng.testing.TestCoordinator.TTChecks;
 
 /**
  * The <code>SelectionListener</code> allows to implement a custom
@@ -84,7 +84,7 @@ public class AnswerSelectionListener implements OnItemClickListener {
 		}
 		
 		// Notifying the testing interface
-		TestingTransactions.check(TTChecks.ANSWER_SELECTED);
+		TestCoordinator.check(TTChecks.ANSWER_SELECTED);
 	}
 
 	/**

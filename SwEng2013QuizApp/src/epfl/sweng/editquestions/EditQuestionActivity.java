@@ -16,8 +16,8 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 import epfl.sweng.R;
 import epfl.sweng.servercomm.ServerInteractions;
-import epfl.sweng.testing.TestingTransactions;
-import epfl.sweng.testing.TestingTransactions.TTChecks;
+import epfl.sweng.testing.TestCoordinator;
+import epfl.sweng.testing.TestCoordinator.TTChecks;
 
 /**
  * Activity that allows the user to submit a new question to the SwEng server.
@@ -48,7 +48,7 @@ public class EditQuestionActivity extends Activity {
 	
 	public void addMoreAnswer(View view) {
 		mAnswerListAdapter.add("");
-		TestingTransactions.check(TTChecks.QUESTION_EDITED);
+		TestCoordinator.check(TTChecks.QUESTION_EDITED);
 	}
 	
 	/**
@@ -169,7 +169,7 @@ public class EditQuestionActivity extends Activity {
 				if (!mQuestionBodyText.equals(s.toString())) {
 					mQuestionBodyText = s.toString();
 					updateSubmitButton(mAnswerListAdapter.audit() == 0);
-					TestingTransactions.check(TTChecks.QUESTION_EDITED);
+					TestCoordinator.check(TTChecks.QUESTION_EDITED);
 				}
 			}
 			
@@ -195,7 +195,7 @@ public class EditQuestionActivity extends Activity {
 				if (!mTagsText.equals(s.toString())) {
 					mTagsText = s.toString();
 					updateSubmitButton(mAnswerListAdapter.audit() == 0);
-					TestingTransactions.check(TTChecks.QUESTION_EDITED);
+					TestCoordinator.check(TTChecks.QUESTION_EDITED);
 				}
 			}
 
@@ -212,7 +212,7 @@ public class EditQuestionActivity extends Activity {
 			}
 		});
 		
-		TestingTransactions.check(TTChecks.EDIT_QUESTIONS_SHOWN);
+		TestCoordinator.check(TTChecks.EDIT_QUESTIONS_SHOWN);
 	}
 	
 	/**

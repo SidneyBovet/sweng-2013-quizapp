@@ -13,8 +13,8 @@ import android.widget.TextView;
 import epfl.sweng.R;
 import epfl.sweng.backend.Question;
 import epfl.sweng.servercomm.ServerInteractions;
-import epfl.sweng.testing.TestingTransactions;
-import epfl.sweng.testing.TestingTransactions.TTChecks;
+import epfl.sweng.testing.TestCoordinator;
+import epfl.sweng.testing.TestCoordinator.TTChecks;
 
 /***
  * Activity used to display a random question to the user.
@@ -71,7 +71,7 @@ public class ShowQuestionsActivity extends Activity {
 				new AnswerSelectionListener(buttonNext, randomQuestion);
 		displayAnswers.setOnItemClickListener(listener);
 		
-		TestingTransactions.check(TTChecks.QUESTION_SHOWN);
+		TestCoordinator.check(TTChecks.QUESTION_SHOWN);
 	}
 
 	/**
