@@ -47,6 +47,8 @@ public class AuthenticationProcess extends AsyncTask<String, Void, String> {
 	public AuthenticationProcess(Context ctx) {
 		this.context = ctx;
 		this.dialog = new ProgressDialog(ctx);
+		dialog.setMessage("Authenticating...");
+		dialog.setCancelable(false);
 	}
 
 	/**
@@ -69,8 +71,6 @@ public class AuthenticationProcess extends AsyncTask<String, Void, String> {
 
 	@Override
 	protected void onPreExecute() {
-		dialog.setMessage("Authenticating...");
-		dialog.setCancelable(false);
 		dialog.show();
 	}
 
@@ -83,11 +83,10 @@ public class AuthenticationProcess extends AsyncTask<String, Void, String> {
 					+ "recieved " + args.length + "argument(s), should've "
 					+ "been 2.");
 		}
-
-		String sessionId = "";
+		
 		String token = getToken();
 		validateToken(token, args[0], args[1]);
-		sessionId = retrieveSessionId(token);
+		String sessionId = retrieveSessionId(token);
 
 		return sessionId;
 	}
