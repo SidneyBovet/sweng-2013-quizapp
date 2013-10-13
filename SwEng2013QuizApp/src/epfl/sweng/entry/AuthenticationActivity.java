@@ -1,14 +1,20 @@
 package epfl.sweng.entry;
 
+import java.util.concurrent.ExecutionException;
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.view.Menu;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 import epfl.sweng.R;
+import epfl.sweng.servercomm.AuthenticationProcess;
 import epfl.sweng.testing.TestCoordinator;
 import epfl.sweng.testing.TestCoordinator.TTChecks;
 
@@ -114,5 +120,31 @@ public class AuthenticationActivity extends Activity {
 		getMenuInflater().inflate(R.menu.authentication, menu);
 		return true;
 	}
-
+	
+	public void buttonAuthenticate(View view) {
+		TextView usrNameField = (TextView) findViewById(R.id.login_user);
+		String usrName = usrNameField.getText().toString();
+		TextView passwordField = (TextView) findViewById(R.id.login_password);
+		String password = passwordField.getText().toString();
+		
+		AuthenticationProcess authProc = new AuthenticationProcess();
+		authProc.execute(usrName, password);
+		String sessionId = "";
+		try {
+			sessionId = authProc.get();
+		} catch (InterruptedException e) {
+			// TODO Call Aymeric's log architecture and David's errorHandle function
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			// TODO Call Aymeric's log architecture and David's errorHandle function
+			e.printStackTrace();
+		} finally {
+			if (null == sessionId) {
+				// TODO Call Aymeric's log architecture and David's errorHandle function
+				return;
+			}
+		}
+		
+		Toast.makeText(this, "AsyncTask returned "+sessionId , Toast.LENGTH_LONG).show();
+	}
 }
