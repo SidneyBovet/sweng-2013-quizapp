@@ -15,7 +15,7 @@ public final class UserCredentialsStorage {
 	private SharedPreferences userCredentialsPrefs;
 	private Editor editor;
 	private String sharedPreferencesName = "user_session";
-	private String keySessionIDName = "SESSION_ID";
+	private final String keySessionIDName = "SESSION_ID";
 
 	/**
 	 * Constructor which job is to create the storage (using SharePreferences
