@@ -41,8 +41,7 @@ public class AuthenticationProcess extends AsyncTask<String, Void, String> {
 	private Context context;
 	private final String[] urls = {
 		"https://sweng-quiz.appspot.com/login",
-		"https://tequila.epfl.ch/cgi-bin/tequila/login",
-		"https://sweng-quiz.appspot.com/login"};
+		"https://tequila.epfl.ch/cgi-bin/tequila/login"};
 
 	public AuthenticationProcess(Context ctx) {
 		this.context = ctx;
@@ -106,12 +105,12 @@ public class AuthenticationProcess extends AsyncTask<String, Void, String> {
 		dialog.dismiss();
 		Toast.makeText(
 				context,
-				"Authentication activity finished, " + "session id = " + result,
+				"Authentication activity finished, session id = " + result,
 				Toast.LENGTH_LONG).show();
 	}
 
 	/**
-	 * Retrieves session id from SwEng's quizz server.
+	 * Retrieves session id from SwEng's quiz server.
 	 * 
 	 * @param token
 	 *            The token previously validated to EPFL's Tequila server.
@@ -136,7 +135,7 @@ public class AuthenticationProcess extends AsyncTask<String, Void, String> {
 		JSONObject jsonResponse = new JSONObject();
 
 		try {
-			HttpPost postRequest = new HttpPost(urls[2]);
+			HttpPost postRequest = new HttpPost(urls[0]);
 			postRequest.setEntity(new StringEntity(postBody.toString()));
 			postRequest.setHeader("Content-type", "application/json");
 			ResponseHandler<String> handler = new BasicResponseHandler();
