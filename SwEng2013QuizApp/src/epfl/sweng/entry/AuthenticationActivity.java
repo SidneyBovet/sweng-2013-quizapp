@@ -126,6 +126,6 @@ public class AuthenticationActivity extends Activity {
 		
 		AuthenticationProcess authProc =
 				new AuthenticationProcess(AuthenticationActivity.this);
-		authProc.execute(usrName, password);
+		authProc.startAuthenticationProcess(usrName, password);
 	}
 }
