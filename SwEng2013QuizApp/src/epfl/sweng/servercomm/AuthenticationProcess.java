@@ -78,6 +78,8 @@ public class AuthenticationProcess extends AsyncTask<String, Void, String> {
 		try {
 			postBody.put("token", token);
 		} catch (JSONException e) {
+			// XXX shouldn't be reached; error should've been thrown earlier
+			// XXX error putting String token into JSON -> not recoverable
 			// TODO Call Aymeric's log architecture and David's errorHandle function
 			e.printStackTrace();
 		}
@@ -93,21 +95,28 @@ public class AuthenticationProcess extends AsyncTask<String, Void, String> {
 					execute(postRequest, handler);
 			jsonResponse = new JSONObject(response);
 		} catch (UnsupportedEncodingException e) {
+			// XXX local encoding not supported -> not recoverable + nothing to do
 			// TODO Call Aymeric's log architecture and David's errorHandle function
 			e.printStackTrace();
 		} catch (ClientProtocolException e) {
+			// XXX error in the HTTP protocol -> not recoverable
 			// TODO Call Aymeric's log architecture and David's errorHandle function
 			e.printStackTrace();
 		} catch (IOException e) {
+			// XXX general error with server -> not recoverable
 			// TODO Call Aymeric's log architecture and David's errorHandle function
 			e.printStackTrace();
 		} catch (JSONException e) {
+			// XXX error while parsing JSONObject
+			//		(server answered with corrupted JSON) -> not recoverable
 			// TODO Call Aymeric's log architecture and David's errorHandle function
 			e.printStackTrace();
 		}
 		try {
 			return jsonResponse.getString("session");
 		} catch (JSONException e) {
+			// XXX error while looking for "session" in JSON
+			//		(Tequila didn't confirm token to SwEng sever) -> not recoverable
 			// TODO Call Aymeric's log architecture and David's errorHandle function
 			e.printStackTrace();
 		}
@@ -130,6 +139,7 @@ public class AuthenticationProcess extends AsyncTask<String, Void, String> {
 			tokenValidationContentEncoded =
 				new UrlEncodedFormEntity(tokenValidationContentList);
 		} catch (UnsupportedEncodingException e) {
+			// XXX local encoding not supported -> not recoverable + nothing to do
 			// TODO Call Aymeric's log architecture and David's errorHandle function
 			e.printStackTrace();
 		}
@@ -141,12 +151,15 @@ public class AuthenticationProcess extends AsyncTask<String, Void, String> {
 			HttpResponse response = SwengHttpClientFactory.getInstance().
 				execute(tokenValidationRequest);
 			if (response.getStatusLine().getStatusCode() != HTTP_STATUS_FOUND) {
+				// XXX Tequila rejected usrname/pwd  -> not recoverable + tell to retry
 				// TODO Call Aymeric's log architecture and David's errorHandle function
 			}
 		} catch (ClientProtocolException e) {
+			// XXX error in the HTTP protocol -> not recoverable + tell to retry later
 			// TODO Call Aymeric's log architecture and David's errorHandle function
 			e.printStackTrace();
 		} catch (IOException e) {
+			// XXX general error with server -> not recoverable + tell to retry later
 			// TODO Call Aymeric's log architecture and David's errorHandle function
 			e.printStackTrace();
 		}
@@ -163,14 +176,18 @@ public class AuthenticationProcess extends AsyncTask<String, Void, String> {
 			JSONObject responseJSON = new JSONObject(response);
 			token = responseJSON.getString("token");
 		} catch (ClientProtocolException e) {
+			// XXX error in the HTTP protocol -> not recoverable + tell to retry later
 			// TODO Call Aymeric's log architecture and David's errorHandle function
 			e.printStackTrace();
 			return null;
 		} catch (IOException e) {
+			// XXX general error with server -> not recoverable + tell to retry later
 			// TODO Call Aymeric's log architecture and David's errorHandle function
 			e.printStackTrace();
 			return null;
 		} catch (JSONException e) {
+			// XXX error while parsing JSONObject
+			//		(no "token" field or corrupted JSON) -> not recoverable + tell to retry later
 			// TODO Call Aymeric's log architecture and David's errorHandle function
 			e.printStackTrace();
 			return null;
@@ -181,9 +198,9 @@ public class AuthenticationProcess extends AsyncTask<String, Void, String> {
 	@Override
 	protected void onPostExecute(String result) {
 		//TODO load session id into Joanna's SharedPref
+		dialog.dismiss();
 		Toast.makeText(context, "Authentication activity finished, " +
 				"session id = " + sessionId, Toast.LENGTH_LONG).show();
-		dialog.dismiss();
 	}
 
 }
