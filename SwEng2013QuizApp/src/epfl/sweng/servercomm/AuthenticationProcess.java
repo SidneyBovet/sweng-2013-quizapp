@@ -101,6 +101,7 @@ public class AuthenticationProcess extends AsyncTask<String, Void, String> {
 		} else {
 			UserCredentialsStorage.getSingletonInstanceOfStorage(context)
 					.takeAuthentication(result);
+			// TODO why not UserCredentialsStorage.getInstance().setSessionId()?
 		}
 		dialog.dismiss();
 		Toast.makeText(
