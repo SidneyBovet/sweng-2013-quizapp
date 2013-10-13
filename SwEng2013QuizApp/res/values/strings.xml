@@ -30,6 +30,7 @@
     <string name="login_user">GASPAR Username</string>
     <string name="login_password">GASPAR Password</string>
     <string name="login_button">Log in using Tequila</string>
-    <string name="autenticationLoginButton">Log in using Tequila</string>
+    <string name="autenticationLoginButtonStateLogIn">Log in using Tequila</string>
+    <string name="autenticationLoginButtonStateLogOut">Log out</string>
 
 </resources>

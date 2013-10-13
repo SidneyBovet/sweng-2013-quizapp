@@ -8,20 +8,22 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/autenticationLoginButton"
-        android:text="@string/autenticationLoginButton"
+        android:id="@+id/autenticationLogButton"
+        android:text="@string/autenticationLoginButtonStateLogIn"
         android:onClick="displayAuthenticationActivity" />
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="displayRandomQuestion"
+        android:id="@+id/displayRandomQuestionButton"
         android:text="@string/displayRandomQuestionButton" />
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="submitQuestion"
+        android:id="@+id/submitQuestionButton"
         android:text="@string/submitQuestionButton" />
 
 </LinearLayout>

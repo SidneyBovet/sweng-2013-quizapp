@@ -59,6 +59,7 @@ public final class UserCredentialsStorage {
 	public void takeAuthentication(String sessionID) {
 		editor.putString(keySessionIDName, sessionID);
 		editor.commit();
+		System.out.println("Authentication done");
 	}
 
 	/**

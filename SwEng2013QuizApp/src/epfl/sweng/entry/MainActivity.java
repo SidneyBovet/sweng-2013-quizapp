@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 import epfl.sweng.R;
 import epfl.sweng.backend.UserCredentialsStorage;
@@ -20,6 +21,9 @@ import epfl.sweng.testing.TestCoordinator.TTChecks;
  * 
  */
 public class MainActivity extends Activity {
+
+	private UserCredentialsStorage persistentStorage;
+	private boolean authenticated = false;
 
 	/**
 	 * Launches the {@link ShowQuestionActivity}.
@@ -55,11 +59,25 @@ public class MainActivity extends Activity {
 		startActivity(submitQuestionActivityIntent);
 	}
 
+	/**
+	 * Lauch the AuthentificationActivity when not authenticated
+	 * Release the authentication and refresh the view when authenticated
+	 * @param view
+	 */
 	public void displayAuthenticationActivity(View view) {
-		Toast.makeText(this, "Please Log in", Toast.LENGTH_SHORT).show();
-		Intent submitAuthenticationActivityIntent = new Intent(this,
-				AuthenticationActivity.class);
-		startActivity(submitAuthenticationActivityIntent);
+		//XXX return automatically to MainActivity when log in?
+		if (!authenticated) {
+			Toast.makeText(this, "Please Log in", Toast.LENGTH_SHORT).show();
+			Intent submitAuthenticationActivityIntent = new Intent(this,
+					AuthenticationActivity.class);
+			startActivity(submitAuthenticationActivityIntent);
+		} else {
+			persistentStorage.releaseAuthentication();
+			authenticated = false;
+			//XXX put it here?
+			//TestCoordinator.check(TTChecks.LOGGED_OUT);
+			onResume();
+		}
 	}
 
 	@Override
@@ -73,11 +91,49 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		// create the UserCreditentialStorage which use a SharedPreference
-		UserCredentialsStorage.getSingletonInstanceOfStorage(this
-				.getApplicationContext());
-
 		// Transaction testing.
 		TestCoordinator.check(TTChecks.MAIN_ACTIVITY_SHOWN);
+		// create the UserCreditentialStorage which use a SharedPreference
+		persistentStorage = UserCredentialsStorage
+				.getSingletonInstanceOfStorage(this.getApplicationContext());
+		// XXX garder ou reinitialiser quand application killed?
+		// clean the storage when the app is first launched
+		persistentStorage.releaseAuthentication();
+	}
+
+	/**
+	 * Called when the app is first launch and when we return to it from another
+	 * activity. Check the authentication state and change the text on the log
+	 * button and the authenticated boolean in response 
+	 */
+	@Override
+	protected void onResume() {
+		super.onResume();
+		if (!persistentStorage.isAuthenticated()) {
+			Button logButton = (Button) findViewById(R.id.autenticationLogButton);
+			logButton.setText(R.string.autenticationLoginButtonStateLogIn);
+			authenticated = false;
+		} else {
+			Button logButton = (Button) findViewById(R.id.autenticationLogButton);
+			logButton.setText(R.string.autenticationLoginButtonStateLogOut);
+			authenticated = true;
+		}
+		setDisplayView();
+	}
+
+	/**
+	 * Set the view of the button and enable or disable them due to 
+	 * authentication state
+	 */
+	private void setDisplayView() {
+		Button showQuestion = (Button) findViewById(R.id.displayRandomQuestionButton);
+		Button submitQuestion = (Button) findViewById(R.id.submitQuestionButton);
+		if (!authenticated) {
+			showQuestion.setEnabled(false);
+			submitQuestion.setEnabled(false);
+		} else {
+			showQuestion.setEnabled(true);
+			submitQuestion.setEnabled(true);
+		}
 	}
 }
