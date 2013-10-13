@@ -1,7 +1,5 @@
 package epfl.sweng.entry;
 
-import java.util.concurrent.ExecutionException;
-
 import android.app.Activity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -12,7 +10,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 import epfl.sweng.R;
 import epfl.sweng.servercomm.AuthenticationProcess;
 import epfl.sweng.testing.TestCoordinator;
@@ -127,24 +124,8 @@ public class AuthenticationActivity extends Activity {
 		TextView passwordField = (TextView) findViewById(R.id.login_password);
 		String password = passwordField.getText().toString();
 		
-		AuthenticationProcess authProc = new AuthenticationProcess();
+		AuthenticationProcess authProc =
+				new AuthenticationProcess(AuthenticationActivity.this);
 		authProc.execute(usrName, password);
-		String sessionId = "";
-		try {
-			sessionId = authProc.get();
-		} catch (InterruptedException e) {
-			// TODO Call Aymeric's log architecture and David's errorHandle function
-			e.printStackTrace();
-		} catch (ExecutionException e) {
-			// TODO Call Aymeric's log architecture and David's errorHandle function
-			e.printStackTrace();
-		} finally {
-			if (null == sessionId) {
-				// TODO Call Aymeric's log architecture and David's errorHandle function
-				return;
-			}
-		}
-		
-		Toast.makeText(this, "AsyncTask returned "+sessionId , Toast.LENGTH_LONG).show();
 	}
 }

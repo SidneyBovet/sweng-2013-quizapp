@@ -18,7 +18,10 @@ import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.os.AsyncTask;
+import android.widget.Toast;
 
 /**
  * AsyncTask that performs the networking part of authentication with EPFL's
@@ -32,15 +35,29 @@ import android.os.AsyncTask;
  */
 public class AuthenticationProcess extends AsyncTask<String, Void, String> {
 	private static final int HTTP_STATUS_FOUND = 302;
+	private ProgressDialog dialog;
+	private Context context;
+	private String sessionId;
 	private final String[] urls = {
 		"https://sweng-quiz.appspot.com/login",
 		"https://tequila.epfl.ch/cgi-bin/tequila/login",
 		"https://sweng-quiz.appspot.com/login"
 	};
 	
+	public AuthenticationProcess(Context ctx) {
+		this.context = ctx;
+		this.dialog = new ProgressDialog(ctx);
+		this.sessionId = "";
+	}
+	
+	@Override
+	protected void onPreExecute() {
+		dialog.setMessage("Authenticating...");
+		dialog.show();
+	}
+	
 	@Override
 	protected String doInBackground(String... args) {
-		String sessionId = "";
 		if (args.length != 2) {
 			System.err.println("Illegal arguments given to " +
 					"AutehnticationProcess, should be (usrname, pwd)");
@@ -94,7 +111,8 @@ public class AuthenticationProcess extends AsyncTask<String, Void, String> {
 			// TODO Call Aymeric's log architecture and David's errorHandle function
 			e.printStackTrace();
 		}
-		return "error in the process";
+		// XXX this part of the code should never be reached
+		return "";
 	}
 
 	private void validateToken(String token, String username, String password) {
@@ -162,8 +180,10 @@ public class AuthenticationProcess extends AsyncTask<String, Void, String> {
 
 	@Override
 	protected void onPostExecute(String result) {
-		
 		//TODO load session id into Joanna's SharedPref
+		Toast.makeText(context, "Authentication activity finished, " +
+				"session id = " + sessionId, Toast.LENGTH_LONG).show();
+		dialog.dismiss();
 	}
 
 }
