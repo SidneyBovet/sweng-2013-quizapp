@@ -29,8 +29,8 @@ import android.widget.Toast;
 /**
  * AsyncTask that performs the networking part of authentication with EPFL's
  * Tequila server. Arguments to passed to its <code>execute()</code> method are:
- * 1. Username 2. Password Any call different from those will throw an
- * IllegalArgumentException.
+ * <br/>1. Username<br/>2. Password<br/> Any call different from those will
+ * throw an IllegalArgumentException.
  * 
  * @author Sidney
  * 
@@ -125,7 +125,7 @@ public class AuthenticationProcess extends AsyncTask<String, Void, String> {
 		try {
 			postBody.put("token", token);
 		} catch (JSONException e) {
-			// XXX shouldn't be reached; error should've been thrown earlier
+			// XXX shouldn't be reached; exception should've been thrown earlier
 			// XXX error putting String token into JSON -> not recoverable
 			// TODO Call Aymeric's log architecture and David's errorHandle
 			// function
