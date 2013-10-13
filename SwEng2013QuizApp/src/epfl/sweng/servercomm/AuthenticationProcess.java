@@ -18,6 +18,8 @@ import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import epfl.sweng.backend.UserCredentialsStorage;
+
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
@@ -37,7 +39,6 @@ public class AuthenticationProcess extends AsyncTask<String, Void, String> {
 	private static final int HTTP_STATUS_FOUND = 302;
 	private ProgressDialog dialog;
 	private Context context;
-	private String sessionId;
 	private final String[] urls = {
 		"https://sweng-quiz.appspot.com/login",
 		"https://tequila.epfl.ch/cgi-bin/tequila/login",
@@ -47,7 +48,6 @@ public class AuthenticationProcess extends AsyncTask<String, Void, String> {
 	public AuthenticationProcess(Context ctx) {
 		this.context = ctx;
 		this.dialog = new ProgressDialog(ctx);
-		this.sessionId = "";
 	}
 	
 	@Override
@@ -65,7 +65,7 @@ public class AuthenticationProcess extends AsyncTask<String, Void, String> {
 					"recieved " + args.length + "argument(s), should've " +
 					"been 2.");
 		}
-		
+		String sessionId = "";
 		String token = getToken();
 		validateToken(token, args[0], args[1]);
 		sessionId = retrieveSessionId(token);
@@ -197,10 +197,16 @@ public class AuthenticationProcess extends AsyncTask<String, Void, String> {
 
 	@Override
 	protected void onPostExecute(String result) {
-		//TODO load session id into Joanna's SharedPref
+		if (result.equals("") || null == result) {
+			// XXX normal error flow shouldn't bring here: exception handled before
+			// TODO Call Aymeric's log architecture and David's errorHandle function
+		} else {
+			UserCredentialsStorage.getSingletonInstanceOfStorage(context).
+				takeAuthentication(result);
+		}
 		dialog.dismiss();
 		Toast.makeText(context, "Authentication activity finished, " +
-				"session id = " + sessionId, Toast.LENGTH_LONG).show();
+				"session id = " + result, Toast.LENGTH_LONG).show();
 	}
 
 }
