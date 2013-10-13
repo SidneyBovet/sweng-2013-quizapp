@@ -1,5 +1,7 @@
 package epfl.sweng.entry;
 
+import org.apache.http.auth.AuthenticationException;
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -126,6 +128,11 @@ public class AuthenticationActivity extends Activity {
 		
 		AuthenticationProcess authProc =
 				new AuthenticationProcess(AuthenticationActivity.this);
-		authProc.startAuthenticationProcess(usrName, password);
+		try {
+			authProc.startAuthenticationProcess(usrName, password);
+		} catch (AuthenticationException e) {
+			// TODO clean UserCredentialsStorage
+			e.printStackTrace();
+		}
 	}
 }
