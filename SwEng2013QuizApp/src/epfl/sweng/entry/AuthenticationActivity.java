@@ -50,7 +50,7 @@ public class AuthenticationActivity extends Activity {
 				| InputType.TYPE_TEXT_VARIATION_PASSWORD);
 
 		mUserNameEditText.addTextChangedListener(new TextWatcher() {
-
+			
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before,
 					int count) {
@@ -98,11 +98,8 @@ public class AuthenticationActivity extends Activity {
 		String usrPassword = mPasswordEditText.getText().toString();
 		// XXX Ici je suis parti du principe que le bouton est desactivé si on
 		// remplit  les fields avec des espaces. A changer ?
-		if (!(usrName.trim().length() == 0 || usrPassword.trim().length() == 0)) {
-			mLoginbutton.setEnabled(true);
-		} else {
-			mLoginbutton.setEnabled(false);
-		}
+		mLoginbutton.setEnabled(!(usrName.trim().length() == 0
+				|| usrPassword.trim().length() == 0));
 	}
 
 	/**

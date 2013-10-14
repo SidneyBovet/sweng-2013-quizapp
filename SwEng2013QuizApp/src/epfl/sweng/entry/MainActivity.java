@@ -102,22 +102,17 @@ public class MainActivity extends Activity {
 	}
 
 	/**
-	 * Called when the app is first launch and when we return to it from another
+	 * Called when the app is first launched and when we return to it from another
 	 * activity. Check the authentication state and change the text on the log
-	 * button and the authenticated boolean in response 
+	 * button and the authenticated boolean in response.
 	 */
 	@Override
 	protected void onResume() {
 		super.onResume();
-		if (!persistentStorage.isAuthenticated()) {
-			Button logButton = (Button) findViewById(R.id.autenticationLogButton);
-			logButton.setText(R.string.autenticationLoginButtonStateLogIn);
-			authenticated = false;
-		} else {
-			Button logButton = (Button) findViewById(R.id.autenticationLogButton);
-			logButton.setText(R.string.autenticationLoginButtonStateLogOut);
-			authenticated = true;
-		}
+		Button logButton = (Button) findViewById(R.id.autenticationLogButton);
+		authenticated = persistentStorage.isAuthenticated();
+		logButton.setText(authenticated ? R.string.autenticationLoginButtonStateLogOut
+				: R.string.autenticationLoginButtonStateLogIn);
 		setDisplayView();
 	}
 
@@ -126,14 +121,7 @@ public class MainActivity extends Activity {
 	 * authentication state
 	 */
 	private void setDisplayView() {
-		Button showQuestion = (Button) findViewById(R.id.displayRandomQuestionButton);
-		Button submitQuestion = (Button) findViewById(R.id.submitQuestionButton);
-		if (!authenticated) {
-			showQuestion.setEnabled(false);
-			submitQuestion.setEnabled(false);
-		} else {
-			showQuestion.setEnabled(true);
-			submitQuestion.setEnabled(true);
-		}
+		((Button) findViewById(R.id.displayRandomQuestionButton)).setEnabled(authenticated);
+		((Button) findViewById(R.id.submitQuestionButton)).setEnabled(authenticated);
 	}
 }

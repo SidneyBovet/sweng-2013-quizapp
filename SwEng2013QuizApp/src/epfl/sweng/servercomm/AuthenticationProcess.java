@@ -19,12 +19,11 @@ import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import epfl.sweng.backend.UserCredentialsStorage;
-
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.widget.Toast;
+import epfl.sweng.backend.UserCredentialsStorage;
 
 /**
  * AsyncTask that performs the networking part of authentication with EPFL's
@@ -64,7 +63,7 @@ public class AuthenticationProcess extends AsyncTask<String, Void, String> {
 	 */
 	public void startAuthenticationProcess(String usrName, String password)
 		throws AuthenticationException {
-		// this function could throw XYZ exception in case auth failed
+		// this function could throw XYZ exception in case auth failed.
 		this.execute(usrName, password);
 	}
 
@@ -73,21 +72,23 @@ public class AuthenticationProcess extends AsyncTask<String, Void, String> {
 		dialog.show();
 	}
 
+	// XXX Do we actually have to do an "ellipse" here? Why don't we give
+	// username and password as parameters?
 	@Override
 	protected String doInBackground(String... args) {
 		if (args.length != 2) {
 			System.err.println("Illegal arguments given to "
-					+ "AutehnticationProcess, should be (usrname, pwd)");
+					+ "AuthenticationProcess, should be (usrname, pwd)");
 			throw new IllegalArgumentException("AuthenticationProcess "
-					+ "recieved " + args.length + "argument(s), should've "
-					+ "been 2.");
+					+ "received " + args.length + "argument(s), expected 2.");
 		}
 		
+		// XXX Pourquoi ne pas renvoyer le token validé au lieu de garder l'ancien?
+		// En plus on pourrait faire du Scala :D :
+		// return retrieveSessionId(validateToken(getToken(), args[0], args[1]));
 		String token = getToken();
 		validateToken(token, args[0], args[1]);
-		String sessionId = retrieveSessionId(token);
-
-		return sessionId;
+		return retrieveSessionId(token);
 	}
 
 	@Override

@@ -59,7 +59,8 @@ public final class UserCredentialsStorage {
 	public void takeAuthentication(String sessionID) {
 		editor.putString(keySessionIDName, sessionID);
 		editor.commit();
-		System.out.println("Authentication done");
+		// XXX: IMO we shouldn't print that here...
+		//System.out.println("Authentication done");
 	}
 
 	/**
@@ -70,8 +71,7 @@ public final class UserCredentialsStorage {
 	 * @return yes if the sessionID is already in the table
 	 */
 	public boolean isAuthenticated() {
-		String value = userCredentialsPrefs.getString(keySessionIDName, null);
-		return value != null;
+		return userCredentialsPrefs.getString(keySessionIDName, null) != null;
 	}
 
 	/**
