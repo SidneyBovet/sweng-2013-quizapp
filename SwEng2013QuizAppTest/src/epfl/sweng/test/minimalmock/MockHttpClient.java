@@ -41,7 +41,8 @@ public class MockHttpClient extends DefaultHttpClient {
         private final String responseBody;
         private final String contentType;
 
-        public CannedResponse(Pattern pattern, int statusCode, String responseBody, String contentType) {
+        public CannedResponse(Pattern pattern, int statusCode,
+        	String responseBody, String contentType) {
             this.pattern = pattern;
             this.statusCode = statusCode;
             this.responseBody = responseBody;
@@ -51,8 +52,15 @@ public class MockHttpClient extends DefaultHttpClient {
 
     private final List<CannedResponse> responses = new ArrayList<CannedResponse>();
 
-    public void pushCannedResponse(String requestRegex, int status, String responseBody, String contentType) {
-        responses.add(0, new CannedResponse(Pattern.compile(requestRegex), status, responseBody, contentType));
+    public void pushCannedResponse(String requestRegex, int status,
+    	String responseBody, String contentType) {
+        responses.add(
+        	0,
+        	new CannedResponse(Pattern.compile(requestRegex),
+        		status,
+        		responseBody,
+        		contentType)
+        );
     }
 
     public void popCannedResponse() {
