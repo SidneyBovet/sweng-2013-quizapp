@@ -41,6 +41,7 @@ public final class UserCredentialsStorage {
 		// double-checked singleton: avoids calling costly synchronized if
 		// unnecessary
 		if (null == singletonStorage) {
+			//XXX why do we not put synchronized on top ?
 			synchronized (UserCredentialsStorage.class) {
 				if (null == singletonStorage) {
 					singletonStorage = new UserCredentialsStorage(context);
@@ -59,8 +60,7 @@ public final class UserCredentialsStorage {
 	public void takeAuthentication(String sessionID) {
 		editor.putString(keySessionIDName, sessionID);
 		editor.commit();
-		// XXX: IMO we shouldn't print that here...
-		//System.out.println("Authentication done");
+		System.out.println("Authentication done");
 	}
 
 	/**
@@ -71,7 +71,8 @@ public final class UserCredentialsStorage {
 	 * @return yes if the sessionID is already in the table
 	 */
 	public boolean isAuthenticated() {
-		return userCredentialsPrefs.getString(keySessionIDName, null) != null;
+		String value = userCredentialsPrefs.getString(keySessionIDName, null);
+		return value != null;
 	}
 
 	/**
