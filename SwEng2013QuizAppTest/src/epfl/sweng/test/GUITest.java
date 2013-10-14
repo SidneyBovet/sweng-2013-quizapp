@@ -4,34 +4,32 @@ import android.app.Activity;
 import android.test.ActivityInstrumentationTestCase2;
 
 import com.jayway.android.robotium.solo.Solo;
-
+import epfl.sweng.testing.TestCoordinator;
 import epfl.sweng.testing.TestingTransaction;
-import epfl.sweng.testing.TestingTransactions;
 
 public class GUITest<T extends Activity> extends
-ActivityInstrumentationTestCase2<T> {
-
+		ActivityInstrumentationTestCase2<T> {
 	private Solo solo;
-	
+
 	public GUITest(Class<T> activityClass) {
 		super(activityClass);
-	}
-	
-	@Override
-	protected void setUp() {
 		solo = new Solo(getInstrumentation());
 	}
-	
-	private void getActivityAndWaitFor(
-			final TestingTransactions.TTChecks expected) {
-		TestingTransactions.run(getInstrumentation(), new TestingTransaction() {
+
+	@Override
+	protected void setUp() {
+		solo = new Solo(getInstrumentation(), getActivity());
+	}
+
+	private void getActivityAndWaitFor(final TestCoordinator.TTChecks expected) {
+		TestCoordinator.run(getInstrumentation(), new TestingTransaction() {
 			@Override
 			public void initiate() {
 				getActivity();
 			}
 
 			@Override
-			public void verify(TestingTransactions.TTChecks notification) {
+			public void verify(TestCoordinator.TTChecks notification) {
 				assertEquals(String.format(
 						"Expected notification %s, but received %s", expected,
 						notification), expected, notification);
@@ -42,5 +40,9 @@ ActivityInstrumentationTestCase2<T> {
 				return String.format("getActivityAndWaitFor(%s)", expected);
 			}
 		});
+	}
+
+	public Solo getSolo() {
+		return solo;
 	}
 }
