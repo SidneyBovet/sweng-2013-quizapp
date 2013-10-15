@@ -20,7 +20,7 @@ public class QuizEditExecutionTest extends TestCase {
 	@Override
 	protected void setUp() throws Exception {
 		mAnswers.add("reponse1");
-		mAnswers.add("      "); // Blank is an error.
+		mAnswers.add("  ¥    "); // Blank is an error.
 		mTags.add("**((/_:_:_");
 		mMockJson = new MockJSON(id, "ma question", mAnswers, index, mTags,
 				"BOB");
@@ -30,7 +30,7 @@ public class QuizEditExecutionTest extends TestCase {
 
 	public void testBadRequestWhenBadJSON() {
 		QuizEditExecution quizEditExecute = new QuizEditExecution();
-		
+
 		quizEditExecute.execute(mMockJson);
 		// HOW TO TEST IF THE RESULT OF THE REQUEST IS BAD ? DO I NEED TO CHANGE
 		// THE CODE IN QuizEditExecution ?

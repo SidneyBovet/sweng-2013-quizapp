@@ -1,6 +1,9 @@
 package epfl.sweng.test;
 
-import android.view.View;
+import android.widget.Adapter;
+import android.widget.ListAdapter;
+import android.widget.ListView;
+import epfl.sweng.R;
 import epfl.sweng.editquestions.EditQuestionActivity;
 import epfl.sweng.testing.TestCoordinator.TTChecks;
 
@@ -38,18 +41,24 @@ public class EditQuestionActivityTest extends GUITest<EditQuestionActivity> {
 				.isEnabled());
 	}
 
-	public void testOnlyOneAnswerAtBeggining() {
+	public void testOnlyOneAnswerAtBeggining() throws InterruptedException {
 		getActivityAndWaitFor(TTChecks.EDIT_QUESTIONS_SHOWN);
-		View mainList = getSolo().getCurrentViews().get(0);
+		ListView mListview = (ListView) getSolo().getView(
+				R.id.submit_question_listview);
 
-		int a = vMainList.getChildCount();
-		System.out.println("KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK  => "
-				+ a);
-		// ArrayList<TextView> vTiles = new ArrayList<TextView>();
-		// vTiles = solo.getCurrentTextViews(vMainList);
-		// Log.i("Total number of texts into list are ", vTiles.size());
-		// for (int i = 0; i < vTiles.size(); i++)
-		// Log.i(" ", vTiles.get(i).getText().toString());
+		assertEquals(0, mListview.getChildCount());
+	}
+
+	public void testaddAnswerWhenButtonPlusIsClicked() {
+
+		getActivityAndWaitFor(TTChecks.EDIT_QUESTIONS_SHOWN);
+		getSolo().clickOnButton("+");
+
+		ListView listView = (ListView) getSolo().getView(
+				R.id.submit_question_listview);
+
+		int count = 0;
+		// while(listView.)
 		assertEquals(true, true);
 	}
 }
