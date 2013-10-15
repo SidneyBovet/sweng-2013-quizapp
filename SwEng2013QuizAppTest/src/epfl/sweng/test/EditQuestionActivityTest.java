@@ -54,10 +54,10 @@ public class EditQuestionActivityTest extends GUITest<EditQuestionActivity> {
 		getActivityAndWaitFor(TTChecks.EDIT_QUESTIONS_SHOWN);
 		getSolo().clickOnButton("+");
 
-		ListView listView = (ListView) getSolo().getView(
-				R.id.submit_question_listview);
+//		ListView listView = (ListView) getSolo().getView(
+//				R.id.submit_question_listview);
 
-		int count = 0;
+//		int count = 0;
 		// while(listView.)
 		assertEquals(true, true);
 	}

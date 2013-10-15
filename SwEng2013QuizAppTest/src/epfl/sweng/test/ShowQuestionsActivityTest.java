@@ -1,7 +1,6 @@
 package epfl.sweng.test;
 import java.io.IOException;
 
-import android.test.ActivityInstrumentationTestCase2;
 import epfl.sweng.servercomm.SwengHttpClientFactory;
 import epfl.sweng.showquestions.ShowQuestionsActivity;
 import epfl.sweng.test.minimalmock.MockHttpClient;

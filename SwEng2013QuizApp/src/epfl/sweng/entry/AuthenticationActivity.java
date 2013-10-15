@@ -1,9 +1,5 @@
 package epfl.sweng.entry;
 
-import java.util.concurrent.ExecutionException;
-
-import org.apache.http.auth.AuthenticationException;
-
 import android.app.Activity;
 import android.os.Bundle;
 import android.text.Editable;
