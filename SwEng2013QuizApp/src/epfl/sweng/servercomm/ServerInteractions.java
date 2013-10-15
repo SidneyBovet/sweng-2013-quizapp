@@ -6,6 +6,8 @@ import java.util.concurrent.ExecutionException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.util.Log;
+
 import epfl.sweng.backend.Question;
 import epfl.sweng.exceptions.ServerSubmitFailedException;
 
@@ -36,14 +38,11 @@ public class ServerInteractions {
 			question = Question
 					.createQuestionFromJSON(asyncTaskRandomQuestionGetter.get());
 		} catch (JSONException e) {
-			// TODO Log it! Problem with JSON Parsing
-			e.printStackTrace();
+			Log.i(ServerInteractions.class.getName(), "Unable to parse JSON");
 		} catch (InterruptedException e) {
 			// TODO Log it!
-			e.printStackTrace();
 		} catch (ExecutionException e) {
 			// TODO Log it!
-			e.printStackTrace();
 		}
 
 		return question;
