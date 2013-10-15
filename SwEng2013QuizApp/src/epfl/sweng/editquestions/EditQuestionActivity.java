@@ -84,8 +84,10 @@ public class EditQuestionActivity extends Activity {
 
 		int httpResponse = -1;
 		try {
-			ServerInteractions.submitQuestion(listInputGUI);
+			httpResponse = ServerInteractions.submitQuestion(listInputGUI);
 			if (httpResponse == HTTP_SUCCESS) {
+				// TODO In general, we should put error messages in strings.xml
+				// and especially make a hierachy if possible.
 				Toast.makeText(this, "Quizz submitted to the server.",
 						Toast.LENGTH_SHORT).show();
 			} else {
