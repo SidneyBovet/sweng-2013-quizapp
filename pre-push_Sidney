@@ -1,0 +1,6 @@
+#!/bin/sh
+"D:\Program Files\Eclipse ADT bundle\adt-bundle-windows-x86_64-20130911\sdk\tools\android.bat" update project --path SwEng2013QuizApp
+"D:\Program Files\Eclipse ADT bundle\adt-bundle-windows-x86_64-20130911\sdk\tools\android.bat" update project --path SwEng2013QuizAppTest
+"D:\Program Files\Eclipse ADT bundle\adt-bundle-windows-x86_64-20130911\sdk\tools\android.bat" update test-project --path SwEng2013QuizAppTest --main ../SwEng2013QuizApp
+cd SwEng2013QuizAppTest
+ant clean emma debug install test
