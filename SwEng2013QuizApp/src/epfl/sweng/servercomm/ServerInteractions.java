@@ -59,7 +59,6 @@ public class ServerInteractions {
 	 *             Wrapper exception to tell the user that something has gone
 	 *             wrong.
 	 */
-
 	public static int submitQuestion(List<String> listInputGUI)
 		throws ServerSubmitFailedException {
 
@@ -74,6 +73,8 @@ public class ServerInteractions {
 
 		int serverResponse = -1;
 		try {
+			// XXX RED ALERT! THIS SEEMS TO BE A MISTAKE!
+			// XXX SHOULD BE REFACTORED IN "ONPOSTEXECUTE".
 			serverResponse = quizEditExecute.get();
 		} catch (InterruptedException e) {
 			// TODO Log it! Internal problem with Thread.

@@ -7,7 +7,6 @@ import java.util.List;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
-import org.apache.http.auth.AuthenticationException;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -24,47 +23,40 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.widget.Toast;
 import epfl.sweng.backend.UserCredentialsStorage;
+import epfl.sweng.exceptions.authentication.InvalidatedTokenException;
+import epfl.sweng.exceptions.authentication.NoSessionIDException;
+import epfl.sweng.exceptions.authentication.TequilaNoTokenException;
 
 /**
  * AsyncTask that performs the networking part of authentication with EPFL's
- * Tequila server. Arguments to passed to its <code>execute()</code> method are:
- * <br/>1. Username<br/>2. Password<br/> Any call different from those will
- * throw an IllegalArgumentException.
+ * Tequila server. Arguments to passed to its <code>execute()</code> method are: <br/>
+ * 1. Username<br/>
+ * 2. Password<br/>
  * 
  * @author Sidney
+ * @author born4new
  * 
  */
 public class AuthenticationProcess extends AsyncTask<String, Void, String> {
+	// TODO Group this one with the one in EditQuestionsActivity in strings.xml
 	private static final int HTTP_STATUS_FOUND = 302;
+
 	private ProgressDialog dialog;
 	private Context context;
-	private final String[] urls = {
+
+	private String errorMessage;
+
+	// TODO Put them in Strings.xml?
+	private final String[] urls = { 
 		"https://sweng-quiz.appspot.com/login",
-		"https://tequila.epfl.ch/cgi-bin/tequila/login"};
+		"https://tequila.epfl.ch/cgi-bin/tequila/login" };
 
 	public AuthenticationProcess(Context ctx) {
 		this.context = ctx;
 		this.dialog = new ProgressDialog(ctx);
+		// TODO Strings.xml
 		dialog.setMessage("Authenticating...");
 		dialog.setCancelable(false);
-	}
-
-	/**
-	 * Starts a new {@link AsyncTask} to perform authentication at Tequila and
-	 * SwEng's quiz server.
-	 * 
-	 * @param usrName
-	 *            User's name in EPFL's Tequila system.
-	 * @param password
-	 *            User's password.
-	 * 
-	 * @throws AuthenticationException
-	 *             in case authentication failed.
-	 */
-	public void startAuthenticationProcess(String usrName, String password)
-		throws AuthenticationException {
-		// this function could throw XYZ exception in case auth failed.
-		this.execute(usrName, password);
 	}
 
 	@Override
@@ -72,111 +64,93 @@ public class AuthenticationProcess extends AsyncTask<String, Void, String> {
 		dialog.show();
 	}
 
-	// XXX Do we actually have to do an "ellipse" here? Why don't we give
-	// username and password as parameters?
+	/**
+	 * Starts a new {@link AsyncTask} to perform authentication at Tequila and
+	 * SwEng's quiz server.
+	 * 
+	 * @param username
+	 *            User's name in EPFL's Tequila system.
+	 * @param password
+	 *            User's password.
+	 */
 	@Override
 	protected String doInBackground(String... args) {
+
 		if (args.length != 2) {
+			// TODO Log it!
 			System.err.println("Illegal arguments given to "
 					+ "AuthenticationProcess, should be (usrname, pwd)");
-			throw new IllegalArgumentException("AuthenticationProcess "
-					+ "received " + args.length + "argument(s), expected 2.");
+			// XXX We should NOT Throw exceptions that we did not declared
+			// in the method signature.
+			// throw new IllegalArgumentException("AuthenticationProcess "
+			// + "received " + args.length + "argument(s), expected 2.");
 		}
-		
-		// XXX Pourquoi ne pas renvoyer le token validŽ au lieu de garder l'ancien?
-		// En plus on pourrait faire du Scala :D :
-		// return retrieveSessionId(validateToken(getToken(), args[0], args[1]));
-		String token = getToken();
-		validateToken(token, args[0], args[1]);
-		return retrieveSessionId(token);
+
+		String sessionId = null;
+		String token = null;
+		try {
+			token = getToken();
+			validateToken(token, args[0], args[1]);
+			sessionId = retrieveSessionId(token);
+		} catch (TequilaNoTokenException e) {
+			// TODO Log it!
+			errorMessage = e.getMessage();
+		} catch (InvalidatedTokenException e) {
+			// TODO Log it!
+			errorMessage = e.getMessage();
+		} catch (NoSessionIDException e) {
+			// TODO Log it!
+			errorMessage = e.getMessage();
+		}
+
+		return sessionId;
 	}
 
 	@Override
 	protected void onPostExecute(String result) {
-		if (result.equals("") || null == result) {
-			// XXX normal error flow shouldn't bring here: exception handled
-			// before
-			// TODO Call Aymeric's log architecture and David's errorHandle
-			// function
-		} else {
+		if (!result.equals("") && result != null) {
 			UserCredentialsStorage.getSingletonInstanceOfStorage(context)
 					.takeAuthentication(result);
 			// TODO why not UserCredentialsStorage.getInstance().setSessionId()?
+			Toast.makeText(context,
+					"Authentication activity finished, session id = " + result,
+					Toast.LENGTH_LONG).show();
+		} else {
+			Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show();
 		}
+
 		dialog.dismiss();
-		Toast.makeText(
-				context,
-				"Authentication activity finished, session id = " + result,
-				Toast.LENGTH_LONG).show();
 	}
 
 	/**
-	 * Retrieves session id from SwEng's quiz server.
+	 * Uses an HTTP Get to retrieve a token from EPFL's Tequila server.
 	 * 
-	 * @param token
-	 *            The token previously validated to EPFL's Tequila server.
-	 * @return The session id returned by SwEng's quiz server if everything went
-	 *         well, the empty string otherwise.
-	 * 
-	 * @see validateToken()
-	 * @see getToken()
+	 * @return The retrieved token to be validated.
 	 */
-	private String retrieveSessionId(String token) {
-		JSONObject postBody = new JSONObject();
-		try {
-			postBody.put("token", token);
-		} catch (JSONException e) {
-			// XXX shouldn't be reached; exception should've been thrown earlier
-			// XXX error putting String token into JSON -> not recoverable
-			// TODO Call Aymeric's log architecture and David's errorHandle
-			// function
-			e.printStackTrace();
-		}
+	private String getToken() throws TequilaNoTokenException {
 
-		JSONObject jsonResponse = new JSONObject();
-
+		ResponseHandler<String> responseHandler = new BasicResponseHandler();
+		HttpGet get = new HttpGet(urls[0]);
+		String token = "";
 		try {
-			HttpPost postRequest = new HttpPost(urls[0]);
-			postRequest.setEntity(new StringEntity(postBody.toString()));
-			postRequest.setHeader("Content-type", "application/json");
-			ResponseHandler<String> handler = new BasicResponseHandler();
-			String response = SwengHttpClientFactory.getInstance().execute(
-					postRequest, handler);
-			jsonResponse = new JSONObject(response);
-		} catch (UnsupportedEncodingException e) {
-			// XXX local encoding not supported -> not recoverable + nothing to
-			// do
-			// TODO Call Aymeric's log architecture and David's errorHandle
-			// function
-			e.printStackTrace();
+			String response = SwengHttpClientFactory.getInstance().execute(get,
+					responseHandler);
+			JSONObject responseJSON = new JSONObject(response);
+			token = responseJSON.getString("token");
 		} catch (ClientProtocolException e) {
-			// XXX error in the HTTP protocol -> not recoverable
-			// TODO Call Aymeric's log architecture and David's errorHandle
-			// function
-			e.printStackTrace();
+			// TODO Log it!
+			throw new TequilaNoTokenException("Error in the HTTP Protocol: "
+					+ e.getMessage());
 		} catch (IOException e) {
-			// XXX general error with server -> not recoverable
-			// TODO Call Aymeric's log architecture and David's errorHandle
-			// function
-			e.printStackTrace();
+			// TODO Log it!
+			throw new TequilaNoTokenException("Internal Error : "
+					+ e.getMessage());
 		} catch (JSONException e) {
-			// XXX error while parsing JSONObject
-			// (server answered with corrupted JSON) -> not recoverable
-			// TODO Call Aymeric's log architecture and David's errorHandle
-			// function
-			e.printStackTrace();
+			// TODO Log it!
+			throw new TequilaNoTokenException("JSON Parsing error : "
+					+ e.getMessage());
 		}
-		try {
-			return jsonResponse.getString("session");
-		} catch (JSONException e) {
-			// XXX error while looking for "session" in JSON
-			// (Tequila didn't confirm token to SwEng sever) -> not recoverable
-			// TODO Call Aymeric's log architecture and David's errorHandle
-			// function
-			e.printStackTrace();
-		}
-		// XXX this part of the code should never be reached
-		return "";
+		return token;
 	}
 
 	/**
@@ -191,7 +165,9 @@ public class AuthenticationProcess extends AsyncTask<String, Void, String> {
 	 * @param password
 	 *            The user's password in EPFL's Tequila system.
 	 */
-	private void validateToken(String token, String username, String password) {
+	private void validateToken(String token, String username, String password)
+		throws InvalidatedTokenException {
+
 		List<NameValuePair> tokenValidationContentList = new ArrayList<NameValuePair>();
 		tokenValidationContentList.add(new BasicNameValuePair("requestkey",
 				token));
@@ -205,11 +181,9 @@ public class AuthenticationProcess extends AsyncTask<String, Void, String> {
 			tokenValidationContentEncoded = new UrlEncodedFormEntity(
 					tokenValidationContentList);
 		} catch (UnsupportedEncodingException e) {
-			// XXX local encoding not supported -> not recoverable + nothing to
-			// do
-			// TODO Call Aymeric's log architecture and David's errorHandle
-			// function
-			e.printStackTrace();
+			// TODO Log it!
+			throw new InvalidatedTokenException(
+					"Local encoding not supported : " + e.getMessage());
 		}
 
 		HttpPost tokenValidationRequest = new HttpPost(urls[1]);
@@ -219,64 +193,75 @@ public class AuthenticationProcess extends AsyncTask<String, Void, String> {
 			HttpResponse response = SwengHttpClientFactory.getInstance()
 					.execute(tokenValidationRequest);
 			if (response.getStatusLine().getStatusCode() != HTTP_STATUS_FOUND) {
-				// XXX Tequila rejected usrname/pwd -> not recoverable + tell to
-				// retry
-				// TODO Call Aymeric's log architecture and David's errorHandle
-				// function
+				// TODO Log it!
+				throw new InvalidatedTokenException(
+						"Tequila rejected username/" + "password");
 			}
 		} catch (ClientProtocolException e) {
-			// XXX error in the HTTP protocol -> not recoverable + tell to retry
-			// later
-			// TODO Call Aymeric's log architecture and David's errorHandle
-			// function
-			e.printStackTrace();
+			// TODO Log it!
+			throw new InvalidatedTokenException("Error in the HTTP protocol"
+					+ e.getMessage());
 		} catch (IOException e) {
-			// XXX general error with server -> not recoverable + tell to retry
-			// later
-			// TODO Call Aymeric's log architecture and David's errorHandle
-			// function
-			e.printStackTrace();
+			// TODO Log it!
+			throw new InvalidatedTokenException("Internal Error : "
+					+ e.getMessage());
 		}
 	}
 
 	/**
-	 * Uses an HTTP Get to retrieve a token from EPFL's Tequila server.
+	 * Retrieves session id from SwEng's quiz server.
 	 * 
-	 * @return The retrieved token to be validated.
+	 * @param token
+	 *            The token previously validated to EPFL's Tequila server.
+	 * @return The session id returned by SwEng's quiz server if everything went
+	 *         well, the empty string otherwise.
+	 * 
+	 * @see validateToken()
+	 * @see getToken()
 	 */
-	private String getToken() {
-		ResponseHandler<String> responseHandler = new BasicResponseHandler();
+	private String retrieveSessionId(String token) throws NoSessionIDException {
 
-		HttpGet get = new HttpGet(urls[0]);
-		String token = "";
+		JSONObject postBody = new JSONObject();
 		try {
-			String response = SwengHttpClientFactory.getInstance().execute(get,
-					responseHandler);
-			JSONObject responseJSON = new JSONObject(response);
-			token = responseJSON.getString("token");
-		} catch (ClientProtocolException e) {
-			// XXX error in the HTTP protocol -> not recoverable + tell to retry
-			// later
-			// TODO Call Aymeric's log architecture and David's errorHandle
-			// function
-			e.printStackTrace();
-			return null;
-		} catch (IOException e) {
-			// XXX general error with server -> not recoverable + tell to retry
-			// later
-			// TODO Call Aymeric's log architecture and David's errorHandle
-			// function
-			e.printStackTrace();
-			return null;
+			postBody.put("token", token);
 		} catch (JSONException e) {
-			// XXX error while parsing JSONObject
-			// (no "token" field or corrupted JSON) -> not recoverable + tell to
-			// retry later
-			// TODO Call Aymeric's log architecture and David's errorHandle
-			// function
-			e.printStackTrace();
-			return null;
+			// TODO Log it!
+			throw new NoSessionIDException(
+					"Error putting String token into JSON" + e.getMessage());
 		}
-		return token;
+
+		JSONObject jsonResponse = new JSONObject();
+
+		try {
+			HttpPost postRequest = new HttpPost(urls[0]);
+			postRequest.setEntity(new StringEntity(postBody.toString()));
+			postRequest.setHeader("Content-type", "application/json");
+			ResponseHandler<String> handler = new BasicResponseHandler();
+			String response = SwengHttpClientFactory.getInstance().execute(
+					postRequest, handler);
+			jsonResponse = new JSONObject(response);
+		} catch (UnsupportedEncodingException e) {
+			// TODO Log it!
+			throw new NoSessionIDException("Local encoding not supported : "
+					+ e.getMessage());
+		} catch (ClientProtocolException e) {
+			// TODO Log it!
+			throw new NoSessionIDException("Error in the HTTP protocol : "
+					+ e.getMessage());
+		} catch (IOException e) {
+			// TODO Log it!
+			throw new NoSessionIDException("Internal error : " + e.getMessage());
+		} catch (JSONException e) {
+			// TODO Log it!
+			throw new NoSessionIDException("Error while parsing JSONObject : "
+					+ e.getMessage());
+		}
+		try {
+			return jsonResponse.getString("session");
+		} catch (JSONException e) {
+			// TODO Log it!
+			throw new NoSessionIDException("Tequila didn't confirm token to "
+					+ "SwEng server" + e.getMessage());
+		}
 	}
 }

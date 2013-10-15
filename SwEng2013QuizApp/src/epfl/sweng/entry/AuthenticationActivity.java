@@ -1,5 +1,7 @@
 package epfl.sweng.entry;
 
+import java.util.concurrent.ExecutionException;
+
 import org.apache.http.auth.AuthenticationException;
 
 import android.app.Activity;
@@ -50,7 +52,7 @@ public class AuthenticationActivity extends Activity {
 				| InputType.TYPE_TEXT_VARIATION_PASSWORD);
 
 		mUserNameEditText.addTextChangedListener(new TextWatcher() {
-			
+
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before,
 					int count) {
@@ -97,9 +99,9 @@ public class AuthenticationActivity extends Activity {
 		String usrName = mUserNameEditText.getText().toString();
 		String usrPassword = mPasswordEditText.getText().toString();
 		// XXX Ici je suis parti du principe que le bouton est desactivé si on
-		// remplit  les fields avec des espaces. A changer ?
-		mLoginbutton.setEnabled(!(usrName.trim().length() == 0
-				|| usrPassword.trim().length() == 0));
+		// remplit les fields avec des espaces. A changer ?
+		mLoginbutton.setEnabled(!(usrName.trim().length() == 0 || usrPassword
+				.trim().length() == 0));
 	}
 
 	/**
@@ -116,20 +118,15 @@ public class AuthenticationActivity extends Activity {
 		getMenuInflater().inflate(R.menu.authentication, menu);
 		return true;
 	}
-	
+
 	public void buttonAuthenticate(View view) {
-		TextView usrNameField = (TextView) findViewById(R.id.login_user);
-		String usrName = usrNameField.getText().toString();
-		TextView passwordField = (TextView) findViewById(R.id.login_password);
-		String password = passwordField.getText().toString();
-		
-		AuthenticationProcess authProc =
-				new AuthenticationProcess(AuthenticationActivity.this);
-		try {
-			authProc.startAuthenticationProcess(usrName, password);
-		} catch (AuthenticationException e) {
-			// TODO clean UserCredentialsStorage
-			e.printStackTrace();
-		}
+		String usrName = ((TextView) findViewById(R.id.login_user)).getText()
+				.toString();
+		String password = ((TextView) findViewById(R.id.login_password))
+				.getText().toString();
+
+		// TODO Quit if already logged in + Toast it + Log it!.
+		new AuthenticationProcess(AuthenticationActivity.this)
+			.execute(usrName, password);
 	}
 }
