@@ -32,5 +32,6 @@
     <string name="login_button">Log in using Tequila</string>
     <string name="autenticationLoginButtonStateLogIn">Log in using Tequila</string>
     <string name="autenticationLoginButtonStateLogOut">Log out</string>
+    <string name="error_fetching_question">An error occurred, please try again later.</string>
 
 </resources>
