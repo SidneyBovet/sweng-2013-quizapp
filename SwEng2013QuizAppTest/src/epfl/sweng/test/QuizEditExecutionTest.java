@@ -7,7 +7,7 @@ import junit.framework.TestCase;
 import epfl.sweng.servercomm.QuizEditExecution;
 
 public class QuizEditExecutionTest extends TestCase {
-	private static final int ERROR_CODE = 401;
+	private static final int ERROR_CODE = 400;
 	private ArrayList<String> mAnswers = new ArrayList<String>();
 	private ArrayList<String> mTags = new ArrayList<String>();
 	private MockJSON mMockJson = null;
