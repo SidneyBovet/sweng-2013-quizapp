@@ -5,12 +5,15 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 import epfl.sweng.R;
+import epfl.sweng.backend.UserCredentialsStorage;
 import epfl.sweng.servercomm.AuthenticationProcess;
 import epfl.sweng.testing.TestCoordinator;
 import epfl.sweng.testing.TestCoordinator.TTChecks;
@@ -121,8 +124,14 @@ public class AuthenticationActivity extends Activity {
 		String password = ((TextView) findViewById(R.id.login_password))
 				.getText().toString();
 
-		// TODO Quit if already logged in + Toast it + Log it!.
-		new AuthenticationProcess(AuthenticationActivity.this)
-			.execute(usrName, password);
+		if (UserCredentialsStorage.getInstance(this).isAuthenticated()) {
+			Toast.makeText(this, "Already logged in!", Toast.LENGTH_LONG).show();
+			Log.wtf(this.getClass().getName(),
+					"User pressed 'Log in' while authenticated!?");
+			finish();
+		}
+		
+		new AuthenticationProcess(AuthenticationActivity.this).
+			execute(usrName, password);
 	}
 }
