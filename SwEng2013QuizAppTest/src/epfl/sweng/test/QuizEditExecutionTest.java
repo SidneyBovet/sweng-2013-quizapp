@@ -1,7 +1,6 @@
 package epfl.sweng.test;
 
 import java.util.ArrayList;
-import java.util.concurrent.ExecutionException;
 
 import junit.framework.TestCase;
 import epfl.sweng.servercomm.QuizEditExecution;
@@ -31,8 +30,10 @@ public class QuizEditExecutionTest extends TestCase {
 		
 		super.setUp();
 	}
+	
 // XXX C'est pas le but de tester si le serveur répond 400 ou pas mais si nous 
 //		on gère le 400
+	
 	public void testBadRequestIsHandled() {
 		QuizEditExecution quizEditExecute = new QuizEditExecution();
 		quizEditExecute.execute(mMockJson);

@@ -22,7 +22,7 @@ public class ShowQuestionsActivityTest extends GUITest<ShowQuestionsActivity> {
 	
 	public void testErrorWhileFetchingQuestionIsHandled() {
 		IOException ioe = new IOException();
-		mockClient.setIOExceptionToThrow(ioe );
+		mockClient.setIOExceptionToThrow(ioe);
 		
 		getActivityAndWaitFor(TTChecks.QUESTION_SHOWN);
 		

@@ -95,7 +95,7 @@ public class MainActivity extends Activity {
 		TestCoordinator.check(TTChecks.MAIN_ACTIVITY_SHOWN);
 		// create the UserCreditentialStorage which use a SharedPreference
 		persistentStorage = UserCredentialsStorage
-				.getSingletonInstanceOfStorage(this.getApplicationContext());
+				.getInstance(this.getApplicationContext());
 		// XXX garder ou reinitialiser quand application killed?
 		// clean the storage when the app is first launched
 		persistentStorage.releaseAuthentication();
