@@ -19,10 +19,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.os.AsyncTask;
 import android.widget.Toast;
 import epfl.sweng.backend.UserCredentialsStorage;
+import epfl.sweng.entry.AuthenticationActivity;
 import epfl.sweng.exceptions.authentication.InvalidatedTokenException;
 import epfl.sweng.exceptions.authentication.NoSessionIDException;
 import epfl.sweng.exceptions.authentication.TequilaNoTokenException;
@@ -41,27 +41,27 @@ public class AuthenticationProcess extends AsyncTask<String, Void, String> {
 	// TODO Group this one with the one in EditQuestionsActivity in strings.xml
 	private static final int HTTP_STATUS_FOUND = 302;
 
-	private ProgressDialog dialog;
-	private Context context;
+	private ProgressDialog mDialog;
+	private AuthenticationActivity mParentActivity;
 
-	private String errorMessage;
+	private String mErrorMessage;
 
 	// TODO Put them in Strings.xml?
 	private final String[] urls = { 
 		"https://sweng-quiz.appspot.com/login",
 		"https://tequila.epfl.ch/cgi-bin/tequila/login" };
 
-	public AuthenticationProcess(Context ctx) {
-		this.context = ctx;
-		this.dialog = new ProgressDialog(ctx);
+	public AuthenticationProcess(AuthenticationActivity parentActivity) {
+		this.mParentActivity = parentActivity;
+		this.mDialog = new ProgressDialog(parentActivity);
 		// TODO Strings.xml
-		dialog.setMessage("Authenticating...");
-		dialog.setCancelable(false);
+		mDialog.setMessage("Authenticating...");
+		mDialog.setCancelable(false);
 	}
 
 	@Override
 	protected void onPreExecute() {
-		dialog.show();
+		mDialog.show();
 	}
 
 	/**
@@ -94,13 +94,13 @@ public class AuthenticationProcess extends AsyncTask<String, Void, String> {
 			sessionId = retrieveSessionId(token);
 		} catch (TequilaNoTokenException e) {
 			// TODO Log it!
-			errorMessage = e.getMessage();
+			mErrorMessage = e.getMessage();
 		} catch (InvalidatedTokenException e) {
 			// TODO Log it!
-			errorMessage = e.getMessage();
+			mErrorMessage = e.getMessage();
 		} catch (NoSessionIDException e) {
 			// TODO Log it!
-			errorMessage = e.getMessage();
+			mErrorMessage = e.getMessage();
 		}
 
 		return sessionId;
@@ -109,17 +109,15 @@ public class AuthenticationProcess extends AsyncTask<String, Void, String> {
 	@Override
 	protected void onPostExecute(String result) {
 		if (!result.equals("") && result != null) {
-			UserCredentialsStorage.getSingletonInstanceOfStorage(context)
+			UserCredentialsStorage.getInstance(mParentActivity)
 					.takeAuthentication(result);
 			// TODO why not UserCredentialsStorage.getInstance().setSessionId()?
-			Toast.makeText(context,
-					"Authentication activity finished, session id = " + result,
-					Toast.LENGTH_LONG).show();
 		} else {
-			Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show();
+			Toast.makeText(mParentActivity, mErrorMessage, Toast.LENGTH_LONG).show();
 		}
 
-		dialog.dismiss();
+		mDialog.dismiss();
+		mParentActivity.finish();
 	}
 
 	/**
