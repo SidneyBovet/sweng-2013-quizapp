@@ -19,12 +19,17 @@ public class QuizEditExecutionTest extends TestCase {
 	private int index = -100;
 
 	public QuizEditExecutionTest() {
+	}
+
+	@Override
+	protected void setUp() throws Exception {
 		mAnswers.add("reponse1");
 		mAnswers.add("      "); // Blank is an error.
 		mTags.add("**((/_:_:_");
 		mMockJson = new MockJSON(id, "ma question", mAnswers, index, mTags,
 				"BOB");
 
+		super.setUp();
 	}
 
 	public void testBadRequestWhenBadJSON() {
@@ -34,6 +39,6 @@ public class QuizEditExecutionTest extends TestCase {
 		// THE CODE IN QuizEditExecution ?
 
 		// 401 is the status number of bad request ?
-		assertEquals(true, true);
+		assertEquals(401, quizEditExecute.getResponseStatus());
 	}
 }

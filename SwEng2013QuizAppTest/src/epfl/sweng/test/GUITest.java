@@ -13,15 +13,14 @@ public class GUITest<T extends Activity> extends
 
 	public GUITest(Class<T> activityClass) {
 		super(activityClass);
-		solo = new Solo(getInstrumentation());
 	}
 
 	@Override
 	protected void setUp() {
-		solo = new Solo(getInstrumentation(), getActivity());
+		solo = new Solo(getInstrumentation());
 	}
 
-	private void getActivityAndWaitFor(final TestCoordinator.TTChecks expected) {
+	protected void getActivityAndWaitFor(final TestCoordinator.TTChecks expected) {
 		TestCoordinator.run(getInstrumentation(), new TestingTransaction() {
 			@Override
 			public void initiate() {
