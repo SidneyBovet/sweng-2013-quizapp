@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
 import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.json.JSONObject;
@@ -16,53 +17,50 @@ import epfl.sweng.testing.TestCoordinator.TTChecks;
  * Asyncronous task that runs a background thread that sends a new
  * {@link Question} to the SwEng server.
  * 
+ * Error types:
+ * 		-1: Internal problem
+ * 		 other code: Server HTTP response
+ * 
  * @author Merok
+ * @author born4new
  * 
  */
-public class QuizEditExecution extends AsyncTask<JSONObject, Void, Void> {
+public class QuizEditExecution extends AsyncTask<JSONObject, Void, Integer> {
+	
 	private final static String SERVER_URL = "https://sweng-quiz.appspot.com";
 	private HttpResponse response = null;
 
-	// @Override
-	// protected Void doInBackground(JSONObject... jsonObject) {
-	// HttpPost post = new HttpPost(SERVER_URL + "/quizquestions/");
-	// // send the quiz
-	// ResponseHandler<String> handler = new BasicResponseHandler();
-	// try {
-	// post.setEntity(new StringEntity(jsonObject[0].toString()));
-	// post.setHeader("Content-type", "application/json");
-	// SwengHttpClientFactory.getInstance().execute(post, handler);
-	// } catch (UnsupportedEncodingException e) {
-	// e.printStackTrace();
-	// } catch (IOException e) {
-	// e.printStackTrace();
-	// }
-	//
-	// TestCoordinator.check(TTChecks.NEW_QUESTION_SUBMITTED);
-	// return null;
-	// }
-
 	@Override
-	protected Void doInBackground(JSONObject... jsonObject) {
+	protected Integer doInBackground(JSONObject... jsonObject) {
+		
+		int responseStatus = -1;
 		HttpPost post = new HttpPost(SERVER_URL + "/quizquestions/");
-		// send the quiz
+		
+		// Send the quiz
 		try {
 			post.setEntity(new StringEntity(jsonObject[0].toString()));
 			post.setHeader("Content-type", "application/json");
 			response = SwengHttpClientFactory.getInstance().execute(post);
-			System.out.println("KSJDKJSKD => "
-					+ response.getStatusLine().getStatusCode());
+			responseStatus = response.getStatusLine().getStatusCode();
 		} catch (UnsupportedEncodingException e) {
+			// TODO : Log it ==> Problem with the StringEntity creation
+			e.printStackTrace();
+		} catch (ClientProtocolException e) {
+			// TODO : Log it ==> Error in the HTTP Protocol. Shouldn't happen if well-parsed?
 			e.printStackTrace();
 		} catch (IOException e) {
+			// TODO : Log it ==> Problem with the StringEntity creation
 			e.printStackTrace();
 		}
 
-		TestCoordinator.check(TTChecks.NEW_QUESTION_SUBMITTED);
-		return null;
+		return responseStatus;
 	}
-
-	public int getResponseStatus() {
-		return response.getStatusLine().getStatusCode();
+	
+	/**
+	 * Method executed right after the process is finished.
+	 * @param result
+	 */
+	protected void onPostExecute(Long result) {
+		TestCoordinator.check(TTChecks.NEW_QUESTION_SUBMITTED);
 	}
 }

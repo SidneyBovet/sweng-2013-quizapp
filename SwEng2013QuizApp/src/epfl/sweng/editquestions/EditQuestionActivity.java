@@ -15,6 +15,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 import epfl.sweng.R;
+import epfl.sweng.exceptions.ServerSubmitFailedException;
 import epfl.sweng.servercomm.ServerInteractions;
 import epfl.sweng.testing.TestCoordinator;
 import epfl.sweng.testing.TestCoordinator.TTChecks;
@@ -29,6 +30,9 @@ import epfl.sweng.testing.TestCoordinator.TTChecks;
  */
 
 public class EditQuestionActivity extends Activity {
+
+	// XXX Where do you think we should store that?
+	private static final int HTTP_SUCCESS = 201;
 
 	private AnswerListAdapter mAnswerListAdapter;
 	private ListView mListview;
@@ -62,8 +66,6 @@ public class EditQuestionActivity extends Activity {
 	 */
 
 	public void sendEditedQuestion(View view) {
-		Toast.makeText(this, "Quizz submitted to the server.",
-				Toast.LENGTH_SHORT).show();
 
 		// WARNING : you MUST follow this structure
 		// elements : Question1 => Answer1 => ... => indexOfAnswer => tags
@@ -80,7 +82,23 @@ public class EditQuestionActivity extends Activity {
 		listInputGUI.add(indexGoodAnswerString);
 		listInputGUI.add(mTagsText);
 
-		ServerInteractions.submitQuestion(listInputGUI);
+		int httpResponse = -1;
+		try {
+			ServerInteractions.submitQuestion(listInputGUI);
+			if (httpResponse == HTTP_SUCCESS) {
+				Toast.makeText(this, "Quizz submitted to the server.",
+						Toast.LENGTH_SHORT).show();
+			} else {
+				Toast.makeText(this,
+						"The server returned an error " + httpResponse,
+						Toast.LENGTH_SHORT).show();
+			}
+		} catch (ServerSubmitFailedException e) {
+			// TODO Log it? (Since we did it on the two layers before,
+			// I'm wondering if we should do it here) Problem with the server
+			Toast.makeText(this, "Server error.", Toast.LENGTH_SHORT).show();
+		}
+
 		resetEditQuestionLayout();
 	}
 
