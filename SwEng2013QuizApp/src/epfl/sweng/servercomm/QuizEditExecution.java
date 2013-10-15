@@ -10,6 +10,7 @@ import org.apache.http.entity.StringEntity;
 import org.json.JSONObject;
 
 import android.os.AsyncTask;
+import android.util.Log;
 import epfl.sweng.testing.TestCoordinator;
 import epfl.sweng.testing.TestCoordinator.TTChecks;
 
@@ -43,14 +44,17 @@ public class QuizEditExecution extends AsyncTask<JSONObject, Void, Integer> {
 			response = SwengHttpClientFactory.getInstance().execute(post);
 			responseStatus = response.getStatusLine().getStatusCode();
 		} catch (UnsupportedEncodingException e) {
-			// TODO : Log it ==> Problem with the StringEntity creation
-			e.printStackTrace();
+			// TODO: Error handling
+			Log.e(this.getClass().getName(), "doInBackground(): StringEntity " +
+					"couldn't be instantied.", e);
 		} catch (ClientProtocolException e) {
-			// TODO : Log it ==> Error in the HTTP Protocol. Shouldn't happen if well-parsed?
-			e.printStackTrace();
+			// TODO: Error handling
+			Log.e(this.getClass().getName(), "doInBackground(): Error with " +
+					"the HTTP protocol.", e);
 		} catch (IOException e) {
-			// TODO : Log it ==> Problem with the StringEntity creation
-			e.printStackTrace();
+			// TODO: Error handling
+			Log.e(this.getClass().getName(), "doInBackground(): An I/O error " +
+					"has occurred.", e);
 		}
 
 		return responseStatus;
