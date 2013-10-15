@@ -46,7 +46,7 @@ public class EditQuestionActivityTest extends GUITest<EditQuestionActivity> {
 		ListView mListview = (ListView) getSolo().getView(
 				R.id.submit_question_listview);
 
-		assertEquals(0, mListview.getChildCount());
+		assertEquals(1, mListview.getChildCount());
 	}
 
 	public void testaddAnswerWhenButtonPlusIsClicked() {
