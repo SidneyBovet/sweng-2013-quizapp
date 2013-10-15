@@ -36,7 +36,7 @@ public final class UserCredentialsStorage {
 	 * @param context
 	 * @return Singleton instance of the class
 	 */
-	public static UserCredentialsStorage getSingletonInstanceOfStorage(
+	public static UserCredentialsStorage getInstance(
 			Context context) {
 		// double-checked singleton: avoids calling costly synchronized if
 		// unnecessary
@@ -60,7 +60,6 @@ public final class UserCredentialsStorage {
 	public void takeAuthentication(String sessionID) {
 		editor.putString(keySessionIDName, sessionID);
 		editor.commit();
-		System.out.println("Authentication done");
 	}
 
 	/**

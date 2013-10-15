@@ -21,7 +21,7 @@ public class UserCreditentialsStorageTest extends
 		contextOfMainActivity = getInstrumentation()
 				.getTargetContext();
 		persistentStorage = UserCredentialsStorage.
-				getSingletonInstanceOfStorage(contextOfMainActivity);
+				getInstance(contextOfMainActivity);
 	}
 	
 	public void testAuthentication() {
