@@ -1,16 +1,18 @@
 package epfl.sweng.test;
 
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 
 import junit.framework.TestCase;
 import epfl.sweng.servercomm.QuizEditExecution;
 
 public class QuizEditExecutionTest extends TestCase {
+	private static final int ERROR_CODE = 401;
 	private ArrayList<String> mAnswers = new ArrayList<String>();
 	private ArrayList<String> mTags = new ArrayList<String>();
 	private MockJSON mMockJson = null;
-	private int id = -33;
-	private int index = -100;
+	private final int id = -33;
+	private final int index = -100;
 
 	public QuizEditExecutionTest() {
 	}
@@ -34,6 +36,14 @@ public class QuizEditExecutionTest extends TestCase {
 		// THE CODE IN QuizEditExecution ?
 
 		// 401 is the status number of bad request ?
-		assertEquals(401, quizEditExecute.getResponseStatus());
+		int status = -1;
+		try {
+			status = quizEditExecute.get();
+		} catch (InterruptedException e) {
+			fail("InterruptedException while getting status");
+		} catch (ExecutionException e) {
+			fail("ExecutionException while getting status");
+		}
+		assertEquals(ERROR_CODE, status);
 	}
 }
