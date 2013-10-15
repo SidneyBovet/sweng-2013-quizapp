@@ -2,13 +2,8 @@ package epfl.sweng.test;
 
 import android.widget.Button;
 import android.widget.EditText;
-
-import com.jayway.android.robotium.solo.Solo;
-
 import epfl.sweng.entry.AuthenticationActivity;
-import epfl.sweng.testing.TestCoordinator;
 import epfl.sweng.testing.TestCoordinator.TTChecks;
-import epfl.sweng.testing.TestingTransaction;
 
 public class AuthenticationActivityTest extends GUITest<AuthenticationActivity> {
 
