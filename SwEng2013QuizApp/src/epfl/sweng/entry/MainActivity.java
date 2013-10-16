@@ -23,7 +23,6 @@ import epfl.sweng.testing.TestCoordinator.TTChecks;
 public class MainActivity extends Activity {
 
 	private UserCredentialsStorage persistentStorage;
-	private boolean authenticated = false;
 
 	/**
 	 * Launches the {@link ShowQuestionActivity}.
@@ -65,21 +64,17 @@ public class MainActivity extends Activity {
 	 * 
 	 * @param view
 	 */
-	// TODO changer en clickOnLogButton
 	public void displayAuthenticationActivity(View view) {
-		// XXX return automatically to MainActivity when log in?
 		// Case LoginUsingTequila
-		if (!authenticated) {
+		if (!persistentStorage.isAuthenticated()) {
 			Toast.makeText(this, "Please Log in", Toast.LENGTH_SHORT).show();
 			Intent submitAuthenticationActivityIntent = new Intent(this,
 					AuthenticationActivity.class); 
-			startActivity(submitAuthenticationActivityIntent);
+			startActivity(submitAuthenticationActivityIntent); 
 		}
 		// Case Log out
 		else {
 			persistentStorage.releaseAuthentication();
-			// TODO virer authenticated a la place isAuthenticated
-			authenticated = false;
 			// TODO ne devrait pas se faire au chargement initial de
 			// l'application
 			TestCoordinator.check(TTChecks.LOGGED_OUT);
@@ -102,9 +97,6 @@ public class MainActivity extends Activity {
 		// create the UserCreditentialStorage which use a SharedPreference
 		persistentStorage = UserCredentialsStorage
 				.getInstance(this.getApplicationContext());
-		// XXX garder ou reinitialiser quand application killed?
-		// clean the storage when the app is first launched
-		// persistentStorage.releaseAuthentication();
 	}
 
 	/**
@@ -116,9 +108,8 @@ public class MainActivity extends Activity {
 	protected void onResume() {
 		super.onResume();
 		Button logButton = (Button) findViewById(R.id.autenticationLogButton);
-		authenticated = persistentStorage.isAuthenticated();
 		logButton
-				.setText(authenticated ? R.string.autenticationLoginButtonStateLogOut
+				.setText(persistentStorage.isAuthenticated() ? R.string.autenticationLoginButtonStateLogOut
 						: R.string.autenticationLoginButtonStateLogIn);
 		setDisplayView();
 		TestCoordinator.check(TTChecks.MAIN_ACTIVITY_SHOWN);
@@ -130,8 +121,8 @@ public class MainActivity extends Activity {
 	 */
 	private void setDisplayView() {
 		((Button) findViewById(R.id.displayRandomQuestionButton))
-				.setEnabled(authenticated);
+				.setEnabled(persistentStorage.isAuthenticated());
 		((Button) findViewById(R.id.submitQuestionButton))
-				.setEnabled(authenticated);
+				.setEnabled(persistentStorage.isAuthenticated());
 	}
 }
