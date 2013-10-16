@@ -20,6 +20,7 @@ import org.json.JSONObject;
 
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.widget.Toast;
 import epfl.sweng.backend.UserCredentialsStorage;
 import epfl.sweng.entry.AuthenticationActivity;
@@ -29,9 +30,9 @@ import epfl.sweng.exceptions.authentication.TequilaNoTokenException;
 
 /**
  * AsyncTask that performs the networking part of authentication with EPFL's
- * Tequila server. Arguments to passed to its <code>execute()</code> method are: <br/>
- * 1. Username<br/>
- * 2. Password<br/>
+ * Tequila server. Arguments to passed to its <code>execute()</code> method are:
+ * <br/>1. Username
+ * <br/>2. Password
  * 
  * @author Sidney
  * @author born4new
@@ -39,6 +40,7 @@ import epfl.sweng.exceptions.authentication.TequilaNoTokenException;
  */
 public class AuthenticationProcess extends AsyncTask<String, Void, String> {
 	// TODO Group this one with the one in EditQuestionsActivity in strings.xml
+	// (need context object for this)
 	private static final int HTTP_STATUS_FOUND = 302;
 
 	private ProgressDialog mDialog;
@@ -46,7 +48,7 @@ public class AuthenticationProcess extends AsyncTask<String, Void, String> {
 
 	private String mErrorMessage;
 
-	// TODO Put them in Strings.xml?
+	// TODO Put them in Strings.xml? < need context object for this.
 	private final String[] urls = { 
 		"https://sweng-quiz.appspot.com/login",
 		"https://tequila.epfl.ch/cgi-bin/tequila/login" };
@@ -54,7 +56,7 @@ public class AuthenticationProcess extends AsyncTask<String, Void, String> {
 	public AuthenticationProcess(AuthenticationActivity parentActivity) {
 		this.mParentActivity = parentActivity;
 		this.mDialog = new ProgressDialog(parentActivity);
-		// TODO Strings.xml
+		// TODO Strings.xml < need context object for this.
 		mDialog.setMessage("Authenticating...");
 		mDialog.setCancelable(false);
 	}
@@ -77,9 +79,8 @@ public class AuthenticationProcess extends AsyncTask<String, Void, String> {
 	protected String doInBackground(String... args) {
 
 		if (args.length != 2) {
-			// TODO Log it!
-			System.err.println("Illegal arguments given to "
-					+ "AuthenticationProcess, should be (usrname, pwd)");
+			Log.e(this.getClass().getName(), "doInBackground(): Illegal "
+					+ "arguments, should be (username, password).");
 			// XXX We should NOT Throw exceptions that we did not declared
 			// in the method signature.
 			// throw new IllegalArgumentException("AuthenticationProcess "
@@ -93,14 +94,17 @@ public class AuthenticationProcess extends AsyncTask<String, Void, String> {
 			validateToken(token, args[0], args[1]);
 			sessionId = retrieveSessionId(token);
 		} catch (TequilaNoTokenException e) {
-			// TODO Log it!
 			mErrorMessage = e.getMessage();
+			Log.e(this.getClass().getName(), "doInBackground(): No Token could "
+					+ "be retrieved.", e);
 		} catch (InvalidatedTokenException e) {
-			// TODO Log it!
 			mErrorMessage = e.getMessage();
+			Log.e(this.getClass().getName(), "doInBackground(): Token could "
+					+ "not be validated.", e);
 		} catch (NoSessionIDException e) {
-			// TODO Log it!
 			mErrorMessage = e.getMessage();
+			Log.e(this.getClass().getName(), "doInBackground(): No SessionID "
+					+ "could be retrieved.", e);
 		}
 
 		return sessionId;
@@ -108,7 +112,7 @@ public class AuthenticationProcess extends AsyncTask<String, Void, String> {
 
 	@Override
 	protected void onPostExecute(String result) {
-		if (!result.equals("") && result != null) {
+		if (result != null && !result.equals("")) {
 			UserCredentialsStorage.getInstance(mParentActivity)
 					.takeAuthentication(result);
 			// TODO why not UserCredentialsStorage.getInstance().setSessionId()?
@@ -136,17 +140,20 @@ public class AuthenticationProcess extends AsyncTask<String, Void, String> {
 			JSONObject responseJSON = new JSONObject(response);
 			token = responseJSON.getString("token");
 		} catch (ClientProtocolException e) {
-			// TODO Log it!
-			throw new TequilaNoTokenException("Error in the HTTP Protocol: "
+			Log.e(this.getClass().getName(), "getToken(): Error in the HTTP "
+					+ "protocol.", e);
+			throw new TequilaNoTokenException("Error in the HTTP Protocol : "
 					+ e.getMessage());
 		} catch (IOException e) {
-			// TODO Log it!
-			throw new TequilaNoTokenException("Internal Error : "
+			Log.e(this.getClass().getName(), "getToken(): An I/O error has "
+					+ "occurred.", e);
+			throw new TequilaNoTokenException("An I/O error has occurred : "
 					+ e.getMessage());
 		} catch (JSONException e) {
-			// TODO Log it!
-			throw new TequilaNoTokenException("JSON Parsing error : "
-					+ e.getMessage());
+			Log.e(this.getClass().getName(), "getToken(): JSONObject "
+					+ "\'responseJSON\' could not get the \'token\' string.", e);
+			throw new TequilaNoTokenException("JSONObject \'responseJSON\' " +
+					"could not get the \'token\' string. : " + e.getMessage());
 		}
 		return token;
 	}
@@ -179,9 +186,10 @@ public class AuthenticationProcess extends AsyncTask<String, Void, String> {
 			tokenValidationContentEncoded = new UrlEncodedFormEntity(
 					tokenValidationContentList);
 		} catch (UnsupportedEncodingException e) {
-			// TODO Log it!
-			throw new InvalidatedTokenException(
-					"Local encoding not supported : " + e.getMessage());
+			Log.e(this.getClass().getName(), "validateToken(): Entity does not "
+					+ "support the local encoding", e);
+			throw new InvalidatedTokenException("Entity does not support the "
+					+ "local encoding : " + e.getMessage());
 		}
 
 		HttpPost tokenValidationRequest = new HttpPost(urls[1]);
@@ -191,17 +199,20 @@ public class AuthenticationProcess extends AsyncTask<String, Void, String> {
 			HttpResponse response = SwengHttpClientFactory.getInstance()
 					.execute(tokenValidationRequest);
 			if (response.getStatusLine().getStatusCode() != HTTP_STATUS_FOUND) {
-				// TODO Log it!
+				Log.e(this.getClass().getName(), "validateToken(): Tequila "
+						+ "rejected username/password");
 				throw new InvalidatedTokenException(
-						"Tequila rejected username/" + "password");
+						"Tequila rejected username/password");
 			}
 		} catch (ClientProtocolException e) {
-			// TODO Log it!
-			throw new InvalidatedTokenException("Error in the HTTP protocol"
+			Log.e(this.getClass().getName(), "validateToken(): Error in the "
+					+ "HTTP protocol.", e);
+			throw new InvalidatedTokenException("Error in the HTTP protocol : "
 					+ e.getMessage());
 		} catch (IOException e) {
-			// TODO Log it!
-			throw new InvalidatedTokenException("Internal Error : "
+			Log.e(this.getClass().getName(), "validateToken(): An I/O error "
+					+ "has occurred.", e);
+			throw new InvalidatedTokenException("An I/O error has occurred : "
 					+ e.getMessage());
 		}
 	}
@@ -223,9 +234,12 @@ public class AuthenticationProcess extends AsyncTask<String, Void, String> {
 		try {
 			postBody.put("token", token);
 		} catch (JSONException e) {
-			// TODO Log it!
+			Log.e(this.getClass().getName(), "retrieveSessionID(): JSONObject "
+					+ "\'postBody\' could not write on the string \'token\'.",
+					e);
 			throw new NoSessionIDException(
-					"Error putting String token into JSON" + e.getMessage());
+					"JSONObject \'postBody\' could not write on the string "
+					+ "\'token\'. : " + e.getMessage());
 		}
 
 		JSONObject jsonResponse = new JSONObject();
@@ -239,27 +253,34 @@ public class AuthenticationProcess extends AsyncTask<String, Void, String> {
 					postRequest, handler);
 			jsonResponse = new JSONObject(response);
 		} catch (UnsupportedEncodingException e) {
-			// TODO Log it!
-			throw new NoSessionIDException("Local encoding not supported : "
-					+ e.getMessage());
+			Log.e(this.getClass().getName(), "retrieveSessionID(): Entity does "
+					+ "not support the local encoding.", e);
+			throw new NoSessionIDException("Entity does not support the local "
+					+ "encoding : " + e.getMessage());
 		} catch (ClientProtocolException e) {
-			// TODO Log it!
+			Log.e(this.getClass().getName(), "retrieveSessionID(): Error in "
+					+ "the HTTP protocol.", e);
 			throw new NoSessionIDException("Error in the HTTP protocol : "
 					+ e.getMessage());
 		} catch (IOException e) {
-			// TODO Log it!
-			throw new NoSessionIDException("Internal error : " + e.getMessage());
-		} catch (JSONException e) {
-			// TODO Log it!
-			throw new NoSessionIDException("Error while parsing JSONObject : "
+			Log.e(this.getClass().getName(), "retrieveSessionID(): An I/O "
+					+ "error has occurred.", e);
+			throw new NoSessionIDException("An I/O error has occurred : "
 					+ e.getMessage());
+		} catch (JSONException e) {
+			Log.e(this.getClass().getName(), "retrieveSessionID(): Error while "
+					+ "parsing JSONObject \'jsonResponse\'.", e);
+			throw new NoSessionIDException("Error while parsing JSONObject "
+					+ "\'jsonResponse\'. : " + e.getMessage());
 		}
 		try {
 			return jsonResponse.getString("session");
 		} catch (JSONException e) {
-			// TODO Log it!
-			throw new NoSessionIDException("Tequila didn't confirm token to "
-					+ "SwEng server" + e.getMessage());
+			Log.e(this.getClass().getName(), "retrieveSessionID(): JSONObject "
+					+ "\'jsonResponse\' couldn't get the \'session\' string.",
+					e);
+			throw new NoSessionIDException("JSONObject \'jsonResponse\' "
+					+ "couldn't get the \'session\' string : " + e.getMessage());
 		}
 	}
 }

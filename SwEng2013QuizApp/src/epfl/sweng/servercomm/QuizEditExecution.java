@@ -45,12 +45,12 @@ public class QuizEditExecution extends AsyncTask<JSONObject, Void, Integer> {
 			responseStatus = response.getStatusLine().getStatusCode();
 		} catch (UnsupportedEncodingException e) {
 			// TODO Error handling
-			Log.e(this.getClass().getName(), "doInBackground(): StringEntity "
-					+ "couldn't be instantied.", e);
+			Log.e(this.getClass().getName(), "doInBackground(): Entity does "
+					+ "not support the local encoding.", e);
 		} catch (ClientProtocolException e) {
 			// TODO Error handling
-			Log.e(this.getClass().getName(), "doInBackground(): Error with "
-					+ "the HTTP protocol.", e);
+			Log.e(this.getClass().getName(), "doInBackground(): Error in the "
+					+ "HTTP protocol.", e);
 		} catch (IOException e) {
 			// TODO Error handling
 			Log.e(this.getClass().getName(), "doInBackground(): An I/O error "
