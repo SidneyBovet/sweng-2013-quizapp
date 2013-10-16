@@ -3,7 +3,9 @@ package epfl.sweng.test;
 import org.apache.http.HttpStatus;
 
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
+import epfl.sweng.R;
 import epfl.sweng.servercomm.SwengHttpClientFactory;
 import epfl.sweng.showquestions.ShowQuestionsActivity;
 import epfl.sweng.test.minimalmock.MockHttpClient;
@@ -73,5 +75,6 @@ public class ShowQuestionsActivityTest extends GUITest<ShowQuestionsActivity> {
 		Button nextButton = getSolo().getButton("Next question");
 		assertFalse(nextButton.isEnabled());
     }    
+
 }
 
