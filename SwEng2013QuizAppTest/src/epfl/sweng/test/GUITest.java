@@ -19,11 +19,17 @@ public class GUITest<T extends Activity> extends
 	protected void setUp() {
 		solo = new Solo(getInstrumentation());
 	}
-	
+
+	@Override
 	protected void tearDown() throws Exception {
+		try {
+			solo.finalize();
+		} catch (Throwable e) {
+			e.printStackTrace();
+		}
 		getActivity().finish();
-		solo.finishOpenedActivities();
-	};
+		super.tearDown();
+	}
 
 	protected void getActivityAndWaitFor(final TestCoordinator.TTChecks expected) {
 		TestCoordinator.run(getInstrumentation(), new TestingTransaction() {
