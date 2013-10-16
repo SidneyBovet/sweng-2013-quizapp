@@ -1,7 +1,5 @@
 package epfl.sweng.test;
 
-import java.io.IOException;
-
 import org.apache.http.HttpStatus;
 
 import android.widget.Button;
