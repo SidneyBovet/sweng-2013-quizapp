@@ -1,11 +1,16 @@
 package epfl.sweng.test;
 
+import android.content.Context;
 import android.widget.Button;
+import epfl.sweng.backend.UserCredentialsStorage;
 import epfl.sweng.entry.MainActivity;
 import epfl.sweng.testing.TestCoordinator.TTChecks;
 
 public class MainActivityNotAuthenticatedTest extends GUITest<MainActivity> {
 
+	private Context contextOfMainActivity;
+	private UserCredentialsStorage persistentStorage;
+	
 	public MainActivityNotAuthenticatedTest() {
 		super(MainActivity.class);
 	}
@@ -13,7 +18,11 @@ public class MainActivityNotAuthenticatedTest extends GUITest<MainActivity> {
 	@Override
 	protected void setUp() {
 		super.setUp();
-		// add stuff we need
+		contextOfMainActivity = getInstrumentation()
+				.getTargetContext();
+		persistentStorage = UserCredentialsStorage.
+				getInstance(contextOfMainActivity);
+		persistentStorage.releaseAuthentication();
 	}
 	
 	public void testShowAllButtons() {
