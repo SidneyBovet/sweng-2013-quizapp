@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
@@ -98,7 +99,9 @@ public class EditQuestionActivity extends Activity {
 		} catch (ServerSubmitFailedException e) {
 			// TODO Log it? (Since we did it on the two layers before,
 			// I'm wondering if we should do it here) Problem with the server
-			Toast.makeText(this, "Server error.", Toast.LENGTH_SHORT).show();
+			Log.e(this.getClass().getName(), "sendEditedQuestion(): The "
+					+ "question could not be submitted.", e);
+			Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
 		}
 
 		resetEditQuestionLayout();
