@@ -71,9 +71,8 @@ public class MainActivity extends Activity {
 			Intent submitAuthenticationActivityIntent = new Intent(this,
 					AuthenticationActivity.class); 
 			startActivity(submitAuthenticationActivityIntent); 
-		}
-		// Case Log out
-		else {
+		} else {
+			// Case Log out
 			persistentStorage.releaseAuthentication();
 			// TODO ne devrait pas se faire au chargement initial de
 			// l'application

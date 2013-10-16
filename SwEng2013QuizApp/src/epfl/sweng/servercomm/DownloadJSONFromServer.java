@@ -21,7 +21,7 @@ public class DownloadJSONFromServer extends AsyncTask<String, Void, String> {
 	@Override
 	protected String doInBackground(String... url) {
 		String randomQuestionJSON = "";
-		if (url.length != 0 && url != null) {
+		if (null != url && 0 != url.length) {
 			HttpGet firstRandom = new HttpGet(url[0]);
 			ResponseHandler<String> firstHandler = new BasicResponseHandler();
 			try {

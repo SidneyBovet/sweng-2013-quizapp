@@ -17,11 +17,12 @@ import epfl.sweng.testing.TestCoordinator.TTChecks;
 /**
  * Asyncronous task that runs a background thread that sends a new
  * {@link Question} to the SwEng server.
- * 
- * Error types:
- * 		-1: Internal problem
- * 		 other code: Server HTTP response
- * 
+ * <p>
+ * Return types:
+ * 	<ul>
+ * 		<li><code>-1</code>: Internal problem</li>
+ * 		<li><code>other code</code>: Server HTTP response</li>
+ * 	</ul>
  * @author Merok
  * @author born4new
  * 
