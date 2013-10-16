@@ -7,7 +7,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.util.Log;
-
 import epfl.sweng.backend.Question;
 import epfl.sweng.exceptions.ServerSubmitFailedException;
 
@@ -20,7 +19,7 @@ import epfl.sweng.exceptions.ServerSubmitFailedException;
  * 
  */
 public class ServerInteractions {
-
+	
 	/**
 	 * Gets a question from the SwEng server. The request is an
 	 * {@link AsyncTask} process.
@@ -38,11 +37,16 @@ public class ServerInteractions {
 			question = Question
 					.createQuestionFromJSON(asyncTaskRandomQuestionGetter.get());
 		} catch (JSONException e) {
-			Log.i(ServerInteractions.class.getName(), "Unable to parse JSON");
+			Log.e(ServerInteractions.class.getName(), "getRandomQuestion(): "
+					+ "Unable to parse \'JSONObject\'.", e);
 		} catch (InterruptedException e) {
-			// TODO Log it!
+			Log.e(ServerInteractions.class.getName(), "getRandomQuestion(): "
+					+ "The \'DownloadJSONFromServer\' task has been "
+					+ "interrupted.", e);
 		} catch (ExecutionException e) {
-			// TODO Log it!
+			Log.e(ServerInteractions.class.getName(), "getRandomQuestion(): "
+					+ "An error has occurred during the "
+					+ "\'DownloadJSONFromServer\' execution.", e);
 		}
 
 		return question;
@@ -76,18 +80,21 @@ public class ServerInteractions {
 			// XXX SHOULD BE REFACTORED IN "ONPOSTEXECUTE".
 			serverResponse = quizEditExecute.get();
 		} catch (InterruptedException e) {
-			// TODO Log it! Internal problem with Thread.
+			Log.e(ServerInteractions.class.getName(), "submitQuestion(): The "
+					+ "The \'QuizEditExecution\' task has been interrupted.", e);
 			// Here we don't care about the type of exception thrown:
 			// If there is one, we will inform the user that ST went wrong.
 			// Note that the exceptions thrown are unlikely to happen since
 			// they are thread-related only.
 		} catch (ExecutionException e) {
-			// TODO Log it!
+			Log.e(ServerInteractions.class.getName(), "submitQuestion(): An "
+					+ "error has occurred during the \'QuizEditExecution\' "
+					+ "execution.", e);
 			// Same as above.
 		}
 
 		if (serverResponse == -1) {
-			throw new ServerSubmitFailedException("Server error");
+			throw new ServerSubmitFailedException("Server error.");
 		}
 
 		return serverResponse;
