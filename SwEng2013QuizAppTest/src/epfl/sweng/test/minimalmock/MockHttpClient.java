@@ -54,8 +54,8 @@ public class MockHttpClient extends DefaultHttpClient {
     }
 
     private final List<CannedResponse> responses = new ArrayList<CannedResponse>();
-    public static final int IOEXCEPTION_ERROR_CODE = 44;
-	public static final int CLIENTPROTOCOLEXCEPTION_ERROR_CODE = 43;
+    public static final int IOEXCEPTION_ERROR_CODE = 500;
+	public static final int CLIENTPROTOCOLEXCEPTION_ERROR_CODE = 503;
     
     public void pushCannedResponse(String requestRegex, int status,
     	String responseBody, String contentType) {
