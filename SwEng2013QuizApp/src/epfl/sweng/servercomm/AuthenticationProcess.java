@@ -24,7 +24,7 @@ import android.util.Log;
 import android.widget.Toast;
 import epfl.sweng.backend.UserCredentialsStorage;
 import epfl.sweng.entry.AuthenticationActivity;
-import epfl.sweng.exceptions.authentication.InvalidatedTokenException;
+import epfl.sweng.exceptions.authentication.InvalidTokenException;
 import epfl.sweng.exceptions.authentication.NoSessionIDException;
 import epfl.sweng.exceptions.authentication.TequilaNoTokenException;
 
@@ -97,7 +97,7 @@ public class AuthenticationProcess extends AsyncTask<String, Void, String> {
 			mErrorMessage = e.getMessage();
 			Log.e(this.getClass().getName(), "doInBackground(): No Token could "
 					+ "be retrieved.", e);
-		} catch (InvalidatedTokenException e) {
+		} catch (InvalidTokenException e) {
 			mErrorMessage = e.getMessage();
 			Log.e(this.getClass().getName(), "doInBackground(): Token could "
 					+ "not be validated.", e);
@@ -171,7 +171,7 @@ public class AuthenticationProcess extends AsyncTask<String, Void, String> {
 	 *            The user's password in EPFL's Tequila system.
 	 */
 	private void validateToken(String token, String username, String password)
-		throws InvalidatedTokenException {
+		throws InvalidTokenException {
 
 		List<NameValuePair> tokenValidationContentList = new ArrayList<NameValuePair>();
 		tokenValidationContentList.add(new BasicNameValuePair("requestkey",
@@ -188,7 +188,7 @@ public class AuthenticationProcess extends AsyncTask<String, Void, String> {
 		} catch (UnsupportedEncodingException e) {
 			Log.e(this.getClass().getName(), "validateToken(): Entity does not "
 					+ "support the local encoding", e);
-			throw new InvalidatedTokenException("Entity does not support the "
+			throw new InvalidTokenException("Entity does not support the "
 					+ "local encoding : " + e.getMessage());
 		}
 
@@ -201,18 +201,18 @@ public class AuthenticationProcess extends AsyncTask<String, Void, String> {
 			if (response.getStatusLine().getStatusCode() != HTTP_STATUS_FOUND) {
 				Log.e(this.getClass().getName(), "validateToken(): Tequila "
 						+ "rejected username/password");
-				throw new InvalidatedTokenException(
+				throw new InvalidTokenException(
 						"Tequila rejected username/password");
 			}
 		} catch (ClientProtocolException e) {
 			Log.e(this.getClass().getName(), "validateToken(): Error in the "
 					+ "HTTP protocol.", e);
-			throw new InvalidatedTokenException("Error in the HTTP protocol : "
+			throw new InvalidTokenException("Error in the HTTP protocol : "
 					+ e.getMessage());
 		} catch (IOException e) {
 			Log.e(this.getClass().getName(), "validateToken(): An I/O error "
 					+ "has occurred.", e);
-			throw new InvalidatedTokenException("An I/O error has occurred : "
+			throw new InvalidTokenException("An I/O error has occurred : "
 					+ e.getMessage());
 		}
 	}

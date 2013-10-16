@@ -7,8 +7,8 @@ package epfl.sweng.exceptions.authentication;
  *
  */
 @SuppressWarnings("serial")
-public class InvalidatedTokenException extends Exception {
-	public InvalidatedTokenException(String msg) {
+public class InvalidTokenException extends Exception {
+	public InvalidTokenException(String msg) {
 		super(msg);
 	}
 }
