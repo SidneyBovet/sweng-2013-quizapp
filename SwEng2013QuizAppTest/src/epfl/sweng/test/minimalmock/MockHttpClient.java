@@ -14,6 +14,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.ProtocolException;
 import org.apache.http.ProtocolVersion;
 import org.apache.http.client.AuthenticationHandler;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpRequestRetryHandler;
 import org.apache.http.client.RedirectHandler;
 import org.apache.http.client.RequestDirector;
@@ -53,25 +54,8 @@ public class MockHttpClient extends DefaultHttpClient {
     }
 
     private final List<CannedResponse> responses = new ArrayList<CannedResponse>();
-   
-    private IOException mIOExceptionToBeThrown = null;
-    private ProtocolException mProtocolExceptionToBeThrown = null;
-
-    public void setIOExceptionToThrow(IOException exception) {
-    	this.mIOExceptionToBeThrown = exception;
-    }
-    
-    public IOException getIOExceptionToThrow() {
-    	return this.mIOExceptionToBeThrown;
-    }
-
-    public void setProtExceptionToThrow(ProtocolException exception) {
-    	this.mProtocolExceptionToBeThrown = exception;
-    }
-    
-    public ProtocolException getProtExceptionToThrow() {
-    	return this.mProtocolExceptionToBeThrown;
-    }
+    public static final int IOEXCEPTION_ERROR_CODE = 44;
+	public static final int CLIENTPROTOCOLEXCEPTION_ERROR_CODE = 43;
     
     public void pushCannedResponse(String requestRegex, int status,
     	String responseBody, String contentType) {
@@ -127,7 +111,7 @@ public class MockHttpClient extends DefaultHttpClient {
  */
 class MockRequestDirector implements RequestDirector {
 
-    private MockHttpClient httpClient;
+	private MockHttpClient httpClient;
 
     public MockRequestDirector(MockHttpClient httpClient) {
         this.httpClient = httpClient;
@@ -137,23 +121,21 @@ class MockRequestDirector implements RequestDirector {
     public HttpResponse execute(HttpHost target, HttpRequest request,
             HttpContext context) throws IOException, ProtocolException {
         Log.v("HTTP", request.getRequestLine().toString());
-
-        if (httpClient.getIOExceptionToThrow() != null) {
-        	throw httpClient.getIOExceptionToThrow();
-		}
-        
-        if (httpClient.getProtExceptionToThrow() != null) {
-        	throw httpClient.getProtExceptionToThrow();
-		}
         
         HttpResponse response = httpClient.processRequest(request);
         if (response == null) {
             throw new AssertionError("Request \"" + request.getRequestLine().toString()
                     + "\" did not match any known pattern");
         }
-
-        Log.v("HTTP", response.getStatusLine().toString());
-        return response;
+        switch (response.getStatusLine().getStatusCode()) {
+			case MockHttpClient.IOEXCEPTION_ERROR_CODE:
+				throw new IOException("Bam!");
+			case MockHttpClient.CLIENTPROTOCOLEXCEPTION_ERROR_CODE:
+				throw new ClientProtocolException("Take this, code!");
+			default:
+		        Log.v("HTTP", response.getStatusLine().toString());
+		        return response;
+        }
     }
 
 }

@@ -1,15 +1,12 @@
 package epfl.sweng.test;
 
-import java.io.IOException;
+import junit.framework.TestCase;
 
 import org.apache.http.HttpStatus;
-import org.apache.http.ProtocolException;
 
 import epfl.sweng.servercomm.DownloadJSONFromServer;
 import epfl.sweng.servercomm.SwengHttpClientFactory;
 import epfl.sweng.test.minimalmock.MockHttpClient;
-
-import junit.framework.TestCase;
 
 public class DownloadJSONFromServerTest extends TestCase{
 	
@@ -35,16 +32,21 @@ public class DownloadJSONFromServerTest extends TestCase{
 	}
 	
 	public void testIOExceptionIsHandled() {
-		IOException exception = new IOException("Take this!");
-		mockClient.setIOExceptionToThrow(exception);
+		mockClient.pushCannedResponse(
+				"GET (?:https?://[^/]+|[^/]+)?/+quizquestions/random\\b",
+				MockHttpClient.IOEXCEPTION_ERROR_CODE,
+				"", "");
 		new DownloadJSONFromServer().
 			execute("https://sweng-quiz.appspot.com/quizquestions/random");
 		assert true;
 	}
 	
 	public void testProtocolExceptionIsHandled() {
-		ProtocolException exception = new ProtocolException("Take that!");
-		mockClient.setProtExceptionToThrow(exception);
+		mockClient.pushCannedResponse(
+				"GET (?:https?://[^/]+|[^/]+)?/+quizquestions/random\\b",
+				MockHttpClient.CLIENTPROTOCOLEXCEPTION_ERROR_CODE,
+				"", "");
+		
 		new DownloadJSONFromServer().
 			execute("https://sweng-quiz.appspot.com/quizquestions/random");
 		assert true;
