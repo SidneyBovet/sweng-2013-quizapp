@@ -1,18 +1,19 @@
 package epfl.sweng.entry;
 
-import org.apache.http.auth.AuthenticationException;
-
 import android.app.Activity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 import epfl.sweng.R;
+import epfl.sweng.backend.UserCredentialsStorage;
 import epfl.sweng.servercomm.AuthenticationProcess;
 import epfl.sweng.testing.TestCoordinator;
 import epfl.sweng.testing.TestCoordinator.TTChecks;
@@ -50,7 +51,7 @@ public class AuthenticationActivity extends Activity {
 				| InputType.TYPE_TEXT_VARIATION_PASSWORD);
 
 		mUserNameEditText.addTextChangedListener(new TextWatcher() {
-			
+
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before,
 					int count) {
@@ -97,9 +98,9 @@ public class AuthenticationActivity extends Activity {
 		String usrName = mUserNameEditText.getText().toString();
 		String usrPassword = mPasswordEditText.getText().toString();
 		// XXX Ici je suis parti du principe que le bouton est desactivé si on
-		// remplit  les fields avec des espaces. A changer ?
-		mLoginbutton.setEnabled(!(usrName.trim().length() == 0
-				|| usrPassword.trim().length() == 0));
+		// remplit les fields avec des espaces. A changer ?
+		mLoginbutton.setEnabled(!(usrName.trim().length() == 0 || usrPassword
+				.trim().length() == 0));
 	}
 
 	/**
@@ -116,20 +117,21 @@ public class AuthenticationActivity extends Activity {
 		getMenuInflater().inflate(R.menu.authentication, menu);
 		return true;
 	}
-	
+
 	public void buttonAuthenticate(View view) {
-		TextView usrNameField = (TextView) findViewById(R.id.login_user);
-		String usrName = usrNameField.getText().toString();
-		TextView passwordField = (TextView) findViewById(R.id.login_password);
-		String password = passwordField.getText().toString();
-		
-		AuthenticationProcess authProc =
-				new AuthenticationProcess(AuthenticationActivity.this);
-		try {
-			authProc.startAuthenticationProcess(usrName, password);
-		} catch (AuthenticationException e) {
-			// TODO clean UserCredentialsStorage
-			e.printStackTrace();
+		String usrName = ((TextView) findViewById(R.id.login_user)).getText()
+				.toString();
+		String password = ((TextView) findViewById(R.id.login_password))
+				.getText().toString();
+
+		if (UserCredentialsStorage.getInstance(this).isAuthenticated()) {
+			Toast.makeText(this, "Already logged in!", Toast.LENGTH_LONG).show();
+			Log.wtf(this.getClass().getName(),
+					"User pressed 'Log in' while authenticated!?");
+			finish();
 		}
+		
+		new AuthenticationProcess(AuthenticationActivity.this).
+			execute(usrName, password);
 	}
 }

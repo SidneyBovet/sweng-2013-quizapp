@@ -101,7 +101,7 @@ public class MainActivity extends Activity {
 		// Transaction testing.
 		// create the UserCreditentialStorage which use a SharedPreference
 		persistentStorage = UserCredentialsStorage
-				.getSingletonInstanceOfStorage(this.getApplicationContext());
+				.getInstance(this.getApplicationContext());
 		// XXX garder ou reinitialiser quand application killed?
 		// clean the storage when the app is first launched
 		// persistentStorage.releaseAuthentication();

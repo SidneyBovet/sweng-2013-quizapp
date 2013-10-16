@@ -1,5 +1,6 @@
 package epfl.sweng.test.minimalmock;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +11,7 @@ import org.apache.http.ConnectionReuseStrategy;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpRequest;
 import org.apache.http.HttpResponse;
+import org.apache.http.ProtocolException;
 import org.apache.http.ProtocolVersion;
 import org.apache.http.client.AuthenticationHandler;
 import org.apache.http.client.HttpRequestRetryHandler;
@@ -51,7 +53,26 @@ public class MockHttpClient extends DefaultHttpClient {
     }
 
     private final List<CannedResponse> responses = new ArrayList<CannedResponse>();
+   
+    private IOException mIOExceptionToBeThrown = null;
+    private ProtocolException mProtocolExceptionToBeThrown = null;
 
+    public void setIOExceptionToThrow(IOException exception) {
+    	this.mIOExceptionToBeThrown = exception;
+    }
+    
+    public IOException getIOExceptionToThrow() {
+    	return this.mIOExceptionToBeThrown;
+    }
+
+    public void setProtExceptionToThrow(ProtocolException exception) {
+    	this.mProtocolExceptionToBeThrown = exception;
+    }
+    
+    public ProtocolException getProtExceptionToThrow() {
+    	return this.mProtocolExceptionToBeThrown;
+    }
+    
     public void pushCannedResponse(String requestRegex, int status,
     	String responseBody, String contentType) {
         responses.add(
@@ -114,9 +135,17 @@ class MockRequestDirector implements RequestDirector {
 
     @Override
     public HttpResponse execute(HttpHost target, HttpRequest request,
-            HttpContext context) {
+            HttpContext context) throws IOException, ProtocolException {
         Log.v("HTTP", request.getRequestLine().toString());
 
+        if (httpClient.getIOExceptionToThrow() != null) {
+        	throw httpClient.getIOExceptionToThrow();
+		}
+        
+        if (httpClient.getProtExceptionToThrow() != null) {
+        	throw httpClient.getProtExceptionToThrow();
+		}
+        
         HttpResponse response = httpClient.processRequest(request);
         if (response == null) {
             throw new AssertionError("Request \"" + request.getRequestLine().toString()

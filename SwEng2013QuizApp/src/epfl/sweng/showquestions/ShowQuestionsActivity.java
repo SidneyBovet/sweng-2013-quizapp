@@ -4,12 +4,14 @@ import org.json.JSONException;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 import epfl.sweng.R;
 import epfl.sweng.backend.Question;
 import epfl.sweng.servercomm.ServerInteractions;
@@ -46,6 +48,13 @@ public class ShowQuestionsActivity extends Activity {
 
 		// fetching question
 		Question randomQuestion = ServerInteractions.getRandomQuestion();
+		if (null == randomQuestion) {
+			Log.i(this.getClass().getName(), "Fetching a random question failed");
+			Toast.makeText(this, R.string.error_fetching_question,
+					Toast.LENGTH_LONG).show();
+			TestCoordinator.check(TTChecks.QUESTION_SHOWN);
+			return;
+		}
 
 		// setting tags
 		TextView textViewQuestion = (TextView) findViewById(R.id.displayQuestion);
