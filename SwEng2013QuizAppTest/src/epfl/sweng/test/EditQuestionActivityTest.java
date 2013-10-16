@@ -100,15 +100,15 @@ public class EditQuestionActivityTest extends GUITest<EditQuestionActivity> {
 	public void testCanNotSubmitIfQuestionIsMissing() {
 
 		getActivityAndWaitFor(TTChecks.EDIT_QUESTIONS_SHOWN);
-		getSolo().typeText(
+		getSolo().enterText(
 				(EditText) getSolo().getText(
 						"Type in the question\'s text body"), "   ");
 		// getActivityAndWaitFor(TTChecks.QUESTION_EDITED);
-		getSolo().typeText(
+		getSolo().enterText(
 				(EditText) getSolo().getText("Type in the question\'s tags"),
 				"tag1");
 		// getActivityAndWaitFor(TTChecks.QUESTION_EDITED);
-		getSolo().typeText((EditText) getSolo().getText("Type in the answer"),
+		getSolo().enterText((EditText) getSolo().getText("Type in the answer"),
 				"La reponse D");
 		// getActivityAndWaitFor(TTChecks.QUESTION_EDITED);
 		getSolo().clickOnButton("✘");
@@ -121,15 +121,15 @@ public class EditQuestionActivityTest extends GUITest<EditQuestionActivity> {
 	public void testCanNotSubmitIfTagsIsMissing() {
 
 		getActivityAndWaitFor(TTChecks.EDIT_QUESTIONS_SHOWN);
-		getSolo().typeText(
+		getSolo().enterText(
 				(EditText) getSolo().getText(
 						"Type in the question\'s text body"), "ma question");
 		// getActivityAndWaitFor(TTChecks.QUESTION_EDITED);
-		getSolo().typeText(
+		getSolo().enterText(
 				(EditText) getSolo().getText("Type in the question\'s tags"),
 				"    ");
 		// getActivityAndWaitFor(TTChecks.QUESTION_EDITED);
-		getSolo().typeText((EditText) getSolo().getText("Type in the answer"),
+		getSolo().enterText((EditText) getSolo().getText("Type in the answer"),
 				"La reponse D");
 		// getActivityAndWaitFor(TTChecks.QUESTION_EDITED);
 		getSolo().clickOnButton("✘");
@@ -142,15 +142,15 @@ public class EditQuestionActivityTest extends GUITest<EditQuestionActivity> {
 	public void testCanNotSubmitIfAnswerIsMissing() {
 
 		getActivityAndWaitFor(TTChecks.EDIT_QUESTIONS_SHOWN);
-		getSolo().typeText(
+		getSolo().enterText(
 				(EditText) getSolo().getText(
 						"Type in the question\'s text body"), "ma question");
 		// getActivityAndWaitFor(TTChecks.QUESTION_EDITED);
-		getSolo().typeText(
+		getSolo().enterText(
 				(EditText) getSolo().getText("Type in the question\'s tags"),
 				"tag");
 		// getActivityAndWaitFor(TTChecks.QUESTION_EDITED);
-		getSolo().typeText((EditText) getSolo().getText("Type in the answer"),
+		getSolo().enterText((EditText) getSolo().getText("Type in the answer"),
 				"   ");
 		// getActivityAndWaitFor(TTChecks.QUESTION_EDITED);
 		getSolo().clickOnButton("✘");
@@ -163,15 +163,15 @@ public class EditQuestionActivityTest extends GUITest<EditQuestionActivity> {
 	public void testCanNotSubmitIfNotAnswerIsIndicated() {
 
 		getActivityAndWaitFor(TTChecks.EDIT_QUESTIONS_SHOWN);
-		getSolo().typeText(
+		getSolo().enterText(
 				(EditText) getSolo().getText(
 						"Type in the question\'s text body"), "ma question");
 		// getActivityAndWaitFor(TTChecks.QUESTION_EDITED);
-		getSolo().typeText(
+		getSolo().enterText(
 				(EditText) getSolo().getText("Type in the question\'s tags"),
 				"tag");
 		// getActivityAndWaitFor(TTChecks.QUESTION_EDITED);
-		getSolo().typeText((EditText) getSolo().getText("Type in the answer"),
+		getSolo().enterText((EditText) getSolo().getText("Type in the answer"),
 				"   ");
 
 		// getActivityAndWaitFor(TTChecks.QUESTION_EDITED);
@@ -189,15 +189,15 @@ public class EditQuestionActivityTest extends GUITest<EditQuestionActivity> {
 		getActivityAndWaitFor(TTChecks.QUESTION_EDITED);
 		getSolo().clickOnButton("+");
 		getActivityAndWaitFor(TTChecks.QUESTION_EDITED);
-		getSolo().typeText(
+		getSolo().enterText(
 				(EditText) getSolo().getText(
 						"Type in the question\'s text body"), "ma question");
 		// getActivityAndWaitFor(TTChecks.QUESTION_EDITED);
-		getSolo().typeText(
+		getSolo().enterText(
 				(EditText) getSolo().getText("Type in the question\'s tags"),
 				"tag");
 		// getActivityAndWaitFor(TTChecks.QUESTION_EDITED);
-		getSolo().typeText((EditText) getSolo().getText("Type in the answer"),
+		getSolo().enterText((EditText) getSolo().getText("Type in the answer"),
 				"   ");
 
 		// getActivityAndWaitFor(TTChecks.QUESTION_EDITED);
@@ -205,4 +205,5 @@ public class EditQuestionActivityTest extends GUITest<EditQuestionActivity> {
 				getSolo().getButton("Submit").isEnabled());
 
 	}
+
 }
