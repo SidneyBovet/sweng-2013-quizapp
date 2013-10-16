@@ -17,7 +17,7 @@ import epfl.sweng.testing.TestCoordinator.TTChecks;
 /***
  * Main activity of the quiz application, shown at launch.
  * 
- * @author born4new
+ * @author born4new, JoTearoom
  * 
  */
 public class MainActivity extends Activity {
@@ -60,22 +60,29 @@ public class MainActivity extends Activity {
 	}
 
 	/**
-	 * Lauch the AuthentificationActivity when not authenticated
-	 * Release the authentication and refresh the view when authenticated
+	 * Lauch the AuthentificationActivity when not authenticated Release the
+	 * authentication and refresh the view when authenticated
+	 * 
 	 * @param view
 	 */
+	// TODO changer en clickOnLogButton
 	public void displayAuthenticationActivity(View view) {
-		//XXX return automatically to MainActivity when log in?
+		// XXX return automatically to MainActivity when log in?
+		// Case LoginUsingTequila
 		if (!authenticated) {
 			Toast.makeText(this, "Please Log in", Toast.LENGTH_SHORT).show();
 			Intent submitAuthenticationActivityIntent = new Intent(this,
-					AuthenticationActivity.class);
+					AuthenticationActivity.class); 
 			startActivity(submitAuthenticationActivityIntent);
-		} else {
+		}
+		// Case Log out
+		else {
 			persistentStorage.releaseAuthentication();
+			// TODO virer authenticated a la place isAuthenticated
 			authenticated = false;
-			//XXX put it here?
-			//TestCoordinator.check(TTChecks.LOGGED_OUT);
+			// TODO ne devrait pas se faire au chargement initial de
+			// l'application
+			TestCoordinator.check(TTChecks.LOGGED_OUT);
 			onResume();
 		}
 	}
@@ -92,36 +99,39 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		// Transaction testing.
-		TestCoordinator.check(TTChecks.MAIN_ACTIVITY_SHOWN);
 		// create the UserCreditentialStorage which use a SharedPreference
 		persistentStorage = UserCredentialsStorage
 				.getSingletonInstanceOfStorage(this.getApplicationContext());
 		// XXX garder ou reinitialiser quand application killed?
 		// clean the storage when the app is first launched
-		persistentStorage.releaseAuthentication();
+		// persistentStorage.releaseAuthentication();
 	}
 
 	/**
-	 * Called when the app is first launched and when we return to it from another
-	 * activity. Check the authentication state and change the text on the log
-	 * button and the authenticated boolean in response.
+	 * Called when the app is first launched and when we return to it from
+	 * another activity. Check the authentication state and change the text on
+	 * the log button and the authenticated boolean in response.
 	 */
 	@Override
 	protected void onResume() {
 		super.onResume();
 		Button logButton = (Button) findViewById(R.id.autenticationLogButton);
 		authenticated = persistentStorage.isAuthenticated();
-		logButton.setText(authenticated ? R.string.autenticationLoginButtonStateLogOut
-				: R.string.autenticationLoginButtonStateLogIn);
+		logButton
+				.setText(authenticated ? R.string.autenticationLoginButtonStateLogOut
+						: R.string.autenticationLoginButtonStateLogIn);
 		setDisplayView();
+		TestCoordinator.check(TTChecks.MAIN_ACTIVITY_SHOWN);
 	}
 
 	/**
-	 * Set the view of the button and enable or disable them due to 
+	 * Set the view of the button and enable or disable them due to
 	 * authentication state
 	 */
 	private void setDisplayView() {
-		((Button) findViewById(R.id.displayRandomQuestionButton)).setEnabled(authenticated);
-		((Button) findViewById(R.id.submitQuestionButton)).setEnabled(authenticated);
+		((Button) findViewById(R.id.displayRandomQuestionButton))
+				.setEnabled(authenticated);
+		((Button) findViewById(R.id.submitQuestionButton))
+				.setEnabled(authenticated);
 	}
 }
