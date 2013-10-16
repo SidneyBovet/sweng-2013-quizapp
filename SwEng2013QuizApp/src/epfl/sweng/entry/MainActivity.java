@@ -65,8 +65,8 @@ public class MainActivity extends Activity {
 	 * @param view
 	 */
 	public void displayAuthenticationActivity(View view) {
-		// Case LoginUsingTequila
 		if (!persistentStorage.isAuthenticated()) {
+			// Case LoginUsingTequila
 			Toast.makeText(this, "Please Log in", Toast.LENGTH_SHORT).show();
 			Intent submitAuthenticationActivityIntent = new Intent(this,
 					AuthenticationActivity.class); 
