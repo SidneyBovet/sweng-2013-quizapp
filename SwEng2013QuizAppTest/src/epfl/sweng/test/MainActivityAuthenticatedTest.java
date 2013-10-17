@@ -31,6 +31,23 @@ public class MainActivityAuthenticatedTest extends GUITest<MainActivity> {
 		super.tearDown();
 	};
 	
+	public void testLogOut() {
+		getActivityAndWaitFor(TTChecks.MAIN_ACTIVITY_SHOWN);
+		getSolo().clickOnButton("Log out");
+		
+		getActivityAndWaitFor(TTChecks.LOGGED_OUT);
+		
+		assertTrue("Submit Quizz Question Button is present",
+				getSolo().searchButton("Submit a quiz question."));
+		assertTrue("Show Random Question Button is present",
+				getSolo().searchButton("Show a random question."));
+		
+		Button showButton = getSolo().getButton("Show a random question.");
+		Button submitButton = getSolo().getButton("Submit a quiz question.");
+		assertTrue(!showButton.isEnabled());
+		assertTrue(!submitButton.isEnabled());
+	}
+	
 	public void testShowAllButtons() {
 		getActivityAndWaitFor(TTChecks.MAIN_ACTIVITY_SHOWN);
 		assertTrue("Login Button is present",
