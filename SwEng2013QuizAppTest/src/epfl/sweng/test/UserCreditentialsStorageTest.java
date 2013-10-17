@@ -22,6 +22,7 @@ public class UserCreditentialsStorageTest extends
 				.getTargetContext();
 		persistentStorage = UserCredentialsStorage.
 				getInstance(contextOfMainActivity);
+		persistentStorage.releaseAuthentication();
 	}
 	
 	public void testAuthentication() {
@@ -30,8 +31,8 @@ public class UserCreditentialsStorageTest extends
 		persistentStorage.takeAuthentication(dummySessionID);
 		assertTrue(persistentStorage.isAuthenticated());
 		persistentStorage.releaseAuthentication();
-	}
-
+	} 
+	
 	public void testReleaseAuthentication() {
 		String dummySessionID = "blabla2";
 		assertFalse(persistentStorage.isAuthenticated());
@@ -40,4 +41,10 @@ public class UserCreditentialsStorageTest extends
 		persistentStorage.releaseAuthentication();
 		assertFalse(persistentStorage.isAuthenticated());
 	}
+	
+	public void testSingleton() {
+		UserCredentialsStorage persistentStorage2 = UserCredentialsStorage.
+				getInstance(contextOfMainActivity);
+		assertTrue(persistentStorage.equals(persistentStorage2));
+	} 
 }
