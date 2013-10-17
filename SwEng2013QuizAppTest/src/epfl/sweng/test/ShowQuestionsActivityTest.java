@@ -11,6 +11,7 @@ import epfl.sweng.testing.TestCoordinator.TTChecks;
 //import java.io.IOException;
 
 /** A test that illustrates the use of MockHttpClients */
+// XXX : Tests work separetely, find out why it doesn't work together.
 public class ShowQuestionsActivityTest extends GUITest<ShowQuestionsActivity> {
 
 	protected static final String RANDOM_QUESTION_BUTTON_LABEL = "Show a random question";
@@ -50,7 +51,6 @@ public class ShowQuestionsActivityTest extends GUITest<ShowQuestionsActivity> {
 				getSolo().searchText("Twenty-seven"));
 	}
 
-	// TODO find why clickontext does not work
 	public void testCorrectQuestionSelected() {
 		mockClient
 				.pushCannedResponse(
@@ -64,6 +64,13 @@ public class ShowQuestionsActivityTest extends GUITest<ShowQuestionsActivity> {
 		getActivityAndWaitFor(TTChecks.QUESTION_SHOWN);
 		assertTrue("Correct answer must be displayed",
 				getSolo().searchText("Forty-two"));
+		assertTrue("Wrong answer must be displayed",
+				getSolo().searchText("Twenty-seven"));
+		
+		getSolo().clickOnText("Forty-two");
+		
+		getActivityAndWaitFor(TTChecks.ANSWER_SELECTED);
+		assertTrue("Couldn't find the correct answer", getSolo().searchText("" + (char)10004));
 	}
 
 	public void testNextButtonFirstDisabled() {
