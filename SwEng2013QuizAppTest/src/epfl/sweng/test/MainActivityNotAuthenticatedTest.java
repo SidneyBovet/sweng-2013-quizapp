@@ -43,7 +43,7 @@ public class MainActivityNotAuthenticatedTest extends GUITest<MainActivity> {
 		assertFalse(submitButton.isEnabled());
 	}
 	
-	public void testLogInButton(){
+	public void testLogInButton() {
 		getActivityAndWaitFor(TTChecks.MAIN_ACTIVITY_SHOWN);
 		assertFalse(persistentStorage.isAuthenticated());
 		getSolo().sleep(2000);
@@ -55,4 +55,5 @@ public class MainActivityNotAuthenticatedTest extends GUITest<MainActivity> {
 		assertTrue("Show Random Question Button is present",
 				getSolo().searchButton("Show a random question."));
 	}
+	
 }
