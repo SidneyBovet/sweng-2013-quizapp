@@ -268,4 +268,39 @@ public class EditQuestionActivityTest extends GUITest<EditQuestionActivity> {
 				getSolo().getButton("Submit").isEnabled());
 	}
 
+	public void testSubmitButtonIsDisabledWhenEverthingWasOkButWeAddANewAnswer() {
+		getSolo().sleep(1);
+		getSolo().clickOnButton("+");
+		getActivityAndWaitFor(TTChecks.QUESTION_EDITED);
+		getSolo().enterText(
+				(EditText) getSolo().getText(
+						"Type in the question\'s text body"), "ma question1");
+
+		// getActivityAndWaitFor(TTChecks.QUESTION_EDITED);
+		getSolo().enterText(
+				(EditText) getSolo().getText("Type in the question\'s tags"),
+				"tag");
+		// getActivityAndWaitFor(TTChecks.QUESTION_EDITED);
+		getSolo().enterText((EditText) getSolo().getText("Type in the answer"),
+				"la réponse AAAAAA");
+		getSolo().enterText((EditText) getSolo().getText("Type in the answer"),
+				"la réponse BBBBBB");
+		getSolo().clickOnButton("✘");
+		getActivityAndWaitFor(TTChecks.QUESTION_EDITED);
+		assertTrue("Submit button must be Enabled",
+				getSolo().getButton("Submit").isEnabled());
+		getSolo().clickOnButton("-");
+		getActivityAndWaitFor(TTChecks.QUESTION_EDITED);
+		assertFalse("Submit button must be Disabled",
+				getSolo().getButton("Submit").isEnabled());
+		getSolo().clickOnButton("+");
+		getActivityAndWaitFor(TTChecks.QUESTION_EDITED);
+		getSolo().enterText((EditText) getSolo().getText("Type in the answer"),
+				"la réponse CCCCCC");
+		getSolo().clickOnButton("✘");
+		getActivityAndWaitFor(TTChecks.QUESTION_EDITED);
+		assertTrue("Submit button must be Enabled",
+				getSolo().getButton("Submit").isEnabled());
+	}
+
 }
