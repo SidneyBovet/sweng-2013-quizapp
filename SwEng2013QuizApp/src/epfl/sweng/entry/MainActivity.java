@@ -76,8 +76,12 @@ public class MainActivity extends Activity {
 			persistentStorage.releaseAuthentication();
 			// TODO ne devrait pas se faire au chargement initial de
 			// l'application
+			Button logButton = (Button) findViewById(R.id.autenticationLogButton);
+			logButton
+					.setText(persistentStorage.isAuthenticated() ? R.string.autenticationLoginButtonStateLogOut
+							: R.string.autenticationLoginButtonStateLogIn);
+			setDisplayView();
 			TestCoordinator.check(TTChecks.LOGGED_OUT);
-			onResume();
 		}
 	}
 
