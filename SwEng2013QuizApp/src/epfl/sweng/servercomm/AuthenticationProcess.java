@@ -76,12 +76,10 @@ public class AuthenticationProcess extends AsyncTask<String, Void, String> {
 	protected String doInBackground(String... args) {
 
 		if (args.length != 2) {
-			Log.e(this.getClass().getName(), "doInBackground(): Illegal "
-					+ "arguments, should be (username, password).");
-			// XXX We should NOT Throw exceptions that we did not declared
-			// in the method signature.
-			// throw new IllegalArgumentException("AuthenticationProcess "
-			// + "received " + args.length + "argument(s), expected 2.");
+			Log.e(this.getClass().getName(), "doInBackground(): Illegal number "
+					+ "of arguments, should be (username, password).");
+			throw new IllegalArgumentException("AuthenticationProcess received "
+					+ args.length + "argument(s), expected 2.");
 		}
 
 		String sessionId = null;
