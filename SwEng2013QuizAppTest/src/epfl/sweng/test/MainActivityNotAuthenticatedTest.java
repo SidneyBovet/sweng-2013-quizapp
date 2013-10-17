@@ -37,8 +37,10 @@ public class MainActivityNotAuthenticatedTest extends GUITest<MainActivity> {
 	
 	public void testQuestionButtonsAreDisabledAtBeggining() {
 		getActivityAndWaitFor(TTChecks.MAIN_ACTIVITY_SHOWN);
+		Button logButton = getSolo().getButton("Log in using Tequila");
 		Button showButton = getSolo().getButton("Show a random question.");
 		Button submitButton = getSolo().getButton("Submit a quiz question.");
+		assertTrue(logButton.isEnabled());
 		assertFalse(showButton.isEnabled());
 		assertFalse(submitButton.isEnabled());
 	}
