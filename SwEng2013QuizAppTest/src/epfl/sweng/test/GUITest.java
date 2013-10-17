@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.test.ActivityInstrumentationTestCase2;
 
 import com.jayway.android.robotium.solo.Solo;
+
+import epfl.sweng.backend.UserCredentialsStorage;
 import epfl.sweng.testing.TestCoordinator;
 import epfl.sweng.testing.TestingTransaction;
 
@@ -18,6 +20,7 @@ public class GUITest<T extends Activity> extends
 	@Override
 	protected void setUp() {
 		solo = new Solo(getInstrumentation());
+		UserCredentialsStorage.getInstance(getInstrumentation().getContext());
 	}
 
 	@Override
