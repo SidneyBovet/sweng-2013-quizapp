@@ -3,6 +3,7 @@ package epfl.sweng.backend;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.util.Log;
 
 /**
  * Storage structure which use a SharedPreferences to store the sessionID
@@ -41,7 +42,6 @@ public final class UserCredentialsStorage {
 		// double-checked singleton: avoids calling costly synchronized if
 		// unnecessary
 		if (null == singletonStorage) {
-			//XXX why do we not put synchronized on top ?
 			synchronized (UserCredentialsStorage.class) {
 				if (null == singletonStorage) {
 					singletonStorage = new UserCredentialsStorage(context);
@@ -51,6 +51,19 @@ public final class UserCredentialsStorage {
 		return singletonStorage;
 	}
 
+	/**
+	 * Singleton getter when no context is available.
+	 * @return
+	 * 		The singleton instance of this object (may be null!)
+	 */
+	public static UserCredentialsStorage getInstance() {
+		if (null == singletonStorage) {
+			Log.e(UserCredentialsStorage.class.getName(), "getInstance()" +
+					"without context was used before the one with a Context!");
+		}
+		return singletonStorage;
+	}
+	
 	/**
 	 * Put the sessionID in the storage table
 	 * 
@@ -83,6 +96,10 @@ public final class UserCredentialsStorage {
 	public void releaseAuthentication() {
 		editor.remove(keySessionIDName);
 		editor.commit();
+	}
+
+	public String getSessionId() {
+		return userCredentialsPrefs.getString(keySessionIDName, "NOT LOGGED IN!");
 	}
 
 }
