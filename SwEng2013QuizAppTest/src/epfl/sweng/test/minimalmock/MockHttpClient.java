@@ -131,8 +131,10 @@ class MockRequestDirector implements RequestDirector {
         }
         switch (response.getStatusLine().getStatusCode()) {
 			case MockHttpClient.IOEXCEPTION_ERROR_CODE:
+				Log.d("HTTP ERR", "Throwing IOE");
 				throw new IOException("Bam!");
 			case MockHttpClient.CLIENTPROTOCOLEXCEPTION_ERROR_CODE:
+				Log.d("HTTP ERR", "Throwing CPE");
 				throw new ClientProtocolException("Take this, code!");
 			default:
 		        Log.v("HTTP", response.getStatusLine().toString());
