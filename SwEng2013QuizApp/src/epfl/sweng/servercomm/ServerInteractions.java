@@ -29,8 +29,7 @@ public class ServerInteractions {
 
 	public static Question getRandomQuestion() {
 		DownloadJSONFromServer asyncTaskRandomQuestionGetter = new DownloadJSONFromServer();
-		String url = "https://sweng-quiz.appspot.com/quizquestions/random";
-		asyncTaskRandomQuestionGetter.execute(url);
+		asyncTaskRandomQuestionGetter.execute(ProjectUrls.getSwengFetchQuestion());
 
 		Question question = null;
 		try {

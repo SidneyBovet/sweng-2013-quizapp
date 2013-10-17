@@ -28,15 +28,13 @@ import epfl.sweng.testing.TestCoordinator.TTChecks;
  * 
  */
 public class QuizEditExecution extends AsyncTask<JSONObject, Void, Integer> {
-	
-	private final static String SERVER_URL = "https://sweng-quiz.appspot.com";
 	private HttpResponse response = null;
 
 	@Override
 	protected Integer doInBackground(JSONObject... jsonObject) {
 		
 		int responseStatus = -1;
-		HttpPost post = new HttpPost(SERVER_URL + "/quizquestions/");
+		HttpPost post = new HttpPost(ProjectUrls.getSwengBaseAddress() + "/quizquestions/");
 		
 		// Send the quiz
 		try {

@@ -49,9 +49,6 @@ public class AuthenticationProcess extends AsyncTask<String, Void, String> {
 	private String mErrorMessage;
 
 	// TODO Put them in Strings.xml? < need context object for this.
-	private final String[] urls = { 
-		"https://sweng-quiz.appspot.com/login",
-		"https://tequila.epfl.ch/cgi-bin/tequila/login" };
 
 	public AuthenticationProcess(AuthenticationActivity parentActivity) {
 		this.mParentActivity = parentActivity;
@@ -132,7 +129,7 @@ public class AuthenticationProcess extends AsyncTask<String, Void, String> {
 	private String getToken() throws TequilaNoTokenException {
 
 		ResponseHandler<String> responseHandler = new BasicResponseHandler();
-		HttpGet get = new HttpGet(urls[0]);
+		HttpGet get = new HttpGet(ProjectUrls.getSwengLogin());
 		String token = "";
 		try {
 			String response = SwengHttpClientFactory.getInstance().execute(get,
@@ -192,7 +189,7 @@ public class AuthenticationProcess extends AsyncTask<String, Void, String> {
 					+ "local encoding : " + e.getMessage());
 		}
 
-		HttpPost tokenValidationRequest = new HttpPost(urls[1]);
+		HttpPost tokenValidationRequest = new HttpPost(ProjectUrls.getTequilaLogin());
 		tokenValidationRequest.setEntity(tokenValidationContentEncoded);
 
 		try {
@@ -245,7 +242,7 @@ public class AuthenticationProcess extends AsyncTask<String, Void, String> {
 		JSONObject jsonResponse = new JSONObject();
 
 		try {
-			HttpPost postRequest = new HttpPost(urls[0]);
+			HttpPost postRequest = new HttpPost(ProjectUrls.getSwengLogin());
 			postRequest.setEntity(new StringEntity(postBody.toString()));
 			postRequest.setHeader("Content-type", "application/json");
 			ResponseHandler<String> handler = new BasicResponseHandler();
