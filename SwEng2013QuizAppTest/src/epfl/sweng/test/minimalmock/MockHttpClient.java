@@ -3,6 +3,7 @@ package epfl.sweng.test.minimalmock;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.regex.Pattern;
@@ -121,6 +122,7 @@ class MockRequestDirector implements RequestDirector {
     public HttpResponse execute(HttpHost target, HttpRequest request,
             HttpContext context) throws IOException, ProtocolException {
         Log.v("HTTP", request.getRequestLine().toString());
+		Log.d("HTTP HEADER", Arrays.toString(request.getAllHeaders()));
         
         HttpResponse response = httpClient.processRequest(request);
         if (response == null) {
