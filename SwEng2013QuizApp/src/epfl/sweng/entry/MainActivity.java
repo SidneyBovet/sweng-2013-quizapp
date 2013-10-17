@@ -34,8 +34,6 @@ public class MainActivity extends Activity {
 	 */
 
 	public void displayRandomQuestion(View view) {
-		Toast.makeText(this, "Please answer to the following question.",
-				Toast.LENGTH_SHORT).show();
 		Intent showQuestionsActivityIntent = new Intent(this,
 				ShowQuestionsActivity.class);
 		startActivity(showQuestionsActivityIntent);
@@ -51,8 +49,6 @@ public class MainActivity extends Activity {
 	 */
 
 	public void submitQuestion(View view) {
-		Toast.makeText(this, "Please enter your question.", Toast.LENGTH_SHORT)
-				.show();
 		Intent submitQuestionActivityIntent = new Intent(this,
 				EditQuestionActivity.class);
 		startActivity(submitQuestionActivityIntent);
