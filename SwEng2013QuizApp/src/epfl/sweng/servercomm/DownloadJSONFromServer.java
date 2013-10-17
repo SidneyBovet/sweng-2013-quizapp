@@ -22,7 +22,7 @@ public class DownloadJSONFromServer extends AsyncTask<String, Void, String> {
 	protected String doInBackground(String... url) {
 		String randomQuestionJSON = "";
 		if (null != url && 0 != url.length) {
-			HttpGet firstRandom = new HttpGet(url[0]);
+			HttpGet firstRandom = HttpFactory.getGetRequest(url[0]);
 			ResponseHandler<String> firstHandler = new BasicResponseHandler();
 			try {
 				randomQuestionJSON = SwengHttpClientFactory.getInstance().

@@ -29,7 +29,7 @@ public class ServerInteractions {
 
 	public static Question getRandomQuestion() {
 		DownloadJSONFromServer asyncTaskRandomQuestionGetter = new DownloadJSONFromServer();
-		asyncTaskRandomQuestionGetter.execute(ProjectUrls.getSwengFetchQuestion());
+		asyncTaskRandomQuestionGetter.execute(HttpFactory.getSwengFetchQuestion());
 
 		Question question = null;
 		try {

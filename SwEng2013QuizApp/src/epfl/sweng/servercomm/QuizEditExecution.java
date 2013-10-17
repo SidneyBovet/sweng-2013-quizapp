@@ -34,7 +34,8 @@ public class QuizEditExecution extends AsyncTask<JSONObject, Void, Integer> {
 	protected Integer doInBackground(JSONObject... jsonObject) {
 		
 		int responseStatus = -1;
-		HttpPost post = new HttpPost(ProjectUrls.getSwengBaseAddress() + "/quizquestions/");
+		HttpPost post = HttpFactory.getPostRequest(
+				HttpFactory.getSwengBaseAddress() + "/quizquestions/");
 		
 		// Send the quiz
 		try {

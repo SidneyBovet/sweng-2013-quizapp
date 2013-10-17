@@ -127,7 +127,7 @@ public class AuthenticationProcess extends AsyncTask<String, Void, String> {
 	private String getToken() throws TequilaNoTokenException {
 
 		ResponseHandler<String> responseHandler = new BasicResponseHandler();
-		HttpGet get = new HttpGet(ProjectUrls.getSwengLogin());
+		HttpGet get = new HttpGet(HttpFactory.getSwengLogin());
 		String token = "";
 		try {
 			String response = SwengHttpClientFactory.getInstance().execute(get,
@@ -187,7 +187,7 @@ public class AuthenticationProcess extends AsyncTask<String, Void, String> {
 					+ "local encoding : " + e.getMessage());
 		}
 
-		HttpPost tokenValidationRequest = new HttpPost(ProjectUrls.getTequilaLogin());
+		HttpPost tokenValidationRequest = new HttpPost(HttpFactory.getTequilaLogin());
 		tokenValidationRequest.setEntity(tokenValidationContentEncoded);
 
 		try {
@@ -240,7 +240,7 @@ public class AuthenticationProcess extends AsyncTask<String, Void, String> {
 		JSONObject jsonResponse = new JSONObject();
 
 		try {
-			HttpPost postRequest = new HttpPost(ProjectUrls.getSwengLogin());
+			HttpPost postRequest = new HttpPost(HttpFactory.getSwengLogin());
 			postRequest.setEntity(new StringEntity(postBody.toString()));
 			postRequest.setHeader("Content-type", "application/json");
 			ResponseHandler<String> handler = new BasicResponseHandler();
