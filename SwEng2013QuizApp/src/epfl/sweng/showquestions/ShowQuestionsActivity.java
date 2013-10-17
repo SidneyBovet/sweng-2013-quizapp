@@ -32,7 +32,7 @@ public class ShowQuestionsActivity extends Activity {
 	protected void onCreate(final Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_display_question);
-
+		
 		setDisplayView();
 	}
 	/**
@@ -53,6 +53,7 @@ public class ShowQuestionsActivity extends Activity {
 			Toast.makeText(this, R.string.error_fetching_question,
 					Toast.LENGTH_LONG).show();
 			TestCoordinator.check(TTChecks.QUESTION_SHOWN);
+			finish();
 			return;
 		}
 
