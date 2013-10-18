@@ -17,7 +17,7 @@ import android.util.Log;
  * @author Joanna
  * 
  */
-public class DownloadJSONFromServer extends AsyncTask<String, Void, String> {
+public class JSONDownloader extends AsyncTask<String, Void, String> {
 	
 	@Override
 	protected String doInBackground(String... url) {

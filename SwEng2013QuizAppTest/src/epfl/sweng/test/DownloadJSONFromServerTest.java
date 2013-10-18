@@ -4,7 +4,7 @@ import junit.framework.TestCase;
 
 import org.apache.http.HttpStatus;
 
-import epfl.sweng.servercomm.DownloadJSONFromServer;
+import epfl.sweng.servercomm.JSONDownloader;
 import epfl.sweng.servercomm.SwengHttpClientFactory;
 import epfl.sweng.test.minimalmock.MockHttpClient;
 
@@ -19,7 +19,7 @@ public class DownloadJSONFromServerTest extends TestCase{
 	}
 
 	public void testGoodPathIsOkay() {
-		DownloadJSONFromServer downloader = new DownloadJSONFromServer();
+		JSONDownloader downloader = new JSONDownloader();
 		mockClient.pushCannedResponse(
                 "GET (?:https?://[^/]+|[^/]+)?/+quizquestions/random\\b",
                 HttpStatus.SC_OK,
@@ -36,7 +36,7 @@ public class DownloadJSONFromServerTest extends TestCase{
 				"GET (?:https?://[^/]+|[^/]+)?/+quizquestions/random\\b",
 				MockHttpClient.IOEXCEPTION_ERROR_CODE,
 				"", "");
-		new DownloadJSONFromServer().
+		new JSONDownloader().
 			execute("https://sweng-quiz.appspot.com/quizquestions/random");
 		assert true;
 	}
@@ -47,7 +47,7 @@ public class DownloadJSONFromServerTest extends TestCase{
 				MockHttpClient.CLIENTPROTOCOLEXCEPTION_ERROR_CODE,
 				"", "");
 		
-		new DownloadJSONFromServer().
+		new JSONDownloader().
 			execute("https://sweng-quiz.appspot.com/quizquestions/random");
 		assert true;
 	}

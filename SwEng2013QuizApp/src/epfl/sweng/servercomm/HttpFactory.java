@@ -3,7 +3,7 @@ package epfl.sweng.servercomm;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 
-import epfl.sweng.backend.UserCredentialsStorage;
+import epfl.sweng.authentication.UserCredentialsStorage;
 
 public class HttpFactory {
 	private static final String SWENG_BASE_ADDRESS =

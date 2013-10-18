@@ -28,7 +28,7 @@ public class ServerInteractions {
 	 */
 
 	public static Question getRandomQuestion() {
-		DownloadJSONFromServer asyncTaskRandomQuestionGetter = new DownloadJSONFromServer();
+		JSONDownloader asyncTaskRandomQuestionGetter = new JSONDownloader();
 		asyncTaskRandomQuestionGetter.execute(HttpFactory.getSwengFetchQuestion());
 
 		Question question = null;

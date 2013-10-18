@@ -1,4 +1,4 @@
-package epfl.sweng.entry;
+package epfl.sweng.authentication;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -13,7 +13,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import epfl.sweng.R;
-import epfl.sweng.backend.UserCredentialsStorage;
 import epfl.sweng.servercomm.AuthenticationProcess;
 import epfl.sweng.testing.TestCoordinator;
 import epfl.sweng.testing.TestCoordinator.TTChecks;

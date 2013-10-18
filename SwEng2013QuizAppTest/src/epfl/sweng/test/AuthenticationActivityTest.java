@@ -2,7 +2,7 @@ package epfl.sweng.test;
 
 import android.widget.Button;
 import android.widget.EditText;
-import epfl.sweng.entry.AuthenticationActivity;
+import epfl.sweng.authentication.AuthenticationActivity;
 import epfl.sweng.testing.TestCoordinator.TTChecks;
 
 public class AuthenticationActivityTest extends GUITest<AuthenticationActivity> {

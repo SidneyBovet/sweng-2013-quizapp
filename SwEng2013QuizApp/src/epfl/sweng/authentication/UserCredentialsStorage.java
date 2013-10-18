@@ -1,4 +1,4 @@
-package epfl.sweng.backend;
+package epfl.sweng.authentication;
 
 import android.content.Context;
 import android.content.SharedPreferences;
