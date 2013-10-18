@@ -1,5 +1,7 @@
 package epfl.sweng.test;
 
+import java.util.concurrent.ExecutionException;
+
 import junit.framework.TestCase;
 
 import org.apache.http.HttpStatus;
@@ -51,5 +53,27 @@ public class DownloadJSONFromServerTest extends TestCase{
 			execute("https://sweng-quiz.appspot.com/quizquestions/random");
 		assert true;
 	}
-	
+	/*
+	public void testMultipleURLS() {
+		String json = "{\"question\": \"What is the answer to life, the universe, and everything?\","
+                + " \"answers\": [\"Forty-two\", \"Twenty-seven\"], \"owner\": \"sweng\","
+                + " \"solutionIndex\": 0, \"tags\": [\"h2g2\", \"trivia\"], \"id\": \"1\" }";
+		mockClient.pushCannedResponse(
+                "GET (?:https?://[^/]+|[^/]+)?/+quizquestions/random\\b",
+                HttpStatus.SC_OK,
+                json,
+                "application/json");
+
+		JSONDownloader downloader = new JSONDownloader();
+		downloader.execute("https://sweng-quiz.appspot.com/quizquestions/random",
+				"https://www.google.com", "https://www.facebook.com",
+				"http://sweng.com");
+		try {
+			assertEquals(downloader.get(), json);
+		} catch (InterruptedException e) {
+			fail("An interruption has occurred during the execution.");
+		} catch (ExecutionException e) {
+			fail("An exception has occurred during the execution.");
+		}
+	}*/
 }
