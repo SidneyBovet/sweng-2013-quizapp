@@ -5,6 +5,12 @@ import java.util.Arrays;
 import java.util.HashSet;
 
 import junit.framework.TestCase;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import epfl.sweng.backend.Converter;
 import epfl.sweng.backend.Question;
 
 /**
@@ -30,7 +36,7 @@ public class QuestionTest extends TestCase {
 	}
 	
 	public void testQuestionCreation() {
-		final Question question = new Question(mQuestionID, mQuestionContent, 
+		Question question = new Question(mQuestionID, mQuestionContent, 
 				mQuestionAnswers, mQuestionSolutionIndex, mQuestionTagsSet,
 				mQuestionOwner);
 		assertEquals(question.getId(), mQuestionID);
@@ -40,65 +46,46 @@ public class QuestionTest extends TestCase {
 		assertEquals(question.getSolutionIndex(), mQuestionSolutionIndex);
 	}
 
-	//TODO why not the same?!?
-	/*
 	public void testJSONTranslation() {
 		final Question question = new Question(mQuestionID, mQuestionContent, 
 				mQuestionAnswers, mQuestionSolutionIndex, mQuestionTagsSet,
 				mQuestionOwner);
-		String jsonContent = "{\"question\": \"content\","
-                + " \"answers\": \"[Answer1,Answer2,Answer3]\", "
+		String jsonContent = "{"
+				+ "\"id\": \"1\","
+				+ "\"tags\": \"[tag1, tag2]\","
 				+ "\"owner\": \"Anonymous\","
-                + " \"solutionIndex\": 2, \"tags\": \"[tag1,tag2]\", "+
-				"\"id\": \"1\" }";
+                + " \"answers\": \"[Answer1, Answer2, Answer3]\","
+				+ "\"question\": \"content\","
+                + " \"solutionIndex\": 2"
+				+ "}";
 		JSONObject json = null;
 		try {
 			json = new JSONObject(jsonContent);
+			
+			// Since JSON developers suck so bad, we cannot do an actual equals
+			// between two JSON Objects, so we just compare them row by row.
+			
+			String[] tags = { "id", "owner", "answers", "question", "solutionIndex" };
+			
+			for (String tag : tags) {
+				assertEquals(json.getString(tag), question.toJSON().getString(tag));
+			}
+			
 		} catch (JSONException e) {
 			fail("Exception when hard creating JSONobject");
 			e.printStackTrace();
 		}
-		try {
-			assertEquals(json.get("answers"),
-				Question.createJSONFromQuestion(question).get("answers"));
-				//or?
-			assertEquals(json.get("answers"),
-				question.toJSON.get("answers"));
-		} catch (JSONException e) {
-			fail("Exception when comparing one tag in the two JSONobject");
-			e.printStackTrace();
-		}	
-	}*/
+	}
+
+	public void testJSONToArray() {
+		JSONArray jsonArray = new JSONArray();
+		jsonArray.put("Answer1");
+		jsonArray.put("Answer2");
+		jsonArray.put("Answer3");
+		assertEquals(mQuestionAnswers, Converter.jsonArrayToStringArray(jsonArray));
+	}
 	
-	//XXX difference toJSON CreateJSONFromQuestion??
-	
-	//XXX no view in LogCat of the log, hard to debug
-	/*
-	public void testQuestionTranslation() {
-		final Question question = new Question(mQuestionID, mQuestionContent, 
-				mQuestionAnswers, mQuestionSolutionIndex, mQuestionTagsSet,
-				mQuestionOwner);
-		String jsonContent = "{\"question\": \"content\","
-                + " \"answers\": \"[Answer1,Answer2,Answer3]\", "
-				+ "\"owner\": \"Anonymous\","
-                + " \"solutionIndex\": 2, \"tags\": \"[tag1,tag2]\", "+
-				"\"id\": \"1\" }";
-		try {
-			Log.v("question toString", question.toString());
-			Log.v("qJson toString", Question.createQuestionFromJSON(jsonContent).toString());
-			//assertEquals(question.toString(), Question.createQuestionFromJSON(jsonContent));
-		} catch (JSONException e) {
-			fail("Exception when comparing one tag in the two JSONobject");
-			e.printStackTrace();
-		}
-	
-	}*/
-	
-	//XXX getTagsToString in static??
-	/*
 	public void testTagToString() {
-		assertEquals("Tags: tag1, tag2", Question.getTagsToString(mQuestionTagsSet));
-	}*/
-	
-	
+		//assertEquals("Tags: tag1, tag2", .getTagsToString(mQuestionTagsSet));
+	}
 }
