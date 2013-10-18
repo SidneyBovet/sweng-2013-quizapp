@@ -53,13 +53,21 @@ public class ShowQuestionsActivityTest extends GUITest<ShowQuestionsActivity> {
 
 	public void testCorrectQuestionSelected() {
 		mockClient
-				.pushCannedResponse(
-						"GET (?:https?://[^/]+|[^/]+)?/+quizquestions/random\\b",
-						HttpStatus.SC_OK,
-						"{\"question\": \"What is the answer to life, the universe, and everything?\","
-								+ " \"answers\": [\"Forty-two\", \"Twenty-seven\"], \"owner\": \"sweng\","
-								+ " \"solutionIndex\": 0, \"tags\": [\"h2g2\", \"trivia\"], \"id\": \"1\" }",
-						"application/json");
+			.pushCannedResponse(
+					"GET (?:https?://[^/]+|[^/]+)?/+quizquestions/random\\b",
+					HttpStatus.SC_OK,
+					"{\"question\": \"What is the answer to life, the universe, and everything?\","
+							+ " \"answers\": [\"Forty-two\", \"Twenty-seven\"], \"owner\": \"sweng\","
+							+ " \"solutionIndex\": 0, \"tags\": [\"h2g2\", \"trivia\"], \"id\": \"1\" }",
+					"application/json");
+		mockClient
+			.pushCannedResponse(
+					"POST (?:https?://[^/]+|[^/]+)?/+quizquestions/random\\b",
+					HttpStatus.SC_OK,
+					"{\"question\": \"What is the answer to life, the universe, and everything?\","
+							+ " \"answers\": [\"Forty-two\", \"Twenty-seven\"], \"owner\": \"sweng\","
+							+ " \"solutionIndex\": 0, \"tags\": [\"h2g2\", \"trivia\"], \"id\": \"1\" }",
+					"application/json");
 
 		getActivityAndWaitFor(TTChecks.QUESTION_SHOWN);
 		assertTrue("Correct answer must be displayed",

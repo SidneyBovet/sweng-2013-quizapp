@@ -4,7 +4,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 
 import android.util.Log;
-import epfl.sweng.backend.UserCredentialsStorage;
+import epfl.sweng.authentication.UserCredentialsStorage;
 
 /**
  * Wrapper used to centralize our http urls.
