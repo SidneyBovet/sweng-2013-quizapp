@@ -5,6 +5,11 @@ import org.apache.http.client.methods.HttpPost;
 
 import epfl.sweng.authentication.UserCredentialsStorage;
 
+/**
+ * Wrapper used to centralize our http urls.
+ * @author born4new
+ *
+ */
 public class HttpFactory {
 	private static final String SWENG_BASE_ADDRESS =
 			"https://sweng-quiz.appspot.com";
@@ -45,15 +50,15 @@ public class HttpFactory {
 
 	public static HttpGet getGetRequest(String url) {
 		HttpGet request = new HttpGet(url);
-		request.setHeader("Authorization", "Tequila "+
-				UserCredentialsStorage.getInstance().getSessionId());
+		request.setHeader("Authorization", "Tequila "
+				+ UserCredentialsStorage.getInstance().getSessionId());
 		return request;
 	}
 
 	public static HttpPost getPostRequest(String url) {
 		HttpPost request = new HttpPost(url);
-		request.setHeader("Authorization", "Tequila "+
-				UserCredentialsStorage.getInstance().getSessionId());
+		request.setHeader("Authorization", "Tequila "
+				+ UserCredentialsStorage.getInstance().getSessionId());
 		return request;
 	}
 }

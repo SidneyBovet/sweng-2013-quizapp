@@ -58,8 +58,8 @@ public final class UserCredentialsStorage {
 	 */
 	public static UserCredentialsStorage getInstance() {
 		if (null == singletonStorage) {
-			Log.e(UserCredentialsStorage.class.getName(), "getInstance()" +
-					"without context was used before the one with a Context!");
+			Log.e(UserCredentialsStorage.class.getName(), "getInstance()"
+					+ "without context was used before the one with a Context!");
 		}
 		return singletonStorage;
 	}

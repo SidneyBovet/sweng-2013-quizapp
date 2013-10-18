@@ -147,8 +147,8 @@ public class AuthenticationProcess extends AsyncTask<String, Void, String> {
 		} catch (JSONException e) {
 			Log.e(this.getClass().getName(), "getToken(): JSONObject "
 					+ "\'responseJSON\' could not get the \'token\' string.", e);
-			throw new TequilaNoTokenException("JSONObject \'responseJSON\' " +
-					"could not get the \'token\' string. : " + e.getMessage());
+			throw new TequilaNoTokenException("JSONObject \'responseJSON\' "
+					+ "could not get the \'token\' string. : " + e.getMessage());
 		}
 		return token;
 	}

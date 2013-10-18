@@ -7,9 +7,18 @@ import java.util.TreeSet;
 
 import org.json.JSONArray;
 
-public class Converter {
+/**
+ * Utility class that allows us to convert JSON in various formats.
+ * It is supposed to be a general-converter.
+ * @author born4new
+ *
+ */
 
-	private Converter() {}
+public final class Converter {
+
+	private Converter() {
+		
+	}
 	
 	/**
 	 * Converts a {@link JSONArray} into a list of String.
