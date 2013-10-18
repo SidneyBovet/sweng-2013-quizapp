@@ -99,15 +99,6 @@ public class QuestionTest extends TestCase {
 		}
 	
 	}*/
-
-	//XXX change visibility of method to public
-	public void testJSONToArray() {
-		JSONArray jsonArray = new JSONArray();
-		jsonArray.put("Answer1");
-		jsonArray.put("Answer2");
-		jsonArray.put("Answer3");
-		assertEquals(mQuestionAnswers, Question.jsonArrayToStringArray(jsonArray));
-	}
 	
 	//XXX getTagsToString in static??
 	/*
