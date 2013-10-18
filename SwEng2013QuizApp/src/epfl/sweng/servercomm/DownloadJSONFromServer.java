@@ -8,6 +8,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.BasicResponseHandler;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 /**
  * Asyncronous task that runs a background thread that fetches a new {@link 
@@ -28,9 +29,13 @@ public class DownloadJSONFromServer extends AsyncTask<String, Void, String> {
 				randomQuestionJSON = SwengHttpClientFactory.getInstance().
 						execute(firstRandom, firstHandler);
 			} catch (ClientProtocolException e) {
-				e.printStackTrace();
+				Log.e(this.getClass().getName(), "doInBackground(): Error in"
+						+ "the HTTP protocol.", e);
+				// TODO error handling
 			} catch (IOException e) {
-				e.printStackTrace();
+				Log.e(this.getClass().getName(), "doInBackground(): An I/O"
+						+ "error has occurred.", e);
+				// TODO error handling
 			}
 		}
 		return randomQuestionJSON;
