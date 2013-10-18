@@ -67,6 +67,7 @@ public class MockHttpClient extends DefaultHttpClient {
         		responseBody,
         		contentType)
         );
+        Log.i("MOCK HTTP CLIENT", "Request "+ requestRegex + " added.");
     }
 
     public void popCannedResponse() {

@@ -3,7 +3,8 @@ package epfl.sweng.servercomm;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 
-import epfl.sweng.authentication.UserCredentialsStorage;
+import android.util.Log;
+import epfl.sweng.backend.UserCredentialsStorage;
 
 /**
  * Wrapper used to centralize our http urls.
@@ -49,13 +50,16 @@ public class HttpFactory {
 	}
 
 	public static HttpGet getGetRequest(String url) {
+        Log.i("HTTP FACTORY", "Creating GET Request " + url);
 		HttpGet request = new HttpGet(url);
-		request.setHeader("Authorization", "Tequila "
-				+ UserCredentialsStorage.getInstance().getSessionId());
+		// XXX getInstance without context could return null - Sidney
+		request.setHeader("Authorization", "Tequila "+
+				UserCredentialsStorage.getInstance().getSessionId());
 		return request;
 	}
 
 	public static HttpPost getPostRequest(String url) {
+        Log.i("HTTP FACTORY", "Creating POST Request " + url);
 		HttpPost request = new HttpPost(url);
 		request.setHeader("Authorization", "Tequila "
 				+ UserCredentialsStorage.getInstance().getSessionId());
