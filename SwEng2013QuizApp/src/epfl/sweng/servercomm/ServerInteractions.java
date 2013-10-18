@@ -66,8 +66,7 @@ public class ServerInteractions {
 
 		Question questionToSubmit = Question
 				.createQuestionFromList(listInputGUI);
-		JSONObject jsonToSubmit = Question
-				.createJSONFromQuestion(questionToSubmit);
+		JSONObject jsonToSubmit = questionToSubmit.toJSON();
 
 		// We launch the AsyncTask that will do the submit in the background.
 		QuizEditExecution quizEditExecute = new QuizEditExecution();

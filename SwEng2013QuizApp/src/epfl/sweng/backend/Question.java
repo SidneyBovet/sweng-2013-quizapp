@@ -74,8 +74,86 @@ public class Question {
 	
 	public Question(String content, List<String> answers,
 			int solutionIndex, Set<String> tags) {
-		this(-1, content, answers, solutionIndex,
-				tags, null);
+		this(-1, content, answers, solutionIndex, tags, null);
+	}
+	
+	/**
+	 * Creates an instance of <code>Question</code> from a string field of a
+	 * {@link JSONObject}, then returns it.
+	 * 
+	 * @param questionJSON The {@link JSONObject} string field to convert.
+	 * @return A <code>Question</code> instance created from a {@link JSONObject} 
+	 *            string field
+	 * @throws JSONException
+	 */
+	
+	public static Question createQuestionFromJSON(String questionJSON)
+		throws JSONException {
+		
+		JSONObject jsonParser = new JSONObject(questionJSON);
+		long id = jsonParser.getLong("id");
+		
+		String question = jsonParser.getString("question");
+		JSONArray answersJSON = jsonParser.getJSONArray("answers");
+		List<String> answers = Converter.jsonArrayToStringArray(answersJSON);
+		
+		int solutionIndex = jsonParser.getInt("solutionIndex");
+		JSONArray tagsJSON = jsonParser.getJSONArray("tags");
+		Set<String> tags = Converter.jsonArrayToStringSet(tagsJSON);
+		String owner = jsonParser.getString("owner");
+		
+		return new Question(id, question, answers, solutionIndex, tags, owner);
+	}
+	
+	/**
+	 * Creates an instance of <code>Question</code> from a list of elements,
+	 * containing the question text body, the tags, the solution index, and the
+	 * answers, then returns it.
+	 * 
+	 * @param listElm A list of the question data fields.
+	 * @return A <code>Question</code> instance created from a list of fields.
+	 */
+	
+	public static Question createQuestionFromList(List<String> listElm) {
+		String questionText = listElm.remove(0);
+		String tagsInOneLine = listElm.remove(listElm.size() - 1);
+		int solutionIndex = Integer
+				.parseInt(listElm.remove(listElm.size() - 1));
+		
+		Pattern pattern = Pattern.compile("(\\w+)", Pattern.CASE_INSENSITIVE);
+		Matcher matcher = pattern.matcher(tagsInOneLine);
+
+		Set<String> tagSet = new TreeSet<String>();
+		while (matcher.find()) {
+			tagSet.add(matcher.group(1));
+		}
+		
+		List<String> answerList = new ArrayList<String>();
+		for (String answer : listElm) {
+			answerList.add(answer);
+		}
+		
+		return new Question(questionText, answerList, solutionIndex, tagSet);
+	}
+	
+	/**
+	 * Returns all the tags in a single <code>String</code>, delimited by a
+	 * comma.
+	 * 
+	 * @return A printable representation of all the tags.
+	 * @throws JSONException
+	 */
+	
+	public String getTagsToString() throws JSONException {
+		Iterator<String> tagsIterator = mTags.iterator();
+		String tagsTogether = "Tags: ";
+		while (tagsIterator.hasNext()) {
+			tagsTogether += tagsIterator.next();
+			if (tagsIterator.hasNext()) {
+				tagsTogether += ", ";
+			}
+		}
+		return tagsTogether;
 	}
 	
 	/**
@@ -101,24 +179,22 @@ public class Question {
 	}
 	
 	/**
-	 * Returns all the tags in a single <code>String</code>, delimited by a
-	 * comma.
-	 * 
-	 * @return A printable representation of all the tags.
-	 * @throws JSONException
+	 * Returns a printable version of the question.
 	 */
 	
-	public String getTagsToString() throws JSONException {
-		Iterator<String> tagsIterator = mTags.iterator();
-		String tagsTogether = "Tags: ";
-		while (tagsIterator.hasNext()) {
-			tagsTogether += tagsIterator.next();
-			if (tagsIterator.hasNext()) {
-				tagsTogether += ", ";
-			}
-		}
-		return tagsTogether;
+	@Override
+	public String toString() {
+		return "Question [id=" + mId + ", questionContent=" + mQuestionContent
+				+ ", answers=" + mAnswers.toString() + ", solutionIndex="
+				+ mSolutionIndex + ", tags=" + mTags.toString() + ", owner="
+				+ mOwner + "]";
 	}
+	
+	/*
+	 ****************************************************
+	 ***************** Getters & Setters ****************
+	 ****************************************************
+	 */
 	
 	/**
 	 * Returns the owner field of the question.
@@ -178,145 +254,5 @@ public class Question {
 	
 	public List<String> getAnswers() {
 		return mAnswers;
-	}
-	
-	/**
-	 * Returns a printable version of the question.
-	 */
-	
-	@Override
-	public String toString() {
-		return "Question [id=" + mId + ", questionContent=" + mQuestionContent
-				+ ", answers=" + mAnswers.toString() + ", solutionIndex="
-				+ mSolutionIndex + ", tags=" + mTags.toString() + ", owner="
-				+ mOwner + "]";
-	}
-	
-	/**
-	 * Creates an instance of <code>Question</code> from a string field of a
-	 * {@link JSONObject}, then returns it.
-	 * 
-	 * @param questionJSON The {@link JSONObject} string field to convert.
-	 * @return A <code>Question</code> instance created from a {@link JSONObject} 
-	 *            string field
-	 * @throws JSONException
-	 */
-	
-	public static Question createQuestionFromJSON(String questionJSON)
-		throws JSONException {
-		
-		JSONObject jsonParser = new JSONObject(questionJSON);
-		long id = jsonParser.getLong("id");
-		
-		String question = jsonParser.getString("question");
-		JSONArray answersJSON = jsonParser.getJSONArray("answers");
-		List<String> answers = jsonArrayToStringArray(answersJSON);
-		
-		int solutionIndex = jsonParser.getInt("solutionIndex");
-		JSONArray tagsJSON = jsonParser.getJSONArray("tags");
-		Set<String> tags = jsonArrayToStringSet(tagsJSON);
-		String owner = jsonParser.getString("owner");
-		
-		return new Question(id, question, answers, solutionIndex, tags, owner);
-	}
-	
-	/**
-	 * Creates an instance of <code>Question</code> from a list of elements,
-	 * containing the question text body, the tags, the solution index, and the
-	 * answers, then returns it.
-	 * 
-	 * @param listElm A list of the question data fields.
-	 * @return A <code>Question</code> instance created from a list of fields.
-	 */
-	
-	public static Question createQuestionFromList(List<String> listElm) {
-		String questionText = listElm.remove(0);
-		String tagsInOneLine = listElm.remove(listElm.size() - 1);
-		int solutionIndex = Integer
-				.parseInt(listElm.remove(listElm.size() - 1));
-		
-		Pattern pattern = Pattern.compile("(\\w+)", Pattern.CASE_INSENSITIVE);
-		Matcher matcher = pattern.matcher(tagsInOneLine);
-
-		Set<String> tagSet = new TreeSet<String>();
-		while (matcher.find()) {
-			tagSet.add(matcher.group(1));
-		}
-		
-		List<String> answerList = new ArrayList<String>();
-		for (String answer : listElm) {
-			answerList.add(answer);
-		}
-		
-		return new Question(questionText, answerList, solutionIndex, tagSet);
-	}
-
-	/**
-	 * Creates a {@link JSONObject} from an instance of question.
-	 * 
-	 * @param question The question to convert
-	 * @return A {@link JSONObject} instance created from a question.
-	 */
-	
-	public static JSONObject createJSONFromQuestion(Question question) {
-		JSONObject questionIntoJSON = new JSONObject();
-		JSONArray answersJSON = new JSONArray();
-		for (int i = 0; i < question.mAnswers.size(); i++) {
-			answersJSON.put(question.mAnswers.get(i));
-		}
-		JSONArray tagsJSON = new JSONArray();
-		Iterator<String> tagsIterator = question.mTags.iterator();
-		while (tagsIterator.hasNext()) {
-			tagsJSON.put(tagsIterator.next());
-		}
-		try {
-			questionIntoJSON.put("question", question.mQuestionContent);
-			questionIntoJSON.put("answers", answersJSON);
-			questionIntoJSON.put("solutionIndex", question.mSolutionIndex);
-			questionIntoJSON.put("tags", tagsJSON);
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-		return questionIntoJSON;
-	}
-	
-	/**
-	 * Converts a {@link JSONArray} into a list of String.
-	 * 
-	 * @param arrayToConvert The {@link JSONArray} to convert.
-	 * @return An <code>ArrayList</code> of the <code>JSONObjects</code> string
-	 *            field.
-	 */
-	private static List<String> jsonArrayToStringArray(
-			JSONArray arrayToConvert) {
-		ArrayList<String> list = new ArrayList<String>();
-		if (arrayToConvert != null) {
-			for (int i = 0; i < arrayToConvert.length(); i++) {
-				if (arrayToConvert.optString(i) != null) {
-					list.add(arrayToConvert.optString(i));
-				}
-			}
-		}
-		return list;
-	}
-	
-	/**
-	 * Converts a {@link JSONArray} into a set of String.
-	 * 
-	 * @param arrayToConvert The {@link JSONArray} to convert.
-	 * @return An <code>HashSet</code> of the <code>JSONObjects</code> string
-	 *            field.
-	 */
-	private static Set<String> jsonArrayToStringSet(
-			JSONArray arrayToConvert) {
-		TreeSet<String> set = new TreeSet<String>();
-		if (arrayToConvert != null) {
-			for (int i = 0; i < arrayToConvert.length(); i++) {
-				if (arrayToConvert.optString(i) != null) {
-					set.add(arrayToConvert.optString(i));
-				}
-			}
-		}
-		return set;
 	}
 }
