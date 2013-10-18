@@ -4,12 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import android.util.Log;
-
 import junit.framework.TestCase;
 import epfl.sweng.backend.Question;
 
