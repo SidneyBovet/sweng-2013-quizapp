@@ -116,7 +116,6 @@ public class AuthenticationProcess extends AsyncTask<String, Void, String> {
 		}
 
 		mDialog.dismiss();
-		mParentActivity.finish();
 	}
 
 	/**

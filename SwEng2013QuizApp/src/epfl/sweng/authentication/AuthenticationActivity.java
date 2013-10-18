@@ -1,5 +1,7 @@
 package epfl.sweng.authentication;
 
+import java.util.concurrent.ExecutionException;
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -107,7 +109,9 @@ public class AuthenticationActivity extends Activity {
 	 * disabling the loginButton.
 	 */
 	public void resetGUIWhenAuthenticationFails() {
-		// TODO AFTER TEST IS WRITTEN...
+		mUserNameEditText.setText("");
+		mPasswordEditText.setText("");
+		TestCoordinator.check(TTChecks.AUTHENTICATION_ACTIVITY_SHOWN);
 	}
 
 	@Override
@@ -130,7 +134,19 @@ public class AuthenticationActivity extends Activity {
 			finish();
 		}
 		
-		new AuthenticationProcess(AuthenticationActivity.this).
-			execute(usrName, password);
+		AuthenticationProcess ap = new AuthenticationProcess(AuthenticationActivity.this);
+		ap.execute(usrName, password);
+		
+		try {
+			if (ap.get() == null) {
+				resetGUIWhenAuthenticationFails();
+			} else {
+				finish();
+			}
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			e.printStackTrace();
+		}
 	}
 }
