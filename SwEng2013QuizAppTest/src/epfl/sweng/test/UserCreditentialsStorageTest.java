@@ -2,7 +2,7 @@ package epfl.sweng.test;
 
 import android.content.Context;
 import android.test.ActivityInstrumentationTestCase2;
-import epfl.sweng.backend.UserCredentialsStorage;
+import epfl.sweng.authentication.UserCredentialsStorage;
 import epfl.sweng.entry.MainActivity;
 
 public class UserCreditentialsStorageTest extends
