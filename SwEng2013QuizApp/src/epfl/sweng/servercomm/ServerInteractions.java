@@ -69,7 +69,7 @@ public class ServerInteractions {
 		JSONObject jsonToSubmit = questionToSubmit.toJSON();
 
 		// We launch the AsyncTask that will do the submit in the background.
-		QuizEditExecution quizEditExecute = new QuizEditExecution();
+		JSONUploader quizEditExecute = new JSONUploader();
 		quizEditExecute.execute(jsonToSubmit);
 
 		int serverResponse = -1;

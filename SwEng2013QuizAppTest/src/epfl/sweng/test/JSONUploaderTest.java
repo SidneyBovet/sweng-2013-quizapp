@@ -3,10 +3,10 @@ package epfl.sweng.test;
 import java.util.ArrayList;
 
 import junit.framework.TestCase;
-import epfl.sweng.servercomm.QuizEditExecution;
+import epfl.sweng.servercomm.JSONUploader;
 import epfl.sweng.test.minimalmock.MockHttpClient;
 
-public class QuizEditExecutionTest extends TestCase {
+public class JSONUploaderTest extends TestCase {
 	private static final int ERROR_CODE = 400;
 	private ArrayList<String> mAnswers = new ArrayList<String>();
 	private ArrayList<String> mTags = new ArrayList<String>();
@@ -15,7 +15,7 @@ public class QuizEditExecutionTest extends TestCase {
 	private final int id = -33;
 	private final int index = -100;
 
-	public QuizEditExecutionTest() {
+	public JSONUploaderTest() {
 	}
 
 	@Override
@@ -35,7 +35,7 @@ public class QuizEditExecutionTest extends TestCase {
 //		on gère le 400
 	
 	public void testBadRequestIsHandled() {
-		QuizEditExecution quizEditExecute = new QuizEditExecution();
+		JSONUploader quizEditExecute = new JSONUploader();
 		quizEditExecute.execute(mMockJson);
 		assert true;
 	}

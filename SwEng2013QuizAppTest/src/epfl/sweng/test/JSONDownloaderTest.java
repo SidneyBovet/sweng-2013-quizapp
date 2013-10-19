@@ -1,7 +1,5 @@
 package epfl.sweng.test;
 
-import java.util.concurrent.ExecutionException;
-
 import junit.framework.TestCase;
 
 import org.apache.http.HttpStatus;
@@ -10,7 +8,7 @@ import epfl.sweng.servercomm.JSONDownloader;
 import epfl.sweng.servercomm.SwengHttpClientFactory;
 import epfl.sweng.test.minimalmock.MockHttpClient;
 
-public class DownloadJSONFromServerTest extends TestCase{
+public class JSONDownloaderTest extends TestCase{
 	
 	private MockHttpClient mockClient;
 	

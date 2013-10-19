@@ -1,4 +1,4 @@
-package epfl.sweng.test;
+package epfl.sweng.test.activities;
 
 import android.widget.EditText;
 import android.widget.ListView;

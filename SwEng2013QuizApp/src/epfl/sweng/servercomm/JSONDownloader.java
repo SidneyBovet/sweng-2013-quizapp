@@ -11,8 +11,11 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 /**
- * Asyncronous task that runs a background thread that fetches a new {@link 
- * Question} from the SwEng server.
+ * Asyncronous task that runs a background thread that fetches a new 
+ * {@link Question} from the SwEng server.
+ * <p>
+ * The task returns an empty string if a problem occurred during the
+ * transaction.
  * 
  * @author Joanna
  * 

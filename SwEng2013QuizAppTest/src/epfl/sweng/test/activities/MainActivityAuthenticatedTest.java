@@ -1,4 +1,4 @@
-package epfl.sweng.test;
+package epfl.sweng.test.activities;
 
 import android.content.Context;
 import android.widget.Button;
@@ -6,56 +6,64 @@ import epfl.sweng.authentication.UserCredentialsStorage;
 import epfl.sweng.entry.MainActivity;
 import epfl.sweng.testing.TestCoordinator.TTChecks;
 
-public class MainActivityNotAuthenticatedTest extends GUITest<MainActivity> {
+public class MainActivityAuthenticatedTest extends GUITest<MainActivity> {
 
 	private Context contextOfMainActivity;
 	private UserCredentialsStorage persistentStorage;
 	
-	public MainActivityNotAuthenticatedTest() {
+	public MainActivityAuthenticatedTest() {
 		super(MainActivity.class);
 	}
 	
 	@Override
-	protected void setUp() {
+	public void setUp() {
 		super.setUp();
 		contextOfMainActivity = getInstrumentation()
 				.getTargetContext();
 		persistentStorage = UserCredentialsStorage.
 				getInstance(contextOfMainActivity);
+		persistentStorage.takeAuthentication("blabla");
+	}
+	
+	@Override
+	protected void tearDown() throws Exception {
 		persistentStorage.releaseAuthentication();
+		super.tearDown();
+	};
+	
+	public void testLogOut() {
+		getActivityAndWaitFor(TTChecks.MAIN_ACTIVITY_SHOWN);
+		getSolo().clickOnButton("Log out");
+		
+		getActivityAndWaitFor(TTChecks.LOGGED_OUT);
+		
+		assertTrue("Submit Quizz Question Button is present",
+				getSolo().searchButton("Submit a quiz question."));
+		assertTrue("Show Random Question Button is present",
+				getSolo().searchButton("Show a random question."));
+		
+		Button showButton = getSolo().getButton("Show a random question.");
+		Button submitButton = getSolo().getButton("Submit a quiz question.");
+		assertTrue(!showButton.isEnabled());
+		assertTrue(!submitButton.isEnabled());
 	}
 	
 	public void testShowAllButtons() {
 		getActivityAndWaitFor(TTChecks.MAIN_ACTIVITY_SHOWN);
 		assertTrue("Login Button is present",
-				getSolo().searchButton("Log in using Tequila"));
+				getSolo().searchButton("Log out"));
 		assertTrue("Show Random Question Button is present",
 				getSolo().searchButton("Show a random question."));
 		assertTrue("Submit Quizz Question Button is present",
 				getSolo().searchButton("Submit a quiz question."));
 	}
 	
-	public void testQuestionButtonsAreDisabledAtBeggining() {
+	public void testQuestionButtonsAreEnabledAtBeggining() {
 		getActivityAndWaitFor(TTChecks.MAIN_ACTIVITY_SHOWN);
-		Button logButton = getSolo().getButton("Log in using Tequila");
 		Button showButton = getSolo().getButton("Show a random question.");
 		Button submitButton = getSolo().getButton("Submit a quiz question.");
-		assertTrue(logButton.isEnabled());
-		assertFalse(showButton.isEnabled());
-		assertFalse(submitButton.isEnabled());
+		assertTrue(showButton.isEnabled());
+		assertTrue(submitButton.isEnabled());
 	}
-	
-	public void testLogInButton() {
-		getActivityAndWaitFor(TTChecks.MAIN_ACTIVITY_SHOWN);
-		assertFalse(persistentStorage.isAuthenticated());
-		getSolo().sleep(2000);
-		getSolo().clickOnButton("Log in using Tequila");
-		getSolo().sleep(2000);
-		assertTrue("Password Asked", getSolo().searchText("GASPAR Password"));
-		getSolo().goBack();
-		getSolo().sleep(2000);
-		assertTrue("Show Random Question Button is present",
-				getSolo().searchButton("Show a random question."));
-	}
-	
+
 }
