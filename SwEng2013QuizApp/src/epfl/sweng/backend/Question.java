@@ -287,7 +287,7 @@ public class Question {
 	 * @return An <code>ArrayList</code> of the <code>JSONObjects</code> string
 	 *            field.
 	 */
-	private static List<String> jsonArrayToStringArray(
+	public static List<String> jsonArrayToStringArray(
 			JSONArray arrayToConvert) {
 		ArrayList<String> list = new ArrayList<String>();
 		if (arrayToConvert != null) {
