@@ -1,8 +1,7 @@
 package epfl.sweng.test.servercomm;
 
-import epfl.sweng.authentication.UserCredentialsStorage;
-import epfl.sweng.servercomm.HttpFactory;
 import junit.framework.TestCase;
+import epfl.sweng.servercomm.HttpFactory;
 
 public class HttpFactoryTest extends TestCase {
 	
@@ -40,11 +39,5 @@ public class HttpFactoryTest extends TestCase {
 	
 	public void testGetTequilaLogin() {
 		assertEquals(TEQUILA_LOGIN, HttpFactory.getTequilaLogin());
-	}
-	
-	public void testgetGETRequest() {
-//		String url = "google.com";
-//		UserCredentialsStorage storageInstance = UserCredentialsStorage.getInstance();
-//		assertTrue(HttpFactory.getGetRequest(url).containsHeader("Authorization"));
 	}
 }
