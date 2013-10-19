@@ -10,6 +10,7 @@ package epfl.sweng.exceptions;
  */
 @SuppressWarnings("serial")
 public class SendEditedQuestionFailException extends Exception {
+	
 	public SendEditedQuestionFailException(String msg) {
 		super(msg);
 	}
