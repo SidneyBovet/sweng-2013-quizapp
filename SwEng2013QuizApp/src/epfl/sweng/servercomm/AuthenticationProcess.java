@@ -22,8 +22,8 @@ import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
-import epfl.sweng.backend.UserCredentialsStorage;
-import epfl.sweng.entry.AuthenticationActivity;
+import epfl.sweng.authentication.AuthenticationActivity;
+import epfl.sweng.authentication.UserCredentialsStorage;
 import epfl.sweng.exceptions.authentication.InvalidTokenException;
 import epfl.sweng.exceptions.authentication.NoSessionIDException;
 import epfl.sweng.exceptions.authentication.TequilaNoTokenException;
@@ -116,7 +116,6 @@ public class AuthenticationProcess extends AsyncTask<String, Void, String> {
 		}
 
 		mDialog.dismiss();
-		mParentActivity.finish();
 	}
 
 	/**
@@ -147,8 +146,8 @@ public class AuthenticationProcess extends AsyncTask<String, Void, String> {
 		} catch (JSONException e) {
 			Log.e(this.getClass().getName(), "getToken(): JSONObject "
 					+ "\'responseJSON\' could not get the \'token\' string.", e);
-			throw new TequilaNoTokenException("JSONObject \'responseJSON\' " +
-					"could not get the \'token\' string. : " + e.getMessage());
+			throw new TequilaNoTokenException("JSONObject \'responseJSON\' "
+					+ "could not get the \'token\' string. : " + e.getMessage());
 		}
 		return token;
 	}

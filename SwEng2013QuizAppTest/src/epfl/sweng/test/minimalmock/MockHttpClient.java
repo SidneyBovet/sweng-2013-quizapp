@@ -67,6 +67,7 @@ public class MockHttpClient extends DefaultHttpClient {
         		responseBody,
         		contentType)
         );
+        Log.i("MOCK HTTP CLIENT", "Request "+ requestRegex + " added.");
     }
 
     public void popCannedResponse() {
@@ -104,6 +105,10 @@ public class MockHttpClient extends DefaultHttpClient {
 
         return null;
     }
+
+	public boolean responsesIsEmpty() {
+		return responses.isEmpty();
+	}
 }
 
 /**

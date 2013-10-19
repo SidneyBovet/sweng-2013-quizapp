@@ -33,4 +33,13 @@ public class MockHttpClientTest extends TestCase{
 		}
 		fail("no exception thrown");
 	}
+	
+	@Override
+	public void tearDown() throws Exception {
+		while (!mockClient.responsesIsEmpty()) {
+			mockClient.popCannedResponse();
+		}
+		
+		super.tearDown();
+	}
 }

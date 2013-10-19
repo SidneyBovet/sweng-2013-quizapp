@@ -3,8 +3,14 @@ package epfl.sweng.servercomm;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 
-import epfl.sweng.backend.UserCredentialsStorage;
+import android.util.Log;
+import epfl.sweng.authentication.UserCredentialsStorage;
 
+/**
+ * Wrapper used to centralize our http urls.
+ * @author born4new
+ *
+ */
 public class HttpFactory {
 	private static final String SWENG_BASE_ADDRESS =
 			"https://sweng-quiz.appspot.com";
@@ -44,16 +50,27 @@ public class HttpFactory {
 	}
 
 	public static HttpGet getGetRequest(String url) {
+        Log.i("HTTP FACTORY", "Creating GET Request " + url);
 		HttpGet request = new HttpGet(url);
-		request.setHeader("Authorization", "Tequila "+
-				UserCredentialsStorage.getInstance().getSessionId());
+		
+		UserCredentialsStorage storageInstance = UserCredentialsStorage.getInstance();
+		if (null != storageInstance) {
+			request.setHeader("Authorization", "Tequila "+ "sdsd");	
+		}
+		
 		return request;
 	}
 
 	public static HttpPost getPostRequest(String url) {
+        Log.i("HTTP FACTORY", "Creating POST Request " + url);
 		HttpPost request = new HttpPost(url);
-		request.setHeader("Authorization", "Tequila "+
-				UserCredentialsStorage.getInstance().getSessionId());
+		
+		UserCredentialsStorage storageInstance = UserCredentialsStorage.getInstance();
+		if (null != storageInstance) {
+			request.setHeader("Authorization", "Tequila "+
+					storageInstance.getSessionId());			
+		}
+		
 		return request;
 	}
 }

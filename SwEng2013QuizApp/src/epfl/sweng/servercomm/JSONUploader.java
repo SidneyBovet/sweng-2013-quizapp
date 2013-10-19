@@ -27,7 +27,7 @@ import epfl.sweng.testing.TestCoordinator.TTChecks;
  * @author born4new
  * 
  */
-public class QuizEditExecution extends AsyncTask<JSONObject, Void, Integer> {
+public class JSONUploader extends AsyncTask<JSONObject, Void, Integer> {
 	private HttpResponse response = null;
 
 	@Override

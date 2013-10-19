@@ -28,7 +28,7 @@ public class ServerInteractions {
 	 */
 
 	public static Question getRandomQuestion() {
-		DownloadJSONFromServer asyncTaskRandomQuestionGetter = new DownloadJSONFromServer();
+		JSONDownloader asyncTaskRandomQuestionGetter = new JSONDownloader();
 		asyncTaskRandomQuestionGetter.execute(HttpFactory.getSwengFetchQuestion());
 
 		Question question = null;
@@ -66,11 +66,10 @@ public class ServerInteractions {
 
 		Question questionToSubmit = Question
 				.createQuestionFromList(listInputGUI);
-		JSONObject jsonToSubmit = Question
-				.createJSONFromQuestion(questionToSubmit);
+		JSONObject jsonToSubmit = questionToSubmit.toJSON();
 
 		// We launch the AsyncTask that will do the submit in the background.
-		QuizEditExecution quizEditExecute = new QuizEditExecution();
+		JSONUploader quizEditExecute = new JSONUploader();
 		quizEditExecute.execute(jsonToSubmit);
 
 		int serverResponse = -1;

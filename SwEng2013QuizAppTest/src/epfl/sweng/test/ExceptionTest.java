@@ -1,6 +1,7 @@
 package epfl.sweng.test;
 
 import junit.framework.TestCase;
+import epfl.sweng.exceptions.SendEditedQuestionFailException;
 import epfl.sweng.exceptions.ServerSubmitFailedException;
 import epfl.sweng.exceptions.authentication.InvalidTokenException;
 import epfl.sweng.exceptions.authentication.NoSessionIDException;
@@ -21,6 +22,7 @@ public class ExceptionTest extends TestCase {
 	
 	public void testExceptionCreation() {
 		new ServerSubmitFailedException("");
+		new SendEditedQuestionFailException("");
 		new InvalidTokenException("");
 		new NoSessionIDException("");
 		new TequilaNoTokenException("");

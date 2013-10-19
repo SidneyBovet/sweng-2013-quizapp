@@ -1,0 +1,306 @@
+Buildfile: /Users/born4new/Documents/workspace/sweng2013/localrepo/sweng-2013-team-swing/SwEng2013QuizAppTest/build.xml
+
+-check-env:
+ [checkenv] Android SDK Tools Revision 22.2.1
+ [checkenv] Installed at /Users/born4new/Documents/workspace/sweng2013/android-sdk-macosx
+
+-setup:
+     [echo] Project Name: SwEng2013QuizAppTest
+  [gettype] Project Type: Test Application
+
+-pre-clean:
+
+clean:
+   [delete] Deleting directory /Users/born4new/Documents/workspace/sweng2013/localrepo/sweng-2013-team-swing/SwEng2013QuizAppTest/bin
+   [delete] Deleting directory /Users/born4new/Documents/workspace/sweng2013/localrepo/sweng-2013-team-swing/SwEng2013QuizAppTest/gen
+
+-check-env:
+ [checkenv] Android SDK Tools Revision 22.2.1
+ [checkenv] Installed at /Users/born4new/Documents/workspace/sweng2013/android-sdk-macosx
+
+-setup:
+     [echo] Project Name: SwEng2013QuizApp
+  [gettype] Project Type: Application
+
+-pre-clean:
+
+clean:
+   [delete] Deleting directory /Users/born4new/Documents/workspace/sweng2013/localrepo/sweng-2013-team-swing/SwEng2013QuizApp/bin
+   [delete] Deleting directory /Users/born4new/Documents/workspace/sweng2013/localrepo/sweng-2013-team-swing/SwEng2013QuizApp/gen
+[getlibpath] Library dependencies:
+[getlibpath] No Libraries
+   [subant] No sub-builds to iterate on
+[getlibpath] Library dependencies:
+[getlibpath] No Libraries
+   [subant] No sub-builds to iterate on
+
+emma:
+
+-set-mode-check:
+
+-set-debug-files:
+
+-check-env:
+ [checkenv] Android SDK Tools Revision 22.2.1
+ [checkenv] Installed at /Users/born4new/Documents/workspace/sweng2013/android-sdk-macosx
+
+-setup:
+     [echo] Project Name: SwEng2013QuizAppTest
+  [gettype] Project Type: Test Application
+
+-set-debug-mode:
+
+-debug-obfuscation-check:
+
+-pre-build:
+
+-build-setup:
+[getbuildtools] Using latest Build Tools: 18.1.0
+     [echo] Resolving Build Target for SwEng2013QuizAppTest...
+[gettarget] Project Target:   Android 4.3
+[gettarget] API level:        18
+     [echo] ----------
+     [echo] Creating output directories if needed...
+    [mkdir] Created dir: /Users/born4new/Documents/workspace/sweng2013/localrepo/sweng-2013-team-swing/SwEng2013QuizAppTest/bin
+    [mkdir] Created dir: /Users/born4new/Documents/workspace/sweng2013/localrepo/sweng-2013-team-swing/SwEng2013QuizAppTest/bin/res
+    [mkdir] Created dir: /Users/born4new/Documents/workspace/sweng2013/localrepo/sweng-2013-team-swing/SwEng2013QuizAppTest/bin/rsObj
+    [mkdir] Created dir: /Users/born4new/Documents/workspace/sweng2013/localrepo/sweng-2013-team-swing/SwEng2013QuizAppTest/bin/rsLibs
+    [mkdir] Created dir: /Users/born4new/Documents/workspace/sweng2013/localrepo/sweng-2013-team-swing/SwEng2013QuizAppTest/gen
+    [mkdir] Created dir: /Users/born4new/Documents/workspace/sweng2013/localrepo/sweng-2013-team-swing/SwEng2013QuizAppTest/bin/classes
+    [mkdir] Created dir: /Users/born4new/Documents/workspace/sweng2013/localrepo/sweng-2013-team-swing/SwEng2013QuizAppTest/bin/dexedLibs
+     [echo] ----------
+     [echo] Resolving Dependencies for SwEng2013QuizAppTest...
+[dependency] Ordered libraries:
+[dependency] 
+[dependency] ------------------
+     [echo] ----------
+     [echo] Building Libraries with 'debug'...
+   [subant] No sub-builds to iterate on
+     [echo] ----------
+     [echo] Building tested project at /Users/born4new/Documents/workspace/sweng2013/localrepo/sweng-2013-team-swing/SwEng2013QuizApp with 'instrument'...
+
+-set-mode-check:
+
+-set-instrumented-mode:
+
+-check-env:
+ [checkenv] Android SDK Tools Revision 22.2.1
+ [checkenv] Installed at /Users/born4new/Documents/workspace/sweng2013/android-sdk-macosx
+
+-setup:
+     [echo] Project Name: SwEng2013QuizApp
+  [gettype] Project Type: Application
+
+-set-debug-mode:
+
+-debug-obfuscation-check:
+
+-pre-build:
+
+-build-setup:
+[getbuildtools] Using latest Build Tools: 18.1.0
+     [echo] Resolving Build Target for SwEng2013QuizApp...
+[gettarget] Project Target:   Android 4.3
+[gettarget] API level:        18
+     [echo] ----------
+     [echo] Creating output directories if needed...
+    [mkdir] Created dir: /Users/born4new/Documents/workspace/sweng2013/localrepo/sweng-2013-team-swing/SwEng2013QuizApp/bin
+    [mkdir] Created dir: /Users/born4new/Documents/workspace/sweng2013/localrepo/sweng-2013-team-swing/SwEng2013QuizApp/bin/res
+    [mkdir] Created dir: /Users/born4new/Documents/workspace/sweng2013/localrepo/sweng-2013-team-swing/SwEng2013QuizApp/bin/rsObj
+    [mkdir] Created dir: /Users/born4new/Documents/workspace/sweng2013/localrepo/sweng-2013-team-swing/SwEng2013QuizApp/bin/rsLibs
+    [mkdir] Created dir: /Users/born4new/Documents/workspace/sweng2013/localrepo/sweng-2013-team-swing/SwEng2013QuizApp/gen
+    [mkdir] Created dir: /Users/born4new/Documents/workspace/sweng2013/localrepo/sweng-2013-team-swing/SwEng2013QuizApp/bin/classes
+    [mkdir] Created dir: /Users/born4new/Documents/workspace/sweng2013/localrepo/sweng-2013-team-swing/SwEng2013QuizApp/bin/dexedLibs
+     [echo] ----------
+     [echo] Resolving Dependencies for SwEng2013QuizApp...
+[dependency] Library dependencies:
+[dependency] No Libraries
+[dependency] 
+[dependency] ------------------
+     [echo] ----------
+     [echo] Building Libraries with 'instrument'...
+   [subant] No sub-builds to iterate on
+
+-code-gen:
+[mergemanifest] Merging AndroidManifest files into one.
+[mergemanifest] Manifest merger disabled. Using project manifest only.
+     [echo] Handling aidl files...
+     [aidl] No AIDL files to compile.
+     [echo] ----------
+     [echo] Handling RenderScript files...
+     [echo] ----------
+     [echo] Handling Resources...
+     [aapt] Generating resource IDs...
+     [echo] ----------
+     [echo] Handling BuildConfig class...
+[buildconfig] Generating BuildConfig class.
+
+-pre-compile:
+
+-compile:
+    [javac] Compiling 22 source files to /Users/born4new/Documents/workspace/sweng2013/localrepo/sweng-2013-team-swing/SwEng2013QuizApp/bin/classes
+     [echo] Instrumenting classes from /Users/born4new/Documents/workspace/sweng2013/localrepo/sweng-2013-team-swing/SwEng2013QuizApp/bin/classes...
+
+-post-compile:
+
+-obfuscate:
+
+-dex:
+      [dex] input: /Users/born4new/Documents/workspace/sweng2013/localrepo/sweng-2013-team-swing/SwEng2013QuizApp/bin/classes
+      [dex] input: /Users/born4new/Documents/workspace/sweng2013/localrepo/sweng-2013-team-swing/SwEng2013QuizApp/libs/android-support-v4.jar
+      [dex] input: /Users/born4new/Documents/workspace/sweng2013/android-sdk-macosx/tools/lib/emma_device.jar
+      [dex] Pre-Dexing /Users/born4new/Documents/workspace/sweng2013/localrepo/sweng-2013-team-swing/SwEng2013QuizApp/libs/android-support-v4.jar -> android-support-v4-78bec924f9149f0bfe630bf6c3d8090d.jar
+      [dex] Pre-Dexing /Users/born4new/Documents/workspace/sweng2013/android-sdk-macosx/tools/lib/emma_device.jar -> emma_device-6652efdca62412304d2a0520a4c5fd42.jar
+      [dex] Converting compiled files and external libraries into /Users/born4new/Documents/workspace/sweng2013/localrepo/sweng-2013-team-swing/SwEng2013QuizApp/bin/classes.dex...
+       [dx] Merged dex A (43 defs/56.0KiB) with dex B (444 defs/452.0KiB). Result is 487 defs/609.1KiB. Took 1.7s
+       [dx] Merged dex A (487 defs/609.1KiB) with dex B (297 defs/326.8KiB). Result is 784 defs/1160.7KiB. Took 2.3s
+
+-crunch:
+   [crunch] Crunching PNG Files in source dir: /Users/born4new/Documents/workspace/sweng2013/localrepo/sweng-2013-team-swing/SwEng2013QuizApp/res
+   [crunch] To destination dir: /Users/born4new/Documents/workspace/sweng2013/localrepo/sweng-2013-team-swing/SwEng2013QuizApp/bin/res
+   [crunch] Processing image to cache: /Users/born4new/Documents/workspace/sweng2013/localrepo/sweng-2013-team-swing/SwEng2013QuizApp/res/drawable-hdpi/ic_launcher.png => /Users/born4new/Documents/workspace/sweng2013/localrepo/sweng-2013-team-swing/SwEng2013QuizApp/bin/res/drawable-hdpi/ic_launcher.png
+   [crunch]   (processed image to cache entry /Users/born4new/Documents/workspace/sweng2013/localrepo/sweng-2013-team-swing/SwEng2013QuizApp/bin/res/drawable-hdpi/ic_launcher.png: 87% size of source)
+   [crunch] Processing image to cache: /Users/born4new/Documents/workspace/sweng2013/localrepo/sweng-2013-team-swing/SwEng2013QuizApp/res/drawable-mdpi/ic_launcher.png => /Users/born4new/Documents/workspace/sweng2013/localrepo/sweng-2013-team-swing/SwEng2013QuizApp/bin/res/drawable-mdpi/ic_launcher.png
+   [crunch]   (processed image to cache entry /Users/born4new/Documents/workspace/sweng2013/localrepo/sweng-2013-team-swing/SwEng2013QuizApp/bin/res/drawable-mdpi/ic_launcher.png: 78% size of source)
+   [crunch] Processing image to cache: /Users/born4new/Documents/workspace/sweng2013/localrepo/sweng-2013-team-swing/SwEng2013QuizApp/res/drawable-xhdpi/ic_launcher.png => /Users/born4new/Documents/workspace/sweng2013/localrepo/sweng-2013-team-swing/SwEng2013QuizApp/bin/res/drawable-xhdpi/ic_launcher.png
+   [crunch]   (processed image to cache entry /Users/born4new/Documents/workspace/sweng2013/localrepo/sweng-2013-team-swing/SwEng2013QuizApp/bin/res/drawable-xhdpi/ic_launcher.png: 85% size of source)
+   [crunch] Crunched 3 PNG files to update cache
+
+-package-resources:
+     [aapt] Creating full resource package...
+
+-package:
+[apkbuilder] Current build type is different than previous build: forced apkbuilder run.
+[apkbuilder] Creating SwEng2013QuizApp-instrumented-unaligned.apk and signing it with a debug key...
+
+-post-package:
+
+-do-debug:
+ [zipalign] Running zip align on final apk...
+     [echo] Debug Package: /Users/born4new/Documents/workspace/sweng2013/localrepo/sweng-2013-team-swing/SwEng2013QuizApp/bin/SwEng2013QuizApp-instrumented.apk
+[propertyfile] Creating new property file: /Users/born4new/Documents/workspace/sweng2013/localrepo/sweng-2013-team-swing/SwEng2013QuizApp/bin/build.prop
+[propertyfile] Updating property file: /Users/born4new/Documents/workspace/sweng2013/localrepo/sweng-2013-team-swing/SwEng2013QuizApp/bin/build.prop
+[propertyfile] Updating property file: /Users/born4new/Documents/workspace/sweng2013/localrepo/sweng-2013-team-swing/SwEng2013QuizApp/bin/build.prop
+[propertyfile] Updating property file: /Users/born4new/Documents/workspace/sweng2013/localrepo/sweng-2013-team-swing/SwEng2013QuizApp/bin/build.prop
+
+instrument:
+ [zipalign] Run cancelled: no changes to input file /Users/born4new/Documents/workspace/sweng2013/localrepo/sweng-2013-team-swing/SwEng2013QuizApp/bin/SwEng2013QuizApp-instrumented-unaligned.apk
+     [echo] Instrumented Package: /Users/born4new/Documents/workspace/sweng2013/localrepo/sweng-2013-team-swing/SwEng2013QuizApp/bin/SwEng2013QuizApp-instrumented.apk
+[propertyfile] Updating property file: /Users/born4new/Documents/workspace/sweng2013/localrepo/sweng-2013-team-swing/SwEng2013QuizApp/bin/build.prop
+[propertyfile] Updating property file: /Users/born4new/Documents/workspace/sweng2013/localrepo/sweng-2013-team-swing/SwEng2013QuizApp/bin/build.prop
+[propertyfile] Updating property file: /Users/born4new/Documents/workspace/sweng2013/localrepo/sweng-2013-team-swing/SwEng2013QuizApp/bin/build.prop
+[propertyfile] Updating property file: /Users/born4new/Documents/workspace/sweng2013/localrepo/sweng-2013-team-swing/SwEng2013QuizApp/bin/build.prop
+[testedprojectclasspath] Resolved classpath:
+[testedprojectclasspath] /Users/born4new/Documents/workspace/sweng2013/localrepo/sweng-2013-team-swing/SwEng2013QuizApp/libs/android-support-v4.jar
+[testedprojectclasspath] /Users/born4new/Documents/workspace/sweng2013/localrepo/sweng-2013-team-swing/SwEng2013QuizApp/bin/classes
+
+-code-gen:
+[mergemanifest] Merging AndroidManifest files into one.
+[mergemanifest] Manifest merger disabled. Using project manifest only.
+     [echo] Handling aidl files...
+     [aidl] No AIDL files to compile.
+     [echo] ----------
+     [echo] Handling RenderScript files...
+     [echo] ----------
+     [echo] Handling Resources...
+     [aapt] Generating resource IDs...
+     [echo] ----------
+     [echo] Handling BuildConfig class...
+[buildconfig] Generating BuildConfig class.
+
+-pre-compile:
+
+-compile:
+    [javac] Compiling 14 source files to /Users/born4new/Documents/workspace/sweng2013/localrepo/sweng-2013-team-swing/SwEng2013QuizAppTest/bin/classes
+    [javac] /Users/born4new/Documents/workspace/sweng2013/localrepo/sweng-2013-team-swing/SwEng2013QuizAppTest/src/epfl/sweng/test/QuizEditExecutionTest.java:34: warning: unmappable character for encoding UTF-8
+    [javac] // XXX C'est pas le but de tester si le serveur r?pond 400 ou pas mais si nous 
+    [javac]                                                  ^
+    [javac] /Users/born4new/Documents/workspace/sweng2013/localrepo/sweng-2013-team-swing/SwEng2013QuizAppTest/src/epfl/sweng/test/QuizEditExecutionTest.java:35: warning: unmappable character for encoding UTF-8
+    [javac] //		on g?re le 400
+    [javac]   		    ^
+    [javac] 2 warnings
+
+-post-compile:
+
+-obfuscate:
+
+-dex:
+      [dex] input: /Users/born4new/Documents/workspace/sweng2013/localrepo/sweng-2013-team-swing/SwEng2013QuizAppTest/bin/classes
+      [dex] input: /Users/born4new/Documents/workspace/sweng2013/localrepo/sweng-2013-team-swing/SwEng2013QuizAppTest/libs/robotium.jar
+      [dex] Pre-Dexing /Users/born4new/Documents/workspace/sweng2013/localrepo/sweng-2013-team-swing/SwEng2013QuizAppTest/libs/robotium.jar -> robotium-c714bda8208af6f5fc84e5df68a2d66b.jar
+      [dex] Converting compiled files and external libraries into /Users/born4new/Documents/workspace/sweng2013/localrepo/sweng-2013-team-swing/SwEng2013QuizAppTest/bin/classes.dex...
+       [dx] Merged dex A (22 defs/24.3KiB) with dex B (59 defs/95.5KiB). Result is 81 defs/143.6KiB. Took 2.0s
+
+-crunch:
+   [crunch] Crunching PNG Files in source dir: /Users/born4new/Documents/workspace/sweng2013/localrepo/sweng-2013-team-swing/SwEng2013QuizAppTest/res
+   [crunch] To destination dir: /Users/born4new/Documents/workspace/sweng2013/localrepo/sweng-2013-team-swing/SwEng2013QuizAppTest/bin/res
+   [crunch] Processing image to cache: /Users/born4new/Documents/workspace/sweng2013/localrepo/sweng-2013-team-swing/SwEng2013QuizAppTest/res/drawable-hdpi/ic_launcher.png => /Users/born4new/Documents/workspace/sweng2013/localrepo/sweng-2013-team-swing/SwEng2013QuizAppTest/bin/res/drawable-hdpi/ic_launcher.png
+   [crunch]   (processed image to cache entry /Users/born4new/Documents/workspace/sweng2013/localrepo/sweng-2013-team-swing/SwEng2013QuizAppTest/bin/res/drawable-hdpi/ic_launcher.png: 87% size of source)
+   [crunch] Processing image to cache: /Users/born4new/Documents/workspace/sweng2013/localrepo/sweng-2013-team-swing/SwEng2013QuizAppTest/res/drawable-ldpi/ic_launcher.png => /Users/born4new/Documents/workspace/sweng2013/localrepo/sweng-2013-team-swing/SwEng2013QuizAppTest/bin/res/drawable-ldpi/ic_launcher.png
+   [crunch]   (processed image to cache entry /Users/born4new/Documents/workspace/sweng2013/localrepo/sweng-2013-team-swing/SwEng2013QuizAppTest/bin/res/drawable-ldpi/ic_launcher.png: 0% size of source)
+   [crunch] Processing image to cache: /Users/born4new/Documents/workspace/sweng2013/localrepo/sweng-2013-team-swing/SwEng2013QuizAppTest/res/drawable-mdpi/ic_launcher.png => /Users/born4new/Documents/workspace/sweng2013/localrepo/sweng-2013-team-swing/SwEng2013QuizAppTest/bin/res/drawable-mdpi/ic_launcher.png
+   [crunch]   (processed image to cache entry /Users/born4new/Documents/workspace/sweng2013/localrepo/sweng-2013-team-swing/SwEng2013QuizAppTest/bin/res/drawable-mdpi/ic_launcher.png: 78% size of source)
+   [crunch] Processing image to cache: /Users/born4new/Documents/workspace/sweng2013/localrepo/sweng-2013-team-swing/SwEng2013QuizAppTest/res/drawable-xhdpi/ic_launcher.png => /Users/born4new/Documents/workspace/sweng2013/localrepo/sweng-2013-team-swing/SwEng2013QuizAppTest/bin/res/drawable-xhdpi/ic_launcher.png
+   [crunch]   (processed image to cache entry /Users/born4new/Documents/workspace/sweng2013/localrepo/sweng-2013-team-swing/SwEng2013QuizAppTest/bin/res/drawable-xhdpi/ic_launcher.png: 85% size of source)
+   [crunch] Crunched 4 PNG files to update cache
+
+-package-resources:
+     [aapt] Creating full resource package...
+
+-package:
+[apkbuilder] Current build type is different than previous build: forced apkbuilder run.
+[apkbuilder] Creating SwEng2013QuizAppTest-debug-unaligned.apk and signing it with a debug key...
+
+-post-package:
+
+-do-debug:
+ [zipalign] Running zip align on final apk...
+     [echo] Debug Package: /Users/born4new/Documents/workspace/sweng2013/localrepo/sweng-2013-team-swing/SwEng2013QuizAppTest/bin/SwEng2013QuizAppTest-debug.apk
+[propertyfile] Creating new property file: /Users/born4new/Documents/workspace/sweng2013/localrepo/sweng-2013-team-swing/SwEng2013QuizAppTest/bin/build.prop
+[propertyfile] Updating property file: /Users/born4new/Documents/workspace/sweng2013/localrepo/sweng-2013-team-swing/SwEng2013QuizAppTest/bin/build.prop
+[propertyfile] Updating property file: /Users/born4new/Documents/workspace/sweng2013/localrepo/sweng-2013-team-swing/SwEng2013QuizAppTest/bin/build.prop
+[propertyfile] Updating property file: /Users/born4new/Documents/workspace/sweng2013/localrepo/sweng-2013-team-swing/SwEng2013QuizAppTest/bin/build.prop
+
+-post-build:
+
+debug:
+
+install:
+     [echo] Installing /Users/born4new/Documents/workspace/sweng2013/localrepo/sweng-2013-team-swing/SwEng2013QuizAppTest/bin/SwEng2013QuizAppTest-debug.apk onto default emulator or device...
+     [exec] 662 KB/s (98136 bytes in 0.144s)
+     [exec] 	pkg: /data/local/tmp/SwEng2013QuizAppTest-debug.apk
+     [exec] Success
+
+-set-mode-check:
+
+-set-instrumented-mode:
+
+install:
+     [echo] Installing /Users/born4new/Documents/workspace/sweng2013/localrepo/sweng-2013-team-swing/SwEng2013QuizApp/bin/SwEng2013QuizApp-instrumented.apk onto default emulator or device...
+     [exec] 1259 KB/s (404006 bytes in 0.313s)
+     [exec] 	pkg: /data/local/tmp/SwEng2013QuizApp-instrumented.apk
+     [exec] Success
+
+installi:
+
+-check-env:
+ [checkenv] Android SDK Tools Revision 22.2.1
+ [checkenv] Installed at /Users/born4new/Documents/workspace/sweng2013/android-sdk-macosx
+
+-setup:
+     [echo] Project Name: SwEng2013QuizAppTest
+  [gettype] Project Type: Test Application
+
+-test-project-check:
+
+test:
+[getlibpath] Library dependencies:
+[getlibpath] No Libraries
+     [echo] Running tests...
+     [echo] Running tests ...
+     [exec] 
+     [exec] epfl.sweng.test.AuthenticationActivityTest:INSTRUMENTATION_ABORTED: System has crashed.
+     [echo] Setting permission to download the coverage file...
+     [exec] Unable to chmod /data/data/epfl.sweng/coverage.ec: No such file or directory
+     [echo] Downloading coverage file into project directory...
+     [exec] remote object '/data/data/epfl.sweng/coverage.ec' does not exist

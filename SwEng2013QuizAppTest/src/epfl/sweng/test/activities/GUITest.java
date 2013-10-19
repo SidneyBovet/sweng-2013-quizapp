@@ -1,11 +1,11 @@
-package epfl.sweng.test;
+package epfl.sweng.test.activities;
 
 import android.app.Activity;
 import android.test.ActivityInstrumentationTestCase2;
 
 import com.jayway.android.robotium.solo.Solo;
 
-import epfl.sweng.backend.UserCredentialsStorage;
+import epfl.sweng.authentication.UserCredentialsStorage;
 import epfl.sweng.testing.TestCoordinator;
 import epfl.sweng.testing.TestingTransaction;
 

@@ -1,8 +1,8 @@
-package epfl.sweng.test;
+package epfl.sweng.test.activities;
 
 import android.content.Context;
 import android.widget.Button;
-import epfl.sweng.backend.UserCredentialsStorage;
+import epfl.sweng.authentication.UserCredentialsStorage;
 import epfl.sweng.entry.MainActivity;
 import epfl.sweng.testing.TestCoordinator.TTChecks;
 

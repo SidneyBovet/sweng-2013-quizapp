@@ -35,7 +35,7 @@
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name="epfl.sweng.entry.AuthenticationActivity"
+            android:name="epfl.sweng.authentication.AuthenticationActivity"
             android:label="@string/title_activity_authentication" >
         </activity>
     </application>
