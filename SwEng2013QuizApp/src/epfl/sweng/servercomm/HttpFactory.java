@@ -52,17 +52,26 @@ public class HttpFactory {
 	public static HttpGet getGetRequest(String url) {
         Log.i("HTTP FACTORY", "Creating GET Request " + url);
 		HttpGet request = new HttpGet(url);
-		// XXX getInstance without context could return null - Sidney
-		request.setHeader("Authorization", "Tequila "+
-				UserCredentialsStorage.getInstance().getSessionId());
+		
+		UserCredentialsStorage storageInstance = UserCredentialsStorage.getInstance();
+		if (null != storageInstance) {
+			request.setHeader("Authorization", "Tequila "+
+					storageInstance.getSessionId());			
+		}
+		
 		return request;
 	}
 
 	public static HttpPost getPostRequest(String url) {
         Log.i("HTTP FACTORY", "Creating POST Request " + url);
 		HttpPost request = new HttpPost(url);
-		request.setHeader("Authorization", "Tequila "
-				+ UserCredentialsStorage.getInstance().getSessionId());
+		
+		UserCredentialsStorage storageInstance = UserCredentialsStorage.getInstance();
+		if (null != storageInstance) {
+			request.setHeader("Authorization", "Tequila "+
+					storageInstance.getSessionId());			
+		}
+		
 		return request;
 	}
 }
