@@ -53,7 +53,7 @@ public class ShowQuestionsActivity extends Activity {
 			Toast.makeText(this, R.string.error_fetching_question,
 					Toast.LENGTH_LONG).show();
 			TestCoordinator.check(TTChecks.QUESTION_SHOWN);
-			finish();
+			//finish();
 			return;
 		}
 
