@@ -18,6 +18,11 @@ public class MainActivityNotAuthenticatedTest extends GUITest<MainActivity> {
 	@Override
 	protected void setUp() {
 		super.setUp();
+		try {
+			Thread.sleep(500);
+		} catch (InterruptedException e) {
+			fail("wtf");
+		}
 		contextOfMainActivity = getInstrumentation()
 				.getTargetContext();
 		persistentStorage = UserCredentialsStorage.

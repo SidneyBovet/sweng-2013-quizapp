@@ -27,6 +27,8 @@ public class MockHttpClientTest extends ActivityInstrumentationTestCase2<ShowQue
     @Override
     public void setUp() throws Exception {
         super.setUp();
+        
+        Thread.sleep(500);
 
         httpClient = new MockHttpClient();
         SwengHttpClientFactory.setInstance(httpClient);

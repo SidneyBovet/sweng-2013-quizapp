@@ -17,7 +17,7 @@ public class UserCreditentialsStorageTest extends
 	
 	@Override
 	public void setUp() {
-		getActivity();
+		//getActivity();
 		contextOfMainActivity = getInstrumentation()
 				.getTargetContext();
 		persistentStorage = UserCredentialsStorage.

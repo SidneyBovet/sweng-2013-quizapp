@@ -1,5 +1,7 @@
 package epfl.sweng.test;
 
+import java.util.concurrent.ExecutionException;
+
 import junit.framework.TestCase;
 
 import org.apache.http.HttpStatus;
@@ -28,7 +30,13 @@ public class JSONDownloaderTest extends TestCase{
                 + " \"solutionIndex\": 0, \"tags\": [\"h2g2\", \"trivia\"], \"id\": \"1\" }",
                 "application/json");
 		downloader.execute("https://sweng-quiz.appspot.com/quizquestions/random");
-		assert true;
+		try {
+			downloader.get();
+		} catch (InterruptedException e) {
+			fail("What a Terrible Failure (aka. WTF!?)");
+		} catch (ExecutionException e) {
+			fail("What a Terrible Failure (aka. WTF!?)");
+		}
 	}
 	
 	public void testIOExceptionIsHandled() {
@@ -36,9 +44,16 @@ public class JSONDownloaderTest extends TestCase{
 				"GET (?:https?://[^/]+|[^/]+)?/+quizquestions/random\\b",
 				MockHttpClient.IOEXCEPTION_ERROR_CODE,
 				"", "");
-		new JSONDownloader().
+		JSONDownloader downloader = new JSONDownloader();
+		downloader.
 			execute("https://sweng-quiz.appspot.com/quizquestions/random");
-		assert true;
+		try {
+			downloader.get();
+		} catch (InterruptedException e) {
+			fail("What a Terrible Failure (aka. WTF!?)");
+		} catch (ExecutionException e) {
+			fail("What a Terrible Failure (aka. WTF!?)");
+		}
 	}
 	
 	public void testProtocolExceptionIsHandled() {
@@ -46,12 +61,18 @@ public class JSONDownloaderTest extends TestCase{
 				"GET (?:https?://[^/]+|[^/]+)?/+quizquestions/random\\b",
 				MockHttpClient.CLIENTPROTOCOLEXCEPTION_ERROR_CODE,
 				"", "");
-		
-		new JSONDownloader().
+		JSONDownloader downloader = new JSONDownloader();
+		downloader.
 			execute("https://sweng-quiz.appspot.com/quizquestions/random");
-		assert true;
+		try {
+			downloader.get();
+		} catch (InterruptedException e) {
+			fail("What a Terrible Failure (aka. WTF!?)");
+		} catch (ExecutionException e) {
+			fail("What a Terrible Failure (aka. WTF!?)");
+		}
 	}
-	/*
+	/* --- hard to compare two JSONObjects...
 	public void testMultipleURLS() {
 		String json = "{\"question\": \"What is the answer to life, the universe, and everything?\","
                 + " \"answers\": [\"Forty-two\", \"Twenty-seven\"], \"owner\": \"sweng\","

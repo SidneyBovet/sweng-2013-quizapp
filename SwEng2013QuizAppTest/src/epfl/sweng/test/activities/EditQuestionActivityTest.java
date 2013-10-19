@@ -232,9 +232,9 @@ public class EditQuestionActivityTest extends GUITest<EditQuestionActivity> {
 				"tag");
 		// getActivityAndWaitFor(TTChecks.QUESTION_EDITED);
 		getSolo().enterText((EditText) getSolo().getText("Type in the answer"),
-				"la réponse D");
+				"la rÃ©ponse D");
 		getSolo().enterText((EditText) getSolo().getText("Type in the answer"),
-				"la réponse BBBBBB");
+				"la rÃ©ponse BBBBBB");
 		getSolo().clickOnButton("✘");
 		getActivityAndWaitFor(TTChecks.QUESTION_EDITED);
 		assertTrue("Submit button must be Enabled",
@@ -255,9 +255,9 @@ public class EditQuestionActivityTest extends GUITest<EditQuestionActivity> {
 				"tag");
 		// getActivityAndWaitFor(TTChecks.QUESTION_EDITED);
 		getSolo().enterText((EditText) getSolo().getText("Type in the answer"),
-				"la réponse D");
+				"la rÃ©ponse D");
 		getSolo().enterText((EditText) getSolo().getText("Type in the answer"),
-				"la réponse BBBBBB");
+				"la rÃ©ponse BBBBBB");
 		getSolo().clickOnButton("✘");
 		getActivityAndWaitFor(TTChecks.QUESTION_EDITED);
 		assertTrue("Submit button must be Enabled",
@@ -282,9 +282,9 @@ public class EditQuestionActivityTest extends GUITest<EditQuestionActivity> {
 				"tag");
 		// getActivityAndWaitFor(TTChecks.QUESTION_EDITED);
 		getSolo().enterText((EditText) getSolo().getText("Type in the answer"),
-				"la réponse AAAAAA");
+				"la rÃ©ponse AAAAAA");
 		getSolo().enterText((EditText) getSolo().getText("Type in the answer"),
-				"la réponse BBBBBB");
+				"la rÃ©ponse BBBBBB");
 		getSolo().clickOnButton("✘");
 		getActivityAndWaitFor(TTChecks.QUESTION_EDITED);
 		assertTrue("Submit button must be Enabled",
@@ -296,7 +296,7 @@ public class EditQuestionActivityTest extends GUITest<EditQuestionActivity> {
 		getSolo().clickOnButton("+");
 		getActivityAndWaitFor(TTChecks.QUESTION_EDITED);
 		getSolo().enterText((EditText) getSolo().getText("Type in the answer"),
-				"la réponse CCCCCC");
+				"la rÃ©ponse CCCCCC");
 		getSolo().clickOnButton("✘");
 		getActivityAndWaitFor(TTChecks.QUESTION_EDITED);
 		assertTrue("Submit button must be Enabled",
