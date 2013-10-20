@@ -151,7 +151,8 @@ public class ShowQuestionsActivityTest extends GUITest<ShowQuestionsActivity> {
 
 		getActivityAndWaitFor(TTChecks.ANSWER_SELECTED);
 
-		assertTrue("Couldn't find the wrong answer",getSolo().searchText("" + (char)10008));
+		assertTrue("Couldn't find the wrong answer",getSolo().
+				searchText("" + (char)10008));
 		
 		assertTrue("Correct answer must be displayed",
 				getSolo().searchText("Answer #2"));
@@ -200,7 +201,7 @@ public class ShowQuestionsActivityTest extends GUITest<ShowQuestionsActivity> {
 				MockHttpClient.CLIENTPROTOCOLEXCEPTION_ERROR_CODE,
 				"", "");
 		getActivityAndWaitFor(TTChecks.QUESTION_SHOWN);
-		getSolo().searchText("An error occurred, please try again later.");
+		getSolo().searchText("There was an error retrieving the question");
 	}
 	
 	public void testErrorWhile500SendByServer() {
@@ -209,7 +210,7 @@ public class ShowQuestionsActivityTest extends GUITest<ShowQuestionsActivity> {
 				MockHttpClient.IOEXCEPTION_ERROR_CODE,
 				"", "");
 		getActivityAndWaitFor(TTChecks.QUESTION_SHOWN);
-		getSolo().searchText("An error occurred, please try again later.");
+		getSolo().searchText("There was an error retrieving the question");
 	}
 	
 	public void testErrorWhile400SendByServer() {
@@ -218,6 +219,6 @@ public class ShowQuestionsActivityTest extends GUITest<ShowQuestionsActivity> {
 				MockHttpClient.FORBIDDEN_ERROR_CODE,
 				"", "");
 		getActivityAndWaitFor(TTChecks.QUESTION_SHOWN);
-		getSolo().searchText("An error occurred, please try again later.");
+		getSolo().searchText("There was an error retrieving the question");
 	}
 }
