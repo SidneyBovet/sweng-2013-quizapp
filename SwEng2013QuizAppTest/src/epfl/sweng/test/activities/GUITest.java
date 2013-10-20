@@ -55,6 +55,27 @@ public class GUITest<T extends Activity> extends
 		});
 	}
 
+	protected void waitFor(final TestCoordinator.TTChecks expected) {
+		TestCoordinator.run(getInstrumentation(), new TestingTransaction() {
+			@Override
+			public void initiate() {
+				// Nothing to do here...
+			}
+
+			@Override
+			public void verify(TestCoordinator.TTChecks notification) {
+				assertEquals(String.format(
+						"Expected notification %s, but received %s", expected,
+						notification), expected, notification);
+			}
+
+			@Override
+			public String toString() {
+				return String.format("WaitFor(%s)", expected);
+			}
+		});
+	}
+
 	public Solo getSolo() {
 		return solo;
 	}
