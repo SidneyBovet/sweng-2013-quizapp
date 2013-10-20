@@ -167,9 +167,11 @@ public class Question {
 		try {
 			jsonObject.put("id", mId);
 			jsonObject.put("question", mQuestionContent);
-			jsonObject.put("answers", mAnswers);
+			JSONArray jsonArrayAnswers = new JSONArray(mAnswers);
+			jsonObject.put("answers", jsonArrayAnswers);
 			jsonObject.put("solutionIndex", mSolutionIndex);
-			jsonObject.put("tags", mTags);
+			JSONArray jsonArrayTags = new JSONArray(mTags);
+			jsonObject.put("tags", jsonArrayTags);
 			jsonObject.put("owner", mOwner);
 		} catch (JSONException e) {
 			e.printStackTrace();
