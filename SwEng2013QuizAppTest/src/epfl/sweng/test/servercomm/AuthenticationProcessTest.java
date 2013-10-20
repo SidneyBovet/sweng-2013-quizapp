@@ -29,7 +29,7 @@ public class AuthenticationProcessTest extends
 	
 	@Override
 	public void setUp() {
-		persistentStorage.releaseAuthentication();
+		persistentStorage.destroyAuthentication();
 	}
 	
 	@Override
