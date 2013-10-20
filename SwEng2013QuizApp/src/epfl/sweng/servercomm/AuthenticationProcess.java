@@ -47,6 +47,7 @@ public class AuthenticationProcess extends AsyncTask<String, Void, String> {
 	private Context mParentActivity;
 
 	private String mErrorMessage;
+	
 	public AuthenticationProcess(Context parentActivity) {
 		this.mParentActivity = parentActivity;
 		this.mDialog = new ProgressDialog(parentActivity);
