@@ -19,10 +19,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
-import epfl.sweng.authentication.AuthenticationActivity;
 import epfl.sweng.authentication.UserCredentialsStorage;
 import epfl.sweng.exceptions.authentication.InvalidTokenException;
 import epfl.sweng.exceptions.authentication.NoSessionIDException;
@@ -44,16 +44,12 @@ public class AuthenticationProcess extends AsyncTask<String, Void, String> {
 	private static final int HTTP_STATUS_FOUND = 302;
 
 	private ProgressDialog mDialog;
-	private AuthenticationActivity mParentActivity;
+	private Context mParentActivity;
 
 	private String mErrorMessage;
-
-	// TODO Put them in Strings.xml? < need context object for this.
-
-	public AuthenticationProcess(AuthenticationActivity parentActivity) {
+	public AuthenticationProcess(Context parentActivity) {
 		this.mParentActivity = parentActivity;
 		this.mDialog = new ProgressDialog(parentActivity);
-		// TODO Strings.xml < need context object for this.
 		mDialog.setMessage("Authenticating...");
 		mDialog.setCancelable(false);
 	}
@@ -109,8 +105,7 @@ public class AuthenticationProcess extends AsyncTask<String, Void, String> {
 	protected void onPostExecute(String result) {
 		if (result != null && !result.equals("")) {
 			UserCredentialsStorage.getInstance(mParentActivity).
-			createAuthentication(result);
-			// TODO why not UserCredentialsStorage.getInstance().setSessionId()?
+				createAuthentication(result);
 		} else {
 			Toast.makeText(mParentActivity, mErrorMessage, Toast.LENGTH_LONG).show();
 		}

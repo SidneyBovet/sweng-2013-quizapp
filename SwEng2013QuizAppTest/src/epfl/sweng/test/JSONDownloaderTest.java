@@ -10,7 +10,7 @@ import epfl.sweng.servercomm.JSONDownloader;
 import epfl.sweng.servercomm.SwengHttpClientFactory;
 import epfl.sweng.test.minimalmock.MockHttpClient;
 
-public class JSONDownloaderTest extends TestCase{
+public class JSONDownloaderTest extends TestCase {
 	
 	private MockHttpClient mockClient;
 	

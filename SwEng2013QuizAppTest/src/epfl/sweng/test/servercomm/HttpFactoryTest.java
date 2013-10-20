@@ -1,5 +1,8 @@
 package epfl.sweng.test.servercomm;
 
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+
 import junit.framework.TestCase;
 import epfl.sweng.servercomm.HttpFactory;
 
@@ -39,5 +42,17 @@ public class HttpFactoryTest extends TestCase {
 	
 	public void testGetTequilaLogin() {
 		assertEquals(TEQUILA_LOGIN, HttpFactory.getTequilaLogin());
+	}
+
+	public void testGetGetRequestWithoutContext() {
+		HttpGet get = new HttpGet("lol");
+		assertEquals(get.getRequestLine().toString(),
+				HttpFactory.getGetRequest("lol").getRequestLine().toString());
+	}
+
+	public void testGetPostRequestWithoutContext() {
+		HttpPost post = new HttpPost("lol");
+		assertEquals(post.getRequestLine().toString(),
+				HttpFactory.getPostRequest("lol").getRequestLine().toString());
 	}
 }

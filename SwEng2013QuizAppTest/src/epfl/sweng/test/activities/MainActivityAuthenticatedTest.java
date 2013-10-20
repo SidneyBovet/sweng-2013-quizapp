@@ -23,6 +23,7 @@ public class MainActivityAuthenticatedTest extends GUITest<MainActivity> {
 		persistentStorage = UserCredentialsStorage.
 				getInstance(contextOfMainActivity);
 		persistentStorage.takeAuthentication("blabla");
+		getActivityAndWaitFor(TTChecks.MAIN_ACTIVITY_SHOWN);
 	}
 	
 	@Override
@@ -32,14 +33,11 @@ public class MainActivityAuthenticatedTest extends GUITest<MainActivity> {
 	};
 	
 	public void testLogOut() {
-		getActivityAndWaitFor(TTChecks.MAIN_ACTIVITY_SHOWN);
 		getSolo().clickOnButton("Log out");
-		
 		getActivityAndWaitFor(TTChecks.LOGGED_OUT);
-		
-		assertTrue("Submit Quizz Question Button is present",
+		assertTrue("Submit Quizz Question Button should be present",
 				getSolo().searchButton("Submit a quiz question."));
-		assertTrue("Show Random Question Button is present",
+		assertTrue("Show Random Question Button should be present",
 				getSolo().searchButton("Show a random question."));
 		
 		Button showButton = getSolo().getButton("Show a random question.");
@@ -49,17 +47,15 @@ public class MainActivityAuthenticatedTest extends GUITest<MainActivity> {
 	}
 	
 	public void testShowAllButtons() {
-		getActivityAndWaitFor(TTChecks.MAIN_ACTIVITY_SHOWN);
 		assertTrue("Login Button is present",
 				getSolo().searchButton("Log out"));
-		assertTrue("Show Random Question Button is present",
+		assertTrue("Show Random Question Button should be present",
 				getSolo().searchButton("Show a random question."));
-		assertTrue("Submit Quizz Question Button is present",
+		assertTrue("Submit Quizz Question Button should be present",
 				getSolo().searchButton("Submit a quiz question."));
 	}
 	
 	public void testQuestionButtonsAreEnabledAtBeggining() {
-		getActivityAndWaitFor(TTChecks.MAIN_ACTIVITY_SHOWN);
 		Button showButton = getSolo().getButton("Show a random question.");
 		Button submitButton = getSolo().getButton("Submit a quiz question.");
 		assertTrue(showButton.isEnabled());
