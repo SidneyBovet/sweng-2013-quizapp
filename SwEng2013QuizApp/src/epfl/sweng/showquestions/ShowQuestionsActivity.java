@@ -1,7 +1,5 @@
 package epfl.sweng.showquestions;
 
-import org.json.JSONException;
-
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
@@ -62,11 +60,7 @@ public class ShowQuestionsActivity extends Activity {
 		textViewQuestion.setText(randomQuestion.getQuestionContent());
 
 		TextView textViewTag = (TextView) findViewById(R.id.displayTags);
-		try {
-			textViewTag.setText(randomQuestion.getTagsToString());
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
+		textViewTag.setText(randomQuestion.getTagsToString());
 
 		// setting answer list
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(

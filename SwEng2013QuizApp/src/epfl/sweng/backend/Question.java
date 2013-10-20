@@ -144,7 +144,7 @@ public class Question {
 	 * @throws JSONException
 	 */
 	
-	public String getTagsToString() throws JSONException {
+	public String getTagsToString() {
 		Iterator<String> tagsIterator = mTags.iterator();
 		String tagsTogether = "Tags: ";
 		while (tagsIterator.hasNext()) {
