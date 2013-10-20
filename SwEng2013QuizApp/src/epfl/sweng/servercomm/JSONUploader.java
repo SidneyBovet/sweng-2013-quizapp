@@ -44,15 +44,12 @@ public class JSONUploader extends AsyncTask<JSONObject, Void, Integer> {
 			response = SwengHttpClientFactory.getInstance().execute(post);
 			responseStatus = response.getStatusLine().getStatusCode();
 		} catch (UnsupportedEncodingException e) {
-			// TODO Error handling
 			Log.e(this.getClass().getName(), "doInBackground(): Entity does "
 					+ "not support the local encoding.", e);
 		} catch (ClientProtocolException e) {
-			// TODO Error handling
 			Log.e(this.getClass().getName(), "doInBackground(): Error in the "
 					+ "HTTP protocol.", e);
 		} catch (IOException e) {
-			// TODO Error handling
 			Log.e(this.getClass().getName(), "doInBackground(): An I/O error "
 					+ "has occurred.", e);
 		}

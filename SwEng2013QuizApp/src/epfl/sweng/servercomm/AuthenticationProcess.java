@@ -47,13 +47,10 @@ public class AuthenticationProcess extends AsyncTask<String, Void, String> {
 	private AuthenticationActivity mParentActivity;
 
 	private String mErrorMessage;
-
-	// TODO Put them in Strings.xml? < need context object for this.
-
+	
 	public AuthenticationProcess(AuthenticationActivity parentActivity) {
 		this.mParentActivity = parentActivity;
 		this.mDialog = new ProgressDialog(parentActivity);
-		// TODO Strings.xml < need context object for this.
 		mDialog.setMessage("Authenticating...");
 		mDialog.setCancelable(false);
 	}
@@ -110,7 +107,6 @@ public class AuthenticationProcess extends AsyncTask<String, Void, String> {
 		if (result != null && !result.equals("")) {
 			UserCredentialsStorage.getInstance(mParentActivity)
 					.takeAuthentication(result);
-			// TODO why not UserCredentialsStorage.getInstance().setSessionId()?
 		} else {
 			Toast.makeText(mParentActivity, mErrorMessage, Toast.LENGTH_LONG).show();
 		}
