@@ -193,4 +193,31 @@ public class ShowQuestionsActivityTest extends GUITest<ShowQuestionsActivity> {
 		getActivityAndWaitFor(TTChecks.QUESTION_SHOWN);
 		assert true;
 	}
+	
+	public void testErrorWhile503SendByServer() {
+		mockClient.pushCannedResponse(
+				"GET (?:https?://[^/]+|[^/]+)?/+quizquestions/random\\b",
+				MockHttpClient.CLIENTPROTOCOLEXCEPTION_ERROR_CODE,
+				"", "");
+		getActivityAndWaitFor(TTChecks.QUESTION_SHOWN);
+		getSolo().searchText("An error occurred, please try again later.");
+	}
+	
+	public void testErrorWhile500SendByServer() {
+		mockClient.pushCannedResponse(
+				"GET (?:https?://[^/]+|[^/]+)?/+quizquestions/random\\b",
+				MockHttpClient.IOEXCEPTION_ERROR_CODE,
+				"", "");
+		getActivityAndWaitFor(TTChecks.QUESTION_SHOWN);
+		getSolo().searchText("An error occurred, please try again later.");
+	}
+	
+	public void testErrorWhile400SendByServer() {
+		mockClient.pushCannedResponse(
+				"GET (?:https?://[^/]+|[^/]+)?/+quizquestions/random\\b",
+				MockHttpClient.FORBIDDEN_ERROR_CODE,
+				"", "");
+		getActivityAndWaitFor(TTChecks.QUESTION_SHOWN);
+		getSolo().searchText("An error occurred, please try again later.");
+	}
 }
