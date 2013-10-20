@@ -22,12 +22,10 @@
 //	@Override
 //	protected void setUp() throws Exception {
 //		mAnswers.add("reponse1");
-//		mAnswers.add("  Â¥    "); // Blank is an error.
+//		mAnswers.add("     "); // Blank is an error.
 //		mTags.add("**((/_:_:_");
 //		mMockJson = new MockJSON(id, "ma question", mAnswers, index, mTags,
 //				"BOB");
-//
-//		mMockClient.pushCannedResponse("(POST|GET) https?://", ERROR_CODE, "", "");
 //		
 //		super.setUp();
 //	}
@@ -36,14 +34,17 @@
 ////		on gère le 400
 //	
 //	public void testBadRequestIsHandled() {
+//
+//		mMockClient.pushCannedResponse(
+//				".+", ERROR_CODE, "", "");
 //		try {
 //			JSONUploader quizEditExecute = new JSONUploader();
 //			quizEditExecute.execute(mMockJson);
-//			Thread.sleep(1000);
+//			quizEditExecute.get();
 //		} catch (InterruptedException e) {
 //			fail("What a Terrible Failure (aka. WTF!?");
-//		} catch (Exception e) {
-//			fail("Looks like bad request is not handled...");
+//		} catch (ExecutionException e) {
+//			fail("An exception was thrown while executing JSONUploader");
 //		}
 //	}
 //}
