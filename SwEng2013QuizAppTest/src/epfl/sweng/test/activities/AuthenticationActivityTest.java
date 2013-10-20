@@ -61,7 +61,7 @@ public class AuthenticationActivityTest extends GUITest<AuthenticationActivity> 
 
 	public void testAuthenticationActivityWorks() {
 		getActivityAndWaitFor(TTChecks.AUTHENTICATION_ACTIVITY_SHOWN);
-		persistentStorage.releaseAuthentication();
+		persistentStorage.destroyAuthentication();
 		getSolo().sleep(1);
 
 		mockClient.pushCannedResponse(

@@ -70,7 +70,7 @@ public final class UserCredentialsStorage {
 	 * @param sessionID
 	 *            that the user received from Tequila
 	 */
-	public void takeAuthentication(String sessionID) {
+	public void createAuthentication(String sessionID) {
 		editor.putString(keySessionIDName, sessionID);
 		editor.commit();
 	}
@@ -93,7 +93,7 @@ public final class UserCredentialsStorage {
 	 * @param sessionID
 	 *            that we want to remove because the user logged out
 	 */
-	public void releaseAuthentication() {
+	public void destroyAuthentication() {
 		editor.remove(keySessionIDName);
 		editor.commit();
 	}

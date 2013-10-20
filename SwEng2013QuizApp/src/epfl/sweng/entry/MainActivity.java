@@ -70,7 +70,7 @@ public class MainActivity extends Activity {
 			startActivity(submitAuthenticationActivityIntent); 
 		} else {
 			// Case Log out
-			persistentStorage.releaseAuthentication();
+			persistentStorage.destroyAuthentication();
 			// TODO ne devrait pas se faire au chargement initial de
 			// l'application
 			Button logButton = (Button) findViewById(R.id.autenticationLogButton);

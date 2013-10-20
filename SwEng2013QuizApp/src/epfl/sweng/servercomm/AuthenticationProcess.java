@@ -108,8 +108,8 @@ public class AuthenticationProcess extends AsyncTask<String, Void, String> {
 	@Override
 	protected void onPostExecute(String result) {
 		if (result != null && !result.equals("")) {
-			UserCredentialsStorage.getInstance(mParentActivity)
-					.takeAuthentication(result);
+			UserCredentialsStorage.getInstance(mParentActivity).
+			createAuthentication(result);
 			// TODO why not UserCredentialsStorage.getInstance().setSessionId()?
 		} else {
 			Toast.makeText(mParentActivity, mErrorMessage, Toast.LENGTH_LONG).show();
