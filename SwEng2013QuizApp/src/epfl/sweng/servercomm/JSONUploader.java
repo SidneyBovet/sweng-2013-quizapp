@@ -64,7 +64,8 @@ public class JSONUploader extends AsyncTask<JSONObject, Void, Integer> {
 	 * Method executed right after the process is finished.
 	 * @param result
 	 */
-	protected void onPostExecute(Long result) {
+	@Override
+	protected void onPostExecute(Integer result) {
 		TestCoordinator.check(TTChecks.NEW_QUESTION_SUBMITTED);
 	}
 }
