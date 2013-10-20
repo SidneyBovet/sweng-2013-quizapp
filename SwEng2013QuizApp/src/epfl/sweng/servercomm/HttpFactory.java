@@ -55,7 +55,7 @@ public class HttpFactory {
 		
 		UserCredentialsStorage storageInstance = UserCredentialsStorage.getInstance();
 		if (null != storageInstance) {
-			request.setHeader("Authorization", "Tequila "+ "sdsd");	
+			request.setHeader("Authorization", "Tequila "+ storageInstance.getSessionId());	
 		}
 		
 		return request;
