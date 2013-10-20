@@ -28,7 +28,7 @@ import epfl.sweng.testing.TestCoordinator.TTChecks;
  * 
  */
 public class JSONUploader extends AsyncTask<JSONObject, Void, Integer> {
-	private HttpResponse response = null;
+	private HttpResponse mResponse = null;
 
 	@Override
 	protected Integer doInBackground(JSONObject... jsonObject) {
@@ -41,8 +41,8 @@ public class JSONUploader extends AsyncTask<JSONObject, Void, Integer> {
 		try {
 			post.setEntity(new StringEntity(jsonObject[0].toString()));
 			post.setHeader("Content-type", "application/json");
-			response = SwengHttpClientFactory.getInstance().execute(post);
-			responseStatus = response.getStatusLine().getStatusCode();
+			mResponse = SwengHttpClientFactory.getInstance().execute(post);
+			responseStatus = mResponse.getStatusLine().getStatusCode();
 		} catch (UnsupportedEncodingException e) {
 			Log.e(this.getClass().getName(), "doInBackground(): Entity does "
 					+ "not support the local encoding.", e);
