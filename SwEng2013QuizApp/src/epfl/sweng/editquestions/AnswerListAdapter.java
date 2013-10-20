@@ -75,6 +75,7 @@ class AnswerListAdapter extends BaseAdapter {
 	 * 
 	 * @return The index of the correct answer.
 	 */
+	
 	public int getCorrectIndex() {
 		return mCorrectAnswerIndex;
 	}
@@ -82,6 +83,7 @@ class AnswerListAdapter extends BaseAdapter {
 	/**
 	 * Resets the fields and the data of the <code>ListView</code>
 	 */
+	
 	public void resetAnswerList() {
 		mAnswerCount = 1;
 		mAnswerList = new ArrayList<String>();

@@ -20,12 +20,13 @@ import epfl.sweng.testing.TestCoordinator;
 import epfl.sweng.testing.TestCoordinator.TTChecks;
 
 /***
- * * This class will take care of the authentication to the Tequila EPFL server.
+ * Activity that takes care of the authentication on the Tequila EPFL server.
  * 
  * @author Merok
  * 
  */
 public class AuthenticationActivity extends Activity {
+	
 	private EditText mUserNameEditText;
 	private EditText mPasswordEditText;
 	private Button mLoginbutton;
@@ -40,9 +41,10 @@ public class AuthenticationActivity extends Activity {
 
 	/**
 	 * Sets all the view in this activity, by disabling the button, filling the
-	 * TextView, setting the status of the loginButton using a listener on the
-	 * login and password EditText.
+	 * <code>TextView</code>, setting the status of the loginButton using a 
+	 * listener on the login and password EditText.
 	 */
+	
 	private void setDisplayView() {
 		mLoginbutton = (Button) findViewById(R.id.login_button);
 		mLoginbutton.setEnabled(false);
@@ -95,6 +97,7 @@ public class AuthenticationActivity extends Activity {
 	 * Tries to update the status of the submit button according to the content
 	 * of the password and login EditText.
 	 */
+	
 	private void checkLoginButtonStatus() {
 		String usrName = mUserNameEditText.getText().toString();
 		String usrPassword = mPasswordEditText.getText().toString();
@@ -108,6 +111,7 @@ public class AuthenticationActivity extends Activity {
 	 * Resets the layout by emptying every EditText on the Activity, and by
 	 * disabling the loginButton.
 	 */
+	
 	public void resetGUIWhenAuthenticationFails() {
 		mUserNameEditText.setText("");
 		mPasswordEditText.setText("");
@@ -121,6 +125,12 @@ public class AuthenticationActivity extends Activity {
 		return true;
 	}
 
+	/**
+	 * Authenticates the user on the Tequila server.
+	 * <p>
+	 * Used when the login button is clicked.
+	 */
+	
 	public void buttonAuthenticate(View view) {
 		String usrName = ((TextView) findViewById(R.id.login_user)).getText()
 				.toString();

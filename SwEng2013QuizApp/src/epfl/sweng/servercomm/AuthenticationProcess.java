@@ -68,6 +68,7 @@ public class AuthenticationProcess extends AsyncTask<String, Void, String> {
 	 * @param password
 	 *            User's password.
 	 */
+	
 	@Override
 	protected String doInBackground(String... args) {
 
@@ -118,6 +119,7 @@ public class AuthenticationProcess extends AsyncTask<String, Void, String> {
 	 * 
 	 * @return The retrieved token to be validated.
 	 */
+	
 	private String getToken() throws TequilaNoTokenException {
 
 		ResponseHandler<String> responseHandler = new BasicResponseHandler();
@@ -159,6 +161,7 @@ public class AuthenticationProcess extends AsyncTask<String, Void, String> {
 	 * @param password
 	 *            The user's password in EPFL's Tequila system.
 	 */
+	
 	private void validateToken(String token, String username, String password)
 		throws InvalidTokenException {
 
@@ -217,6 +220,7 @@ public class AuthenticationProcess extends AsyncTask<String, Void, String> {
 	 * @see validateToken()
 	 * @see getToken()
 	 */
+	
 	private String retrieveSessionId(String token) throws NoSessionIDException {
 
 		JSONObject postBody = new JSONObject();

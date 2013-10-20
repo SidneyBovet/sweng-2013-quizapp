@@ -164,9 +164,9 @@ public class EditQuestionActivity extends Activity {
 	}
 
 	/**
-	 * Initializes the activity by binding the {@link AnswerListAdapter} with
-	 * the <code>ListView</code>, and adding a <code>TextWatcher</code> on the
-	 * question and tags fields.
+	 * Initializes the activity by setting the view.
+	 *
+	 * @see #setDisplayView()
 	 */
 
 	@Override
@@ -176,11 +176,13 @@ public class EditQuestionActivity extends Activity {
 		setDisplayView();
 		TestCoordinator.check(TTChecks.EDIT_QUESTIONS_SHOWN);
 	}
-
+	
 	/**
-	 * Resets the layout by emptying every <code>EditText</code> on the Activty,
-	 * and by resetting the <code>ListView</code> adapter.
+	 * Sets the view by binding the {@link AnswerListAdapter} with the
+	 * <code>ListView</code>, and adding a <code>TextWatcher</code> on the
+	 * question and tags fields.
 	 */
+	
 	private void setDisplayView() {
 
 		mQuestionBodyText = "";
@@ -245,7 +247,12 @@ public class EditQuestionActivity extends Activity {
 		});
 
 	}
-
+	
+	/**
+	 * Resets the layout by emptying every <code>EditText</code> on the Activty,
+	 * and by resetting the <code>ListView</code> adapter.
+	 */
+	
 	private void resetEditQuestionLayout() {
 		mQuestionBodyText = "";
 		mTagsText = "";

@@ -56,11 +56,14 @@ public class MainActivity extends Activity {
 	}
 
 	/**
-	 * Lauch the AuthentificationActivity when not authenticated Release the
-	 * authentication and refresh the view when authenticated
+	 * Launches the {@link AuthenticationActivity} when not authenticated.
+	 * Releases the authentication and refreshes the view when authenticated.
+	 * <p>
+	 * Used when the login/logout button is clicked.
 	 * 
 	 * @param view
 	 */
+	
 	public void displayAuthenticationActivity(View view) {
 		if (!persistentStorage.isAuthenticated()) {
 			// Case LoginUsingTequila
@@ -100,10 +103,13 @@ public class MainActivity extends Activity {
 	}
 
 	/**
+	 * Checks the authentication state and change the text on the log button and
+	 * the authenticated boolean in response.
+	 * <p>
 	 * Called when the app is first launched and when we return to it from
-	 * another activity. Check the authentication state and change the text on
-	 * the log button and the authenticated boolean in response.
+	 * another activity.
 	 */
+	
 	@Override
 	protected void onResume() {
 		super.onResume();
@@ -116,9 +122,10 @@ public class MainActivity extends Activity {
 	}
 
 	/**
-	 * Set the view of the button and enable or disable them due to
-	 * authentication state
+	 * Sets the view of the activity, by enabling or disabling the buttons
+	 * according to the authentication state.
 	 */
+	
 	private void setDisplayView() {
 		((Button) findViewById(R.id.displayRandomQuestionButton))
 				.setEnabled(persistentStorage.isAuthenticated());

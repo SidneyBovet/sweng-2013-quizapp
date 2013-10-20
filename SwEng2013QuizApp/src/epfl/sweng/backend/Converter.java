@@ -8,16 +8,16 @@ import java.util.TreeSet;
 import org.json.JSONArray;
 
 /**
- * Utility class that allows us to convert JSON in various formats.
- * It is supposed to be a general-converter.
+ * Utility class that allows us to convert JSON in various formats. It is
+ * supposed to be a general-converter.
+ * 
  * @author born4new
- *
  */
 
 public final class Converter {
 
 	private Converter() {
-		
+		// Nothing to do here
 	}
 	
 	/**
@@ -27,6 +27,7 @@ public final class Converter {
 	 * @return An <code>ArrayList</code> of the <code>JSONObjects</code> string
 	 *            field.
 	 */
+	
 	public static List<String> jsonArrayToStringArray(
 			JSONArray arrayToConvert) {
 		ArrayList<String> list = new ArrayList<String>();
@@ -47,6 +48,7 @@ public final class Converter {
 	 * @return An <code>HashSet</code> of the <code>JSONObjects</code> string
 	 *            field.
 	 */
+	
 	public static Set<String> jsonArrayToStringSet(
 			JSONArray arrayToConvert) {
 		TreeSet<String> set = new TreeSet<String>();
