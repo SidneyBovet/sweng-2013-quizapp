@@ -1,6 +1,7 @@
 package epfl.sweng.test;
 
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 
 import junit.framework.TestCase;
 import epfl.sweng.servercomm.JSONUploader;
@@ -39,11 +40,11 @@ public class JSONUploaderTest extends TestCase {
 		try {
 			JSONUploader quizEditExecute = new JSONUploader();
 			quizEditExecute.execute(mMockJson);
-			Thread.sleep(1000);
+			quizEditExecute.get();
 		} catch (InterruptedException e) {
 			fail("What a Terrible Failure (aka. WTF!?");
-		} catch (Exception e) {
-			fail("Looks like bad request is not handled...");
+		} catch (ExecutionException e) {
+			fail("An exception was thrown while executing JSONUploader");
 		}
 	}
 }
