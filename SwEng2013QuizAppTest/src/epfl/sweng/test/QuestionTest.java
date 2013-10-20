@@ -3,6 +3,7 @@ package epfl.sweng.test;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 
 import junit.framework.TestCase;
 
@@ -29,30 +30,30 @@ public class QuestionTest extends TestCase {
 	private final HashSet<String> mQuestionTagsSet = new HashSet<String>(
 			Arrays.asList("tag1", "tag2"));
 	private final String mQuestionOwner = "Anonymous";
+	private Question mQuestion;
+	private Question mQuestion2;
 	
 	@Override
 	public void setUp() {
-		
+		mQuestion = new Question(mQuestionID, mQuestionContent, 
+				mQuestionAnswers, mQuestionSolutionIndex, mQuestionTagsSet,
+				mQuestionOwner);
+		mQuestion2 = new Question(mQuestionContent, 
+				mQuestionAnswers, mQuestionSolutionIndex, mQuestionTagsSet);
 	}
 	
 	public void testQuestionCreation() {
-		Question question = new Question(mQuestionID, mQuestionContent, 
-				mQuestionAnswers, mQuestionSolutionIndex, mQuestionTagsSet,
-				mQuestionOwner);
-		assertEquals(question.getId(), mQuestionID);
-		assertEquals(question.getQuestionContent(), 
+		assertEquals(mQuestion.getId(), mQuestionID);
+		assertEquals(mQuestion.getQuestionContent(), 
 				"Question: " + mQuestionContent);
-		assertEquals(question.getAnswers().get(0), mQuestionAnswers.get(0));
-		assertEquals(question.getSolutionIndex(), mQuestionSolutionIndex);
+		assertEquals(mQuestion.getAnswers().get(0), mQuestionAnswers.get(0));
+		assertEquals(mQuestion.getSolutionIndex(), mQuestionSolutionIndex);
 	}
 
 	public void testJSONTranslation() {
-		final Question question = new Question(mQuestionID, mQuestionContent, 
-				mQuestionAnswers, mQuestionSolutionIndex, mQuestionTagsSet,
-				mQuestionOwner);
 		String jsonContent = "{"
 				+ "\"id\": \"1\","
-				+ "\"tags\": \"[tag1, tag2]\","
+				+ "\"tags\": \"[tag2, tag1]\","
 				+ "\"owner\": \"Anonymous\","
                 + " \"answers\": \"[Answer1, Answer2, Answer3]\","
 				+ "\"question\": \"content\","
@@ -65,10 +66,10 @@ public class QuestionTest extends TestCase {
 			// Since JSON developers suck so bad, we cannot do an actual equals
 			// between two JSON Objects, so we just compare them row by row.
 			
-			String[] tags = { "id", "owner", "answers", "question", "solutionIndex" };
+			String[] tags = {"id", "owner", "answers", "question", "solutionIndex"};
 			
 			for (String tag : tags) {
-				assertEquals(json.getString(tag), question.toJSON().getString(tag));
+				assertEquals(json.getString(tag), mQuestion.toJSON().getString(tag));
 			}
 			
 		} catch (JSONException e) {
@@ -85,7 +86,44 @@ public class QuestionTest extends TestCase {
 		assertEquals(mQuestionAnswers, Converter.jsonArrayToStringArray(jsonArray));
 	}
 	
+	// Since the tags are in the set the order here can be changed
 	public void testTagToString() {
-		//assertEquals("Tags: tag1, tag2", .getTagsToString(mQuestionTagsSet));
+		assertEquals("Tags: tag2, tag1", mQuestion.getTagsToString());
 	}
+	
+	public void testJSONToSet() {
+		JSONArray jsonArray = new JSONArray();
+		jsonArray.put("tag1");
+		jsonArray.put("tag2");
+		assertEquals(mQuestionTagsSet, 
+				Converter.jsonArrayToStringSet(jsonArray));
+	}
+	
+	public void testToString() {
+		assertEquals(mQuestion.toString(), "Question [id=1, questionContent=" +
+				"content, answers=[Answer1, Answer2, Answer3], solutionIndex=2, " +
+				"tags=[tag2, tag1], owner=Anonymous]");
+	}
+	
+	public void testSecondConstructor() {
+		assertEquals(-1, mQuestion2.getId());
+		assertEquals(null, mQuestion2.getOwner());
+	}
+	
+	public void testListTranslation() {
+		List<String> listToQuestion = new ArrayList<String>();
+		listToQuestion.add(mQuestionContent);
+
+		List<String> listAnswers = mQuestionAnswers;
+		listToQuestion.addAll(listAnswers);
+
+		int indexGoodAnswer = mQuestionSolutionIndex;
+		String indexGoodAnswerString = Integer.toString(indexGoodAnswer);
+
+		listToQuestion.add(indexGoodAnswerString);
+		listToQuestion.add("tag1, tag2");
+		//TODO check why if we compare the two objects the tags are switched??
+		assertEquals(mQuestion2.getAnswers(), 
+				Question.createQuestionFromList(listToQuestion).getAnswers());
+	}	
 }
