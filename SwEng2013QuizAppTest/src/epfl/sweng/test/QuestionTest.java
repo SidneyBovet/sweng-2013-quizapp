@@ -55,7 +55,7 @@ public class QuestionTest extends TestCase {
 				+ "\"id\": \"1\","
 				+ "\"tags\": \"[tag2, tag1]\","
 				+ "\"owner\": \"Anonymous\","
-                + " \"answers\": \"[Answer1, Answer2, Answer3]\","
+                + " \"answers\":  [\"Answer1\", \"Answer2\", \"Answer3\"],"
 				+ "\"question\": \"content\","
                 + " \"solutionIndex\": 2"
 				+ "}";
