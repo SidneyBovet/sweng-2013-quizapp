@@ -75,7 +75,7 @@ public class ServerInteractions {
 		int serverResponse = -1;
 		try {
 			// XXX RED ALERT! THIS SEEMS TO BE A MISTAKE!
-			// XXX SHOULD BE REFACTORED IN "ONPOSTEXECUTE".
+			// XXX SHOULD BE REFACTORED IN "ONPOSTEXECUTE". - unknown author
 			serverResponse = quizEditExecute.get();
 		} catch (InterruptedException e) {
 			Log.e(ServerInteractions.class.getName(), "submitQuestion(): The "
