@@ -22,13 +22,13 @@ public class MainActivityAuthenticatedTest extends GUITest<MainActivity> {
 				.getTargetContext();
 		persistentStorage = UserCredentialsStorage.
 				getInstance(contextOfMainActivity);
-		persistentStorage.takeAuthentication("blabla");
+		persistentStorage.createAuthentication("blabla");
 		getActivityAndWaitFor(TTChecks.MAIN_ACTIVITY_SHOWN);
 	}
 	
 	@Override
 	protected void tearDown() throws Exception {
-		persistentStorage.releaseAuthentication();
+		persistentStorage.destroyAuthentication();
 		super.tearDown();
 	};
 	

@@ -22,23 +22,23 @@ public class UserCreditentialsStorageTest extends
 				.getTargetContext();
 		persistentStorage = UserCredentialsStorage.
 				getInstance(contextOfMainActivity);
-		persistentStorage.releaseAuthentication();
+		persistentStorage.destroyAuthentication();
 	}
 	
 	public void testAuthentication() {
 		String dummySessionID = "blabla";
 		assertFalse(persistentStorage.isAuthenticated());
-		persistentStorage.takeAuthentication(dummySessionID);
+		persistentStorage.createAuthentication(dummySessionID);
 		assertTrue(persistentStorage.isAuthenticated());
-		persistentStorage.releaseAuthentication();
+		persistentStorage.destroyAuthentication();
 	} 
 	
 	public void testReleaseAuthentication() {
 		String dummySessionID = "blabla2";
 		assertFalse(persistentStorage.isAuthenticated());
-		persistentStorage.takeAuthentication(dummySessionID);
+		persistentStorage.createAuthentication(dummySessionID);
 		assertTrue(persistentStorage.isAuthenticated());
-		persistentStorage.releaseAuthentication();
+		persistentStorage.destroyAuthentication();
 		assertFalse(persistentStorage.isAuthenticated());
 	}
 	

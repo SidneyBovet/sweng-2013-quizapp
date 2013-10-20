@@ -27,7 +27,7 @@ public class MainActivityNotAuthenticatedTest extends GUITest<MainActivity> {
 				.getTargetContext();
 		persistentStorage = UserCredentialsStorage.
 				getInstance(contextOfMainActivity);
-		persistentStorage.releaseAuthentication();
+		persistentStorage.destroyAuthentication();
 	}
 	
 	public void testShowAllButtons() {
