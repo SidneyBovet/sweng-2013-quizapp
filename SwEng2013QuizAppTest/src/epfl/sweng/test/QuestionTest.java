@@ -2,8 +2,9 @@ package epfl.sweng.test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 import junit.framework.TestCase;
 
@@ -27,7 +28,7 @@ public class QuestionTest extends TestCase {
 	private final ArrayList<String> mQuestionAnswers = new ArrayList<String>(
 			Arrays.asList("Answer1", "Answer2", "Answer3"));
 	private final int mQuestionSolutionIndex = 2;
-	private final HashSet<String> mQuestionTagsSet = new HashSet<String>(
+	private final Set<String> mQuestionTagsSet = new TreeSet<String>(
 			Arrays.asList("tag1", "tag2"));
 	private final String mQuestionOwner = "Anonymous";
 	private Question mQuestion;
@@ -53,9 +54,9 @@ public class QuestionTest extends TestCase {
 	public void testJSONTranslation() {
 		String jsonContent = "{"
 				+ "\"id\": \"1\","
-				+ "\"tags\": \"[tag2, tag1]\","
+				+ "\"tags\": \"[tag1, tag2]\","
 				+ "\"owner\": \"Anonymous\","
-                + " \"answers\":  [\"Answer1\", \"Answer2\", \"Answer3\"],"
+                + " \"answers\": [\"Answer1\", \"Answer2\", \"Answer3\"],"
 				+ "\"question\": \"content\","
                 + " \"solutionIndex\": 2"
 				+ "}";
@@ -88,7 +89,7 @@ public class QuestionTest extends TestCase {
 	
 	// Since the tags are in the set the order here can be changed
 	public void testTagToString() {
-		assertEquals("Tags: tag2, tag1", mQuestion.getTagsToString());
+		assertEquals("Tags: tag1, tag2", mQuestion.getTagsToString());
 	}
 	
 	public void testJSONToSet() {
@@ -102,7 +103,7 @@ public class QuestionTest extends TestCase {
 	public void testToString() {
 		assertEquals(mQuestion.toString(), "Question [id=1, questionContent=" +
 				"content, answers=[Answer1, Answer2, Answer3], solutionIndex=2, " +
-				"tags=[tag2, tag1], owner=Anonymous]");
+				"tags=[tag1, tag2], owner=Anonymous]");
 	}
 	
 	public void testSecondConstructor() {
