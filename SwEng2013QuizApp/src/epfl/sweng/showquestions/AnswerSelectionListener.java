@@ -6,7 +6,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 import epfl.sweng.R;
-import epfl.sweng.backend.Question;
+import epfl.sweng.quizquestions.QuizQuestion;
 import epfl.sweng.testing.TestCoordinator;
 import epfl.sweng.testing.TestCoordinator.TTChecks;
 
@@ -22,7 +22,7 @@ import epfl.sweng.testing.TestCoordinator.TTChecks;
 public class AnswerSelectionListener implements OnItemClickListener {
 	
 	private Button mButtonNext;
-	private Question mConcernedQuestion;
+	private QuizQuestion mConcernedQuestion;
 	private boolean mRightAnswerSelected;
 	
 	private int mLastSelectedQuestion;
@@ -35,7 +35,7 @@ public class AnswerSelectionListener implements OnItemClickListener {
 	 * @param lwQuestions The list of displayed answers.
 	 */
 	
-	public AnswerSelectionListener(Button bNext, Question question) {
+	public AnswerSelectionListener(Button bNext, QuizQuestion question) {
 		this.mButtonNext = bNext;
 		this.mConcernedQuestion = question;
 		this.mRightAnswerSelected = false;

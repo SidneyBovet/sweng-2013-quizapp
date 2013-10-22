@@ -7,7 +7,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.util.Log;
-import epfl.sweng.backend.Question;
+import epfl.sweng.quizquestions.QuizQuestion;
 import epfl.sweng.exceptions.ServerSubmitFailedException;
 
 /**
@@ -27,14 +27,13 @@ public class ServerInteractions {
 	 * @return A random {@link Question}.
 	 */
 
-	public static Question getRandomQuestion() {
+	public static QuizQuestion getRandomQuestion() {
 		JSONDownloader asyncTaskRandomQuestionGetter = new JSONDownloader();
 		asyncTaskRandomQuestionGetter.execute(HttpFactory.getSwengFetchQuestion());
 
-		Question question = null;
+		QuizQuestion question = null;
 		try {
-			question = Question
-					.createQuestionFromJSON(asyncTaskRandomQuestionGetter.get());
+			question = new QuizQuestion(asyncTaskRandomQuestionGetter.get());
 		} catch (JSONException e) {
 			Log.e(ServerInteractions.class.getName(), "getRandomQuestion(): "
 					+ "Unable to parse \'JSONObject\'.", e);
@@ -64,7 +63,7 @@ public class ServerInteractions {
 	public static int submitQuestion(List<String> listInputGUI)
 		throws ServerSubmitFailedException {
 
-		Question questionToSubmit = Question
+		QuizQuestion questionToSubmit = QuizQuestion
 				.createQuestionFromList(listInputGUI);
 		JSONObject jsonToSubmit = questionToSubmit.toJSON();
 

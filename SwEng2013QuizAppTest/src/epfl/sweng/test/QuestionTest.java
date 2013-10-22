@@ -12,8 +12,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import epfl.sweng.backend.Converter;
-import epfl.sweng.backend.Question;
+import epfl.sweng.quizquestions.Converter;
+import epfl.sweng.quizquestions.QuizQuestion;
 
 /**
  * This test covers the Question class from the epfl.sweng.backend package.
@@ -23,7 +23,7 @@ import epfl.sweng.backend.Question;
  */
 public class QuestionTest extends TestCase {
 
-	private final long mQuestionID = (long) 1;
+	private final int mQuestionID = 1;
 	private final String mQuestionContent = "content";
 	private final ArrayList<String> mQuestionAnswers = new ArrayList<String>(
 			Arrays.asList("Answer1", "Answer2", "Answer3"));
@@ -31,15 +31,15 @@ public class QuestionTest extends TestCase {
 	private final Set<String> mQuestionTagsSet = new TreeSet<String>(
 			Arrays.asList("tag1", "tag2"));
 	private final String mQuestionOwner = "Anonymous";
-	private Question mQuestion;
-	private Question mQuestion2;
+	private QuizQuestion mQuestion;
+	private QuizQuestion mQuestion2;
 	
 	@Override
 	public void setUp() {
-		mQuestion = new Question(mQuestionID, mQuestionContent, 
+		mQuestion = new QuizQuestion(mQuestionContent, 
 				mQuestionAnswers, mQuestionSolutionIndex, mQuestionTagsSet,
-				mQuestionOwner);
-		mQuestion2 = new Question(mQuestionContent, 
+				mQuestionID, mQuestionOwner);
+		mQuestion2 = new QuizQuestion(mQuestionContent, 
 				mQuestionAnswers, mQuestionSolutionIndex, mQuestionTagsSet);
 	}
 	
@@ -125,6 +125,6 @@ public class QuestionTest extends TestCase {
 		listToQuestion.add("tag1, tag2");
 		//TODO check why if we compare the two objects the tags are switched??
 		assertEquals(mQuestion2.getAnswers(), 
-				Question.createQuestionFromList(listToQuestion).getAnswers());
+				QuizQuestion.createQuestionFromList(listToQuestion).getAnswers());
 	}	
 }

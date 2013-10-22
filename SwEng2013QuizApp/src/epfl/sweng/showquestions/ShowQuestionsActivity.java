@@ -11,7 +11,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import epfl.sweng.R;
-import epfl.sweng.backend.Question;
+import epfl.sweng.quizquestions.QuizQuestion;
 import epfl.sweng.servercomm.ServerInteractions;
 import epfl.sweng.testing.TestCoordinator;
 import epfl.sweng.testing.TestCoordinator.TTChecks;
@@ -45,7 +45,7 @@ public class ShowQuestionsActivity extends Activity {
 		buttonNext.setEnabled(false);
 
 		// fetching question
-		Question randomQuestion = ServerInteractions.getRandomQuestion();
+		QuizQuestion randomQuestion = ServerInteractions.getRandomQuestion();
 		if (null == randomQuestion) {
 			Log.i(this.getClass().getName(), "Fetching a random question failed");
 			Toast.makeText(this, R.string.error_fetching_question,
