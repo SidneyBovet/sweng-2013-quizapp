@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.Toast;
 import epfl.sweng.R;
 import epfl.sweng.authentication.AuthenticationActivity;
@@ -24,6 +25,7 @@ import epfl.sweng.testing.TestCoordinator.TTChecks;
 public class MainActivity extends Activity {
 
 	private UserCredentialsStorage mPersistentStorage;
+	private boolean isOffline = false;
 
 	/**
 	 * Launches the {@link ShowQuestionActivity}.
@@ -55,6 +57,29 @@ public class MainActivity extends Activity {
 		startActivity(submitQuestionActivityIntent);
 	}
 
+	/**
+	 * Function called back on checkbox activation. Handles the <i>Offline</i>
+	 * state of the whole application.
+	 * @param v The View clicked
+	 */
+	public void onCheckboxSwitchModeClicked(View v) {
+		assert v instanceof CheckBox;
+		CheckBox clickedCheckBox = (CheckBox) v;
+		assert 	(clickedCheckBox.isChecked() && isOffline) ||
+				(!clickedCheckBox.isChecked() && !isOffline);
+		
+		isOffline = !isOffline;
+		
+		Toast.makeText(this,
+				"Assert: ("+clickedCheckBox.isChecked()+"&&"+isOffline+")||(" +
+						!clickedCheckBox.isChecked()+"&&"+!isOffline+")",
+				Toast.LENGTH_SHORT).show();
+
+		assert 	(clickedCheckBox.isChecked() && isOffline) ||
+				(!clickedCheckBox.isChecked() && !isOffline);
+	}
+	
+	
 	/**
 	 * Launches the {@link AuthenticationActivity} when not authenticated.
 	 * Releases the authentication and refreshes the view when authenticated.
