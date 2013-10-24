@@ -318,12 +318,12 @@ public class EditQuestionActivity extends Activity {
 		
 		//XXX reuse Button or retrieve new one?
 		//XXX VISIBLE == isShown to true?
-		if (addButton == null || !addButton.getText().equals("+") 
+		if (addButton == null || !addButton.getText().equals(R.id.submit_question_add_button) 
 				|| !addButton.isShown()) {
 			++errorCount;
 		}
 		
-		if (submitButton == null || !submitButton.getText().equals("Submit")
+		if (submitButton == null || !submitButton.getText().equals(R.id.submit_question_button)
 				|| !submitButton.isShown()) {
 			++errorCount;
 		}
@@ -332,19 +332,19 @@ public class EditQuestionActivity extends Activity {
 		for (int i = 0; i < mListview.getCount(); i++) {
 			View answerView = mListview.getChildAt(i);
 			//XXX verify that there is at least one view?
+			//XXX isShown==false for question to scroll? => isShown mListView?
 			Button removeButton = (Button) answerView
-					.findViewById(R.id.submit_question_remove_answer_edit);
-			Button correctnessButton = (Button) answerView
-					
-					.findViewById(R.id.submit_question_correct_switch);
+					.findViewById(R.string.submit_question_remove_answer);
+			Button correctnessButton = (Button) answerView	
+					.findViewById(R.string.submit_Edited_Question_Button);
 			if (removeButton == null || !removeButton.getText().equals("-")
 					|| !removeButton.isShown()) {
 				++errorCount;
 			}
 			
 			if (correctnessButton == null || 
-					!(correctnessButton.getText().equals("✘") ||
-							correctnessButton.getText().equals("✔"))
+					!(correctnessButton.getText().equals(R.string.question_wrong_answer) ||
+							correctnessButton.getText().equals(R.string.question_correct_answer))
 					|| !correctnessButton.isShown()) {
 				++errorCount;
 			}
