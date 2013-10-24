@@ -26,6 +26,10 @@ public class QuizQuestion {
 	private int mSolutionIndex;
 	private Set<String> mTags;
 	private String mOwner;
+	private final static int QUESTION_CONTENT_MAX_SIZE = 500;
+	private final static int ANSWER_CONTENT_MAX_SIZE = 500;
+	private final static int ANSWERLIST_MAX_SIZE = 10;
+	private final static int TAGSLIST_MAX_SIZE = 20;
 
 	/**
 	 * Constructor
@@ -46,9 +50,9 @@ public class QuizQuestion {
 	 *            Question owner.
 	 */
 
-    public QuizQuestion(final String question, final List<String> answers, 
-    		final int solutionIndex, final Set<String> tags, final int id, 
-    		final String owner) {
+	public QuizQuestion(final String question, final List<String> answers,
+			final int solutionIndex, final Set<String> tags, final int id,
+			final String owner) {
 		this.mId = id;
 		this.mQuestionContent = question;
 		this.mAnswers = answers;
@@ -72,8 +76,8 @@ public class QuizQuestion {
 	 *            Set of question tags.
 	 */
 
-	public QuizQuestion(final String question, final List<String> answers, 
-    		final int solutionIndex, final Set<String> tags) {
+	public QuizQuestion(final String question, final List<String> answers,
+			final int solutionIndex, final Set<String> tags) {
 		this(question, answers, solutionIndex, tags, -1, null);
 	}
 
@@ -112,7 +116,8 @@ public class QuizQuestion {
 	 * 
 	 * @param listElm
 	 *            A list of the question data fields.
-	 * @return A <code>QuizQuestion</code> instance created from a list of fields.
+	 * @return A <code>QuizQuestion</code> instance created from a list of
+	 *         fields.
 	 */
 
 	public static QuizQuestion createQuestionFromList(List<String> listElm) {
@@ -191,6 +196,45 @@ public class QuizQuestion {
 				+ ", answers=" + mAnswers.toString() + ", solutionIndex="
 				+ mSolutionIndex + ", tags=" + mTags.toString() + ", owner="
 				+ mOwner + "]";
+	}
+
+	/**
+	 * Audit method that test if all rep-invariants are respected. 
+	 * 
+	 * @return a number that represent how many rep-invariants are violated.
+	 */
+	public int auditErrors() {
+		int errorCount = 0;
+		if (mQuestionContent.trim().length() == 0
+				|| !(0 < mQuestionContent.length() && mQuestionContent.length() <= QUESTION_CONTENT_MAX_SIZE)) {
+			++errorCount;
+		}
+
+		for (String answer : mAnswers) {
+			if (answer.trim().length() == 0
+					|| !(0 < answer.length() && answer
+							.length() <= ANSWER_CONTENT_MAX_SIZE)) {
+				++errorCount;
+			}
+		}
+
+		if (!(mAnswers.size() >= 0 && mAnswers.size() <= ANSWERLIST_MAX_SIZE)) {
+			++errorCount;
+		}
+
+		if (!(mSolutionIndex >= 0 && mSolutionIndex < mAnswers.size())) {
+			++errorCount;
+		}
+
+		for (String tag : mTags) {
+			if (tag.trim().length() == 0
+					|| !(0 < tag.length() && tag
+							.length() <= TAGSLIST_MAX_SIZE)) {
+				++errorCount;
+			}
+		}
+
+		return errorCount;
 	}
 
 	/*
