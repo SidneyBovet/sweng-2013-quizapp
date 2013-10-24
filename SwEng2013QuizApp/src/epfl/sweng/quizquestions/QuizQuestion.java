@@ -26,6 +26,7 @@ public class QuizQuestion {
 	private int mSolutionIndex;
 	private Set<String> mTags;
 	private String mOwner;
+	//TODO checkstyle!!
 	private final static int sQUESTION_CONTENT_MAX_SIZE = 500;
 	private final static int sANSWER_CONTENT_MAX_SIZE = 500;
 	private final static int sANSWERLIST_MAX_SIZE = 10;
@@ -198,6 +199,12 @@ public class QuizQuestion {
 				+ mOwner + "]";
 	}
 
+	/*
+	 * ***************************************************
+	 * ********************* Audit ***********************
+	 * ***************************************************
+	 */
+	
 	/**
 	 * Audit method that verifies if all rep-invariants are respected. 
 	 * 
