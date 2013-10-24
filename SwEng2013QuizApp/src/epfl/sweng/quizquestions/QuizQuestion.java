@@ -26,10 +26,10 @@ public class QuizQuestion {
 	private int mSolutionIndex;
 	private Set<String> mTags;
 	private String mOwner;
-	private final static int QUESTION_CONTENT_MAX_SIZE = 500;
-	private final static int ANSWER_CONTENT_MAX_SIZE = 500;
-	private final static int ANSWERLIST_MAX_SIZE = 10;
-	private final static int TAGSLIST_MAX_SIZE = 20;
+	private final static int sQUESTION_CONTENT_MAX_SIZE = 500;
+	private final static int sANSWER_CONTENT_MAX_SIZE = 500;
+	private final static int sANSWERLIST_MAX_SIZE = 10;
+	private final static int sTAGSLIST_MAX_SIZE = 20;
 
 	/**
 	 * Constructor
@@ -199,26 +199,26 @@ public class QuizQuestion {
 	}
 
 	/**
-	 * Audit method that test if all rep-invariants are respected. 
+	 * Audit method that verifies if all rep-invariants are respected. 
 	 * 
 	 * @return a number that represent how many rep-invariants are violated.
 	 */
 	public int auditErrors() {
 		int errorCount = 0;
 		if (mQuestionContent.trim().length() == 0
-				|| !(0 < mQuestionContent.length() && mQuestionContent.length() <= QUESTION_CONTENT_MAX_SIZE)) {
+				|| !(0 < mQuestionContent.length() && mQuestionContent.length() <= sQUESTION_CONTENT_MAX_SIZE)) {
 			++errorCount;
 		}
 
 		for (String answer : mAnswers) {
 			if (answer.trim().length() == 0
 					|| !(0 < answer.length() && answer
-							.length() <= ANSWER_CONTENT_MAX_SIZE)) {
+							.length() <= sANSWER_CONTENT_MAX_SIZE)) {
 				++errorCount;
 			}
 		}
 
-		if (!(mAnswers.size() >= 0 && mAnswers.size() <= ANSWERLIST_MAX_SIZE)) {
+		if (!(mAnswers.size() >= 0 && mAnswers.size() <= sANSWERLIST_MAX_SIZE)) {
 			++errorCount;
 		}
 
@@ -229,7 +229,7 @@ public class QuizQuestion {
 		for (String tag : mTags) {
 			if (tag.trim().length() == 0
 					|| !(0 < tag.length() && tag
-							.length() <= TAGSLIST_MAX_SIZE)) {
+							.length() <= sTAGSLIST_MAX_SIZE)) {
 				++errorCount;
 			}
 		}
