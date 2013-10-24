@@ -5,6 +5,16 @@ import java.util.List;
 
 import epfl.sweng.quizquestions.QuizQuestion;
 
+/**
+ * This class will perform all the server interactions
+ * in the place of our app. It will also cache all the 
+ * questions that we fetch from the server and take place
+ * of the server when in offline mode.
+ * 
+ *  
+ * @author born4new
+ *
+ */
 public class QuestionsProxy {
 	
 	private List<QuizQuestion> quizzQuestionsOutbox;
