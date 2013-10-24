@@ -109,7 +109,7 @@ public class EditQuestionActivity extends Activity {
 
 	/**
 	 * Tries to update the status of the submit button with the value parameter,
-	 * along with the success of the {@link #audit()} method.
+	 * along with the success of the {@link #auditEmptyField()} method.
 	 * 
 	 * @param value
 	 *            The new status value of the submit button.
@@ -119,35 +119,14 @@ public class EditQuestionActivity extends Activity {
 		Button submitButton = (Button) mLayout
 				.findViewById(R.id.submit_question_button);
 		if (submitButton != null) {
-			boolean newVal = value && audit() == 0;
+			boolean newVal = value && auditEmptyField() == 0;
 			if (submitButton.isEnabled() != newVal) {
 				submitButton.setEnabled(newVal);
 			}
 		}
 	}
 
-	/**
-	 * Checks the following requirements :
-	 * <ul>
-	 * <li>The question field must not be an empty string</li>
-	 * <li>The tags field must not be an empty string.</li>
-	 * </ul>
-	 * 
-	 * @return The number of the previously described errors.
-	 */
 
-	public int audit() {
-		int errors = 0;
-
-		if (mQuestionBodyText.matches("\\s*")) {
-			errors++;
-		}
-		if (mTagsText.matches("\\s*")) {
-			errors++;
-		}
-
-		return errors;
-	}
 
 	/**
 	 * Initializes the contents of the Activity's standard options menu.
@@ -268,5 +247,132 @@ public class EditQuestionActivity extends Activity {
 		}
 		mAnswerListAdapter.resetAnswerList();
 		editTextToFocus.requestFocus();
+	}
+	
+	/*
+	 * ***************************************************
+	 * ********************* Audit ***********************
+	 * ***************************************************
+	 */
+	
+	/**
+	 * Checks the following requirements :
+	 * <ul>
+	 * <li>The question field must not be an empty string</li>
+	 * <li>The tags field must not be an empty string.</li>
+	 * </ul>
+	 * 
+	 * @return The number of the previously described errors.
+	 */
+
+	public int auditEmptyField() {
+		int errors = 0;
+
+		if (mQuestionBodyText.matches("\\s*")) {
+			errors++;
+		}
+		if (mTagsText.matches("\\s*")) {
+			errors++;
+		}
+
+		return errors;
+	}
+	
+	/**
+	 * Audit method that verifies if all rep-invariants are respected. 
+	 * 
+	 * @return a number that represent how many rep-invariants are violated.
+	 */
+	public int auditErrors() {
+		int errorCount = 0;
+		errorCount += auditEditTexts();
+		errorCount += auditButtons();
+		errorCount += auditAnswers();
+		errorCount += auditSubmitButton();
+		return errorCount;
+	}
+	
+	/**
+	 * Audit method that verifies if all rep-invariants for EditTexts
+	 * are respected. 
+	 * 
+	 * @return a number that represent how many rep-invariants are violated.
+	 */
+	private int auditEditTexts() {
+		int errorCount = 0;
+		return errorCount;
+	}
+	 
+	/**
+	 * Audit method that verifies if all rep-invariants for Buttons
+	 * are respected. 
+	 * 
+	 * @return a number that represent how many rep-invariants are violated.
+	 */	 
+	private int auditButtons() {
+		int errorCount = 0;
+		Button addButton = (Button) mLayout
+				.findViewById(R.id.submit_question_add_text);
+		Button submitButton = (Button) mLayout
+				.findViewById(R.id.submit_question_button);
+		
+		//XXX reuse Button or retrieve new one?
+		//XXX VISIBLE == isShown to true?
+		if (addButton == null || !addButton.getText().equals("+") 
+				|| !addButton.isShown()) {
+			++errorCount;
+		}
+		
+		if (submitButton == null || !submitButton.getText().equals("Submit")
+				|| !submitButton.isShown()) {
+			++errorCount;
+		}
+		
+		//XXX correct view got?
+		for (int i = 0; i < mListview.getCount(); i++) {
+			View answerView = mListview.getChildAt(i);
+			//XXX verify that there is at least one view?
+			Button removeButton = (Button) answerView
+					.findViewById(R.id.submit_question_remove_answer_edit);
+			Button correctnessButton = (Button) answerView
+					
+					.findViewById(R.id.submit_question_correct_switch);
+			if (removeButton == null || !removeButton.getText().equals("-")
+					|| !removeButton.isShown()) {
+				++errorCount;
+			}
+			
+			if (correctnessButton == null || 
+					!(correctnessButton.getText().equals("✘") ||
+							correctnessButton.getText().equals("✔"))
+					|| !correctnessButton.isShown()) {
+				++errorCount;
+			}
+				
+		}
+		return errorCount;
+	}
+	 
+	/**
+	 * Audit method that verifies if all rep-invariants for answers
+	 * are respected. 
+	 * 
+	 * @return a number that represent how many rep-invariants are violated.
+	 */	 
+	private int auditAnswers() {
+		int errorCount = 0;
+		return errorCount;
+	}
+	 
+	 
+	/**
+	 * Audit method that verifies if all rep-invariants for behaviour of
+	 * of buttons are respected. 
+	 * 
+	 * @return a number that represent how many rep-invariants are violated.
+	 */	
+	private int auditSubmitButton() {
+		int errorCount = 0;
+		return errorCount;
 	}
 }
