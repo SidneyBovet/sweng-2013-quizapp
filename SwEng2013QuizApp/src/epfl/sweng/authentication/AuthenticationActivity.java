@@ -101,10 +101,8 @@ public class AuthenticationActivity extends Activity {
 	private void checkLoginButtonStatus() {
 		String usrName = mUserNameEditText.getText().toString();
 		String usrPassword = mPasswordEditText.getText().toString();
-		// XXX Ici je suis parti du principe que le bouton est desactivé si on
-		// remplit les fields avec des espaces. A changer ?
-		mLoginbutton.setEnabled(!(usrName.trim().length() == 0 || usrPassword
-				.trim().length() == 0));
+		mLoginbutton.setEnabled(!(usrName.length() == 0 || usrPassword
+				.length() == 0));
 	}
 
 	/**
