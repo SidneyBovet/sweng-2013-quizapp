@@ -53,7 +53,7 @@ public class AuthenticationActivityTest extends GUITest<AuthenticationActivity> 
 		getSolo().enterText(login, "     ");
 		getSolo().enterText(password, "     ");
 
-		assertFalse("login and password fileds must be correctly filled",
+		assertTrue("login and password fileds must be correctly filled",
 				loginButton.isEnabled());
 	}
 
