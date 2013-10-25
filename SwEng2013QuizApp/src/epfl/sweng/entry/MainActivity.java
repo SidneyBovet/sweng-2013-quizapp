@@ -65,10 +65,9 @@ public class MainActivity extends Activity {
 	public void onCheckboxSwitchModeClicked(View v) {
 		assert v instanceof CheckBox;
 		CheckBox clickedCheckBox = (CheckBox) v;
-		assert 	(clickedCheckBox.isChecked() && isOffline) ||
-				(!clickedCheckBox.isChecked() && !isOffline);
-		
-		isOffline = !isOffline;
+
+		// XXX why assert doesn't breaks?
+		//isOffline = !isOffline;
 		
 		Toast.makeText(this,
 				"Assert: ("+clickedCheckBox.isChecked()+"&&"+isOffline+")||(" +
@@ -116,6 +115,14 @@ public class MainActivity extends Activity {
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
+	
+	public int auditErrors() {
+		int numErrors = 0;
+		
+		numErrors += auditCheckbox();
+		
+		return numErrors;
+	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -156,5 +163,16 @@ public class MainActivity extends Activity {
 				.setEnabled(mPersistentStorage.isAuthenticated());
 		((Button) findViewById(R.id.submitQuestionButton))
 				.setEnabled(mPersistentStorage.isAuthenticated());
+	}
+
+	private int auditCheckbox() {
+		int numErrors = 0;
+		CheckBox onfflineCheckbox =
+				(CheckBox) this.findViewById(R.id.switchOnlineModeCheckbox);
+		if ((onfflineCheckbox.isChecked() && isOffline) ||
+				(!onfflineCheckbox.isChecked() && !isOffline)) {
+			numErrors++;
+		}
+		return numErrors;
 	}
 }
