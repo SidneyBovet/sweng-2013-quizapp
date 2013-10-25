@@ -60,11 +60,10 @@ public class ServerInteractions {
 	 *             Wrapper exception to tell the user that something has gone
 	 *             wrong.
 	 */
-	public static int submitQuestion(List<String> listInputGUI)
+	public static int submitQuestion(QuizQuestion questionToSubmit)
 		throws ServerSubmitFailedException {
 
-		QuizQuestion questionToSubmit = QuizQuestion
-				.createQuestionFromList(listInputGUI);
+
 		JSONObject jsonToSubmit = questionToSubmit.toJSON();
 
 		// We launch the AsyncTask that will do the submit in the background.

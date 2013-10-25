@@ -7,17 +7,15 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 import epfl.sweng.R;
-import epfl.sweng.exceptions.ServerSubmitFailedException;
-import epfl.sweng.servercomm.ServerInteractions;
+import epfl.sweng.patterns.QuestionsProxy;
+import epfl.sweng.quizquestions.QuizQuestion;
 import epfl.sweng.testing.TestCoordinator;
 import epfl.sweng.testing.TestCoordinator.TTChecks;
 
@@ -31,9 +29,6 @@ import epfl.sweng.testing.TestCoordinator.TTChecks;
  */
 
 public class EditQuestionActivity extends Activity {
-
-	// XXX Where do you think we should store that?
-	private static final int HTTP_SUCCESS = 201;
 
 	private AnswerListAdapter mAnswerListAdapter;
 	private ListView mListview;
@@ -82,27 +77,10 @@ public class EditQuestionActivity extends Activity {
 
 		listInputGUI.add(indexGoodAnswerString);
 		listInputGUI.add(mTagsText);
-
-		int httpResponse = -1;
-		try {
-			httpResponse = ServerInteractions.submitQuestion(listInputGUI);
-			if (httpResponse == HTTP_SUCCESS) {
-				// TODO In general, we should put error messages in strings.xml
-				// and especially make a hierachy if possible.
-				// Toast.makeText(this, "Quiz submitted to the server.",
-						//Toast.LENGTH_SHORT).show();
-			} else {
-				Toast.makeText(this,
-						"Could not upload the question to the server",
-						Toast.LENGTH_SHORT).show();
-			}
-		} catch (ServerSubmitFailedException e) {
-			// TODO Log it? (Since we did it on the two layers before,
-			// I'm wondering if we should do it here) Problem with the server
-			Log.e(this.getClass().getName(), "sendEditedQuestion(): The "
-					+ "question could not be submitted.", e);
-			Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
-		}
+		QuizQuestion questionToSubmit = QuizQuestion
+				.createQuestionFromList(listInputGUI);
+		
+		QuestionsProxy.getInstance().sendQuizzQuestion(questionToSubmit);
 
 		resetEditQuestionLayout();
 	}
@@ -316,8 +294,6 @@ public class EditQuestionActivity extends Activity {
 		Button submitButton = (Button) mLayout
 				.findViewById(R.id.submit_question_button);
 		
-		//XXX reuse Button or retrieve new one?
-		//XXX VISIBLE == isShown to true?
 		if (addButton == null || !addButton.getText().equals(R.id.submit_question_add_button) 
 				|| !addButton.isShown()) {
 			++errorCount;
@@ -331,8 +307,6 @@ public class EditQuestionActivity extends Activity {
 		//XXX correct view got?
 		for (int i = 0; i < mListview.getCount(); i++) {
 			View answerView = mListview.getChildAt(i);
-			//XXX verify that there is at least one view?
-			//XXX isShown==false for question to scroll? => isShown mListView?
 			Button removeButton = (Button) answerView
 					.findViewById(R.string.submit_question_remove_answer);
 			Button correctnessButton = (Button) answerView	
