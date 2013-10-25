@@ -154,7 +154,8 @@ public class EditQuestionActivityTest extends GUITest<EditQuestionActivity> {
 				"   ");
 
 		getSolo().clickOnButton("" + (char) 10008);
-		waitFor(TTChecks.QUESTION_EDITED);
+		getActivityAndWaitFor(TTChecks.QUESTION_EDITED);
+		//waitFor(TTChecks.QUESTION_EDITED);
 		assertFalse("Submit button must be Disabled",
 				getSolo().getButton("Submit").isEnabled());
 
