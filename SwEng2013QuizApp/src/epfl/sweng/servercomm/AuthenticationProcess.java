@@ -23,7 +23,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
-import epfl.sweng.authentication.UserCredentialsStorage;
+import epfl.sweng.authentication.UserPreferences;
 import epfl.sweng.exceptions.authentication.InvalidTokenException;
 import epfl.sweng.exceptions.authentication.NoSessionIDException;
 import epfl.sweng.exceptions.authentication.TequilaNoTokenException;
@@ -106,8 +106,8 @@ public class AuthenticationProcess extends AsyncTask<String, Void, String> {
 	@Override
 	protected void onPostExecute(String result) {
 		if (result != null && !result.equals("")) {
-			UserCredentialsStorage.getInstance(mParentActivity).
-				createAuthentication(result);
+			UserPreferences.getInstance(mParentActivity).
+				createEntry("SESSION_ID", result);
 		} else {
 			Toast.makeText(mParentActivity, mErrorMessage, Toast.LENGTH_LONG).show();
 		}

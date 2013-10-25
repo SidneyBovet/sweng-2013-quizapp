@@ -7,20 +7,21 @@ import android.util.Log;
 
 /**
  * Data structure which uses a {@link SharedPreferences} to store the
- * credentials of the user.
+ * preferences of the user.
  * <p>
  * This class implements the singleton pattern.
  * 
  * @author JoTearoom
  * 
  */
-public final class UserCredentialsStorage {
+public final class UserPreferences {
 	
-	private static UserCredentialsStorage sSingletonStorage;
+	private static UserPreferences sSingletonStorage;
 	private SharedPreferences mUserCredentialsPrefs;
 	private Editor mEditor;
 	private String mSharedPreferencesName = "user_session";
 	private final String mKeySessionIDName = "SESSION_ID";
+	private final String mKeyConnectionState = "CONNECTION_STATE";
 
 	/**
 	 * Private constructor of the singleton.
@@ -29,10 +30,11 @@ public final class UserCredentialsStorage {
 	 *            Context of the activity that needs the storage.
 	 */
 	
-	private UserCredentialsStorage(Context context) {
+	private UserPreferences(Context context) {
 		this.mUserCredentialsPrefs = context.getSharedPreferences(
 				mSharedPreferencesName, Context.MODE_PRIVATE);
 		this.mEditor = mUserCredentialsPrefs.edit();
+		this.createEntry(mKeyConnectionState, "ONLINE");
 	}
 
 	/**
@@ -42,14 +44,14 @@ public final class UserCredentialsStorage {
 	 * @return Singleton instance of the class.
 	 */
 	
-	public static UserCredentialsStorage getInstance(
+	public static UserPreferences getInstance(
 			Context context) {
 		// double-checked singleton: avoids calling costly synchronized if
 		// unnecessary
 		if (null == sSingletonStorage) {
-			synchronized (UserCredentialsStorage.class) {
+			synchronized (UserPreferences.class) {
 				if (null == sSingletonStorage) {
-					sSingletonStorage = new UserCredentialsStorage(context);
+					sSingletonStorage = new UserPreferences(context);
 				}
 			}
 		}
@@ -62,23 +64,22 @@ public final class UserCredentialsStorage {
 	 * 		The singleton instance of this object (may be null!)
 	 */
 	
-	public static UserCredentialsStorage getInstance() {
+	public static UserPreferences getInstance() {
 		if (null == sSingletonStorage) {
-			Log.e(UserCredentialsStorage.class.getName(), "getInstance()"
+			Log.e(UserPreferences.class.getName(), "getInstance()"
 					+ "without context was used before the one with a Context!");
 		}
 		return sSingletonStorage;
 	}
 	
 	/**
-	 * Stores the sessionID.
+	 * Create a key value entry for user preferences
 	 * 
-	 * @param sessionID
-	 *            Session ID that the user received from Tequila.
+	 * @param key 
+	 * @param value
 	 */
-	
-	public void createAuthentication(String sessionID) {
-		mEditor.putString(mKeySessionIDName, sessionID);
+	public void createEntry(String key, String value) {
+		mEditor.putString(key, value);
 		mEditor.commit();
 	}
 
@@ -89,11 +90,22 @@ public final class UserCredentialsStorage {
 	 * @return <b>true</b> if the sessionID is already in the table.
 	 *            <b>false</b> otherwise
 	 */
-	
 	public boolean isAuthenticated() {
 		String value = mUserCredentialsPrefs.getString(mKeySessionIDName, null);
 		return value != null;
 	}
+	
+	/**
+	 * Checks if the user is connected.
+	 * 
+	 * @return <b>true</b> if the connectionState is already in the table.
+	 *           <b>false</b> otherwise
+	 */
+	public boolean isConnected() {
+		String value = mUserCredentialsPrefs.getString(mKeyConnectionState, null);
+		return value != null;
+	}
+	
 
 	/**
 	 * Removes the sessionID from the storage table.
@@ -113,5 +125,4 @@ public final class UserCredentialsStorage {
 	public String getSessionId() {
 		return mUserCredentialsPrefs.getString(mKeySessionIDName, "NOT LOGGED IN!");
 	}
-
 }

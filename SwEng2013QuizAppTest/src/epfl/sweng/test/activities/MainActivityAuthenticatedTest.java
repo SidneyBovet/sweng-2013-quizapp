@@ -2,14 +2,14 @@ package epfl.sweng.test.activities;
 
 import android.content.Context;
 import android.widget.Button;
-import epfl.sweng.authentication.UserCredentialsStorage;
+import epfl.sweng.authentication.UserPreferences;
 import epfl.sweng.entry.MainActivity;
 import epfl.sweng.testing.TestCoordinator.TTChecks;
 
 public class MainActivityAuthenticatedTest extends GUITest<MainActivity> {
 
 	private Context contextOfMainActivity;
-	private UserCredentialsStorage persistentStorage;
+	private UserPreferences persistentStorage;
 	
 	public MainActivityAuthenticatedTest() {
 		super(MainActivity.class);
@@ -20,9 +20,9 @@ public class MainActivityAuthenticatedTest extends GUITest<MainActivity> {
 		super.setUp();
 		contextOfMainActivity = getInstrumentation()
 				.getTargetContext();
-		persistentStorage = UserCredentialsStorage.
+		persistentStorage = UserPreferences.
 				getInstance(contextOfMainActivity);
-		persistentStorage.createAuthentication("blabla");
+		persistentStorage.createEntry("blabla");
 		getActivityAndWaitFor(TTChecks.MAIN_ACTIVITY_SHOWN);
 	}
 	

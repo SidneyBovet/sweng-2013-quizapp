@@ -4,7 +4,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 
 import android.util.Log;
-import epfl.sweng.authentication.UserCredentialsStorage;
+import epfl.sweng.authentication.UserPreferences;;
 
 /**
  * Wrapper used to centralize our http urls.
@@ -53,7 +53,7 @@ public class HttpFactory {
         Log.i("HTTP FACTORY", "Creating GET Request " + url);
 		HttpGet request = new HttpGet(url);
 		
-		UserCredentialsStorage storageInstance = UserCredentialsStorage.getInstance();
+		UserPreferences storageInstance = UserPreferences.getInstance();
 		if (null != storageInstance) {
 			request.setHeader("Authorization", "Tequila "+ storageInstance.getSessionId());	
 		}
@@ -65,7 +65,7 @@ public class HttpFactory {
         Log.i("HTTP FACTORY", "Creating POST Request " + url);
 		HttpPost request = new HttpPost(url);
 		
-		UserCredentialsStorage storageInstance = UserCredentialsStorage.getInstance();
+		UserPreferences storageInstance = UserPreferences.getInstance();
 		if (null != storageInstance) {
 			request.setHeader("Authorization", "Tequila "+
 					storageInstance.getSessionId());			

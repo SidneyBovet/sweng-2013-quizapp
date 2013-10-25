@@ -4,7 +4,7 @@ public class CheckProxyHelper implements ICheckProxyHelper {
 
 	@Override
 	public Class<?> getServerCommunicationClass() {
-		return null;
+		return QuestionsProxy.class;
 	}
 
 	@Override

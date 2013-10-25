@@ -10,7 +10,7 @@ import android.widget.CheckBox;
 import android.widget.Toast;
 import epfl.sweng.R;
 import epfl.sweng.authentication.AuthenticationActivity;
-import epfl.sweng.authentication.UserCredentialsStorage;
+import epfl.sweng.authentication.UserPreferences;
 import epfl.sweng.editquestions.EditQuestionActivity;
 import epfl.sweng.showquestions.ShowQuestionsActivity;
 import epfl.sweng.testing.TestCoordinator;
@@ -24,8 +24,8 @@ import epfl.sweng.testing.TestCoordinator.TTChecks;
  */
 public class MainActivity extends Activity {
 
-	private UserCredentialsStorage mPersistentStorage;
-	private boolean isOffline = false;
+	private UserPreferences mUserPreferences;
+	private boolean isOffline;
 
 	/**
 	 * Launches the {@link ShowQuestionActivity}.
@@ -66,6 +66,11 @@ public class MainActivity extends Activity {
 		assert v instanceof CheckBox;
 		CheckBox clickedCheckBox = (CheckBox) v;
 
+		if(clickedCheckBox.isChecked()){
+			mUserPreferences.createEntry("CONNECTION_STATE", "OFFLINE");
+		} else{
+			mUserPreferences.createEntry("CONNECTION_STATE", "ONLINE");
+		}
 		// XXX why assert doesn't breaks?
 		//isOffline = !isOffline;
 		
@@ -89,7 +94,7 @@ public class MainActivity extends Activity {
 	 */
 	
 	public void displayAuthenticationActivity(View view) {
-		if (!mPersistentStorage.isAuthenticated()) {
+		if (!mUserPreferences.isAuthenticated()) {
 			// Case LoginUsingTequila
 			Toast.makeText(this, "Please Log in", Toast.LENGTH_SHORT).show();
 			Intent submitAuthenticationActivityIntent = new Intent(this,
@@ -97,12 +102,12 @@ public class MainActivity extends Activity {
 			startActivity(submitAuthenticationActivityIntent); 
 		} else {
 			// Case Log out
-			mPersistentStorage.destroyAuthentication();
+			mUserPreferences.destroyAuthentication();
 			// TODO ne devrait pas se faire au chargement initial de
 			// l'application
 			Button logButton = (Button) findViewById(R.id.autenticationLogButton);
 			logButton
-					.setText(mPersistentStorage.isAuthenticated() ? R.string.autenticationLoginButtonStateLogOut
+					.setText(mUserPreferences.isAuthenticated() ? R.string.autenticationLoginButtonStateLogOut
 							: R.string.autenticationLoginButtonStateLogIn);
 			setDisplayView();
 			TestCoordinator.check(TTChecks.LOGGED_OUT);
@@ -130,7 +135,7 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_main);
 		// Transaction testing.
 		// create the UserCreditentialStorage which use a SharedPreference
-		mPersistentStorage = UserCredentialsStorage
+		mUserPreferences = UserPreferences
 				.getInstance(this.getApplicationContext());
 	}
 
@@ -147,7 +152,7 @@ public class MainActivity extends Activity {
 		super.onResume();
 		Button logButton = (Button) findViewById(R.id.autenticationLogButton);
 		logButton
-				.setText(mPersistentStorage.isAuthenticated() ? R.string.autenticationLoginButtonStateLogOut
+				.setText(mUserPreferences.isAuthenticated() ? R.string.autenticationLoginButtonStateLogOut
 						: R.string.autenticationLoginButtonStateLogIn);
 		setDisplayView();
 		TestCoordinator.check(TTChecks.MAIN_ACTIVITY_SHOWN);
@@ -160,9 +165,12 @@ public class MainActivity extends Activity {
 	
 	private void setDisplayView() {
 		((Button) findViewById(R.id.displayRandomQuestionButton))
-				.setEnabled(mPersistentStorage.isAuthenticated());
+				.setEnabled(mUserPreferences.isAuthenticated());
 		((Button) findViewById(R.id.submitQuestionButton))
-				.setEnabled(mPersistentStorage.isAuthenticated());
+				.setEnabled(mUserPreferences.isAuthenticated());
+		
+		int visibility = mUserPreferences.isAuthenticated() ? View.VISIBLE : View.INVISIBLE;
+		((CheckBox) findViewById(R.id.switchOnlineModeCheckbox)).setVisibility(visibility);
 	}
 
 	private int auditCheckbox() {
