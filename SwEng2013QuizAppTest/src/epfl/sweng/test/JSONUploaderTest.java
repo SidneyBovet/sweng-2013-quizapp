@@ -64,7 +64,7 @@ public class JSONUploaderTest extends TestCase {
 		} catch (ExecutionException e) {
 			fail("An exception was thrown while executing JSONUploader");
 		}
-		assertTrue("Must be 400 since it's a BAD result", result == 400);
+		assertEquals(400, result);
 	}
 
 	public void testGoodPathisOK() {
@@ -83,7 +83,7 @@ public class JSONUploaderTest extends TestCase {
 		} catch (ExecutionException e) {
 			fail("An exception was thrown while executing JSONUploader");
 		}
-		assertTrue("Must be 200 since it's a OK result", result == 200);
+		assertEquals(200, result);
 
 	}
 }
