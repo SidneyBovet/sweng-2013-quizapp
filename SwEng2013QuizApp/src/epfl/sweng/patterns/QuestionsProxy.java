@@ -3,7 +3,6 @@ package epfl.sweng.patterns;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
 import epfl.sweng.authentication.UserPreferences;
 import epfl.sweng.exceptions.ServerSubmitFailedException;
 import epfl.sweng.quizquestions.QuizQuestion;
@@ -20,13 +19,15 @@ import epfl.sweng.servercomm.ServerInteractions;
  * that tells us if it has been instanciated?
  *  
  *  
- * @author born4new
+ * @author born4new, JoTearoom, Merok
  *
  */
 public final class QuestionsProxy {
 	
 	private static QuestionsProxy sQuestionProxy;
+	//question to be sent
 	private List<QuizQuestion> mQuizzQuestionsOutbox;
+	//question to be retrieve
 	private List<QuizQuestion> mQuizzQuestionsInbox;
 	private UserPreferences mUserPreferences;
 	
@@ -34,7 +35,6 @@ public final class QuestionsProxy {
 	 * Private constructor of the singleton.
 	 * 
 	 */
-	
 	private QuestionsProxy() {
 		mQuizzQuestionsOutbox = new ArrayList<QuizQuestion>();
 		mQuizzQuestionsInbox = new ArrayList<QuizQuestion>();
@@ -60,31 +60,47 @@ public final class QuestionsProxy {
 		return sQuestionProxy;
 	}
 
-	public void addInbox(QuizQuestion question){
+	/**
+	 * Add a {@link QuizQuestion} to the Inbox only if it is a well 
+	 * formed question
+	 * @param question The {@link QuizQuestion} to be verify
+	 */
+	public void addInbox(QuizQuestion question) {
 		if (question.auditErrors() == 0) {
 			mQuizzQuestionsInbox.add(question);
 		}
 	}
 	
-	public void addOutbox(QuizQuestion question){
+	/**
+	 * Add a {@link QuizQuestion} to the Outbox only if it is a well 
+	 * formed question
+	 * @param question The {@link QuizQuestion} to be verify
+	 */
+	public void addOutbox(QuizQuestion question) {
 		if (question.auditErrors() == 0) {
 			mQuizzQuestionsOutbox.add(question);
 		}
 	}
 	
+	/**
+	 * Send a {@link QuizQuestion} to the server after having stored 
+	 * it in the cache and send the cached questions to be sent if online.
+	 * Store the {@link QuizQuestion} to be sent in the cache if offline.
+	 * @param question {@link QuizQuestion} that we want to send
+	 */
 	public void sendQuizzQuestion(QuizQuestion question) {
-		//ONLINE
-
+		
 		addInbox(question);
 		
 		try {
 			if (mUserPreferences.isConnected()) {
-				while (mQuizzQuestionsOutbox.size() > 0) {
+				/*while (mQuizzQuestionsOutbox.size() > 0) {
 					QuizQuestion mquestionOut = mQuizzQuestionsOutbox.remove(0);
 					ServerInteractions.submitQuestion(mquestionOut);
 					//XXX pour l'instant pas dans le bon ordre => regler asynctask
-				}
+				}*/
 				ServerInteractions.submitQuestion(question);
+				//XXX repris de EditQuestionActivity => à mettre à un bon endroit
 				/*if (httpResponse == HttpStatus.SC_CREATED) {
 					// TODO In general, we should put error messages in strings.xml
 					// and especially make a hierachy if possible.
@@ -100,6 +116,7 @@ public final class QuestionsProxy {
 				addOutbox(question);
 			}
 		} catch (ServerSubmitFailedException e) {
+			//XXX repris de EditQuestionActivity => à mettre à un bon endroit
 			/*// TODO Log it? (Since we did it on the two layers before,
 			// I'm wondering if we should do it here) Problem with the server
 			Log.e(this.getClass().getName(), "sendEditedQuestion(): The "
@@ -109,14 +126,19 @@ public final class QuestionsProxy {
 		
 	}
 	
+	/**
+	 * Retrieve a {@link QuizQuestion} from the server and store it in the 
+	 * cache before returning it if online.
+	 * Choose a random {@link QuizQuestion} from the cached content before
+	 * returning it if offline.
+	 * @return {@link QuizQuestion} retrieve from the server 
+	 */
 	public QuizQuestion retrieveQuizzQuestion() {
 		QuizQuestion fetchedQuestion = null;
+		
 		if (mUserPreferences.isConnected()) {
 			fetchedQuestion = ServerInteractions.getRandomQuestion();
-			// Online
-			
-			// fetching question
-			
+			//XXX repris de ShowQuestionActivity => à mettre à un bon endroit
 			/*if (null == randomQuestion) {
 				Log.i(this.getClass().getName(), "Fetching a random question failed");
 				Toast.makeText(this, R.string.error_fetching_question,
@@ -125,18 +147,14 @@ public final class QuestionsProxy {
 				//finish();
 				return;
 			}*/
-			
-			// ...stores it inside the inbox...
 			addInbox(fetchedQuestion);
 		} else {
-			//Offline
-			//TODO check si random juste			
+			//TODO gerer cas on commence en mode offline donc liste vide
 			int questionIDCache = new Random()
 				.nextInt(mQuizzQuestionsInbox.size());
 			fetchedQuestion = mQuizzQuestionsInbox.get(questionIDCache);
 		}
-
+		
 		return fetchedQuestion;
-		//...and send it back to the user.
 	}
 }
