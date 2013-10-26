@@ -60,7 +60,10 @@ public final class TestCoordinator {
         QUESTION_EDITED,
         NEW_QUESTION_SUBMITTED,
         AUTHENTICATION_ACTIVITY_SHOWN,
-        LOGGED_OUT
+        LOGGED_OUT,
+        //XXX ok to add that here??? JoTearoom
+        OFFLINE_CHECKBOX_ENABLED,
+        OFFLINE_CHECKBOX_DISABLED
     };
 
     private TTChecks currentCheck = TTChecks.NONE;
