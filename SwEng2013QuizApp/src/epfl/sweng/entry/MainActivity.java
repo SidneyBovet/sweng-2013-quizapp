@@ -65,15 +65,20 @@ public class MainActivity extends Activity {
 	public void onCheckboxSwitchModeClicked(View v) {
 		assert v instanceof CheckBox;
 		CheckBox clickedCheckBox = (CheckBox) v;
-
-		if(clickedCheckBox.isChecked()){
+		
+		//Change the connection state entry in the UserPreferences
+		if (clickedCheckBox.isChecked()) {
 			mUserPreferences.createEntry("CONNECTION_STATE", "OFFLINE");
-		} else{
+			setDisplayView();
+			TestCoordinator.check(TTChecks.OFFLINE_CHECKBOX_ENABLED);
+		} else {
 			mUserPreferences.createEntry("CONNECTION_STATE", "ONLINE");
+			setDisplayView();
+			TestCoordinator.check(TTChecks.OFFLINE_CHECKBOX_ENABLED);
 		}
+		//TODO remove assert? JoTearoom
 		// XXX why assert doesn't breaks?
 		//isOffline = !isOffline;
-		
 		Toast.makeText(this,
 				"Assert: ("+clickedCheckBox.isChecked()+"&&"+isOffline+")||(" +
 						!clickedCheckBox.isChecked()+"&&"+!isOffline+")",
@@ -103,8 +108,6 @@ public class MainActivity extends Activity {
 		} else {
 			// Case Log out
 			mUserPreferences.destroyAuthentication();
-			// TODO ne devrait pas se faire au chargement initial de
-			// l'application
 			Button logButton = (Button) findViewById(R.id.autenticationLogButton);
 			logButton
 					.setText(mUserPreferences.isAuthenticated() ? R.string.autenticationLoginButtonStateLogOut
@@ -133,8 +136,7 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		// Transaction testing.
-		// create the UserCreditentialStorage which use a SharedPreference
+		// create the UserPreferences which use a SharedPreference
 		mUserPreferences = UserPreferences
 				.getInstance(this.getApplicationContext());
 	}
@@ -160,6 +162,7 @@ public class MainActivity extends Activity {
 
 	/**
 	 * Sets the view of the activity, by enabling or disabling the buttons
+	 * and the checkbox
 	 * according to the authentication state.
 	 */
 	
@@ -168,7 +171,6 @@ public class MainActivity extends Activity {
 				.setEnabled(mUserPreferences.isAuthenticated());
 		((Button) findViewById(R.id.submitQuestionButton))
 				.setEnabled(mUserPreferences.isAuthenticated());
-		
 		int visibility = mUserPreferences.isAuthenticated() ? View.VISIBLE : View.INVISIBLE;
 		((CheckBox) findViewById(R.id.switchOnlineModeCheckbox)).setVisibility(visibility);
 	}
