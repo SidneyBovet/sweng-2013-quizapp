@@ -103,7 +103,7 @@ public final class UserPreferences {
 	 */
 	public boolean isConnected() {
 		String value = mUserCredentialsPrefs.getString(mKeyConnectionState, null);
-		return value != null;
+		return value.equals("ONLINE");
 	}
 	
 
