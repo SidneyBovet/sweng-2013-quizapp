@@ -2,6 +2,8 @@ package epfl.sweng.test.activities;
 
 import android.content.Context;
 import android.widget.Button;
+import android.widget.CheckBox;
+import epfl.sweng.R;
 import epfl.sweng.authentication.UserPreferences;
 import epfl.sweng.entry.MainActivity;
 import epfl.sweng.testing.TestCoordinator.TTChecks;
@@ -28,20 +30,22 @@ public class MainActivityNotAuthenticatedTest extends GUITest<MainActivity> {
 		persistentStorage = UserPreferences.
 				getInstance(contextOfMainActivity);
 		persistentStorage.destroyAuthentication();
+		getActivityAndWaitFor(TTChecks.MAIN_ACTIVITY_SHOWN);
 	}
 	
 	public void testShowAllButtons() {
-		getActivityAndWaitFor(TTChecks.MAIN_ACTIVITY_SHOWN);
 		assertTrue("Login Button is present",
 				getSolo().searchButton("Log in using Tequila"));
 		assertTrue("Show Random Question Button is present",
 				getSolo().searchButton("Show a random question."));
 		assertTrue("Submit Quizz Question Button is present",
 				getSolo().searchButton("Submit a quiz question."));
+		//XXX why failed?
+		/*assertFalse("Check Box should be present", 
+				getSolo().searchText("Offline mode"));*/
 	}
 	
 	public void testQuestionButtonsAreDisabledAtBeggining() {
-		getActivityAndWaitFor(TTChecks.MAIN_ACTIVITY_SHOWN);
 		Button logButton = getSolo().getButton("Log in using Tequila");
 		Button showButton = getSolo().getButton("Show a random question.");
 		Button submitButton = getSolo().getButton("Submit a quiz question.");
@@ -51,9 +55,8 @@ public class MainActivityNotAuthenticatedTest extends GUITest<MainActivity> {
 	}
 	
 	public void testLogInButton() {
-		getActivityAndWaitFor(TTChecks.MAIN_ACTIVITY_SHOWN);
+		//XXX try to remove sleep... don't pass!
 		assertFalse(persistentStorage.isAuthenticated());
-		getSolo().sleep(2000);
 		getSolo().clickOnButton("Log in using Tequila");
 		getSolo().sleep(2000);
 		assertTrue("Password Asked", getSolo().searchText("GASPAR Password"));
@@ -63,4 +66,12 @@ public class MainActivityNotAuthenticatedTest extends GUITest<MainActivity> {
 				getSolo().searchButton("Show a random question."));
 	}
 	
+	public void testCheckBoxInvisible() {
+		//XXX why false??
+		 /* 		assertFalse("Check Box should be present", 
+				getSolo().searchText("Offline mode"));
+		 */
+		CheckBox connexionState = (CheckBox) getSolo().getView(R.id.switchOnlineModeCheckbox);
+		assertFalse(connexionState.isShown());
+	}
 }

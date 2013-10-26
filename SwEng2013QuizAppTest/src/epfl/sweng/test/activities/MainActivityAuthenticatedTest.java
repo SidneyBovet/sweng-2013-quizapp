@@ -2,6 +2,8 @@ package epfl.sweng.test.activities;
 
 import android.content.Context;
 import android.widget.Button;
+import android.widget.CheckBox;
+import epfl.sweng.R;
 import epfl.sweng.authentication.UserPreferences;
 import epfl.sweng.entry.MainActivity;
 import epfl.sweng.testing.TestCoordinator.TTChecks;
@@ -22,7 +24,7 @@ public class MainActivityAuthenticatedTest extends GUITest<MainActivity> {
 				.getTargetContext();
 		persistentStorage = UserPreferences.
 				getInstance(contextOfMainActivity);
-		persistentStorage.createEntry("blabla");
+		persistentStorage.createEntry("SESSION_ID", "blabla");
 		getActivityAndWaitFor(TTChecks.MAIN_ACTIVITY_SHOWN);
 	}
 	
@@ -53,6 +55,8 @@ public class MainActivityAuthenticatedTest extends GUITest<MainActivity> {
 				getSolo().searchButton("Show a random question."));
 		assertTrue("Submit Quizz Question Button should be present",
 				getSolo().searchButton("Submit a quiz question."));
+		assertTrue("Check Box should be present", 
+				getSolo().searchText("Offline mode"));
 	}
 	
 	public void testQuestionButtonsAreEnabledAtBeggining() {
@@ -60,6 +64,11 @@ public class MainActivityAuthenticatedTest extends GUITest<MainActivity> {
 		Button submitButton = getSolo().getButton("Submit a quiz question.");
 		assertTrue(showButton.isEnabled());
 		assertTrue(submitButton.isEnabled());
+	}
+	
+	public void testCheckBoxVisible() {
+		CheckBox connexionState = (CheckBox) getSolo().getView(R.id.switchOnlineModeCheckbox);
+		assertTrue(connexionState.isShown());
 	}
 
 }
