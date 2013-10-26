@@ -1,6 +1,5 @@
 package epfl.sweng.servercomm;
 
-import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import org.json.JSONException;
@@ -62,7 +61,6 @@ public class ServerInteractions {
 	 */
 	public static int submitQuestion(QuizQuestion questionToSubmit)
 		throws ServerSubmitFailedException {
-
 
 		JSONObject jsonToSubmit = questionToSubmit.toJSON();
 

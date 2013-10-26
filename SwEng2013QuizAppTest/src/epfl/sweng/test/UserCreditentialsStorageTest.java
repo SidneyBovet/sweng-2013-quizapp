@@ -28,7 +28,7 @@ public class UserCreditentialsStorageTest extends
 	public void testAuthentication() {
 		String dummySessionID = "blabla";
 		assertFalse(persistentStorage.isAuthenticated());
-		persistentStorage.createEntry(dummySessionID);
+		persistentStorage.createEntry("SESSION_ID", dummySessionID);
 		assertTrue(persistentStorage.isAuthenticated());
 		persistentStorage.destroyAuthentication();
 	} 
@@ -36,7 +36,7 @@ public class UserCreditentialsStorageTest extends
 	public void testReleaseAuthentication() {
 		String dummySessionID = "blabla2";
 		assertFalse(persistentStorage.isAuthenticated());
-		persistentStorage.createEntry(dummySessionID);
+		persistentStorage.createEntry("SESSION_ID", dummySessionID);
 		assertTrue(persistentStorage.isAuthenticated());
 		persistentStorage.destroyAuthentication();
 		assertFalse(persistentStorage.isAuthenticated());

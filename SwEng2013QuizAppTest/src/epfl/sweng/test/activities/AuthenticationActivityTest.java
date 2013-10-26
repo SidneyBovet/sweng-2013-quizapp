@@ -6,7 +6,7 @@ import android.content.Context;
 import android.widget.Button;
 import android.widget.EditText;
 import epfl.sweng.authentication.AuthenticationActivity;
-import epfl.sweng.authentication.UserCredentialsStorage;
+import epfl.sweng.authentication.UserPreferences;
 import epfl.sweng.servercomm.SwengHttpClientFactory;
 import epfl.sweng.test.minimalmock.MockHttpClient;
 import epfl.sweng.testing.TestCoordinator.TTChecks;
@@ -14,7 +14,7 @@ import epfl.sweng.testing.TestCoordinator.TTChecks;
 public class AuthenticationActivityTest extends GUITest<AuthenticationActivity> {
 
 	private Context contextOfAuthenticationActivity;
-	private UserCredentialsStorage persistentStorage;
+	private UserPreferences persistentStorage;
 	private MockHttpClient mockClient;
 
 	public AuthenticationActivityTest() {
@@ -28,7 +28,7 @@ public class AuthenticationActivityTest extends GUITest<AuthenticationActivity> 
 		contextOfAuthenticationActivity = getInstrumentation()
 				.getTargetContext();
 		SwengHttpClientFactory.setInstance(mockClient);
-		persistentStorage = UserCredentialsStorage
+		persistentStorage = UserPreferences
 				.getInstance(contextOfAuthenticationActivity);
 		getActivityAndWaitFor(TTChecks.AUTHENTICATION_ACTIVITY_SHOWN);
 	}

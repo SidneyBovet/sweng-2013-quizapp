@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import epfl.sweng.exceptions.ServerSubmitFailedException;
+import epfl.sweng.quizquestions.QuizQuestion;
 import epfl.sweng.servercomm.ServerInteractions;
 import epfl.sweng.servercomm.SwengHttpClientFactory;
 import epfl.sweng.test.minimalmock.MockHttpClient;
@@ -54,9 +55,11 @@ public class ServerInteractionsTest extends TestCase {
 
 		listInputGUI.add(indexGoodAnswerString);
 		listInputGUI.add("tag1, tag2, tag3");
-
+		QuizQuestion questionToSubmit = QuizQuestion
+				.createQuestionFromList(listInputGUI);
 		try {
-			int serverReturn = ServerInteractions.submitQuestion(listInputGUI);
+			int serverReturn = ServerInteractions.
+					submitQuestion(questionToSubmit);
 			// XXX This was 400 at the time of writing.
 			assertEquals(serverReturn, 200);
 		} catch (ServerSubmitFailedException e) {
@@ -83,9 +86,11 @@ public class ServerInteractionsTest extends TestCase {
 
 		listInputGUI.add(indexGoodAnswerString);
 		listInputGUI.add("tag1, tag2, tag3");
-
+		QuizQuestion questionToSubmit = QuizQuestion
+				.createQuestionFromList(listInputGUI);
 		try {
-			int serverReturn = ServerInteractions.submitQuestion(listInputGUI);
+			int serverReturn = ServerInteractions.
+					submitQuestion(questionToSubmit);
 			assertEquals(serverReturn, 400);
 		} catch (ServerSubmitFailedException e) {
 			fail("An exception occured while doing the test.");
