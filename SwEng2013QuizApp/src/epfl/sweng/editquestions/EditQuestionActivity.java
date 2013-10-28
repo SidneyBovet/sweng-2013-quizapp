@@ -242,25 +242,26 @@ public class EditQuestionActivity extends Activity {
 	 * 
 	 * @return The number of the previously described errors.
 	 */
-
+	
 	public int auditEmptyField() {
 		int errors = 0;
-
+		
 		if (mQuestionBodyText.matches("\\s*")) {
 			errors++;
 		}
 		if (mTagsText.matches("\\s*")) {
 			errors++;
 		}
-
+		
 		return errors;
 	}
 	
 	/**
 	 * Audit method that verifies if all rep-invariants are respected. 
 	 * 
-	 * @return a number that represent how many rep-invariants are violated.
+	 * @return the number of violated rep-invariants.
 	 */
+	
 	public int auditErrors() {
 		int errorCount = 0;
 		errorCount += auditEditTexts();
@@ -274,10 +275,43 @@ public class EditQuestionActivity extends Activity {
 	 * Audit method that verifies if all rep-invariants for EditTexts
 	 * are respected. 
 	 * 
-	 * @return a number that represent how many rep-invariants are violated.
+	 * @return the number of violated rep-invariants.
 	 */
+	
 	private int auditEditTexts() {
 		int errorCount = 0;
+		
+		EditText editQuestionBody = (EditText) mLayout.
+				findViewById(R.id.submit_question_text_body_edit);
+		EditText editTags = (EditText) mLayout.
+				findViewById(R.id.submit_question_tags);
+		
+		String questionBodyHint = getString(R.string.submit_question_text_body);
+		if (editQuestionBody == null
+				|| !editQuestionBody.getHint().equals(questionBodyHint)
+				|| editQuestionBody.getVisibility() != View.VISIBLE) {
+			errorCount++;
+		}
+		
+		String answerHint = getString(R.string.submit_question_answer_hint);
+		for (int i = 0; i < mListview.getCount(); i++) {
+			View answerView = mListview.getChildAt(i);
+			EditText editAnswer = (EditText) answerView.
+					findViewById(R.id.submit_question_answer_text);
+			
+			if (editAnswer == null
+					|| !editAnswer.getHint().equals(answerHint)
+					|| editAnswer.getVisibility() != View.VISIBLE) {
+				errorCount++;
+			}
+		}
+		
+		String tagsHint = getString(R.string.submit_question_tags);
+		if (editTags == null
+				|| !editTags.getHint().equals(tagsHint)
+				|| editTags.getVisibility() != View.VISIBLE) {
+			errorCount++;
+		}
 		return errorCount;
 	}
 	 
@@ -285,8 +319,9 @@ public class EditQuestionActivity extends Activity {
 	 * Audit method that verifies if all rep-invariants for Buttons
 	 * are respected. 
 	 * 
-	 * @return a number that represent how many rep-invariants are violated.
-	 */	 
+	 * @return the number of violated rep-invariants.
+	 */
+	
 	private int auditButtons() {
 		int errorCount = 0;
 		Button addButton = (Button) mLayout
@@ -331,22 +366,47 @@ public class EditQuestionActivity extends Activity {
 	 * Audit method that verifies if all rep-invariants for answers
 	 * are respected. 
 	 * 
-	 * @return a number that represent how many rep-invariants are violated.
-	 */	 
+	 * @return the number of violated rep-invariants.
+	 */
+	
 	private int auditAnswers() {
-		int errorCount = 0;
-		return errorCount;
+		boolean oneAnswerChecked = false;
+		
+		String correctAnswerCheck = getString(R.string.question_correct_answer);
+		for (int i = 0; i < mListview.getCount(); i++) {
+			View answerView = mListview.getChildAt(i);
+			Button correctnessButton = (Button) answerView.
+					findViewById(R.id.submit_question_correct_switch);
+			
+			if (correctnessButton == null) {
+				return 2;	// then you've met with a terrible fate
+			}
+			if (correctnessButton.getText().equals(correctAnswerCheck)) {
+				if (!oneAnswerChecked) {
+					oneAnswerChecked = true;
+				}
+				else {
+					return 1;
+				}
+			}
+		}
+		
+		return 0;
 	}
-	 
 	 
 	/**
 	 * Audit method that verifies if all rep-invariants for behaviour of
 	 * of buttons are respected. 
 	 * 
-	 * @return a number that represent how many rep-invariants are violated.
-	 */	
+	 * @return the number of violated rep-invariants.
+	 */
+	
 	private int auditSubmitButton() {
 		int errorCount = 0;
+		
+		errorCount += auditEmptyField();
+		errorCount += mAnswerListAdapter.audit();
+		
 		return errorCount;
 	}
 }
