@@ -393,41 +393,46 @@ public class EditQuestionActivity extends Activity {
 	private int auditButtons() {
 		int errorCount = 0;
 		Button addButton = (Button) mLayout
-				.findViewById(R.id.submit_question_add_text);
+				.findViewById(R.id.submit_question_add_button);
 		Button submitButton = (Button) mLayout
 				.findViewById(R.id.submit_question_button);
 		
-		if (addButton == null || !addButton.getText().equals(R.id.submit_question_add_button) 
-				|| !addButton.isShown()) {
+		String addButtonText = getString(R.string.submit_question_add_button);
+		if (addButton == null
+				|| !addButton.getText().equals(addButtonText)
+				|| addButton.getVisibility() != View.VISIBLE) {
 			++errorCount;
 		}
 		
-		if (submitButton == null || !submitButton.getText().equals(R.id.submit_question_button)
-				|| !submitButton.isShown()) {
+		String submitButtonText = getString(R.string.submit_question_button);
+		if (submitButton == null
+				|| !submitButton.getText().equals(submitButtonText)
+				|| submitButton.getVisibility() != View.VISIBLE) {
 			++errorCount;
 		}
 		
-		//XXX correct view got?
-		//XXX isShown => getVisibility() == View.VISIBLE
-		//XXX getText().equals(R.id...) => getString(R.string...)
+		String removeButtonText = getString(R.string.submit_question_remove_answer);
+		String correctAnswerText = getString(R.string.question_correct_answer);
+		String wrongAnswerText = getString(R.string.question_wrong_answer);
 		for (int i = 0; i < mListview.getCount(); i++) {
 			View answerView = mListview.getChildAt(i);
 			Button removeButton = (Button) answerView
 					.findViewById(R.string.submit_question_remove_answer);
 			Button correctnessButton = (Button) answerView	
 					.findViewById(R.string.submit_Edited_Question_Button);
-			if (removeButton == null || !removeButton.getText().equals("-")
-					|| !removeButton.isShown()) {
+			
+			if (removeButton == null
+					|| !removeButton.getText().equals(removeButtonText)
+					|| removeButton.getVisibility() != View.VISIBLE) {
 				++errorCount;
 			}
 			
-			if (correctnessButton == null || 
-					!(correctnessButton.getText().equals(R.string.question_wrong_answer) ||
-							correctnessButton.getText().equals(R.string.question_correct_answer))
-					|| !correctnessButton.isShown()) {
+			if (correctnessButton == null
+					|| (!correctnessButton.getText().equals(correctAnswerText)
+					&& !correctnessButton.getText().equals(wrongAnswerText))
+					|| correctnessButton.getVisibility() != View.VISIBLE) {
 				++errorCount;
 			}
-				
 		}
 		return errorCount;
 	}

@@ -1,5 +1,8 @@
 package epfl.sweng.test.activities;
 
+import java.util.concurrent.Semaphore;
+
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -335,5 +338,26 @@ public class EditQuestionActivityTest extends GUITest<EditQuestionActivity> {
 		getSolo().sleep(2000);
 
 		assertFalse("Must not be text BBBBBB", getSolo().searchText("answer BBBBBB"));
+	}
+	
+	public void testAudit() {
+		final Semaphore s = new Semaphore(1);
+		getActivity().runOnUiThread(new Runnable() {
+			
+			@Override
+			public void run() {
+				EditQuestionActivity activity = (EditQuestionActivity) getActivity();
+				Button button = (Button) activity.findViewById(R.id.submit_question_button);
+				button.setText("Not submit");
+				s.release();
+			}
+		});
+		
+		try {
+			s.acquire();
+			System.out.println(getActivity().auditErrors());
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 }
