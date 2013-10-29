@@ -341,7 +341,29 @@ public class EditQuestionActivityTest extends GUITest<EditQuestionActivity> {
 	}
 	
 	public void testAudit() {
-		final Semaphore s = new Semaphore(1);
+		getSolo().sleep(1);
+		
+		getSolo().clickOnButton("+");
+		waitFor(TTChecks.QUESTION_EDITED);
+		getSolo().enterText(
+				(EditText) getSolo().getText(
+						"Type in the question\'s text body"), "question");
+
+		getSolo().enterText(
+				(EditText) getSolo().getText("tag"),
+				"tag");
+
+		getSolo().enterText((EditText) getSolo().getText("Type in the answer"),
+				"answer 1");
+		getSolo().enterText((EditText) getSolo().getText("Type in the answer"),
+				"answer 2");
+		getSolo().clickOnButton("" + (char) 10008);
+		waitFor(TTChecks.QUESTION_EDITED);
+		
+		assertTrue("Number of audit errors = " + getActivity().auditErrors() + " != 0",
+				getActivity().auditErrors() == 0);
+		
+		final Semaphore semaphore = new Semaphore(1);
 		getActivity().runOnUiThread(new Runnable() {
 			
 			@Override
@@ -349,13 +371,14 @@ public class EditQuestionActivityTest extends GUITest<EditQuestionActivity> {
 				EditQuestionActivity activity = (EditQuestionActivity) getActivity();
 				Button button = (Button) activity.findViewById(R.id.submit_question_button);
 				button.setText("Not submit");
-				s.release();
+				semaphore.release();
 			}
 		});
 		
 		try {
-			s.acquire();
-			System.out.println(getActivity().auditErrors());
+			semaphore.acquire();
+			assertTrue("# Audit errors = " + getActivity().auditErrors() + " != 1",
+					getActivity().auditErrors() == 1);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
