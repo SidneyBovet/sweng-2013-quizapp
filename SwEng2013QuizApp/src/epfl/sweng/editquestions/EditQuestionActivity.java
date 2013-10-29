@@ -246,6 +246,11 @@ public class EditQuestionActivity extends Activity {
 			if (null != questions && questions.length != 1) {
 				throw new IllegalArgumentException();
 			}
+			
+			// TODO Uncomment this when using the proxy.
+			// return QuestionsProxy.getInstance().sendQuizzQuestion(questions[0]);
+			
+			/******************* DELETE THIS WHEN PROXY *******************/ 
 			QuizQuestion question = questions[0];
 			
 			int responseStatus = -1;
@@ -274,6 +279,7 @@ public class EditQuestionActivity extends Activity {
 			}
 			
 			return responseStatus;
+			/**************************************************************/
 		}
 		
 		@Override
@@ -282,9 +288,8 @@ public class EditQuestionActivity extends Activity {
 			
 			if (result != HttpStatus.SC_CREATED) {
 				// XXX switch to off line mode
-				// TODO meh. (change fuck this shit
-				Toast.makeText(EditQuestionActivity.this, "Fuck this shit",
-						Toast.LENGTH_LONG).show();
+				Toast.makeText(EditQuestionActivity.this, R.string.
+						error_uploading_question, Toast.LENGTH_LONG).show();
 			}
 		}
 	}

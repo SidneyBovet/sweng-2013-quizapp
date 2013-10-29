@@ -113,13 +113,18 @@ public class ShowQuestionsActivity extends Activity {
 		
 		@Override
 		protected QuizQuestion doInBackground(Void... params) {
+			
+			// TODO Uncomment when getting back to the proxy.
+			// return QuestionsProxy.getInstance().retrieveQuizzQuestion();
+			
+			/******************* DELETE THIS WHEN PROXY *******************/ 
 			QuizQuestion question = null;
+			
 			String url = HttpFactory.getSwengFetchQuestion();
 			
 			HttpGet firstRandom = HttpFactory.getGetRequest(url);
 			ResponseHandler<String> firstHandler = new BasicResponseHandler();
 			try {
-				// XXX later: call proxy instead of SwengFactory
 				String jsonQuestion = SwengHttpClientFactory.getInstance().
 						execute(firstRandom, firstHandler);
 				question = new QuizQuestion(jsonQuestion);
@@ -136,17 +141,16 @@ public class ShowQuestionsActivity extends Activity {
 			}
 			
 			return question;
+			/**************************************************************/
 		}
 		
 		@Override
-		protected void onPostExecute(QuizQuestion result) {
-			super.onPostExecute(result);
-			
-			if (null == result) {
+		protected void onPostExecute(QuizQuestion question) {
+			super.onPostExecute(question);
+			if (null == question) {
 				// XXX switch to off line mode
-				// TODO change this nice toast (David is in a hurry)
-				Toast.makeText(ShowQuestionsActivity.this, "Fuck",
-						Toast.LENGTH_LONG).show();
+				Toast.makeText(ShowQuestionsActivity.this, R.string.
+						error_fetching_question, Toast.LENGTH_LONG).show();
 			}
 		}
 	}
