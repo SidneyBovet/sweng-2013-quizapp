@@ -257,7 +257,7 @@ public class EditQuestionActivity extends Activity {
 	}
 	
 	/**
-	 * Audit method that verifies if all rep-invariants are respected. 
+	 * Audit method that verifies if all rep-invariants are fulfilled. 
 	 * 
 	 * @return the number of violated rep-invariants.
 	 */
@@ -273,7 +273,7 @@ public class EditQuestionActivity extends Activity {
 	
 	/**
 	 * Audit method that verifies if all rep-invariants for EditTexts
-	 * are respected. 
+	 * are fulfilled. 
 	 * 
 	 * @return the number of violated rep-invariants.
 	 */
@@ -316,8 +316,8 @@ public class EditQuestionActivity extends Activity {
 	}
 	 
 	/**
-	 * Audit method that verifies if all rep-invariants for Buttons
-	 * are respected. 
+	 * Audit method that verifies if all rep-invariants for Buttons are
+	 * fulfilled. 
 	 * 
 	 * @return the number of violated rep-invariants.
 	 */
@@ -340,6 +340,8 @@ public class EditQuestionActivity extends Activity {
 		}
 		
 		//XXX correct view got?
+		//XXX isShown => getVisibility() == View.VISIBLE
+		//XXX getText().equals(R.id...) => getString(R.string...)
 		for (int i = 0; i < mListview.getCount(); i++) {
 			View answerView = mListview.getChildAt(i);
 			Button removeButton = (Button) answerView
@@ -363,8 +365,8 @@ public class EditQuestionActivity extends Activity {
 	}
 	 
 	/**
-	 * Audit method that verifies if all rep-invariants for answers
-	 * are respected. 
+	 * Audit method that verifies if all rep-invariants for answers are
+	 * fulfilled.
 	 * 
 	 * @return the number of violated rep-invariants.
 	 */
@@ -384,8 +386,7 @@ public class EditQuestionActivity extends Activity {
 			if (correctnessButton.getText().equals(correctAnswerCheck)) {
 				if (!oneAnswerChecked) {
 					oneAnswerChecked = true;
-				}
-				else {
+				} else {
 					return 1;
 				}
 			}
@@ -395,8 +396,8 @@ public class EditQuestionActivity extends Activity {
 	}
 	 
 	/**
-	 * Audit method that verifies if all rep-invariants for behaviour of
-	 * of buttons are respected. 
+	 * Audit method that verifies if all rep-invariants for behaviour of buttons
+	 * are fulfilled. 
 	 * 
 	 * @return the number of violated rep-invariants.
 	 */
