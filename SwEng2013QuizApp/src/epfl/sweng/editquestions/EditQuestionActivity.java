@@ -1,21 +1,33 @@
 package epfl.sweng.editquestions;
 
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+
 import android.app.Activity;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 import epfl.sweng.R;
-import epfl.sweng.patterns.QuestionsProxy;
 import epfl.sweng.quizquestions.QuizQuestion;
+import epfl.sweng.servercomm.HttpFactory;
+import epfl.sweng.servercomm.SwengHttpClientFactory;
 import epfl.sweng.testing.TestCoordinator;
 import epfl.sweng.testing.TestCoordinator.TTChecks;
 
@@ -80,7 +92,7 @@ public class EditQuestionActivity extends Activity {
 		QuizQuestion questionToSubmit = QuizQuestion
 				.createQuestionFromList(listInputGUI);
 		
-		QuestionsProxy.getInstance().sendQuizzQuestion(questionToSubmit);
+		new AsyncPostQuestion().execute(questionToSubmit);
 
 		resetEditQuestionLayout();
 	}
@@ -227,34 +239,62 @@ public class EditQuestionActivity extends Activity {
 		editTextToFocus.requestFocus();
 	}
 	
+	class AsyncPostQuestion extends AsyncTask<QuizQuestion, Void, Integer> {
+		
+		@Override
+		protected Integer doInBackground(QuizQuestion... questions) {
+			if (null != questions && questions.length != 1) {
+				throw new IllegalArgumentException();
+			}
+			QuizQuestion question = questions[0];
+			
+			int responseStatus = -1;
+			HttpPost post = HttpFactory.getPostRequest(
+					HttpFactory.getSwengBaseAddress() + "/quizquestions/");
+			
+			// Send the quiz
+			try {
+				post.setEntity(new StringEntity(question.toJSON().toString()));
+				post.setHeader("Content-type", "application/json");
+				
+				HttpResponse mResponse = SwengHttpClientFactory.getInstance().execute(post);
+				responseStatus = mResponse.getStatusLine().getStatusCode();
+			} catch (UnsupportedEncodingException e) {
+				// XXX switch to off line mode
+				Log.e(this.getClass().getName(), "doInBackground(): Entity does "
+						+ "not support the local encoding.", e);
+			} catch (ClientProtocolException e) {
+				// XXX switch to off line mode
+				Log.e(this.getClass().getName(), "doInBackground(): Error in the "
+						+ "HTTP protocol.", e);
+			} catch (IOException e) {
+				// XXX switch to off line mode
+				Log.e(this.getClass().getName(), "doInBackground(): An I/O error "
+						+ "has occurred.", e);
+			}
+			
+			return responseStatus;
+		}
+		
+		@Override
+		protected void onPostExecute(Integer result) {
+			super.onPostExecute(result);
+			
+			if (result != HttpStatus.SC_CREATED) {
+				// XXX switch to off line mode
+				// TODO meh. (change fuck this shit
+				Toast.makeText(EditQuestionActivity.this, "Fuck this shit",
+						Toast.LENGTH_LONG).show();
+			}
+		}
+	}
+
+
 	/*
 	 * ***************************************************
 	 * ********************* Audit ***********************
 	 * ***************************************************
 	 */
-	
-	/**
-	 * Checks the following requirements :
-	 * <ul>
-	 * <li>The question field must not be an empty string</li>
-	 * <li>The tags field must not be an empty string.</li>
-	 * </ul>
-	 * 
-	 * @return The number of the previously described errors.
-	 */
-	
-	public int auditEmptyField() {
-		int errors = 0;
-		
-		if (mQuestionBodyText.matches("\\s*")) {
-			errors++;
-		}
-		if (mTagsText.matches("\\s*")) {
-			errors++;
-		}
-		
-		return errors;
-	}
 	
 	/**
 	 * Audit method that verifies if all rep-invariants are fulfilled. 
@@ -269,6 +309,29 @@ public class EditQuestionActivity extends Activity {
 		errorCount += auditAnswers();
 		errorCount += auditSubmitButton();
 		return errorCount;
+	}
+	
+	/**
+	 * Checks the following requirements :
+	 * <ul>
+	 * <li>The question field must not be an empty string</li>
+	 * <li>The tags field must not be an empty string.</li>
+	 * </ul>
+	 * 
+	 * @return The number of the previously described errors.
+	 */
+	
+	private int auditEmptyField() {
+		int errors = 0;
+		
+		if (mQuestionBodyText.matches("\\s*")) {
+			errors++;
+		}
+		if (mTagsText.matches("\\s*")) {
+			errors++;
+		}
+		
+		return errors;
 	}
 	
 	/**
@@ -379,6 +442,12 @@ public class EditQuestionActivity extends Activity {
 			View answerView = mListview.getChildAt(i);
 			Button correctnessButton = (Button) answerView.
 					findViewById(R.id.submit_question_correct_switch);
+			
+			
+			
+			// TODO what the hell?! == true + = true? maaah
+			
+			
 			
 			if (correctnessButton == null) {
 				return 2;	// then you've met with a terrible fate

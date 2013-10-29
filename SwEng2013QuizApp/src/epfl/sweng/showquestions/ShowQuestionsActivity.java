@@ -1,16 +1,29 @@
 package epfl.sweng.showquestions;
 
+import java.io.IOException;
+import java.util.concurrent.ExecutionException;
+
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.ResponseHandler;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.BasicResponseHandler;
+import org.json.JSONException;
+
 import android.app.Activity;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 import epfl.sweng.R;
-import epfl.sweng.patterns.QuestionsProxy;
 import epfl.sweng.quizquestions.QuizQuestion;
+import epfl.sweng.servercomm.HttpFactory;
+import epfl.sweng.servercomm.SwengHttpClientFactory;
 import epfl.sweng.testing.TestCoordinator;
 import epfl.sweng.testing.TestCoordinator.TTChecks;
 
@@ -42,8 +55,19 @@ public class ShowQuestionsActivity extends Activity {
 		Button buttonNext = (Button) findViewById(R.id.buttonNext);
 		buttonNext.setEnabled(false);
 
-		QuizQuestion randomQuestion = QuestionsProxy.getInstance().
-				retrieveQuizzQuestion();
+		AsyncRetrieveQuestion asyncFetchQuestion = new AsyncRetrieveQuestion();
+		asyncFetchQuestion.execute();
+		QuizQuestion randomQuestion = null;
+		try {
+			randomQuestion = asyncFetchQuestion.get();
+		} catch (InterruptedException e) {
+			Log.wtf(this.getClass().getName(), "AsyncFetchQuestion was interrupted");
+		} catch (ExecutionException e) {
+			// XXX switch to off line mode
+			Log.e(this.getClass().getName(), "Process crashed");
+			finish();
+			return;
+		}
 
 		// setting tags
 		TextView textViewQuestion = (TextView) findViewById(R.id.displayQuestion);
@@ -83,5 +107,47 @@ public class ShowQuestionsActivity extends Activity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.display_question, menu);
 		return true;
+	}
+	
+	class AsyncRetrieveQuestion extends AsyncTask<Void, Void, QuizQuestion> {
+		
+		@Override
+		protected QuizQuestion doInBackground(Void... params) {
+			QuizQuestion question = null;
+			String url = HttpFactory.getSwengFetchQuestion();
+			
+			HttpGet firstRandom = HttpFactory.getGetRequest(url);
+			ResponseHandler<String> firstHandler = new BasicResponseHandler();
+			try {
+				// XXX later: call proxy instead of SwengFactory
+				String jsonQuestion = SwengHttpClientFactory.getInstance().
+						execute(firstRandom, firstHandler);
+				question = new QuizQuestion(jsonQuestion);
+			} catch (ClientProtocolException e) {
+				Log.e(this.getClass().getName(), "doInBackground(): Error in"
+						+ "the HTTP protocol.", e);
+				// TODO switch to off line mode
+			} catch (IOException e) {
+				Log.e(this.getClass().getName(), "doInBackground(): An I/O"
+						+ "error has occurred.", e);
+				// TODO switch to off line mode
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+			
+			return question;
+		}
+		
+		@Override
+		protected void onPostExecute(QuizQuestion result) {
+			super.onPostExecute(result);
+			
+			if (null == result) {
+				// XXX switch to off line mode
+				// TODO change this nice toast (David is in a hurry)
+				Toast.makeText(ShowQuestionsActivity.this, "Fuck",
+						Toast.LENGTH_LONG).show();
+			}
+		}
 	}
 }
