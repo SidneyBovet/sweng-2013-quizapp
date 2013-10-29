@@ -179,7 +179,7 @@ public class EditQuestionActivity extends Activity {
 
 			@Override
 			public void afterTextChanged(Editable s) {
-				// Proceed only if there has been changes.
+				// Proceed only if there has been user changes.
 				if (!mQuestionBodyText.equals(s.toString())) {
 					mQuestionBodyText = s.toString();
 					updateSubmitButton();
