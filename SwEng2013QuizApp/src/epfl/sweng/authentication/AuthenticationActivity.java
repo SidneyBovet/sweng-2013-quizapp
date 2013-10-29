@@ -140,6 +140,7 @@ public class AuthenticationActivity extends Activity {
 			Log.wtf(this.getClass().getName(),
 					"User pressed 'Log in' while authenticated!?");
 			finish();
+			return;
 		}
 
 		new AsyncAuthentication().execute(username, password);
