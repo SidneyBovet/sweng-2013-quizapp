@@ -63,7 +63,6 @@ public class MainActivity extends Activity {
 	 * @param v The View clicked
 	 */
 	public void onCheckboxSwitchModeClicked(View v) {
-		assert v instanceof CheckBox;
 		CheckBox clickedCheckBox = (CheckBox) v;
 		
 		//Change the connection state entry in the UserPreferences
@@ -76,16 +75,11 @@ public class MainActivity extends Activity {
 			setDisplayView();
 			//TestCoordinator.check(TTChecks.OFFLINE_CHECKBOX_ENABLED);
 		}
-		//TODO remove assert? JoTearoom
-		// XXX why assert doesn't breaks?
-		//isOffline = !isOffline;
-		Toast.makeText(this,
-				"Assert: ("+clickedCheckBox.isChecked()+"&&"+isOffline+")||(" +
-						!clickedCheckBox.isChecked()+"&&"+!isOffline+")",
-				Toast.LENGTH_SHORT).show();
-
-		assert 	(clickedCheckBox.isChecked() && isOffline) ||
-				(!clickedCheckBox.isChecked() && !isOffline);
+		
+		// XXX is it implemented the correct way (throw AseertionError)?
+		if (auditErrors() != 0) {
+			throw new AssertionError();
+		}
 	}
 	
 	
