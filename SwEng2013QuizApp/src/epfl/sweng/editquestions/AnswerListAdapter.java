@@ -101,7 +101,7 @@ class AnswerListAdapter extends BaseAdapter {
 	
 	@Override
 	public void notifyDataSetChanged() {
-		mEditQuestionActivity.updateSubmitButton(audit() == 0);
+		mEditQuestionActivity.updateSubmitButton();
 		super.notifyDataSetChanged();
 	}
 	
@@ -161,7 +161,7 @@ class AnswerListAdapter extends BaseAdapter {
 				if (!mAnswerList.get(currentRowIndex).equals(s.toString())) {
 					mAnswerList.remove(currentRowIndex);
 					mAnswerList.add(currentRowIndex, s.toString());
-					mEditQuestionActivity.updateSubmitButton(audit() == 0);
+					mEditQuestionActivity.updateSubmitButton();
 					TestCoordinator.check(TTChecks.QUESTION_EDITED);
 				}
 			}
@@ -246,7 +246,7 @@ class AnswerListAdapter extends BaseAdapter {
 	 * @return	The number of the previously described errors.
 	 */
 	
-	public int audit() {
+	public int auditErrors() {
 		int errors = 0;
 
 		if (mAnswerCount != mAnswerList.size()) {

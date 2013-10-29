@@ -105,19 +105,29 @@ public class EditQuestionActivity extends Activity {
 	 *            The new status value of the submit button.
 	 */
 
-	public void updateSubmitButton(boolean value) {
+	public void updateSubmitButton() {
 		Button submitButton = (Button) mLayout
 				.findViewById(R.id.submit_question_button);
 		if (submitButton != null) {
-			boolean newVal = value && auditEmptyField() == 0;
-			if (submitButton.isEnabled() != newVal) {
-				submitButton.setEnabled(newVal);
-			}
+			submitButton.setEnabled(auditSubmitButton() == 0);
 		}
 	}
-
-
-
+	
+	/**
+	 * Audit method that verifies if all rep-invariants are fulfilled. 
+	 * 
+	 * @return the number of violated rep-invariants.
+	 */
+	
+	public int auditErrors() {
+		int errorCount = 0;
+		errorCount += auditEditTexts();
+		errorCount += auditButtons();
+		errorCount += auditAnswers();
+		errorCount += auditSubmitButton();
+		return errorCount;
+	}
+	
 	/**
 	 * Initializes the contents of the Activity's standard options menu.
 	 * <p>
@@ -172,7 +182,7 @@ public class EditQuestionActivity extends Activity {
 				// Proceed only if there has been changes.
 				if (!mQuestionBodyText.equals(s.toString())) {
 					mQuestionBodyText = s.toString();
-					updateSubmitButton(mAnswerListAdapter.audit() == 0);
+					updateSubmitButton();
 					TestCoordinator.check(TTChecks.QUESTION_EDITED);
 				}
 			}
@@ -197,7 +207,7 @@ public class EditQuestionActivity extends Activity {
 			public void afterTextChanged(Editable s) {
 				if (!mTagsText.equals(s.toString())) {
 					mTagsText = s.toString();
-					updateSubmitButton(mAnswerListAdapter.audit() == 0);
+					updateSubmitButton();
 					TestCoordinator.check(TTChecks.QUESTION_EDITED);
 				}
 			}
@@ -302,21 +312,6 @@ public class EditQuestionActivity extends Activity {
 	 */
 	
 	/**
-	 * Audit method that verifies if all rep-invariants are fulfilled. 
-	 * 
-	 * @return the number of violated rep-invariants.
-	 */
-	
-	public int auditErrors() {
-		int errorCount = 0;
-		errorCount += auditEditTexts();
-		errorCount += auditButtons();
-		errorCount += auditAnswers();
-		errorCount += auditSubmitButton();
-		return errorCount;
-	}
-	
-	/**
 	 * Checks the following requirements :
 	 * <ul>
 	 * <li>The question field must not be an empty string</li>
@@ -417,9 +412,9 @@ public class EditQuestionActivity extends Activity {
 		for (int i = 0; i < mListview.getCount(); i++) {
 			View answerView = mListview.getChildAt(i);
 			Button removeButton = (Button) answerView
-					.findViewById(R.string.submit_question_remove_answer);
+					.findViewById(R.id.submit_question_remove_answer_edit);
 			Button correctnessButton = (Button) answerView	
-					.findViewById(R.string.submit_Edited_Question_Button);
+					.findViewById(R.id.submit_question_correct_switch);
 			
 			if (removeButton == null
 					|| !removeButton.getText().equals(removeButtonText)
@@ -453,12 +448,6 @@ public class EditQuestionActivity extends Activity {
 			Button correctnessButton = (Button) answerView.
 					findViewById(R.id.submit_question_correct_switch);
 			
-			
-			
-			// TODO what the hell?! == true + = true? maaah
-			
-			
-			
 			if (correctnessButton == null) {
 				return 2;	// then you've met with a terrible fate
 			}
@@ -485,7 +474,11 @@ public class EditQuestionActivity extends Activity {
 		int errorCount = 0;
 		
 		errorCount += auditEmptyField();
-		errorCount += mAnswerListAdapter.audit();
+		
+		// avoid IllegalStateException
+		if (mAnswerListAdapter != null) {
+			errorCount += mAnswerListAdapter.auditErrors();
+		}
 		
 		return errorCount;
 	}
