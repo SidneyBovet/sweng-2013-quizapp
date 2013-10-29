@@ -91,7 +91,7 @@ public class EditQuestionActivity extends Activity {
 		listInputGUI.add(mTagsText);
 		QuizQuestion questionToSubmit = QuizQuestion
 				.createQuestionFromList(listInputGUI);
-		
+
 		new AsyncPostQuestion().execute(questionToSubmit);
 
 		resetEditQuestionLayout();
@@ -112,13 +112,13 @@ public class EditQuestionActivity extends Activity {
 			submitButton.setEnabled(auditSubmitButton() == 0);
 		}
 	}
-	
+
 	/**
-	 * Audit method that verifies if all rep-invariants are fulfilled. 
+	 * Audit method that verifies if all rep-invariants are fulfilled.
 	 * 
 	 * @return the number of violated rep-invariants.
 	 */
-	
+
 	public int auditErrors() {
 		int errorCount = 0;
 		errorCount += auditEditTexts();
@@ -127,7 +127,7 @@ public class EditQuestionActivity extends Activity {
 		errorCount += auditSubmitButton();
 		return errorCount;
 	}
-	
+
 	/**
 	 * Initializes the contents of the Activity's standard options menu.
 	 * <p>
@@ -144,7 +144,7 @@ public class EditQuestionActivity extends Activity {
 
 	/**
 	 * Initializes the activity by setting the view.
-	 *
+	 * 
 	 * @see #setDisplayView()
 	 */
 
@@ -155,13 +155,13 @@ public class EditQuestionActivity extends Activity {
 		setDisplayView();
 		TestCoordinator.check(TTChecks.EDIT_QUESTIONS_SHOWN);
 	}
-	
+
 	/**
 	 * Sets the view by binding the {@link AnswerListAdapter} with the
 	 * <code>ListView</code>, and adding a <code>TextWatcher</code> on the
 	 * question and tags fields.
 	 */
-	
+
 	private void setDisplayView() {
 
 		mQuestionBodyText = "";
@@ -226,12 +226,12 @@ public class EditQuestionActivity extends Activity {
 		});
 
 	}
-	
+
 	/**
 	 * Resets the layout by emptying every <code>EditText</code> on the Activty,
 	 * and by resetting the <code>ListView</code> adapter.
 	 */
-	
+
 	private void resetEditQuestionLayout() {
 		mQuestionBodyText = "";
 		mTagsText = "";
@@ -248,69 +248,74 @@ public class EditQuestionActivity extends Activity {
 		mAnswerListAdapter.resetAnswerList();
 		editTextToFocus.requestFocus();
 	}
-	
+
 	class AsyncPostQuestion extends AsyncTask<QuizQuestion, Void, Integer> {
-		
+
 		@Override
 		protected Integer doInBackground(QuizQuestion... questions) {
 			if (null != questions && questions.length != 1) {
 				throw new IllegalArgumentException();
 			}
-			
+
 			// TODO Uncomment this when using the proxy.
-			// return QuestionsProxy.getInstance().sendQuizzQuestion(questions[0]);
-			
-			/******************* DELETE THIS WHEN PROXY *******************/ 
+			// return
+			// QuestionsProxy.getInstance().sendQuizzQuestion(questions[0]);
+
+			/******************* DELETE THIS WHEN PROXY *******************/
 			QuizQuestion question = questions[0];
-			
+
 			int responseStatus = -1;
-			HttpPost post = HttpFactory.getPostRequest(
-					HttpFactory.getSwengBaseAddress() + "/quizquestions/");
-			
+			HttpPost post = HttpFactory.getPostRequest(HttpFactory
+					.getSwengBaseAddress() + "/quizquestions/");
+
 			// Send the quiz
 			try {
 				post.setEntity(new StringEntity(question.toJSON().toString()));
 				post.setHeader("Content-type", "application/json");
-				
-				HttpResponse mResponse = SwengHttpClientFactory.getInstance().execute(post);
+
+				HttpResponse mResponse = SwengHttpClientFactory.getInstance()
+						.execute(post);
 				responseStatus = mResponse.getStatusLine().getStatusCode();
 			} catch (UnsupportedEncodingException e) {
 				// XXX switch to off line mode
-				Log.e(this.getClass().getName(), "doInBackground(): Entity does "
-						+ "not support the local encoding.", e);
+				Log.e(this.getClass().getName(),
+						"doInBackground(): Entity does "
+								+ "not support the local encoding.", e);
 			} catch (ClientProtocolException e) {
 				// XXX switch to off line mode
-				Log.e(this.getClass().getName(), "doInBackground(): Error in the "
-						+ "HTTP protocol.", e);
+				Log.e(this.getClass().getName(),
+						"doInBackground(): Error in the " + "HTTP protocol.", e);
 			} catch (IOException e) {
 				// XXX switch to off line mode
-				Log.e(this.getClass().getName(), "doInBackground(): An I/O error "
-						+ "has occurred.", e);
+				Log.e(this.getClass().getName(),
+						"doInBackground(): An I/O error " + "has occurred.", e);
 			}
-			
+
 			return responseStatus;
 			/**************************************************************/
 		}
-		
+
 		@Override
 		protected void onPostExecute(Integer result) {
 			super.onPostExecute(result);
-			
+
 			if (result != HttpStatus.SC_CREATED) {
 				// XXX switch to off line mode
-				Toast.makeText(EditQuestionActivity.this, R.string.
-						error_uploading_question, Toast.LENGTH_LONG).show();
+				Toast.makeText(
+						EditQuestionActivity.this,
+						getResources().getString(
+								R.string.error_uploading_question),
+						Toast.LENGTH_LONG).show();
 			}
 		}
 	}
-
 
 	/*
 	 * ***************************************************
 	 * ********************* Audit ***********************
 	 * ***************************************************
 	 */
-	
+
 	/**
 	 * Checks the following requirements :
 	 * <ul>
@@ -320,92 +325,89 @@ public class EditQuestionActivity extends Activity {
 	 * 
 	 * @return The number of the previously described errors.
 	 */
-	
+
 	private int auditEmptyField() {
 		int errors = 0;
-		
+
 		if (mQuestionBodyText.matches("\\s*")) {
 			errors++;
 		}
 		if (mTagsText.matches("\\s*")) {
 			errors++;
 		}
-		
+
 		return errors;
 	}
-	
+
 	/**
-	 * Audit method that verifies if all rep-invariants for EditTexts
-	 * are fulfilled. 
+	 * Audit method that verifies if all rep-invariants for EditTexts are
+	 * fulfilled.
 	 * 
 	 * @return the number of violated rep-invariants.
 	 */
-	
+
 	private int auditEditTexts() {
 		int errorCount = 0;
-		
-		EditText editQuestionBody = (EditText) mLayout.
-				findViewById(R.id.submit_question_text_body_edit);
-		EditText editTags = (EditText) mLayout.
-				findViewById(R.id.submit_question_tags);
-		
+
+		EditText editQuestionBody = (EditText) mLayout
+				.findViewById(R.id.submit_question_text_body_edit);
+		EditText editTags = (EditText) mLayout
+				.findViewById(R.id.submit_question_tags);
+
 		String questionBodyHint = getString(R.string.submit_question_text_body);
 		if (editQuestionBody == null
 				|| !editQuestionBody.getHint().equals(questionBodyHint)
 				|| editQuestionBody.getVisibility() != View.VISIBLE) {
 			errorCount++;
 		}
-		
+
 		String answerHint = getString(R.string.submit_question_answer_hint);
 		for (int i = 0; i < mListview.getCount(); i++) {
 			View answerView = mListview.getChildAt(i);
-			EditText editAnswer = (EditText) answerView.
-					findViewById(R.id.submit_question_answer_text);
-			
-			if (editAnswer == null
-					|| !editAnswer.getHint().equals(answerHint)
+			EditText editAnswer = (EditText) answerView
+					.findViewById(R.id.submit_question_answer_text);
+
+			if (editAnswer == null || !editAnswer.getHint().equals(answerHint)
 					|| editAnswer.getVisibility() != View.VISIBLE) {
 				errorCount++;
 			}
 		}
-		
+
 		String tagsHint = getString(R.string.submit_question_tags);
-		if (editTags == null
-				|| !editTags.getHint().equals(tagsHint)
+		if (editTags == null || !editTags.getHint().equals(tagsHint)
 				|| editTags.getVisibility() != View.VISIBLE) {
 			errorCount++;
 		}
 		return errorCount;
 	}
-	 
+
 	/**
 	 * Audit method that verifies if all rep-invariants for Buttons are
-	 * fulfilled. 
+	 * fulfilled.
 	 * 
 	 * @return the number of violated rep-invariants.
 	 */
-	
+
 	private int auditButtons() {
 		int errorCount = 0;
 		Button addButton = (Button) mLayout
 				.findViewById(R.id.submit_question_add_button);
 		Button submitButton = (Button) mLayout
 				.findViewById(R.id.submit_question_button);
-		
+
 		String addButtonText = getString(R.string.submit_question_add_button);
-		if (addButton == null
-				|| !addButton.getText().equals(addButtonText)
+		if (addButton == null || !addButton.getText().equals(addButtonText)
 				|| addButton.getVisibility() != View.VISIBLE) {
 			++errorCount;
 		}
-		
+
 		String submitButtonText = getString(R.string.submit_question_button);
 		if (submitButton == null
 				|| !submitButton.getText().equals(submitButtonText)
 				|| submitButton.getVisibility() != View.VISIBLE) {
 			++errorCount;
 		}
-		
+
 		String removeButtonText = getString(R.string.submit_question_remove_answer);
 		String correctAnswerText = getString(R.string.question_correct_answer);
 		String wrongAnswerText = getString(R.string.question_wrong_answer);
@@ -413,43 +415,43 @@ public class EditQuestionActivity extends Activity {
 			View answerView = mListview.getChildAt(i);
 			Button removeButton = (Button) answerView
 					.findViewById(R.id.submit_question_remove_answer_edit);
-			Button correctnessButton = (Button) answerView	
+			Button correctnessButton = (Button) answerView
 					.findViewById(R.id.submit_question_correct_switch);
-			
+
 			if (removeButton == null
 					|| !removeButton.getText().equals(removeButtonText)
 					|| removeButton.getVisibility() != View.VISIBLE) {
 				++errorCount;
 			}
-			
+
 			if (correctnessButton == null
-					|| (!correctnessButton.getText().equals(correctAnswerText)
-					&& !correctnessButton.getText().equals(wrongAnswerText))
+					|| (!correctnessButton.getText().equals(correctAnswerText) && !correctnessButton
+							.getText().equals(wrongAnswerText))
 					|| correctnessButton.getVisibility() != View.VISIBLE) {
 				++errorCount;
 			}
 		}
 		return errorCount;
 	}
-	 
+
 	/**
 	 * Audit method that verifies if all rep-invariants for answers are
 	 * fulfilled.
 	 * 
 	 * @return the number of violated rep-invariants.
 	 */
-	
+
 	private int auditAnswers() {
 		boolean oneAnswerChecked = false;
-		
+
 		String correctAnswerCheck = getString(R.string.question_correct_answer);
 		for (int i = 0; i < mListview.getCount(); i++) {
 			View answerView = mListview.getChildAt(i);
-			Button correctnessButton = (Button) answerView.
-					findViewById(R.id.submit_question_correct_switch);
-			
+			Button correctnessButton = (Button) answerView
+					.findViewById(R.id.submit_question_correct_switch);
+
 			if (correctnessButton == null) {
-				return 2;	// then you've met with a terrible fate
+				return 2; // then you've met with a terrible fate
 			}
 			if (correctnessButton.getText().equals(correctAnswerCheck)) {
 				if (!oneAnswerChecked) {
@@ -459,27 +461,27 @@ public class EditQuestionActivity extends Activity {
 				}
 			}
 		}
-		
+
 		return 0;
 	}
-	 
+
 	/**
 	 * Audit method that verifies if all rep-invariants for behaviour of buttons
-	 * are fulfilled. 
+	 * are fulfilled.
 	 * 
 	 * @return the number of violated rep-invariants.
 	 */
-	
+
 	private int auditSubmitButton() {
 		int errorCount = 0;
-		
+
 		errorCount += auditEmptyField();
-		
+
 		// avoid IllegalStateException
 		if (mAnswerListAdapter != null) {
 			errorCount += mAnswerListAdapter.auditErrors();
 		}
-		
+
 		return errorCount;
 	}
 }

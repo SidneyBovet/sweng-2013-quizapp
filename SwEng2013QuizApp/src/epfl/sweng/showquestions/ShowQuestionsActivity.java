@@ -30,26 +30,27 @@ import epfl.sweng.testing.TestCoordinator.TTChecks;
 /***
  * Activity used to display a random question to the user.
  * 
- * @author born4new 
+ * @author born4new
  * @author JoTearoom
- *
+ * 
  */
 
 public class ShowQuestionsActivity extends Activity {
-	
+
 	@Override
 	protected void onCreate(final Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_display_question);
-		
+
 		setDisplayView();
 	}
+
 	/**
 	 * Sets all the view in this activity, by disabling the button, filling the
 	 * <code>TextView</code>, initializing the <code>ListView</code> bounded
 	 * with its adapter and putting it under a listener.
 	 */
-	
+
 	private void setDisplayView() {
 		// setting button look
 		Button buttonNext = (Button) findViewById(R.id.buttonNext);
@@ -61,7 +62,8 @@ public class ShowQuestionsActivity extends Activity {
 		try {
 			randomQuestion = asyncFetchQuestion.get();
 		} catch (InterruptedException e) {
-			Log.wtf(this.getClass().getName(), "AsyncFetchQuestion was interrupted");
+			Log.wtf(this.getClass().getName(),
+					"AsyncFetchQuestion was interrupted");
 		} catch (ExecutionException e) {
 			// XXX switch to off line mode
 			Log.e(this.getClass().getName(), "Process crashed");
@@ -77,27 +79,27 @@ public class ShowQuestionsActivity extends Activity {
 		textViewTag.setText(randomQuestion.getTagsToString());
 
 		// setting answer list
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-				this, 
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
 				android.R.layout.simple_list_item_1,
 				randomQuestion.getAnswers());
 		ListView displayAnswers = (ListView) findViewById(R.id.displayAnswers);
 		displayAnswers.setAdapter(adapter);
-		
-		//put answer list under listening
-		AnswerSelectionListener listener =
-				new AnswerSelectionListener(buttonNext, randomQuestion);
+
+		// put answer list under listening
+		AnswerSelectionListener listener = new AnswerSelectionListener(
+				buttonNext, randomQuestion);
 		displayAnswers.setOnItemClickListener(listener);
-		
+
 		TestCoordinator.check(TTChecks.QUESTION_SHOWN);
 	}
 
 	/**
 	 * Goes back to the state when the current activity was started.
 	 * 
-	 * @param view Element that was clicked, which is the send button. 
+	 * @param view
+	 *            Element that was clicked, which is the send button.
 	 */
-	
+
 	public void displayAgainRandomQuestion(View view) {
 		setDisplayView();
 	}
@@ -108,25 +110,25 @@ public class ShowQuestionsActivity extends Activity {
 		getMenuInflater().inflate(R.menu.display_question, menu);
 		return true;
 	}
-	
+
 	class AsyncRetrieveQuestion extends AsyncTask<Void, Void, QuizQuestion> {
-		
+
 		@Override
 		protected QuizQuestion doInBackground(Void... params) {
-			
+
 			// TODO Uncomment when getting back to the proxy.
 			// return QuestionsProxy.getInstance().retrieveQuizzQuestion();
-			
-			/******************* DELETE THIS WHEN PROXY *******************/ 
+
+			/******************* DELETE THIS WHEN PROXY *******************/
 			QuizQuestion question = null;
-			
+
 			String url = HttpFactory.getSwengFetchQuestion();
-			
+
 			HttpGet firstRandom = HttpFactory.getGetRequest(url);
 			ResponseHandler<String> firstHandler = new BasicResponseHandler();
 			try {
-				String jsonQuestion = SwengHttpClientFactory.getInstance().
-						execute(firstRandom, firstHandler);
+				String jsonQuestion = SwengHttpClientFactory.getInstance()
+						.execute(firstRandom, firstHandler);
 				question = new QuizQuestion(jsonQuestion);
 			} catch (ClientProtocolException e) {
 				Log.e(this.getClass().getName(), "doInBackground(): Error in"
@@ -139,18 +141,21 @@ public class ShowQuestionsActivity extends Activity {
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
-			
+
 			return question;
 			/**************************************************************/
 		}
-		
+
 		@Override
 		protected void onPostExecute(QuizQuestion question) {
 			super.onPostExecute(question);
 			if (null == question) {
 				// XXX switch to off line mode
-				Toast.makeText(ShowQuestionsActivity.this, R.string.
-						error_fetching_question, Toast.LENGTH_LONG).show();
+				Toast.makeText(
+						ShowQuestionsActivity.this,
+						getResources().getString(
+								R.string.error_fetching_question),
+						Toast.LENGTH_LONG).show();
 			}
 		}
 	}

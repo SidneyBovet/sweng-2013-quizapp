@@ -25,7 +25,7 @@ import epfl.sweng.testing.TestCoordinator.TTChecks;
  * 
  */
 public class AuthenticationActivity extends Activity {
-	
+
 	private EditText mUserNameEditText;
 	private EditText mPasswordEditText;
 	private Button mLoginbutton;
@@ -40,10 +40,10 @@ public class AuthenticationActivity extends Activity {
 
 	/**
 	 * Sets all the view in this activity, by disabling the button, filling the
-	 * <code>TextView</code>, setting the status of the loginButton using a 
+	 * <code>TextView</code>, setting the status of the loginButton using a
 	 * listener on the login and password EditText.
 	 */
-	
+
 	private void setDisplayView() {
 		mLoginbutton = (Button) findViewById(R.id.login_button);
 		mLoginbutton.setEnabled(false);
@@ -96,19 +96,19 @@ public class AuthenticationActivity extends Activity {
 	 * Tries to update the status of the submit button according to the content
 	 * of the password and login EditText.
 	 */
-	
+
 	private void checkLoginButtonStatus() {
 		String usrName = mUserNameEditText.getText().toString();
 		String usrPassword = mPasswordEditText.getText().toString();
-		mLoginbutton.setEnabled(!(usrName.length() == 0 || usrPassword
-				.length() == 0));
+		mLoginbutton
+				.setEnabled(!(usrName.length() == 0 || usrPassword.length() == 0));
 	}
 
 	/**
 	 * Resets the layout by emptying every EditText on the Activity, and by
 	 * disabling the loginButton.
 	 */
-	
+
 	public void resetGUIWhenAuthenticationFails() {
 		mUserNameEditText.setText("");
 		mPasswordEditText.setText("");
@@ -127,7 +127,7 @@ public class AuthenticationActivity extends Activity {
 	 * <p>
 	 * Used when the login button is clicked.
 	 */
-	
+
 	public void buttonAuthenticate(View view) {
 		String username = ((TextView) findViewById(R.id.login_user)).getText()
 				.toString();
@@ -135,43 +135,47 @@ public class AuthenticationActivity extends Activity {
 				.getText().toString();
 
 		if (UserPreferences.getInstance(this).isAuthenticated()) {
-			Toast.makeText(this, "Already logged in!", Toast.LENGTH_LONG).show();
+			Toast.makeText(this, "Already logged in!", Toast.LENGTH_LONG)
+					.show();
 			Log.wtf(this.getClass().getName(),
 					"User pressed 'Log in' while authenticated!?");
 			finish();
 		}
-		
+
 		new AsyncAuthentication().execute(username, password);
 	}
-	
+
 	/**
 	 * Thread that will proceed user authentication.
+	 * 
 	 * @author born4new
-	 *
+	 * 
 	 */
 	class AsyncAuthentication extends AsyncTask<String, Void, String> {
-		
+
 		@Override
 		protected String doInBackground(String... userInfos) {
 			if (null != userInfos && userInfos.length != 2) {
 				throw new IllegalArgumentException();
 			}
 
-			return AuthenticationProcess.authenticate(userInfos[0], userInfos[1]);
+			return AuthenticationProcess.authenticate(userInfos[0],
+					userInfos[1]);
 		}
-		
+
 		@Override
 		protected void onPostExecute(String sessionId) {
 			super.onPostExecute(sessionId);
-			
+
 			if (null == sessionId || sessionId.equals("")) {
 				// XXX switch to off line mode
-				Toast.makeText(AuthenticationActivity.this, R.string.
-						error_logging_in, Toast.LENGTH_LONG).show();
+				Toast.makeText(AuthenticationActivity.this,
+						getResources().getString(R.string.error_logging_in),
+						Toast.LENGTH_LONG).show();
 				resetGUIWhenAuthenticationFails();
 			} else {
-				UserPreferences.getInstance(AuthenticationActivity.this).
-					createEntry("SESSION_ID", sessionId);
+				UserPreferences.getInstance(AuthenticationActivity.this)
+						.createEntry("SESSION_ID", sessionId);
 				finish();
 			}
 		}
