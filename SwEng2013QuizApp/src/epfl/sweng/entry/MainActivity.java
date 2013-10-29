@@ -70,11 +70,11 @@ public class MainActivity extends Activity {
 		if (clickedCheckBox.isChecked()) {
 			mUserPreferences.createEntry("CONNECTION_STATE", "OFFLINE");
 			setDisplayView();
-			TestCoordinator.check(TTChecks.OFFLINE_CHECKBOX_ENABLED);
+			//TestCoordinator.check(TTChecks.OFFLINE_CHECKBOX_ENABLED);
 		} else {
 			mUserPreferences.createEntry("CONNECTION_STATE", "ONLINE");
 			setDisplayView();
-			TestCoordinator.check(TTChecks.OFFLINE_CHECKBOX_ENABLED);
+			//TestCoordinator.check(TTChecks.OFFLINE_CHECKBOX_ENABLED);
 		}
 		//TODO remove assert? JoTearoom
 		// XXX why assert doesn't breaks?
