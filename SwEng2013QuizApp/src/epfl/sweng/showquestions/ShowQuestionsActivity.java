@@ -69,6 +69,11 @@ public class ShowQuestionsActivity extends Activity {
 			Log.e(this.getClass().getName(), "Process crashed");
 			finish();
 			return;
+		} finally {
+			if (null == randomQuestion) {
+				finish();
+				return;
+			}
 		}
 
 		// setting tags
