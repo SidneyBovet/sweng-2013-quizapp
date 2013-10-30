@@ -307,6 +307,7 @@ public class EditQuestionActivity extends Activity {
 								R.string.error_uploading_question),
 						Toast.LENGTH_LONG).show();
 			}
+			TestCoordinator.check(TTChecks.NEW_QUESTION_SUBMITTED);
 		}
 	}
 
@@ -443,13 +444,13 @@ public class EditQuestionActivity extends Activity {
 
 	private int auditAnswers() {
 		boolean oneAnswerChecked = false;
-
+		
 		String correctAnswerCheck = getString(R.string.question_correct_answer);
 		for (int i = 0; i < mListview.getCount(); i++) {
 			View answerView = mListview.getChildAt(i);
 			Button correctnessButton = (Button) answerView
 					.findViewById(R.id.submit_question_correct_switch);
-
+			
 			if (correctnessButton == null) {
 				return 2; // then you've met with a terrible fate
 			}
