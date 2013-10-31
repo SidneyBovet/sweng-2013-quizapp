@@ -61,6 +61,8 @@ public final class TestCoordinator {
         NEW_QUESTION_SUBMITTED,
         AUTHENTICATION_ACTIVITY_SHOWN,
         LOGGED_OUT,
+        OFFLINE_CHECKBOX_ENABLED,
+        OFFLINE_CHECKBOX_DISABLED
     };
 
     private TTChecks currentCheck = TTChecks.NONE;
@@ -75,8 +77,8 @@ public final class TestCoordinator {
             synchronized (tts) {
                 if (tts.state != TTState.IDLE) {
                     throw new TestCoordinationError(
-                            "Attempt to run transaction '" + t
-                            + "', but another transaction is running.");
+                            "Attempt to run transaction '" + t +
+                            "', but another transaction is running.");
                 }
                 tts.startTime = System.currentTimeMillis();
                 Log.d(TAG, String.format("Starting transaction %s", t));
@@ -98,8 +100,8 @@ public final class TestCoordinator {
                 // simultaneously, and set the state back to IDLE.
                 if (tts.state != TTState.INITIATED && tts.state != TTState.COMPLETED) {
                     throw new TestCoordinationError(
-                            "Attempt to wait for transaction '" + t
-                            + "', but it was aborted.");
+                            "Attempt to wait for transaction '" + t +
+                            "', but it was aborted.");
                 }
 
                 // 2) wait for the transaction to complete (i.e., to call check)
