@@ -63,7 +63,7 @@ public class MainActivity extends Activity {
 	 * @param v The View clicked
 	 */
 	public void onCheckboxSwitchModeClicked(View v) {
-		CheckBox clickedCheckBox = (CheckBox) v;
+		/*CheckBox clickedCheckBox = (CheckBox) v;
 		
 		//Change the connection state entry in the UserPreferences
 		if (clickedCheckBox.isChecked()) {
@@ -79,7 +79,7 @@ public class MainActivity extends Activity {
 		// XXX is it implemented the correct way (throw AseertionError)?
 		if (auditErrors() != 0) {
 			throw new AssertionError();
-		}
+		}*/
 	}
 	
 	
