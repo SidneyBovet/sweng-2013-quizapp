@@ -71,7 +71,7 @@ public class ShowQuestionsActivity extends Activity {
 			return;
 		} finally {
 			if (null == randomQuestion) {
-				finish();
+//				finish();
 				return;
 			}
 		}
