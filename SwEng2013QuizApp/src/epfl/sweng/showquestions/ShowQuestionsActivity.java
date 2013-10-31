@@ -67,7 +67,7 @@ public class ShowQuestionsActivity extends Activity {
 		} catch (ExecutionException e) {
 			// XXX switch to off line mode
 			Log.e(this.getClass().getName(), "Process crashed");
-			finish();
+//			finish();
 			return;
 		} finally {
 			if (null == randomQuestion) {
