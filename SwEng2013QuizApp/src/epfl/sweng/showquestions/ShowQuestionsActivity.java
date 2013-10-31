@@ -67,11 +67,13 @@ public class ShowQuestionsActivity extends Activity {
 		} catch (ExecutionException e) {
 			// XXX switch to off line mode
 			Log.e(this.getClass().getName(), "Process crashed");
+			TestCoordinator.check(TTChecks.QUESTION_SHOWN);
 //			finish();
 			return;
 		} finally {
 			if (null == randomQuestion) {
 //				finish();
+				TestCoordinator.check(TTChecks.QUESTION_SHOWN);
 				return;
 			}
 		}
