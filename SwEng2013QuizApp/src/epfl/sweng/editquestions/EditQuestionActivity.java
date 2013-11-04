@@ -263,6 +263,7 @@ public class EditQuestionActivity extends Activity {
 
 			if (result != HttpStatus.SC_CREATED) {
 				mUserPreferences.createEntry("CONNECTION_STATE", "OFFLINE");
+				TestCoordinator.check(TTChecks.OFFLINE_CHECKBOX_ENABLED);
 				Toast.makeText(
 						EditQuestionActivity.this,
 						getResources().getString(

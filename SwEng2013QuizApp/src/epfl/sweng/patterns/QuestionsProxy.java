@@ -19,6 +19,8 @@ import epfl.sweng.authentication.UserPreferences;
 import epfl.sweng.quizquestions.QuizQuestion;
 import epfl.sweng.servercomm.HttpFactory;
 import epfl.sweng.servercomm.SwengHttpClientFactory;
+import epfl.sweng.testing.TestCoordinator;
+import epfl.sweng.testing.TestCoordinator.TTChecks;
 
 /**
  * This class will perform all the server interactions
@@ -105,14 +107,17 @@ public final class QuestionsProxy {
 			responseStatus = mResponse.getStatusLine().getStatusCode();			
 		} catch (UnsupportedEncodingException e) {
 			mUserPreferences.createEntry("CONNECTION_STATE", "OFFLINE");
+			TestCoordinator.check(TTChecks.OFFLINE_CHECKBOX_ENABLED);
 			Log.e(this.getClass().getName(), "doInBackground(): Entity does "
 					+ "not support the local encoding.", e);
 		} catch (ClientProtocolException e) {
 			mUserPreferences.createEntry("CONNECTION_STATE", "OFFLINE");
+			TestCoordinator.check(TTChecks.OFFLINE_CHECKBOX_ENABLED);
 			Log.e(this.getClass().getName(), "doInBackground(): Error in the "
 					+ "HTTP protocol.", e);
 		} catch (IOException e) {
 			mUserPreferences.createEntry("CONNECTION_STATE", "OFFLINE");
+			TestCoordinator.check(TTChecks.OFFLINE_CHECKBOX_ENABLED);
 			Log.e(this.getClass().getName(), "doInBackground(): An I/O error "
 					+ "has occurred.", e);
 		}
@@ -131,18 +136,18 @@ public final class QuestionsProxy {
 		
 		int responseStatus = -1;
 		if (mUserPreferences.isConnected()) {
-			//XXX envoyer d'abord question courante ou stockée?
+			//XXX envoyer d'abord question courante ou stockée? Joanna
 			responseStatus = sendQuizzQuestionHelper(question);
 			while (mQuizzQuestionsOutbox.size() > 0) {
 				QuizQuestion mquestionOut = mQuizzQuestionsOutbox.remove(0);
 				sendQuizzQuestion(mquestionOut);
 				//XXX pour l'instant pas dans le bon ordre => regler asynctask
-				//mnt ok??
+				//mnt ok?? Joanna
 			}
 		} else {
 			addOutbox(question);
 		}
-		//XXX retourner list de responseStatus?
+		//XXX retourner list de responseStatus? Joanna
 		return responseStatus;
 	}
 	
@@ -169,10 +174,12 @@ public final class QuestionsProxy {
 				addInbox(fetchedQuestion);
 			} catch (ClientProtocolException e) {
 				mUserPreferences.createEntry("CONNECTION_STATE", "OFFLINE");
+				TestCoordinator.check(TTChecks.OFFLINE_CHECKBOX_ENABLED);
 				Log.e(this.getClass().getName(), "doInBackground(): Error in"
 						+ "the HTTP protocol.", e);
 			} catch (IOException e) {
 				mUserPreferences.createEntry("CONNECTION_STATE", "OFFLINE");
+				TestCoordinator.check(TTChecks.OFFLINE_CHECKBOX_ENABLED);
 				Log.e(this.getClass().getName(), "doInBackground(): An I/O"
 						+ "error has occurred.", e);
 			} catch (JSONException e) {

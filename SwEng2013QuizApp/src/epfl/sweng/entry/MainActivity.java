@@ -67,15 +67,19 @@ public class MainActivity extends Activity {
 		//Change the connection state entry in the UserPreferences
 		if (clickedCheckBox.isChecked()) {
 			mUserPreferences.createEntry("CONNECTION_STATE", "OFFLINE");
+			TestCoordinator.check(TTChecks.OFFLINE_CHECKBOX_ENABLED);
 			setDisplayView();
 			//TestCoordinator.check(TTChecks.OFFLINE_CHECKBOX_ENABLED);
 		} else {
 			mUserPreferences.createEntry("CONNECTION_STATE", "ONLINE");
+			//XXX after the app successfully synchronizes with the server =>
+			//is it here? Joanna
+			TestCoordinator.check(TTChecks.OFFLINE_CHECKBOX_DISABLED);
 			setDisplayView();
 			//TestCoordinator.check(TTChecks.OFFLINE_CHECKBOX_ENABLED);
 		}
 		
-		//XXX check again when Offline due to connection failures?
+		//XXX check again when Offline due to connection failures? Joanna
 //		// XXX is it implemented the correct way (throw AseertionError)?
 		//TODO issues #63
 //		if (auditErrors() != 0) {
@@ -152,9 +156,13 @@ public class MainActivity extends Activity {
 				.setText(mUserPreferences.isAuthenticated() ? R.string.autenticationLoginButtonStateLogOut
 						: R.string.autenticationLoginButtonStateLogIn);
 		setDisplayView();
-		TestCoordinator.check(TTChecks.MAIN_ACTIVITY_SHOWN);
 	}
 
+	@Override
+	protected void onStart() {
+		super.onStart();
+		TestCoordinator.check(TTChecks.MAIN_ACTIVITY_SHOWN);
+	}
 	/**
 	 * Sets the view of the activity, by enabling or disabling the buttons
 	 * and the checkbox

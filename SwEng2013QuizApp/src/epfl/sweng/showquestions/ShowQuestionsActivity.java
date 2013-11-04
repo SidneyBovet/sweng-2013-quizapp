@@ -124,6 +124,7 @@ public class ShowQuestionsActivity extends Activity {
 			super.onPostExecute(question);
 			if (null == question) {
 				mUserPreferences.createEntry("CONNECTION_STATE", "OFFLINE");
+				TestCoordinator.check(TTChecks.OFFLINE_CHECKBOX_ENABLED);
 				Toast.makeText(
 						ShowQuestionsActivity.this,
 						getResources().getString(
