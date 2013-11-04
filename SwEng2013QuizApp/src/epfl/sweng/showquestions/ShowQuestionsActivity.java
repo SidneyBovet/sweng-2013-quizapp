@@ -60,14 +60,11 @@ public class ShowQuestionsActivity extends Activity {
 			Log.wtf(this.getClass().getName(),
 					"AsyncFetchQuestion was interrupted");
 		} catch (ExecutionException e) {
-			// XXX switch to off line mode
-			Log.e(this.getClass().getName(), "Process crashed");
 			TestCoordinator.check(TTChecks.QUESTION_SHOWN);
-//			finish();
+			Log.e(this.getClass().getName(), "Process crashed");
 			return;
 		} finally {
 			if (null == randomQuestion) {
-//				finish();
 				TestCoordinator.check(TTChecks.QUESTION_SHOWN);
 				return;
 			}
@@ -118,47 +115,21 @@ public class ShowQuestionsActivity extends Activity {
 		@Override
 		protected QuizQuestion doInBackground(Void... params) {
 
-			 //TODO Uncomment when getting back to the proxy.
 			 return QuestionsProxy.getInstance().retrieveQuizzQuestion();
 
-//			/******************* DELETE THIS WHEN PROXY *******************/
-//			QuizQuestion question = null;
-//
-//			String url = HttpFactory.getSwengFetchQuestion();
-//
-//			HttpGet firstRandom = HttpFactory.getGetRequest(url);
-//			ResponseHandler<String> firstHandler = new BasicResponseHandler();
-//			try {
-//				String jsonQuestion = SwengHttpClientFactory.getInstance()
-//						.execute(firstRandom, firstHandler);
-//				question = new QuizQuestion(jsonQuestion);
-//			} catch (ClientProtocolException e) {
-//				Log.e(this.getClass().getName(), "doInBackground(): Error in"
-//						+ "the HTTP protocol.", e);
-//				// TODO switch to off line mode
-//			} catch (IOException e) {
-//				Log.e(this.getClass().getName(), "doInBackground(): An I/O"
-//						+ "error has occurred.", e);
-//				// TODO switch to off line mode
-//			} catch (JSONException e) {
-//				e.printStackTrace();
-//			}
-//
-//			return question;
-//			/**************************************************************/
 		}
 
 		@Override
 		protected void onPostExecute(QuizQuestion question) {
 			super.onPostExecute(question);
 			if (null == question) {
-				// XXX switch to off line mode
+				mUserPreferences.createEntry("CONNECTION_STATE", "OFFLINE");
 				Toast.makeText(
 						ShowQuestionsActivity.this,
 						getResources().getString(
 								R.string.error_fetching_question),
 						Toast.LENGTH_LONG).show();
-				mUserPreferences.createEntry("CONNECTION_STATE", "OFFLINE");
+
 			}
 		}
 	}

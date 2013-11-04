@@ -85,7 +85,8 @@ public class EditQuestionActivity extends Activity {
 		listInputGUI.add(mTagsText);
 		QuizQuestion questionToSubmit = QuizQuestion
 				.createQuestionFromList(listInputGUI);
-
+		
+		//XXX pas d'exception comme dans show question? Joanna
 		new AsyncPostQuestion().execute(questionToSubmit);
 
 		resetEditQuestionLayout();
@@ -246,47 +247,14 @@ public class EditQuestionActivity extends Activity {
 
 	class AsyncPostQuestion extends AsyncTask<QuizQuestion, Void, Integer> {
 
+		//XXX toujours utilité d'une Asynctask? Joanna
 		@Override
 		protected Integer doInBackground(QuizQuestion... questions) {
 			if (null != questions && questions.length != 1) {
 				throw new IllegalArgumentException();
 			}
 
-			// TODO Uncomment this when using the proxy.
 			return QuestionsProxy.getInstance().sendQuizzQuestion(questions[0]);
-
-//			/******************* DELETE THIS WHEN PROXY *******************/
-//			QuizQuestion question = questions[0];
-//
-//			int responseStatus = -1;
-//			HttpPost post = HttpFactory.getPostRequest(HttpFactory
-//					.getSwengBaseAddress() + "/quizquestions/");
-//
-//			// Send the quiz
-//			try {
-//				post.setEntity(new StringEntity(question.toJSON().toString()));
-//				post.setHeader("Content-type", "application/json");
-//
-//				HttpResponse mResponse = SwengHttpClientFactory.getInstance()
-//						.execute(post);
-//				responseStatus = mResponse.getStatusLine().getStatusCode();
-//			} catch (UnsupportedEncodingException e) {
-//				// XXX switch to off line mode
-//				Log.e(this.getClass().getName(),
-//						"doInBackground(): Entity does "
-//								+ "not support the local encoding.", e);
-//			} catch (ClientProtocolException e) {
-//				// XXX switch to off line mode
-//				Log.e(this.getClass().getName(),
-//						"doInBackground(): Error in the " + "HTTP protocol.", e);
-//			} catch (IOException e) {
-//				// XXX switch to off line mode
-//				Log.e(this.getClass().getName(),
-//						"doInBackground(): An I/O error " + "has occurred.", e);
-//			}
-//
-//			return responseStatus;
-//			/**************************************************************/
 		}
 
 		@Override
@@ -294,13 +262,12 @@ public class EditQuestionActivity extends Activity {
 			super.onPostExecute(result);
 
 			if (result != HttpStatus.SC_CREATED) {
-				// XXX switch to off line mode
+				mUserPreferences.createEntry("CONNECTION_STATE", "OFFLINE");
 				Toast.makeText(
 						EditQuestionActivity.this,
 						getResources().getString(
 								R.string.error_uploading_question),
 						Toast.LENGTH_LONG).show();
-				mUserPreferences.createEntry("CONNECTION_STATE", "OFFLINE");
 			}
 			TestCoordinator.check(TTChecks.NEW_QUESTION_SUBMITTED);
 		}

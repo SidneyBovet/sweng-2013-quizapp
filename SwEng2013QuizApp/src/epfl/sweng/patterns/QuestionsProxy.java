@@ -104,17 +104,14 @@ public final class QuestionsProxy {
 			HttpResponse mResponse = SwengHttpClientFactory.getInstance().execute(post);
 			responseStatus = mResponse.getStatusLine().getStatusCode();			
 		} catch (UnsupportedEncodingException e) {
-			// XXX switch to off line mode
 			mUserPreferences.createEntry("CONNECTION_STATE", "OFFLINE");
 			Log.e(this.getClass().getName(), "doInBackground(): Entity does "
 					+ "not support the local encoding.", e);
 		} catch (ClientProtocolException e) {
-			// XXX switch to off line mode
 			mUserPreferences.createEntry("CONNECTION_STATE", "OFFLINE");
 			Log.e(this.getClass().getName(), "doInBackground(): Error in the "
 					+ "HTTP protocol.", e);
 		} catch (IOException e) {
-			// XXX switch to off line mode
 			mUserPreferences.createEntry("CONNECTION_STATE", "OFFLINE");
 			Log.e(this.getClass().getName(), "doInBackground(): An I/O error "
 					+ "has occurred.", e);
@@ -140,7 +137,7 @@ public final class QuestionsProxy {
 				QuizQuestion mquestionOut = mQuizzQuestionsOutbox.remove(0);
 				sendQuizzQuestion(mquestionOut);
 				//XXX pour l'instant pas dans le bon ordre => regler asynctask
-				//XXX mnt ok??
+				//mnt ok??
 			}
 		} else {
 			addOutbox(question);
@@ -157,7 +154,7 @@ public final class QuestionsProxy {
 	 * @return {@link QuizQuestion} retrieve from the server 
 	 */
 	public QuizQuestion retrieveQuizzQuestion() {
-		//TODO regler bug quand offline submit online submit online show
+		//TODO regler bug quand offline submit online submit online show issues #64
 		QuizQuestion fetchedQuestion = null;
 		
 		if (mUserPreferences.isConnected()) {
@@ -171,15 +168,13 @@ public final class QuestionsProxy {
 				fetchedQuestion = new QuizQuestion(jsonQuestion);
 				addInbox(fetchedQuestion);
 			} catch (ClientProtocolException e) {
+				mUserPreferences.createEntry("CONNECTION_STATE", "OFFLINE");
 				Log.e(this.getClass().getName(), "doInBackground(): Error in"
 						+ "the HTTP protocol.", e);
-				// TODO switch to off line mode
-				mUserPreferences.createEntry("CONNECTION_STATE", "OFFLINE");
 			} catch (IOException e) {
+				mUserPreferences.createEntry("CONNECTION_STATE", "OFFLINE");
 				Log.e(this.getClass().getName(), "doInBackground(): An I/O"
 						+ "error has occurred.", e);
-				// TODO switch to off line mode
-				mUserPreferences.createEntry("CONNECTION_STATE", "OFFLINE");
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
