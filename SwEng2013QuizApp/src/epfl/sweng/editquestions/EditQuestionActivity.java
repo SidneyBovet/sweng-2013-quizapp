@@ -18,6 +18,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 import epfl.sweng.R;
+import epfl.sweng.authentication.UserPreferences;
 import epfl.sweng.patterns.QuestionsProxy;
 import epfl.sweng.quizquestions.QuizQuestion;
 import epfl.sweng.testing.TestCoordinator;
@@ -41,6 +42,7 @@ public class EditQuestionActivity extends Activity {
 	// fields related to the question
 	private String mQuestionBodyText;
 	private String mTagsText;
+	private UserPreferences mUserPreferences;
 
 	/**
 	 * Adds a new empty answer to the <code>ListView</code>.
@@ -130,7 +132,8 @@ public class EditQuestionActivity extends Activity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.submit_question, menu);
-
+		mUserPreferences = UserPreferences
+				.getInstance(this.getApplicationContext());
 		return true;
 	}
 
@@ -297,6 +300,7 @@ public class EditQuestionActivity extends Activity {
 						getResources().getString(
 								R.string.error_uploading_question),
 						Toast.LENGTH_LONG).show();
+				mUserPreferences.createEntry("CONNECTION_STATE", "OFFLINE");
 			}
 			TestCoordinator.check(TTChecks.NEW_QUESTION_SUBMITTED);
 		}

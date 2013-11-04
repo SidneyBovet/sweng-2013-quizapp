@@ -105,14 +105,17 @@ public final class QuestionsProxy {
 			responseStatus = mResponse.getStatusLine().getStatusCode();			
 		} catch (UnsupportedEncodingException e) {
 			// XXX switch to off line mode
+			mUserPreferences.createEntry("CONNECTION_STATE", "OFFLINE");
 			Log.e(this.getClass().getName(), "doInBackground(): Entity does "
 					+ "not support the local encoding.", e);
 		} catch (ClientProtocolException e) {
 			// XXX switch to off line mode
+			mUserPreferences.createEntry("CONNECTION_STATE", "OFFLINE");
 			Log.e(this.getClass().getName(), "doInBackground(): Error in the "
 					+ "HTTP protocol.", e);
 		} catch (IOException e) {
 			// XXX switch to off line mode
+			mUserPreferences.createEntry("CONNECTION_STATE", "OFFLINE");
 			Log.e(this.getClass().getName(), "doInBackground(): An I/O error "
 					+ "has occurred.", e);
 		}
@@ -171,10 +174,12 @@ public final class QuestionsProxy {
 				Log.e(this.getClass().getName(), "doInBackground(): Error in"
 						+ "the HTTP protocol.", e);
 				// TODO switch to off line mode
+				mUserPreferences.createEntry("CONNECTION_STATE", "OFFLINE");
 			} catch (IOException e) {
 				Log.e(this.getClass().getName(), "doInBackground(): An I/O"
 						+ "error has occurred.", e);
 				// TODO switch to off line mode
+				mUserPreferences.createEntry("CONNECTION_STATE", "OFFLINE");
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}

@@ -25,7 +25,6 @@ import epfl.sweng.testing.TestCoordinator.TTChecks;
 public class MainActivity extends Activity {
 
 	private UserPreferences mUserPreferences;
-	private boolean isOffline;
 
 	/**
 	 * Launches the {@link ShowQuestionActivity}.
@@ -76,6 +75,7 @@ public class MainActivity extends Activity {
 			//TestCoordinator.check(TTChecks.OFFLINE_CHECKBOX_ENABLED);
 		}
 		
+		//XXX check again when Offline due to connection failures?
 //		// XXX is it implemented the correct way (throw AseertionError)?
 		//TODO issues #63
 //		if (auditErrors() != 0) {
@@ -174,8 +174,8 @@ public class MainActivity extends Activity {
 		int numErrors = 0;
 		CheckBox onfflineCheckbox =
 				(CheckBox) this.findViewById(R.id.switchOnlineModeCheckbox);
-		if ((onfflineCheckbox.isChecked() && isOffline) ||
-				(!onfflineCheckbox.isChecked() && !isOffline)) {
+		if ((onfflineCheckbox.isChecked() && !mUserPreferences.isConnected()) ||
+				(!onfflineCheckbox.isChecked() && !!mUserPreferences.isConnected())) {
 			numErrors++;
 		}
 		return numErrors;
