@@ -1,13 +1,6 @@
 package epfl.sweng.showquestions;
 
-import java.io.IOException;
 import java.util.concurrent.ExecutionException;
-
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.ResponseHandler;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.BasicResponseHandler;
-import org.json.JSONException;
 
 import android.app.Activity;
 import android.os.AsyncTask;
@@ -21,9 +14,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import epfl.sweng.R;
+import epfl.sweng.patterns.QuestionsProxy;
 import epfl.sweng.quizquestions.QuizQuestion;
-import epfl.sweng.servercomm.HttpFactory;
-import epfl.sweng.servercomm.SwengHttpClientFactory;
 import epfl.sweng.testing.TestCoordinator;
 import epfl.sweng.testing.TestCoordinator.TTChecks;
 
@@ -123,34 +115,34 @@ public class ShowQuestionsActivity extends Activity {
 		@Override
 		protected QuizQuestion doInBackground(Void... params) {
 
-			// TODO Uncomment when getting back to the proxy.
-			// return QuestionsProxy.getInstance().retrieveQuizzQuestion();
+			 //TODO Uncomment when getting back to the proxy.
+			 return QuestionsProxy.getInstance().retrieveQuizzQuestion();
 
-			/******************* DELETE THIS WHEN PROXY *******************/
-			QuizQuestion question = null;
-
-			String url = HttpFactory.getSwengFetchQuestion();
-
-			HttpGet firstRandom = HttpFactory.getGetRequest(url);
-			ResponseHandler<String> firstHandler = new BasicResponseHandler();
-			try {
-				String jsonQuestion = SwengHttpClientFactory.getInstance()
-						.execute(firstRandom, firstHandler);
-				question = new QuizQuestion(jsonQuestion);
-			} catch (ClientProtocolException e) {
-				Log.e(this.getClass().getName(), "doInBackground(): Error in"
-						+ "the HTTP protocol.", e);
-				// TODO switch to off line mode
-			} catch (IOException e) {
-				Log.e(this.getClass().getName(), "doInBackground(): An I/O"
-						+ "error has occurred.", e);
-				// TODO switch to off line mode
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
-
-			return question;
-			/**************************************************************/
+//			/******************* DELETE THIS WHEN PROXY *******************/
+//			QuizQuestion question = null;
+//
+//			String url = HttpFactory.getSwengFetchQuestion();
+//
+//			HttpGet firstRandom = HttpFactory.getGetRequest(url);
+//			ResponseHandler<String> firstHandler = new BasicResponseHandler();
+//			try {
+//				String jsonQuestion = SwengHttpClientFactory.getInstance()
+//						.execute(firstRandom, firstHandler);
+//				question = new QuizQuestion(jsonQuestion);
+//			} catch (ClientProtocolException e) {
+//				Log.e(this.getClass().getName(), "doInBackground(): Error in"
+//						+ "the HTTP protocol.", e);
+//				// TODO switch to off line mode
+//			} catch (IOException e) {
+//				Log.e(this.getClass().getName(), "doInBackground(): An I/O"
+//						+ "error has occurred.", e);
+//				// TODO switch to off line mode
+//			} catch (JSONException e) {
+//				e.printStackTrace();
+//			}
+//
+//			return question;
+//			/**************************************************************/
 		}
 
 		@Override

@@ -63,7 +63,7 @@ public class MainActivity extends Activity {
 	 * @param v The View clicked
 	 */
 	public void onCheckboxSwitchModeClicked(View v) {
-		/*CheckBox clickedCheckBox = (CheckBox) v;
+		CheckBox clickedCheckBox = (CheckBox) v;
 		
 		//Change the connection state entry in the UserPreferences
 		if (clickedCheckBox.isChecked()) {
@@ -76,10 +76,11 @@ public class MainActivity extends Activity {
 			//TestCoordinator.check(TTChecks.OFFLINE_CHECKBOX_ENABLED);
 		}
 		
-		// XXX is it implemented the correct way (throw AseertionError)?
-		if (auditErrors() != 0) {
-			throw new AssertionError();
-		}*/
+//		// XXX is it implemented the correct way (throw AseertionError)?
+		//TODO issues #63
+//		if (auditErrors() != 0) {
+//			throw new AssertionError();
+//		}
 	}
 	
 	

@@ -94,6 +94,31 @@ public final class QuestionsProxy {
 		}
 	}
 	
+	public int sendQuizzQuestionHelper(QuizQuestion question) {
+		HttpPost post = HttpFactory.getPostRequest(
+				HttpFactory.getSwengBaseAddress() + "/quizquestions/");
+		int responseStatus = -1;
+		try {
+			post.setEntity(new StringEntity(question.toJSON().toString()));
+			post.setHeader("Content-type", "application/json");
+			HttpResponse mResponse = SwengHttpClientFactory.getInstance().execute(post);
+			responseStatus = mResponse.getStatusLine().getStatusCode();			
+		} catch (UnsupportedEncodingException e) {
+			// XXX switch to off line mode
+			Log.e(this.getClass().getName(), "doInBackground(): Entity does "
+					+ "not support the local encoding.", e);
+		} catch (ClientProtocolException e) {
+			// XXX switch to off line mode
+			Log.e(this.getClass().getName(), "doInBackground(): Error in the "
+					+ "HTTP protocol.", e);
+		} catch (IOException e) {
+			// XXX switch to off line mode
+			Log.e(this.getClass().getName(), "doInBackground(): An I/O error "
+					+ "has occurred.", e);
+		}
+		return responseStatus;
+	}
+	
 	/**
 	 * Send a {@link QuizQuestion} to the server after having stored 
 	 * it in the cache and send the cached questions to be sent if online.
@@ -106,38 +131,18 @@ public final class QuestionsProxy {
 		
 		int responseStatus = -1;
 		if (mUserPreferences.isConnected()) {
-			
-			HttpPost post = HttpFactory.getPostRequest(
-					HttpFactory.getSwengBaseAddress() + "/quizquestions/");
-
-			try {
-				post.setEntity(new StringEntity(question.toJSON().toString()));
-				post.setHeader("Content-type", "application/json");
-				HttpResponse mResponse = SwengHttpClientFactory.getInstance().execute(post);
-				responseStatus = mResponse.getStatusLine().getStatusCode();
-			} catch (UnsupportedEncodingException e) {
-				// XXX switch to off line mode
-				Log.e(this.getClass().getName(), "doInBackground(): Entity does "
-						+ "not support the local encoding.", e);
-			} catch (ClientProtocolException e) {
-				// XXX switch to off line mode
-				Log.e(this.getClass().getName(), "doInBackground(): Error in the "
-						+ "HTTP protocol.", e);
-			} catch (IOException e) {
-				// XXX switch to off line mode
-				Log.e(this.getClass().getName(), "doInBackground(): An I/O error "
-						+ "has occurred.", e);
-			}
-			
-			/*while (mQuizzQuestionsOutbox.size() > 0) {
+			//XXX envoyer d'abord question courante ou stockée?
+			responseStatus = sendQuizzQuestionHelper(question);
+			while (mQuizzQuestionsOutbox.size() > 0) {
 				QuizQuestion mquestionOut = mQuizzQuestionsOutbox.remove(0);
-				ServerInteractions.submitQuestion(mquestionOut);
+				sendQuizzQuestion(mquestionOut);
 				//XXX pour l'instant pas dans le bon ordre => regler asynctask
-			}*/
+				//XXX mnt ok??
+			}
 		} else {
 			addOutbox(question);
 		}
-		
+		//XXX retourner list de responseStatus?
 		return responseStatus;
 	}
 	
@@ -149,7 +154,7 @@ public final class QuestionsProxy {
 	 * @return {@link QuizQuestion} retrieve from the server 
 	 */
 	public QuizQuestion retrieveQuizzQuestion() {
-		
+		//TODO regler bug quand offline submit online submit online show
 		QuizQuestion fetchedQuestion = null;
 		
 		if (mUserPreferences.isConnected()) {

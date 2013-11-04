@@ -1,22 +1,15 @@
 package epfl.sweng.editquestions;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
 
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
@@ -25,9 +18,8 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 import epfl.sweng.R;
+import epfl.sweng.patterns.QuestionsProxy;
 import epfl.sweng.quizquestions.QuizQuestion;
-import epfl.sweng.servercomm.HttpFactory;
-import epfl.sweng.servercomm.SwengHttpClientFactory;
 import epfl.sweng.testing.TestCoordinator;
 import epfl.sweng.testing.TestCoordinator.TTChecks;
 
@@ -258,41 +250,40 @@ public class EditQuestionActivity extends Activity {
 			}
 
 			// TODO Uncomment this when using the proxy.
-			// return
-			// QuestionsProxy.getInstance().sendQuizzQuestion(questions[0]);
+			return QuestionsProxy.getInstance().sendQuizzQuestion(questions[0]);
 
-			/******************* DELETE THIS WHEN PROXY *******************/
-			QuizQuestion question = questions[0];
-
-			int responseStatus = -1;
-			HttpPost post = HttpFactory.getPostRequest(HttpFactory
-					.getSwengBaseAddress() + "/quizquestions/");
-
-			// Send the quiz
-			try {
-				post.setEntity(new StringEntity(question.toJSON().toString()));
-				post.setHeader("Content-type", "application/json");
-
-				HttpResponse mResponse = SwengHttpClientFactory.getInstance()
-						.execute(post);
-				responseStatus = mResponse.getStatusLine().getStatusCode();
-			} catch (UnsupportedEncodingException e) {
-				// XXX switch to off line mode
-				Log.e(this.getClass().getName(),
-						"doInBackground(): Entity does "
-								+ "not support the local encoding.", e);
-			} catch (ClientProtocolException e) {
-				// XXX switch to off line mode
-				Log.e(this.getClass().getName(),
-						"doInBackground(): Error in the " + "HTTP protocol.", e);
-			} catch (IOException e) {
-				// XXX switch to off line mode
-				Log.e(this.getClass().getName(),
-						"doInBackground(): An I/O error " + "has occurred.", e);
-			}
-
-			return responseStatus;
-			/**************************************************************/
+//			/******************* DELETE THIS WHEN PROXY *******************/
+//			QuizQuestion question = questions[0];
+//
+//			int responseStatus = -1;
+//			HttpPost post = HttpFactory.getPostRequest(HttpFactory
+//					.getSwengBaseAddress() + "/quizquestions/");
+//
+//			// Send the quiz
+//			try {
+//				post.setEntity(new StringEntity(question.toJSON().toString()));
+//				post.setHeader("Content-type", "application/json");
+//
+//				HttpResponse mResponse = SwengHttpClientFactory.getInstance()
+//						.execute(post);
+//				responseStatus = mResponse.getStatusLine().getStatusCode();
+//			} catch (UnsupportedEncodingException e) {
+//				// XXX switch to off line mode
+//				Log.e(this.getClass().getName(),
+//						"doInBackground(): Entity does "
+//								+ "not support the local encoding.", e);
+//			} catch (ClientProtocolException e) {
+//				// XXX switch to off line mode
+//				Log.e(this.getClass().getName(),
+//						"doInBackground(): Error in the " + "HTTP protocol.", e);
+//			} catch (IOException e) {
+//				// XXX switch to off line mode
+//				Log.e(this.getClass().getName(),
+//						"doInBackground(): An I/O error " + "has occurred.", e);
+//			}
+//
+//			return responseStatus;
+//			/**************************************************************/
 		}
 
 		@Override
