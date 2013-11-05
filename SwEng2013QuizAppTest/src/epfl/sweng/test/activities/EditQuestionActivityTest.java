@@ -19,6 +19,7 @@ public class EditQuestionActivityTest extends GUITest<EditQuestionActivity> {
 	protected void setUp() {
 		super.setUp();
 		getActivityAndWaitFor(TTChecks.EDIT_QUESTIONS_SHOWN);
+		getSolo().sleep(100); // waiting cannot hurt
 		// add stuff we need
 	}
 

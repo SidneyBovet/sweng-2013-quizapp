@@ -31,6 +31,7 @@ public class AuthenticationActivityTest extends GUITest<AuthenticationActivity> 
 		persistentStorage = UserPreferences
 				.getInstance(contextOfAuthenticationActivity);
 		getActivityAndWaitFor(TTChecks.AUTHENTICATION_ACTIVITY_SHOWN);
+		getSolo().sleep(500);
 	}
 
 	public void testShowEditTextAndLoginButton() {
@@ -41,6 +42,7 @@ public class AuthenticationActivityTest extends GUITest<AuthenticationActivity> 
 	}
 
 	public void testLoginButtonIsDisabledAtBeggining() {
+		getSolo().sleep(300);
 		Button loginButton = getSolo().getButton("Log in using Tequila");
 		assertFalse(loginButton.isEnabled());
 	}

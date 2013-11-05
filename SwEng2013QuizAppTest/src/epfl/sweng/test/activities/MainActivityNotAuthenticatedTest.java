@@ -34,6 +34,7 @@ public class MainActivityNotAuthenticatedTest extends GUITest<MainActivity> {
 	}
 	
 	public void testShowAllButtons() {
+		getSolo().sleep(500);
 		assertTrue("Login Button is present",
 				getSolo().searchButton("Log in using Tequila"));
 		assertTrue("Show Random Question Button is present",

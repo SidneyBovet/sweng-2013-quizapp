@@ -49,10 +49,10 @@ public class MainActivityConnectionState extends GUITest<MainActivity> {
 				R.id.switchOnlineModeCheckbox);
 		getSolo().clickOnView(connexionState);
 		getActivityAndWaitFor(TTChecks.OFFLINE_CHECKBOX_ENABLED);
+		getSolo().sleep(1000);
 		getSolo().clickOnView(connexionState);
-		//XXX why doesn't work with TTCHECKS but with sleep
 		getActivityAndWaitFor(TTChecks.OFFLINE_CHECKBOX_DISABLED);
-		//getSolo().sleep(2000);
+		getSolo().sleep(1000);
 		assertTrue(persistentStorage.isConnected());
 	}
 }
