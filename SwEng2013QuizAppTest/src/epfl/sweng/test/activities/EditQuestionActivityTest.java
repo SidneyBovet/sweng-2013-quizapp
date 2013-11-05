@@ -376,6 +376,7 @@ public class EditQuestionActivityTest extends GUITest<EditQuestionActivity> {
 		
 		try {
 			semaphore.acquire();
+			getSolo().sleep(1000);
 			assertTrue("# Audit errors = " + getActivity().auditErrors() + " != 1",
 					getActivity().auditErrors() == 1);
 		} catch (InterruptedException e) {
