@@ -117,7 +117,6 @@ public class ShowQuestionsActivity extends Activity {
 		protected void onPostExecute(QuizQuestion question) {
 			super.onPostExecute(question);
 			if (null == question) {
-				//XXX dans ce cas erreur de serveur??
 				//mUserPreferences.createEntry("CONNECTION_STATE", "OFFLINE");
 				//TestCoordinator.check(TTChecks.OFFLINE_CHECKBOX_ENABLED);
 				Toast.makeText(
