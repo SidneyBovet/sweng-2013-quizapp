@@ -5,10 +5,15 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.http.HttpStatus;
+
 import epfl.sweng.authentication.UserPreferences;
 import epfl.sweng.patterns.QuestionsProxy;
 import epfl.sweng.quizquestions.QuizQuestion;
+import epfl.sweng.servercomm.SwengHttpClientFactory;
 import epfl.sweng.showquestions.ShowQuestionsActivity;
+import epfl.sweng.test.minimalmock.MockHttpClient;
+import epfl.sweng.test.minimalmock.UnconnectedHttpClient;
 import epfl.sweng.testing.TestCoordinator.TTChecks;
 
 //import java.io.IOException;
@@ -19,6 +24,9 @@ public class ShowQuestionsActivityOfflineTest extends GUITest<ShowQuestionsActiv
 
 	protected static final String RANDOM_QUESTION_BUTTON_LABEL = "Show a random question";
 
+	MockHttpClient mMockClient;
+	UnconnectedHttpClient mUnconnectedClient;
+	
 	public ShowQuestionsActivityOfflineTest() {
 		super(ShowQuestionsActivity.class);
 	}
@@ -26,9 +34,11 @@ public class ShowQuestionsActivityOfflineTest extends GUITest<ShowQuestionsActiv
 	@Override
 	public void setUp() {
 		super.setUp();
-		UserPreferences.getInstance(getInstrumentation().getContext()).
-			createEntry("CONNECTION_STATE", "OFFLINE");
 
+		/* Reseting both client for security */
+		mUnconnectedClient = new UnconnectedHttpClient();
+		mMockClient = new MockHttpClient();
+		
 		List<String> answers = new ArrayList<String>();
 		answers.add("100% accurate");
 		answers.add("Fully voodoo and could generate non-pseudorandom numbers");
@@ -43,6 +53,10 @@ public class ShowQuestionsActivityOfflineTest extends GUITest<ShowQuestionsActiv
 	}
 
 	public void testOnlyQuestionInInboxIsDisplayed() {
+		UserPreferences.getInstance(getInstrumentation().getContext()).
+				createEntry("CONNECTION_STATE", "OFFLINE");
+		SwengHttpClientFactory.setInstance(mUnconnectedClient);
+		
 		getActivityAndWaitFor(TTChecks.QUESTION_SHOWN);
 		assertTrue(
 				"Question must be displayed",
@@ -54,5 +68,58 @@ public class ShowQuestionsActivityOfflineTest extends GUITest<ShowQuestionsActiv
 		assertTrue("Correct answer must be displayed",
 				getSolo().searchText("Fully voodoo and could generate non-" +
 						"pseudorandom numbers"));
+	}
+	
+	public void testNewlyRetrievedQuestionShouldBeCached() {
+		int expectedInboxSize = QuestionsProxy.getInstance().getInboxSize() + 1;
+		
+		UserPreferences.getInstance(getInstrumentation().getContext()).
+				createEntry("CONNECTION_STATE", "ONLINE");
+		SwengHttpClientFactory.setInstance(mMockClient);
+		mMockClient
+		.pushCannedResponse(
+				"GET (?:https?://[^/]+|[^/]+)?/+quizquestions/random\\b",
+				HttpStatus.SC_OK,
+				"{\"question\": \"What is the answer to life, the universe, and everything?\","
+						+ " \"answers\": [\"Forty-two\", \"Twenty-seven\"], \"owner\": \"sweng\","
+						+ " \"solutionIndex\": 0, \"tags\": [\"h2g2\", \"trivia\"], \"id\": \"1\" }",
+				"application/json");
+		
+		getActivityAndWaitFor(TTChecks.QUESTION_SHOWN);
+		getSolo().sleep(500);
+		assertEquals(expectedInboxSize, QuestionsProxy.getInstance().getInboxSize());
+	}
+
+	public void testNetworkAvailableShouldMakeConnectionStateOnline() {
+		UserPreferences.getInstance(getInstrumentation().getContext()).
+			createEntry("CONNECTION_STATE", "OFFLINE");
+		SwengHttpClientFactory.setInstance(mMockClient);
+		mMockClient
+		.pushCannedResponse(
+				"GET (?:https?://[^/]+|[^/]+)?/+quizquestions/random\\b",
+				HttpStatus.SC_OK,
+				"{\"question\": \"What is the answer to life, the universe, and everything?\","
+						+ " \"answers\": [\"Forty-two\", \"Twenty-seven\"], \"owner\": \"sweng\","
+						+ " \"solutionIndex\": 0, \"tags\": [\"h2g2\", \"trivia\"], \"id\": \"1\" }",
+				"application/json");
+
+		getActivityAndWaitFor(TTChecks.QUESTION_SHOWN);
+		getSolo().sleep(500);
+		boolean isOnline = UserPreferences.getInstance(getInstrumentation().
+				getContext()).isConnected();
+		assertEquals("After a successful connection, state should be online",
+				true, isOnline);
+	}
+
+	public void testNetworkUnavailableShouldMakeConnectionStateOffline() {
+		UserPreferences.getInstance(getInstrumentation().getContext()).
+			createEntry("CONNECTION_STATE", "ONLINE");
+		SwengHttpClientFactory.setInstance(mUnconnectedClient);
+		getActivityAndWaitFor(TTChecks.QUESTION_SHOWN);
+		getSolo().sleep(500);
+		boolean isOnline = UserPreferences.getInstance(getInstrumentation().
+				getContext()).isConnected();
+		assertEquals("After a failed connection, state should be offline",
+				false, isOnline);
 	}
 }
