@@ -364,7 +364,7 @@ public class EditQuestionActivityTest extends GUITest<EditQuestionActivity> {
 		assertTrue("Number of audit errors = " + getActivity().auditErrors() + " != 0",
 				getActivity().auditErrors() == 0);
 		
-		final Semaphore semaphore = new Semaphore(1);
+		final Semaphore semaphore = new Semaphore(0);
 		getActivity().runOnUiThread(new Runnable() {
 			
 			@Override
@@ -378,7 +378,7 @@ public class EditQuestionActivityTest extends GUITest<EditQuestionActivity> {
 		
 		try {
 			semaphore.acquire();
-			getSolo().sleep(1000);
+			getSolo().sleep(100);
 			assertTrue("# Audit errors = " + getActivity().auditErrors() + " != 1",
 					getActivity().auditErrors() == 1);
 		} catch (InterruptedException e) {
