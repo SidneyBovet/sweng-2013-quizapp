@@ -19,12 +19,11 @@ public class EditQuestionActivityTest extends GUITest<EditQuestionActivity> {
 	protected void setUp() {
 		super.setUp();
 		getActivityAndWaitFor(TTChecks.EDIT_QUESTIONS_SHOWN);
-		getSolo().sleep(100); // waiting cannot hurt
 		// add stuff we need
 	}
 
 	public void testBasicsElementsAreHere() {
-		getSolo().sleep(100);
+		getSolo().sleep(500);
 		assertTrue("Tag field needed",
 				getSolo().searchText("Type in the question\'s tags"));
 		assertTrue("Question field needed",
@@ -44,14 +43,14 @@ public class EditQuestionActivityTest extends GUITest<EditQuestionActivity> {
 	}
 
 	public void testSubmitButtonIsDisabledAtBeggining() {
-		getSolo().sleep(100);
+		getSolo().sleep(500);
 		assertFalse("Button is disabled", getSolo().getButton("Submit")
 				.isEnabled());
 
 	}
 
 	public void testOnlyOneAnswerAtBeggining() throws InterruptedException {
-		getSolo().sleep(100);
+		getSolo().sleep(500);
 		ListView lw = (ListView) getSolo().getView(
 				R.id.submit_question_listview);
 		int a = lw.getAdapter().getCount();
@@ -70,7 +69,7 @@ public class EditQuestionActivityTest extends GUITest<EditQuestionActivity> {
 	}
 
 	public void testHave3answerwhenPlusButtonIsClicked2times() {
-		getSolo().sleep(100);
+		getSolo().sleep(500);
 		getSolo().clickOnButton("+");
 		waitFor(TTChecks.QUESTION_EDITED);
 		getSolo().clickOnButton("+");
@@ -82,7 +81,7 @@ public class EditQuestionActivityTest extends GUITest<EditQuestionActivity> {
 	}
 
 	public void testCanRemoveFirstAnswerRow() {
-		getSolo().sleep(100);
+		getSolo().sleep(500);
 		getSolo().clickOnButton("-");
 		waitFor(TTChecks.QUESTION_EDITED);
 
@@ -93,7 +92,7 @@ public class EditQuestionActivityTest extends GUITest<EditQuestionActivity> {
 	}
 
 	public void testAnswerButtonChangeWhenClickedOn() {
-		getSolo().sleep(100);
+		getSolo().sleep(500);
 		assertTrue("Answer must be false",
 				getSolo().searchButton("" + (char) 10008));
 		getSolo().clickOnButton("" + (char) 10008);
@@ -104,7 +103,7 @@ public class EditQuestionActivityTest extends GUITest<EditQuestionActivity> {
 	}
 
 	public void testCanNotSubmitIfQuestionIsMissing() {
-		getSolo().sleep(100);
+		getSolo().sleep(500);
 		getSolo().enterText(
 				(EditText) getSolo().getText(
 						"Type in the question\'s text body"), "   ");
@@ -125,7 +124,7 @@ public class EditQuestionActivityTest extends GUITest<EditQuestionActivity> {
 	}
 
 	public void testCanNotSubmitIfTagsIsMissing() {
-		getSolo().sleep(100);
+		getSolo().sleep(500);
 		getSolo().enterText(
 				(EditText) getSolo().getText(
 						"Type in the question\'s text body"), "my question");
@@ -145,7 +144,7 @@ public class EditQuestionActivityTest extends GUITest<EditQuestionActivity> {
 	}
 
 	public void testCanNotSubmitIfAnswerIsMissing() {
-		getSolo().sleep(100);
+		getSolo().sleep(500);
 		getSolo().enterText(
 				(EditText) getSolo().getText(
 						"Type in the question\'s text body"), "my question");
@@ -165,7 +164,7 @@ public class EditQuestionActivityTest extends GUITest<EditQuestionActivity> {
 	}
 
 	public void testCanNotSubmitIfNotAnswerIsIndicated() {
-		getSolo().sleep(100);
+		getSolo().sleep(500);
 		getSolo().enterText(
 				(EditText) getSolo().getText(
 						"Type in the question\'s text body"), "my question");
@@ -183,7 +182,7 @@ public class EditQuestionActivityTest extends GUITest<EditQuestionActivity> {
 	}
 
 	public void testCanNotSubmitIfNotAnswerIsIndicatedWhenMulitpleAnswers() {
-		getSolo().sleep(100);
+		getSolo().sleep(500);
 		getSolo().clickOnButton("+");
 		waitFor(TTChecks.QUESTION_EDITED);
 		getSolo().clickOnButton("+");
@@ -207,7 +206,7 @@ public class EditQuestionActivityTest extends GUITest<EditQuestionActivity> {
 	}
 
 	public void testCanNotSubmitWhenEveryThingIsCorrectlyFieldButOnlyOneAnswer() {
-		getSolo().sleep(100);
+		getSolo().sleep(500);
 		getSolo().enterText(
 				(EditText) getSolo().getText(
 						"Type in the question\'s text body"), "ma question");
@@ -219,13 +218,13 @@ public class EditQuestionActivityTest extends GUITest<EditQuestionActivity> {
 		getSolo().enterText((EditText) getSolo().getText("Type in the answer"),
 				"   ");
 		getSolo().clickOnButton("" + (char) 10008);
-		waitFor(TTChecks.QUESTION_EDITED);
+		getActivityAndWaitFor(TTChecks.QUESTION_EDITED);
 		assertFalse("Submit button must be Enabled",
 				getSolo().getButton("Submit").isEnabled());
 	}
 
 	public void testCanSubmitWhenEveryThingIsCorrectlyField() {
-		getSolo().sleep(100);
+		getSolo().sleep(500);
 		getSolo().clickOnButton("+");
 		waitFor(TTChecks.QUESTION_EDITED);
 		getSolo().enterText(
@@ -247,7 +246,7 @@ public class EditQuestionActivityTest extends GUITest<EditQuestionActivity> {
 	}
 
 	public void testWhenRemoveAnswerSubmitIsDisabled() {
-		getSolo().sleep(100);
+		getSolo().sleep(500);
 		getSolo().clickOnButton("+");
 		waitFor(TTChecks.QUESTION_EDITED);
 		getSolo().enterText(
@@ -274,7 +273,7 @@ public class EditQuestionActivityTest extends GUITest<EditQuestionActivity> {
 	}
 
 	public void testSubmitButtonIsDisabledWhenEverthingWasOkButWeAddANewAnswer() {
-		getSolo().sleep(100);
+		getSolo().sleep(500);
 		getSolo().clickOnButton("+");
 		waitFor(TTChecks.QUESTION_EDITED);
 		getSolo().enterText(
@@ -308,7 +307,7 @@ public class EditQuestionActivityTest extends GUITest<EditQuestionActivity> {
 	}
 
 	public void testRemoveSpecificRow() {
-		getSolo().sleep(100);
+		getSolo().sleep(500);
 		getSolo().clickOnButton("\\+");
 		waitFor(TTChecks.QUESTION_EDITED);
 		getSolo().enterText(
@@ -342,7 +341,7 @@ public class EditQuestionActivityTest extends GUITest<EditQuestionActivity> {
 	}
 	
 	public void testAudit() {
-		getSolo().sleep(100);
+		getSolo().sleep(500);
 		
 		getSolo().clickOnButton("+");
 		waitFor(TTChecks.QUESTION_EDITED);
@@ -378,7 +377,7 @@ public class EditQuestionActivityTest extends GUITest<EditQuestionActivity> {
 		
 		try {
 			semaphore.acquire();
-			getSolo().sleep(100);
+			getSolo().sleep(500);
 			assertTrue("# Audit errors = " + getActivity().auditErrors() + " != 1",
 					getActivity().auditErrors() == 1);
 		} catch (InterruptedException e) {
