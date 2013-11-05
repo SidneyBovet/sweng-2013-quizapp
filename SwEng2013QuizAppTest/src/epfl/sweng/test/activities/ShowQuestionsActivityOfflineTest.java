@@ -52,12 +52,13 @@ public class ShowQuestionsActivityOfflineTest extends GUITest<ShowQuestionsActiv
 		QuestionsProxy.getInstance().addInbox(question);
 	}
 
-	public void testOnlyQuestionInInboxIsDisplayed() {
+	public void testQuestionInInboxIsDisplayedWhenOffline() {
 		UserPreferences.getInstance(getInstrumentation().getContext()).
 				createEntry("CONNECTION_STATE", "OFFLINE");
 		SwengHttpClientFactory.setInstance(mUnconnectedClient);
 		
 		getActivityAndWaitFor(TTChecks.QUESTION_SHOWN);
+		getSolo().sleep(1000);
 		assertTrue(
 				"Question must be displayed",
 				getSolo()
@@ -90,32 +91,27 @@ public class ShowQuestionsActivityOfflineTest extends GUITest<ShowQuestionsActiv
 		assertEquals(expectedInboxSize, QuestionsProxy.getInstance().getInboxSize());
 	}
 
-	public void testNetworkAvailableShouldMakeConnectionStateOnline() {
-		UserPreferences.getInstance(getInstrumentation().getContext()).
-			createEntry("CONNECTION_STATE", "OFFLINE");
-		SwengHttpClientFactory.setInstance(mMockClient);
-		mMockClient
-		.pushCannedResponse(
-				"GET (?:https?://[^/]+|[^/]+)?/+quizquestions/random\\b",
-				HttpStatus.SC_OK,
-				"{\"question\": \"What is the answer to life, the universe, and everything?\","
-						+ " \"answers\": [\"Forty-two\", \"Twenty-seven\"], \"owner\": \"sweng\","
-						+ " \"solutionIndex\": 0, \"tags\": [\"h2g2\", \"trivia\"], \"id\": \"1\" }",
-				"application/json");
-
-		getActivityAndWaitFor(TTChecks.QUESTION_SHOWN);
-		getSolo().sleep(500);
-		boolean isOnline = UserPreferences.getInstance(getInstrumentation().
-				getContext()).isConnected();
-		assertEquals("After a successful connection, state should be online",
-				true, isOnline);
-	}
-
 	public void testNetworkUnavailableShouldMakeConnectionStateOffline() {
 		UserPreferences.getInstance(getInstrumentation().getContext()).
 			createEntry("CONNECTION_STATE", "ONLINE");
 		SwengHttpClientFactory.setInstance(mUnconnectedClient);
-		getActivityAndWaitFor(TTChecks.QUESTION_SHOWN);
+		getActivityAndWaitFor(TTChecks.OFFLINE_CHECKBOX_ENABLED);
+		getSolo().sleep(500);
+		boolean isOnline = UserPreferences.getInstance(getInstrumentation().
+				getContext()).isConnected();
+		assertEquals("After a failed connection, state should be offline",
+				false, isOnline);
+	}
+
+	public void testStatus500ShouldMakeConnectionStateOffline() {
+		UserPreferences.getInstance(getInstrumentation().getContext()).
+			createEntry("CONNECTION_STATE", "ONLINE");
+		SwengHttpClientFactory.setInstance(mMockClient);
+		
+		mMockClient.pushCannedResponse(".", HttpStatus.SC_INTERNAL_SERVER_ERROR,
+				"", "");
+		
+		getActivityAndWaitFor(TTChecks.OFFLINE_CHECKBOX_ENABLED);
 		getSolo().sleep(500);
 		boolean isOnline = UserPreferences.getInstance(getInstrumentation().
 				getContext()).isConnected();
