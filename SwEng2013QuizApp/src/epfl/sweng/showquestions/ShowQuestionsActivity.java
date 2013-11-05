@@ -114,9 +114,7 @@ public class ShowQuestionsActivity extends Activity {
 
 		@Override
 		protected QuizQuestion doInBackground(Void... params) {
-
-			 return QuestionsProxy.getInstance().retrieveQuizzQuestion();
-
+			return QuestionsProxy.getInstance().retrieveQuizzQuestion();
 		}
 
 		@Override
