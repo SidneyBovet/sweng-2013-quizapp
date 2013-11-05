@@ -70,6 +70,7 @@ public class ShowQuestionsActivityTest extends GUITest<ShowQuestionsActivity> {
 					"application/json");
 
 		getActivityAndWaitFor(TTChecks.QUESTION_SHOWN);
+		getSolo().sleep(500);
 		assertTrue("Correct answer must be displayed",
 				getSolo().searchText("Forty-two"));
 		
@@ -186,7 +187,7 @@ public class ShowQuestionsActivityTest extends GUITest<ShowQuestionsActivity> {
 		assertFalse(nextButton.isEnabled());
 	}
 
-	public void testErrorWhileFetchingQuestionIsHandled() {
+	public void testExceptionWhileFetchingQuestionIsHandled() {
 		mockClient.pushCannedResponse(
 				"GET (?:https?://[^/]+|[^/]+)?/+quizquestions/random\\b",
 				MockHttpClient.IOEXCEPTION_ERROR_CODE,
@@ -198,7 +199,7 @@ public class ShowQuestionsActivityTest extends GUITest<ShowQuestionsActivity> {
 	public void testErrorWhile503SendByServer() {
 		mockClient.pushCannedResponse(
 				"GET (?:https?://[^/]+|[^/]+)?/+quizquestions/random\\b",
-				MockHttpClient.CLIENTPROTOCOLEXCEPTION_ERROR_CODE,
+				HttpStatus.SC_SERVICE_UNAVAILABLE,
 				"", "");
 		getActivityAndWaitFor(TTChecks.QUESTION_SHOWN);
 		getSolo().searchText("There was an error retrieving the question");
