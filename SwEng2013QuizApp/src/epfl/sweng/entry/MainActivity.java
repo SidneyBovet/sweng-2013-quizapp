@@ -77,8 +77,6 @@ public class MainActivity extends Activity {
 			setDisplayView();
 		} else {
 			mUserPreferences.createEntry("CONNECTION_STATE", "ONLINE");
-			// XXX after the app successfully synchronizes with the server =>
-			// is it here? Joanna
 			TestCoordinator.check(TTChecks.OFFLINE_CHECKBOX_DISABLED);
 			setDisplayView();
 			
@@ -86,7 +84,6 @@ public class MainActivity extends Activity {
 			// new AsyncSendCachedQuestion().execute(QuestionsProxy.getInstance());
 		}
 
-		// XXX check again when Offline due to connection failures? Joanna
 		// // XXX is it implemented the correct way (throw AseertionError)?
 		// TODO issues #63
 		// if (auditErrors() != 0) {
