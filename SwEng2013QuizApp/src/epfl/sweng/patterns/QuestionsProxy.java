@@ -134,8 +134,14 @@ public final class QuestionsProxy {
 		// independently of the state we are in (online or offline).
 		addOutbox(question);
 
-		return UserPreferences.getInstance().isConnected() ? sendCachedQuestions() 
-				: HttpStatus.SC_USE_PROXY;
+		int returnVariable = -1;
+		if (UserPreferences.getInstance().isConnected()) {
+			returnVariable = sendCachedQuestions();
+		} else {
+			returnVariable = HttpStatus.SC_USE_PROXY;
+		}
+		
+		return returnVariable;
 	}
 
 	public int sendCachedQuestions() {
