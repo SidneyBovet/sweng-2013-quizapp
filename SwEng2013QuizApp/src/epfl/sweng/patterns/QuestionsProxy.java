@@ -42,7 +42,6 @@ public final class QuestionsProxy {
 	private List<QuizQuestion> mQuizzQuestionsOutbox;
 	// question to be retrieve
 	private List<QuizQuestion> mQuizzQuestionsInbox;
-	private UserPreferences mUserPreferences;
 
 	/**
 	 * Private constructor of the singleton.
@@ -51,7 +50,6 @@ public final class QuestionsProxy {
 	private QuestionsProxy() {
 		mQuizzQuestionsOutbox = new ArrayList<QuizQuestion>();
 		mQuizzQuestionsInbox = new ArrayList<QuizQuestion>();
-		mUserPreferences = UserPreferences.getInstance();
 	}
 
 	/**
@@ -111,17 +109,17 @@ public final class QuestionsProxy {
 					.execute(postQuery);
 			responseStatus = mResponse.getStatusLine().getStatusCode();
 		} catch (UnsupportedEncodingException e) {
-			mUserPreferences.createEntry("CONNECTION_STATE", "OFFLINE");
+			UserPreferences.getInstance().createEntry("CONNECTION_STATE", "OFFLINE");
 			TestCoordinator.check(TTChecks.OFFLINE_CHECKBOX_ENABLED);
 			Log.e(this.getClass().getName(), "doInBackground(): Entity does "
 					+ "not support the local encoding.", e);
 		} catch (ClientProtocolException e) {
-			mUserPreferences.createEntry("CONNECTION_STATE", "OFFLINE");
+			UserPreferences.getInstance().createEntry("CONNECTION_STATE", "OFFLINE");
 			TestCoordinator.check(TTChecks.OFFLINE_CHECKBOX_ENABLED);
 			Log.e(this.getClass().getName(), "doInBackground(): Error in the "
 					+ "HTTP protocol.", e);
 		} catch (IOException e) {
-			mUserPreferences.createEntry("CONNECTION_STATE", "OFFLINE");
+			UserPreferences.getInstance().createEntry("CONNECTION_STATE", "OFFLINE");
 			TestCoordinator.check(TTChecks.OFFLINE_CHECKBOX_ENABLED);
 			Log.e(this.getClass().getName(), "doInBackground(): An I/O error "
 					+ "has occurred.", e);
@@ -145,7 +143,7 @@ public final class QuestionsProxy {
 		// independently of the state we are in (online or offline).
 		addOutbox(question);
 
-		return mUserPreferences.isConnected() ? sendCachedQuestions() 
+		return UserPreferences.getInstance().isConnected() ? sendCachedQuestions() 
 				: HttpStatus.SC_USE_PROXY;
 	}
 
@@ -183,7 +181,7 @@ public final class QuestionsProxy {
 		// #64
 		QuizQuestion fetchedQuestion = null;
 
-		if (mUserPreferences.isConnected()) {
+		if (UserPreferences.getInstance().isConnected()) {
 			// XXX Why don't we use one method for these two calls instead
 			// of giving URL to the getGetRequest?
 			String url = HttpFactory.getSwengFetchQuestion();
@@ -194,12 +192,12 @@ public final class QuestionsProxy {
 				fetchedQuestion = new QuizQuestion(jsonQuestion);
 				addInbox(fetchedQuestion);
 			} catch (ClientProtocolException e) {
-				mUserPreferences.createEntry("CONNECTION_STATE", "OFFLINE");
+				UserPreferences.getInstance().createEntry("CONNECTION_STATE", "OFFLINE");
 				TestCoordinator.check(TTChecks.OFFLINE_CHECKBOX_ENABLED);
 				Log.e(this.getClass().getName(), "doInBackground(): Error in"
 						+ "the HTTP protocol.", e);
 			} catch (IOException e) {
-				mUserPreferences.createEntry("CONNECTION_STATE", "OFFLINE");
+				UserPreferences.getInstance().createEntry("CONNECTION_STATE", "OFFLINE");
 				TestCoordinator.check(TTChecks.OFFLINE_CHECKBOX_ENABLED);
 				Log.e(this.getClass().getName(), "doInBackground(): An I/O"
 						+ "error has occurred.", e);
@@ -219,5 +217,9 @@ public final class QuestionsProxy {
 		}
 
 		return fetchedQuestion;
+	}
+
+	public int getOutboxSize() {
+		return mQuizzQuestionsOutbox.size();
 	}
 }
