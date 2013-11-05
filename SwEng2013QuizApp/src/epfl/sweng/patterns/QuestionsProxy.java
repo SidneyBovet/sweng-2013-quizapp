@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Random;
 
 import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
@@ -97,14 +98,15 @@ public final class QuestionsProxy {
 	}
 	
 	public int sendQuizzQuestionHelper(QuizQuestion question) {
-		HttpPost post = HttpFactory.getPostRequest(
+		HttpPost postQuery = HttpFactory.getPostRequest(
 				HttpFactory.getSwengBaseAddress() + "/quizquestions/");
+		
 		int responseStatus = -1;
 		try {
-			post.setEntity(new StringEntity(question.toJSON().toString()));
-			post.setHeader("Content-type", "application/json");
-			HttpResponse mResponse = SwengHttpClientFactory.getInstance().execute(post);
-			responseStatus = mResponse.getStatusLine().getStatusCode();			
+			postQuery.setEntity(new StringEntity(question.toJSON().toString()));
+			postQuery.setHeader("Content-type", "application/json");
+			HttpResponse mResponse = SwengHttpClientFactory.getInstance().execute(postQuery);
+			responseStatus = mResponse.getStatusLine().getStatusCode();
 		} catch (UnsupportedEncodingException e) {
 			mUserPreferences.createEntry("CONNECTION_STATE", "OFFLINE");
 			TestCoordinator.check(TTChecks.OFFLINE_CHECKBOX_ENABLED);
@@ -133,22 +135,30 @@ public final class QuestionsProxy {
 	public int sendQuizzQuestion(QuizQuestion question) {
 		
 		addInbox(question);
-		
+		addOutbox(question);
+			
 		int responseStatus = -1;
 		if (mUserPreferences.isConnected()) {
-			//XXX envoyer d'abord question courante ou stockée? Joanna
-			responseStatus = sendQuizzQuestionHelper(question);
+			// We first send all the questions to be sent.
 			while (mQuizzQuestionsOutbox.size() > 0) {
-				QuizQuestion mquestionOut = mQuizzQuestionsOutbox.remove(0);
-				sendQuizzQuestion(mquestionOut);
-				//XXX pour l'instant pas dans le bon ordre => regler asynctask
-				//mnt ok?? Joanna
+				
+				QuizQuestion questionOut = mQuizzQuestionsOutbox.get(0);
+				
+				// XXX Is this method a blocking one? It should be. 
+				responseStatus = sendQuizzQuestionHelper(questionOut);
+				
+				if (HttpStatus.SC_CREATED == responseStatus) {
+					questionOut = mQuizzQuestionsOutbox.remove(0);
+				} else {
+					return responseStatus;
+				}
+				
 			}
 		} else {
-			addOutbox(question);
+			return HttpStatus.SC_USE_PROXY;
 		}
-		//XXX retourner list de responseStatus? Joanna
-		return responseStatus;
+		
+		return HttpStatus.SC_CREATED;
 	}
 	
 	/**
