@@ -136,7 +136,7 @@ public final class QuestionsProxy {
 		
 		int responseStatus = -1;
 		if (mUserPreferences.isConnected()) {
-			//XXX envoyer d'abord question courante ou stockÃ©e? Joanna
+			//XXX envoyer d'abord question courante ou stockée? Joanna
 			responseStatus = sendQuizzQuestionHelper(question);
 			while (mQuizzQuestionsOutbox.size() > 0) {
 				QuizQuestion mquestionOut = mQuizzQuestionsOutbox.remove(0);
