@@ -2,7 +2,6 @@ package epfl.sweng.test.activities;
 
 import java.util.concurrent.Semaphore;
 
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
