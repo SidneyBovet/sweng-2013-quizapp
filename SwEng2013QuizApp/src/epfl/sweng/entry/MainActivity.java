@@ -69,14 +69,12 @@ public class MainActivity extends Activity {
 			mUserPreferences.createEntry("CONNECTION_STATE", "OFFLINE");
 			TestCoordinator.check(TTChecks.OFFLINE_CHECKBOX_ENABLED);
 			setDisplayView();
-			//TestCoordinator.check(TTChecks.OFFLINE_CHECKBOX_ENABLED);
 		} else {
 			mUserPreferences.createEntry("CONNECTION_STATE", "ONLINE");
 			//XXX after the app successfully synchronizes with the server =>
 			//is it here? Joanna
 			TestCoordinator.check(TTChecks.OFFLINE_CHECKBOX_DISABLED);
 			setDisplayView();
-			//TestCoordinator.check(TTChecks.OFFLINE_CHECKBOX_ENABLED);
 		}
 		
 		//XXX check again when Offline due to connection failures? Joanna
