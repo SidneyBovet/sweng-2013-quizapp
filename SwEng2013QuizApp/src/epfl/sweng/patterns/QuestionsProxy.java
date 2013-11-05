@@ -134,12 +134,16 @@ public final class QuestionsProxy {
 	 */
 	public int sendQuizzQuestion(QuizQuestion question) {
 		
+		// We add in the inbox to make this question accessible in offline mode.
 		addInbox(question);
+		// We add the current question to the outbox by default to send it 
+		// independently of the state we are in (online or offline).
 		addOutbox(question);
 			
 		int responseStatus = -1;
 		if (mUserPreferences.isConnected()) {
-			// We first send all the questions to be sent.
+			// We first send all the questions that we stored when in 
+			// offline mode.
 			while (mQuizzQuestionsOutbox.size() > 0) {
 				
 				QuizQuestion questionOut = mQuizzQuestionsOutbox.get(0);
@@ -148,6 +152,7 @@ public final class QuestionsProxy {
 				responseStatus = sendQuizzQuestionHelper(questionOut);
 				
 				if (HttpStatus.SC_CREATED == responseStatus) {
+					// If the question has been sent, we remove it from the queue. 
 					questionOut = mQuizzQuestionsOutbox.remove(0);
 				} else {
 					return responseStatus;
