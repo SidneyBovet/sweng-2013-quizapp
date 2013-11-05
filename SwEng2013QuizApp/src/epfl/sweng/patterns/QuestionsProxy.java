@@ -81,7 +81,7 @@ public final class QuestionsProxy {
 	 *            The {@link QuizQuestion} to be verify
 	 */
 	public void addInbox(QuizQuestion question) {
-		if (question.auditErrors() == 0) {
+		if (null != question && question.auditErrors() == 0) {
 			mQuizzQuestionsInbox.add(question);
 		}
 	}
@@ -94,7 +94,7 @@ public final class QuestionsProxy {
 	 *            The {@link QuizQuestion} to be verify
 	 */
 	public void addOutbox(QuizQuestion question) {
-		if (question.auditErrors() == 0) {
+		if (null != question && question.auditErrors() == 0) {
 			mQuizzQuestionsOutbox.add(question);
 		}
 	}

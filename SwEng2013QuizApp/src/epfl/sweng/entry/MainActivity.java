@@ -81,7 +81,9 @@ public class MainActivity extends Activity {
 			// is it here? Joanna
 			TestCoordinator.check(TTChecks.OFFLINE_CHECKBOX_DISABLED);
 			setDisplayView();
-			new AsyncSendCachedQuestion().execute(QuestionsProxy.getInstance());
+			
+			// See https://github.com/sweng-epfl/sweng-2013-team-swing/issues/67
+			// new AsyncSendCachedQuestion().execute(QuestionsProxy.getInstance());
 		}
 
 		// XXX check again when Offline due to connection failures? Joanna
@@ -172,7 +174,6 @@ public class MainActivity extends Activity {
 	 * Sets the view of the activity, by enabling or disabling the buttons and
 	 * the checkbox according to the authentication state.
 	 */
-
 	private void setDisplayView() {
 		((Button) findViewById(R.id.displayRandomQuestionButton))
 				.setEnabled(mUserPreferences.isAuthenticated());
@@ -180,8 +181,9 @@ public class MainActivity extends Activity {
 				.setEnabled(mUserPreferences.isAuthenticated());
 		int visibility = mUserPreferences.isAuthenticated() ? View.VISIBLE
 				: View.INVISIBLE;
-		((CheckBox) findViewById(R.id.switchOnlineModeCheckbox))
-				.setVisibility(visibility);
+		CheckBox isOffline = (CheckBox) findViewById(R.id.switchOnlineModeCheckbox);
+		isOffline.setVisibility(visibility);
+		isOffline.setChecked(!mUserPreferences.isConnected());	
 	}
 
 	private int auditCheckbox() {
@@ -198,7 +200,6 @@ public class MainActivity extends Activity {
 
 	class AsyncSendCachedQuestion extends AsyncTask<QuestionsProxy, Void, Integer> {
 
-		// XXX toujours utilitee d'une Asynctask? Joanna
 		@Override
 		protected Integer doInBackground(QuestionsProxy... proxy) {
 			if (null != proxy && proxy.length != 1) {

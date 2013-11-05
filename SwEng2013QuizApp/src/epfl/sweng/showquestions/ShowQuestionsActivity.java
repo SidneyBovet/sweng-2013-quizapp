@@ -3,6 +3,7 @@ package epfl.sweng.showquestions;
 import java.util.concurrent.ExecutionException;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,6 +15,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import epfl.sweng.R;
+import epfl.sweng.entry.MainActivity;
 import epfl.sweng.patterns.QuestionsProxy;
 import epfl.sweng.quizquestions.QuizQuestion;
 import epfl.sweng.testing.TestCoordinator;
@@ -125,6 +127,10 @@ public class ShowQuestionsActivity extends Activity {
 						getResources().getString(
 								R.string.error_fetching_question),
 						Toast.LENGTH_LONG).show();
+				
+				// We go back to the main Activity.
+				startActivity(new Intent(ShowQuestionsActivity.this, MainActivity.class));
+				finish();
 
 			}
 		}
