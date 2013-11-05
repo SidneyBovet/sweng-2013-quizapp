@@ -86,7 +86,6 @@ public class EditQuestionActivity extends Activity {
 		QuizQuestion questionToSubmit = QuizQuestion
 				.createQuestionFromList(listInputGUI);
 		
-		//XXX pas d'exception comme dans show question? Joanna
 		new AsyncPostQuestion().execute(questionToSubmit);
 
 		resetEditQuestionLayout();
@@ -247,7 +246,6 @@ public class EditQuestionActivity extends Activity {
 
 	class AsyncPostQuestion extends AsyncTask<QuizQuestion, Void, Integer> {
 
-		//XXX toujours utili d'une Asynctask? Joanna
 		@Override
 		protected Integer doInBackground(QuizQuestion... questions) {
 			if (null != questions && questions.length != 1) {
