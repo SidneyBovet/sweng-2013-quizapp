@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Set;
 
 import android.content.Context;
-import android.view.View;
 import android.widget.CheckBox;
 import epfl.sweng.R;
 import epfl.sweng.authentication.UserPreferences;
