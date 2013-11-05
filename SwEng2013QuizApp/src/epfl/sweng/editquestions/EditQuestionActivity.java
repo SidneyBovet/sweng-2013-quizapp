@@ -260,7 +260,6 @@ public class EditQuestionActivity extends Activity {
 		@Override
 		protected void onPostExecute(Integer result) {
 			super.onPostExecute(result);
-
 			if (result != HttpStatus.SC_CREATED) {
 				mUserPreferences.createEntry("CONNECTION_STATE", "OFFLINE");
 				TestCoordinator.check(TTChecks.OFFLINE_CHECKBOX_ENABLED);

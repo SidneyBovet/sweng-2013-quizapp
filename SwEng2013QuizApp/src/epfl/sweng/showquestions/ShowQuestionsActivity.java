@@ -14,7 +14,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import epfl.sweng.R;
-import epfl.sweng.authentication.UserPreferences;
 import epfl.sweng.patterns.QuestionsProxy;
 import epfl.sweng.quizquestions.QuizQuestion;
 import epfl.sweng.testing.TestCoordinator;
@@ -29,14 +28,11 @@ import epfl.sweng.testing.TestCoordinator.TTChecks;
  */
 
 public class ShowQuestionsActivity extends Activity {
-	private UserPreferences mUserPreferences;
 	
 	@Override
 	protected void onCreate(final Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_display_question);
-		mUserPreferences = UserPreferences
-				.getInstance(this.getApplicationContext());
 		setDisplayView();
 	}
 
@@ -121,8 +117,9 @@ public class ShowQuestionsActivity extends Activity {
 		protected void onPostExecute(QuizQuestion question) {
 			super.onPostExecute(question);
 			if (null == question) {
-				mUserPreferences.createEntry("CONNECTION_STATE", "OFFLINE");
-				TestCoordinator.check(TTChecks.OFFLINE_CHECKBOX_ENABLED);
+				//XXX dans ce cas erreur de serveur??
+				//mUserPreferences.createEntry("CONNECTION_STATE", "OFFLINE");
+				//TestCoordinator.check(TTChecks.OFFLINE_CHECKBOX_ENABLED);
 				Toast.makeText(
 						ShowQuestionsActivity.this,
 						getResources().getString(

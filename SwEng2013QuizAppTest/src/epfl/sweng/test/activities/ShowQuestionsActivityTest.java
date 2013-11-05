@@ -195,7 +195,7 @@ public class ShowQuestionsActivityTest extends GUITest<ShowQuestionsActivity> {
 		getActivityAndWaitFor(TTChecks.QUESTION_SHOWN);
 		assert true;
 	}
-	
+
 	public void testErrorWhile503SendByServer() {
 		mockClient.pushCannedResponse(
 				"GET (?:https?://[^/]+|[^/]+)?/+quizquestions/random\\b",
@@ -204,7 +204,7 @@ public class ShowQuestionsActivityTest extends GUITest<ShowQuestionsActivity> {
 		getActivityAndWaitFor(TTChecks.QUESTION_SHOWN);
 		getSolo().searchText("There was an error retrieving the question");
 	}
-	
+
 	public void testErrorWhile500SendByServer() {
 		mockClient.pushCannedResponse(
 				"GET (?:https?://[^/]+|[^/]+)?/+quizquestions/random\\b",
@@ -215,7 +215,7 @@ public class ShowQuestionsActivityTest extends GUITest<ShowQuestionsActivity> {
 	}
 	
 	//TODO debug test
-	/*
+
 	public void testErrorWhile400SendByServer() {
 		mockClient.pushCannedResponse(
 				"GET (?:https?://[^/]+|[^/]+)?/+quizquestions/random\\b",
@@ -224,5 +224,5 @@ public class ShowQuestionsActivityTest extends GUITest<ShowQuestionsActivity> {
 		getActivityAndWaitFor(TTChecks.QUESTION_SHOWN);
 		getSolo().searchText("There was an error retrieving the question");
 	}
-	*/
+	
 }
