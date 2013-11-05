@@ -247,7 +247,7 @@ public class EditQuestionActivity extends Activity {
 
 	class AsyncPostQuestion extends AsyncTask<QuizQuestion, Void, Integer> {
 
-		//XXX toujours utilité d'une Asynctask? Joanna
+		//XXX toujours utili d'une Asynctask? Joanna
 		@Override
 		protected Integer doInBackground(QuizQuestion... questions) {
 			if (null != questions && questions.length != 1) {
@@ -260,7 +260,7 @@ public class EditQuestionActivity extends Activity {
 		@Override
 		protected void onPostExecute(Integer result) {
 			super.onPostExecute(result);
-			if (result != HttpStatus.SC_CREATED) {
+			if (result != HttpStatus.SC_CREATED && result != HttpStatus.SC_USE_PROXY) {
 				mUserPreferences.createEntry("CONNECTION_STATE", "OFFLINE");
 				TestCoordinator.check(TTChecks.OFFLINE_CHECKBOX_ENABLED);
 				Toast.makeText(

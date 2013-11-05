@@ -1,7 +1,10 @@
 package epfl.sweng.entry;
 
+import org.apache.http.HttpStatus;
+
 import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
@@ -12,6 +15,7 @@ import epfl.sweng.R;
 import epfl.sweng.authentication.AuthenticationActivity;
 import epfl.sweng.authentication.UserPreferences;
 import epfl.sweng.editquestions.EditQuestionActivity;
+import epfl.sweng.patterns.QuestionsProxy;
 import epfl.sweng.showquestions.ShowQuestionsActivity;
 import epfl.sweng.testing.TestCoordinator;
 import epfl.sweng.testing.TestCoordinator.TTChecks;
@@ -59,33 +63,35 @@ public class MainActivity extends Activity {
 	/**
 	 * Function called back on checkbox activation. Handles the <i>Offline</i>
 	 * state of the whole application.
-	 * @param v The View clicked
+	 * 
+	 * @param v
+	 *            The View clicked
 	 */
 	public void onCheckboxSwitchModeClicked(View v) {
 		CheckBox clickedCheckBox = (CheckBox) v;
-		
-		//Change the connection state entry in the UserPreferences
+
+		// Change the connection state entry in the UserPreferences
 		if (clickedCheckBox.isChecked()) {
 			mUserPreferences.createEntry("CONNECTION_STATE", "OFFLINE");
 			TestCoordinator.check(TTChecks.OFFLINE_CHECKBOX_ENABLED);
 			setDisplayView();
 		} else {
 			mUserPreferences.createEntry("CONNECTION_STATE", "ONLINE");
-			//XXX after the app successfully synchronizes with the server =>
-			//is it here? Joanna
+			// XXX after the app successfully synchronizes with the server =>
+			// is it here? Joanna
 			TestCoordinator.check(TTChecks.OFFLINE_CHECKBOX_DISABLED);
 			setDisplayView();
+			new AsyncSendCachedQuestion().execute(QuestionsProxy.getInstance());
 		}
-		
-		//XXX check again when Offline due to connection failures? Joanna
-//		// XXX is it implemented the correct way (throw AseertionError)?
-		//TODO issues #63
-//		if (auditErrors() != 0) {
-//			throw new AssertionError();
-//		}
+
+		// XXX check again when Offline due to connection failures? Joanna
+		// // XXX is it implemented the correct way (throw AseertionError)?
+		// TODO issues #63
+		// if (auditErrors() != 0) {
+		// throw new AssertionError();
+		// }
 	}
-	
-	
+
 	/**
 	 * Launches the {@link AuthenticationActivity} when not authenticated.
 	 * Releases the authentication and refreshes the view when authenticated.
@@ -94,14 +100,14 @@ public class MainActivity extends Activity {
 	 * 
 	 * @param view
 	 */
-	
+
 	public void displayAuthenticationActivity(View view) {
 		if (!mUserPreferences.isAuthenticated()) {
 			// Case LoginUsingTequila
 			Toast.makeText(this, "Please Log in", Toast.LENGTH_SHORT).show();
 			Intent submitAuthenticationActivityIntent = new Intent(this,
-					AuthenticationActivity.class); 
-			startActivity(submitAuthenticationActivityIntent); 
+					AuthenticationActivity.class);
+			startActivity(submitAuthenticationActivityIntent);
 		} else {
 			// Case Log out
 			mUserPreferences.destroyAuthentication();
@@ -120,12 +126,12 @@ public class MainActivity extends Activity {
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
-	
+
 	public int auditErrors() {
 		int numErrors = 0;
-		
+
 		numErrors += auditCheckbox();
-		
+
 		return numErrors;
 	}
 
@@ -134,8 +140,8 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		// create the UserPreferences which use a SharedPreference
-		mUserPreferences = UserPreferences
-				.getInstance(this.getApplicationContext());
+		mUserPreferences = UserPreferences.getInstance(this
+				.getApplicationContext());
 	}
 
 	/**
@@ -145,7 +151,7 @@ public class MainActivity extends Activity {
 	 * Called when the app is first launched and when we return to it from
 	 * another activity.
 	 */
-	
+
 	@Override
 	protected void onResume() {
 		super.onResume();
@@ -161,29 +167,60 @@ public class MainActivity extends Activity {
 		super.onStart();
 		TestCoordinator.check(TTChecks.MAIN_ACTIVITY_SHOWN);
 	}
+
 	/**
-	 * Sets the view of the activity, by enabling or disabling the buttons
-	 * and the checkbox
-	 * according to the authentication state.
+	 * Sets the view of the activity, by enabling or disabling the buttons and
+	 * the checkbox according to the authentication state.
 	 */
-	
+
 	private void setDisplayView() {
 		((Button) findViewById(R.id.displayRandomQuestionButton))
 				.setEnabled(mUserPreferences.isAuthenticated());
 		((Button) findViewById(R.id.submitQuestionButton))
 				.setEnabled(mUserPreferences.isAuthenticated());
-		int visibility = mUserPreferences.isAuthenticated() ? View.VISIBLE : View.INVISIBLE;
-		((CheckBox) findViewById(R.id.switchOnlineModeCheckbox)).setVisibility(visibility);
+		int visibility = mUserPreferences.isAuthenticated() ? View.VISIBLE
+				: View.INVISIBLE;
+		((CheckBox) findViewById(R.id.switchOnlineModeCheckbox))
+				.setVisibility(visibility);
 	}
 
 	private int auditCheckbox() {
 		int numErrors = 0;
-		CheckBox onfflineCheckbox =
-				(CheckBox) this.findViewById(R.id.switchOnlineModeCheckbox);
-		if ((onfflineCheckbox.isChecked() && !mUserPreferences.isConnected()) ||
-				(!onfflineCheckbox.isChecked() && !!mUserPreferences.isConnected())) {
+		CheckBox onfflineCheckbox = (CheckBox) this
+				.findViewById(R.id.switchOnlineModeCheckbox);
+		if ((onfflineCheckbox.isChecked() && !mUserPreferences.isConnected())
+				|| (!onfflineCheckbox.isChecked() && !!mUserPreferences
+						.isConnected())) {
 			numErrors++;
 		}
 		return numErrors;
+	}
+
+	class AsyncSendCachedQuestion extends AsyncTask<QuestionsProxy, Void, Integer> {
+
+		// XXX toujours utilitee d'une Asynctask? Joanna
+		@Override
+		protected Integer doInBackground(QuestionsProxy... proxy) {
+			if (null != proxy && proxy.length != 1) {
+				throw new IllegalArgumentException();
+			}
+
+			return proxy[0].sendCachedQuestions();
+		}
+
+		@Override
+		protected void onPostExecute(Integer result) {
+			super.onPostExecute(result);
+			if (result != HttpStatus.SC_CREATED) {
+				mUserPreferences.createEntry("CONNECTION_STATE", "OFFLINE");
+				TestCoordinator.check(TTChecks.OFFLINE_CHECKBOX_ENABLED);
+				Toast.makeText(
+						MainActivity.this,
+						getResources().getString(
+								R.string.error_uploading_question),
+						Toast.LENGTH_LONG).show();
+			}
+			TestCoordinator.check(TTChecks.NEW_QUESTION_SUBMITTED);
+		}
 	}
 }

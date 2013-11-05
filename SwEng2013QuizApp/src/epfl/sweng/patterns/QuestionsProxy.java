@@ -24,28 +24,26 @@ import epfl.sweng.testing.TestCoordinator;
 import epfl.sweng.testing.TestCoordinator.TTChecks;
 
 /**
- * This class will perform all the server interactions
- * in the place of our app. It will also cache all the 
- * questions that we fetch from the server and take place
- * of the server when in offline mode.
+ * This class will perform all the server interactions in the place of our app.
+ * It will also cache all the questions that we fetch from the server and take
+ * place of the server when in offline mode.
  * 
- * XXX If we don't use a Singleton, how do we ensure that
- * we only have one proxy class? Do we have a boolean flag
- * that tells us if it has been instanciated?
- *  
- *  
+ * XXX If we don't use a Singleton, how do we ensure that we only have one proxy
+ * class? Do we have a boolean flag that tells us if it has been instanciated?
+ * 
+ * 
  * @author born4new, JoTearoom, Merok
- *
+ * 
  */
 public final class QuestionsProxy {
-	
+
 	private static QuestionsProxy sQuestionProxy;
-	//question to be sent
+	// question to be sent
 	private List<QuizQuestion> mQuizzQuestionsOutbox;
-	//question to be retrieve
+	// question to be retrieve
 	private List<QuizQuestion> mQuizzQuestionsInbox;
 	private UserPreferences mUserPreferences;
-	
+
 	/**
 	 * Private constructor of the singleton.
 	 * 
@@ -61,7 +59,7 @@ public final class QuestionsProxy {
 	 * 
 	 * @return Singleton instance of the class.
 	 */
-	
+
 	public static QuestionsProxy getInstance() {
 		// double-checked singleton: avoids calling costly synchronized if
 		// unnecessary
@@ -76,36 +74,41 @@ public final class QuestionsProxy {
 	}
 
 	/**
-	 * Add a {@link QuizQuestion} to the Inbox only if it is a well 
-	 * formed question
-	 * @param question The {@link QuizQuestion} to be verify
+	 * Add a {@link QuizQuestion} to the Inbox only if it is a well formed
+	 * question
+	 * 
+	 * @param question
+	 *            The {@link QuizQuestion} to be verify
 	 */
 	public void addInbox(QuizQuestion question) {
 		if (question.auditErrors() == 0) {
 			mQuizzQuestionsInbox.add(question);
 		}
 	}
-	
+
 	/**
-	 * Add a {@link QuizQuestion} to the Outbox only if it is a well 
-	 * formed question
-	 * @param question The {@link QuizQuestion} to be verify
+	 * Add a {@link QuizQuestion} to the Outbox only if it is a well formed
+	 * question
+	 * 
+	 * @param question
+	 *            The {@link QuizQuestion} to be verify
 	 */
 	public void addOutbox(QuizQuestion question) {
 		if (question.auditErrors() == 0) {
 			mQuizzQuestionsOutbox.add(question);
 		}
 	}
-	
+
 	public int sendQuizzQuestionHelper(QuizQuestion question) {
-		HttpPost postQuery = HttpFactory.getPostRequest(
-				HttpFactory.getSwengBaseAddress() + "/quizquestions/");
-		
+		HttpPost postQuery = HttpFactory.getPostRequest(HttpFactory
+				.getSwengBaseAddress() + "/quizquestions/");
+
 		int responseStatus = -1;
 		try {
 			postQuery.setEntity(new StringEntity(question.toJSON().toString()));
 			postQuery.setHeader("Content-type", "application/json");
-			HttpResponse mResponse = SwengHttpClientFactory.getInstance().execute(postQuery);
+			HttpResponse mResponse = SwengHttpClientFactory.getInstance()
+					.execute(postQuery);
 			responseStatus = mResponse.getStatusLine().getStatusCode();
 		} catch (UnsupportedEncodingException e) {
 			mUserPreferences.createEntry("CONNECTION_STATE", "OFFLINE");
@@ -125,66 +128,75 @@ public final class QuestionsProxy {
 		}
 		return responseStatus;
 	}
-	
+
 	/**
-	 * Send a {@link QuizQuestion} to the server after having stored 
-	 * it in the cache and send the cached questions to be sent if online.
-	 * Store the {@link QuizQuestion} to be sent in the cache if offline.
-	 * @param question {@link QuizQuestion} that we want to send
+	 * Send a {@link QuizQuestion} to the server after having stored it in the
+	 * cache and send the cached questions to be sent if online. Store the
+	 * {@link QuizQuestion} to be sent in the cache if offline.
+	 * 
+	 * @param question
+	 *            {@link QuizQuestion} that we want to send
 	 */
 	public int sendQuizzQuestion(QuizQuestion question) {
-		
+
 		// We add in the inbox to make this question accessible in offline mode.
 		addInbox(question);
-		// We add the current question to the outbox by default to send it 
+		// We add the current question to the outbox by default to send it
 		// independently of the state we are in (online or offline).
 		addOutbox(question);
-			
+
 		int responseStatus = -1;
 		if (mUserPreferences.isConnected()) {
-			// We first send all the questions that we stored when in 
-			// offline mode.
-			while (mQuizzQuestionsOutbox.size() > 0) {
-				
-				QuizQuestion questionOut = mQuizzQuestionsOutbox.get(0);
-				
-				// XXX Is this method a blocking one? It should be. 
-				responseStatus = sendQuizzQuestionHelper(questionOut);
-				
-				if (HttpStatus.SC_CREATED == responseStatus) {
-					// If the question has been sent, we remove it from the queue. 
-					questionOut = mQuizzQuestionsOutbox.remove(0);
-				} else {
-					return responseStatus;
-				}
-				
-			}
+			responseStatus = sendCachedQuestions();
 		} else {
 			return HttpStatus.SC_USE_PROXY;
 		}
-		
-		return HttpStatus.SC_CREATED;
+
+		return responseStatus;
 	}
-	
+
+	public int sendCachedQuestions() {
+		int responseStatus = -1;
+		// We first send all the questions that we stored when in
+		// offline mode.
+		while (mQuizzQuestionsOutbox.size() > 0) {
+
+			QuizQuestion questionOut = mQuizzQuestionsOutbox.get(0);
+
+			// XXX Is this method a blocking one? It should be.
+			responseStatus = sendQuizzQuestionHelper(questionOut);
+
+			if (HttpStatus.SC_CREATED == responseStatus) {
+				// If the question has been sent, we remove it from the queue.
+				questionOut = mQuizzQuestionsOutbox.remove(0);
+			} else {
+				return responseStatus;
+			}
+		}
+		return responseStatus;
+
+	}
+
 	/**
-	 * Retrieve a {@link QuizQuestion} from the server and store it in the 
-	 * cache before returning it if online.
-	 * Choose a random {@link QuizQuestion} from the cached content before
-	 * returning it if offline.
-	 * @return {@link QuizQuestion} retrieve from the server 
+	 * Retrieve a {@link QuizQuestion} from the server and store it in the cache
+	 * before returning it if online. Choose a random {@link QuizQuestion} from
+	 * the cached content before returning it if offline.
+	 * 
+	 * @return {@link QuizQuestion} retrieve from the server
 	 */
 	public QuizQuestion retrieveQuizzQuestion() {
-		//TODO regler bug quand offline submit online submit online show issues #64
+		// TODO regler bug quand offline submit online submit online show issues
+		// #64
 		QuizQuestion fetchedQuestion = null;
-		
+
 		if (mUserPreferences.isConnected()) {
 			// XXX Why don't we use one method for these two calls instead
 			// of giving URL to the getGetRequest?
 			String url = HttpFactory.getSwengFetchQuestion();
 			HttpGet firstRandom = HttpFactory.getGetRequest(url);
 			try {
-				String jsonQuestion = SwengHttpClientFactory.getInstance().
-						execute(firstRandom, new BasicResponseHandler());
+				String jsonQuestion = SwengHttpClientFactory.getInstance()
+						.execute(firstRandom, new BasicResponseHandler());
 				fetchedQuestion = new QuizQuestion(jsonQuestion);
 				addInbox(fetchedQuestion);
 			} catch (ClientProtocolException e) {
@@ -200,14 +212,14 @@ public final class QuestionsProxy {
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
-			
+
 		} else {
-			//TODO gerer cas on commence en mode offline donc liste vide
-			int questionIDCache = new Random()
-				.nextInt(mQuizzQuestionsInbox.size());
+			// TODO gerer cas on commence en mode offline donc liste vide
+			int questionIDCache = new Random().nextInt(mQuizzQuestionsInbox
+					.size());
 			fetchedQuestion = mQuizzQuestionsInbox.get(questionIDCache);
 		}
-		
+
 		return fetchedQuestion;
 	}
 }
