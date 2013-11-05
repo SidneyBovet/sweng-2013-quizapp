@@ -60,12 +60,12 @@ public class ShowQuestionsActivity extends Activity {
 			Log.wtf(this.getClass().getName(),
 					"AsyncFetchQuestion was interrupted");
 		} catch (ExecutionException e) {
-			TestCoordinator.check(TTChecks.QUESTION_SHOWN);
+			// TestCoordinator.check(TTChecks.QUESTION_SHOWN);
 			Log.e(this.getClass().getName(), "Process crashed");
 			return;
 		} finally {
 			if (null == randomQuestion) {
-				TestCoordinator.check(TTChecks.QUESTION_SHOWN);
+				// TestCoordinator.check(TTChecks.QUESTION_SHOWN);
 				return;
 			}
 		}
