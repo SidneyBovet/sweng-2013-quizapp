@@ -55,8 +55,11 @@ public class MockHttpClient extends DefaultHttpClient {
     }
 
     private final List<CannedResponse> responses = new ArrayList<CannedResponse>();
-    public static final int IOEXCEPTION_ERROR_CODE = 500;
-	public static final int CLIENTPROTOCOLEXCEPTION_ERROR_CODE = 503;
+    /* note: those are real HTTP response but we're highly unlikely to want our
+     * mock client to return these, therefore using them as internal error codes
+     */
+    public static final int IOEXCEPTION_ERROR_CODE = 402;
+	public static final int CLIENTPROTOCOLEXCEPTION_ERROR_CODE = 414;
 	public static final int FORBIDDEN_ERROR_CODE = 400;
     
     public void pushCannedResponse(String requestRegex, int status,
