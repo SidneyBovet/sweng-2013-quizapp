@@ -208,10 +208,14 @@ public final class QuestionsProxy {
 			}
 
 		} else {
-			// TODO gerer cas on commence en mode offline donc liste vide
-			int questionIDCache = new Random().nextInt(mQuizzQuestionsInbox
-					.size());
-			fetchedQuestion = mQuizzQuestionsInbox.get(questionIDCache);
+			if (mQuizzQuestionsInbox.size() > 0) {				
+				int questionIDCache = new Random()
+						.nextInt(mQuizzQuestionsInbox.size());
+				fetchedQuestion = mQuizzQuestionsInbox.get(questionIDCache);
+			} else {
+				Log.i("QuestionProxy", "Inbox empty!");
+				fetchedQuestion = null;
+			}
 		}
 
 		return fetchedQuestion;
