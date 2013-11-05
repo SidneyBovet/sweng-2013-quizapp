@@ -3,6 +3,7 @@ package epfl.sweng.test.activities;
 import org.apache.http.HttpStatus;
 
 import android.widget.Button;
+import epfl.sweng.authentication.UserPreferences;
 import epfl.sweng.servercomm.SwengHttpClientFactory;
 import epfl.sweng.showquestions.ShowQuestionsActivity;
 import epfl.sweng.test.minimalmock.MockHttpClient;
@@ -27,6 +28,8 @@ public class ShowQuestionsActivityTest extends GUITest<ShowQuestionsActivity> {
 		super.setUp();
 		mockClient = new MockHttpClient();
 		SwengHttpClientFactory.setInstance(mockClient);
+		UserPreferences.getInstance(getInstrumentation().getContext()).
+			createEntry("CONNECTION_STATE", "ONLINE");
 	}
 
 	public void testFetchQuestion() {
@@ -70,7 +73,7 @@ public class ShowQuestionsActivityTest extends GUITest<ShowQuestionsActivity> {
 					"application/json");
 
 		getActivityAndWaitFor(TTChecks.QUESTION_SHOWN);
-		getSolo().sleep(500);
+		getSolo().sleep(1000);
 		assertTrue("Correct answer must be displayed",
 				getSolo().searchText("Forty-two"));
 		
@@ -192,7 +195,7 @@ public class ShowQuestionsActivityTest extends GUITest<ShowQuestionsActivity> {
 				"GET (?:https?://[^/]+|[^/]+)?/+quizquestions/random\\b",
 				MockHttpClient.IOEXCEPTION_ERROR_CODE,
 				"", "");
-		getActivityAndWaitFor(TTChecks.QUESTION_SHOWN);
+		getActivityAndWaitFor(TTChecks.OFFLINE_CHECKBOX_ENABLED);
 		assert true;
 	}
 
@@ -201,7 +204,7 @@ public class ShowQuestionsActivityTest extends GUITest<ShowQuestionsActivity> {
 				"GET (?:https?://[^/]+|[^/]+)?/+quizquestions/random\\b",
 				HttpStatus.SC_SERVICE_UNAVAILABLE,
 				"", "");
-		getActivityAndWaitFor(TTChecks.QUESTION_SHOWN);
+		getActivityAndWaitFor(TTChecks.OFFLINE_CHECKBOX_ENABLED);
 		getSolo().searchText("There was an error retrieving the question");
 	}
 
@@ -210,7 +213,7 @@ public class ShowQuestionsActivityTest extends GUITest<ShowQuestionsActivity> {
 				"GET (?:https?://[^/]+|[^/]+)?/+quizquestions/random\\b",
 				MockHttpClient.IOEXCEPTION_ERROR_CODE,
 				"", "");
-		getActivityAndWaitFor(TTChecks.QUESTION_SHOWN);
+		getActivityAndWaitFor(TTChecks.OFFLINE_CHECKBOX_ENABLED);
 		getSolo().searchText("There was an error retrieving the question");
 	}
 	
@@ -221,7 +224,7 @@ public class ShowQuestionsActivityTest extends GUITest<ShowQuestionsActivity> {
 				"GET (?:https?://[^/]+|[^/]+)?/+quizquestions/random\\b",
 				MockHttpClient.FORBIDDEN_ERROR_CODE,
 				"", "");
-		getActivityAndWaitFor(TTChecks.QUESTION_SHOWN);
+		getActivityAndWaitFor(TTChecks.OFFLINE_CHECKBOX_ENABLED);
 		getSolo().searchText("There was an error retrieving the question");
 	}
 	
