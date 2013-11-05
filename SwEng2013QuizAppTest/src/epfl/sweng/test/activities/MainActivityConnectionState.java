@@ -45,7 +45,8 @@ public class MainActivityConnectionState extends GUITest<MainActivity> {
 	}
 	
 	public void testCheckBoxCheckConnected() {
-		CheckBox connexionState = (CheckBox) getSolo().getView(R.id.switchOnlineModeCheckbox);
+		CheckBox connexionState = (CheckBox) getSolo().getView(
+				R.id.switchOnlineModeCheckbox);
 		getSolo().clickOnView(connexionState);
 		getActivityAndWaitFor(TTChecks.OFFLINE_CHECKBOX_ENABLED);
 		getSolo().clickOnView(connexionState);
