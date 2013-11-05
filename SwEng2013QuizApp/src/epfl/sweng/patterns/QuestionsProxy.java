@@ -44,15 +44,6 @@ public final class QuestionsProxy {
 	private List<QuizQuestion> mQuizzQuestionsInbox;
 
 	/**
-	 * Private constructor of the singleton.
-	 * 
-	 */
-	private QuestionsProxy() {
-		mQuizzQuestionsOutbox = new ArrayList<QuizQuestion>();
-		mQuizzQuestionsInbox = new ArrayList<QuizQuestion>();
-	}
-
-	/**
 	 * Returns the singleton, creates it if it's not instancied.
 	 * 
 	 * @return Singleton instance of the class.
@@ -221,5 +212,18 @@ public final class QuestionsProxy {
 
 	public int getOutboxSize() {
 		return mQuizzQuestionsOutbox.size();
+	}
+
+	public int getInboxSize() {
+		return mQuizzQuestionsOutbox.size();
+	}
+
+	/**
+	 * Private constructor of the singleton.
+	 * 
+	 */
+	private QuestionsProxy() {
+		mQuizzQuestionsOutbox = new ArrayList<QuizQuestion>();
+		mQuizzQuestionsInbox = new ArrayList<QuizQuestion>();
 	}
 }
