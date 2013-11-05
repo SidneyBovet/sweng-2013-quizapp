@@ -215,7 +215,7 @@ public final class QuestionsProxy {
 	}
 
 	public int getInboxSize() {
-		return mQuizzQuestionsOutbox.size();
+		return mQuizzQuestionsInbox.size();
 	}
 
 	/**
