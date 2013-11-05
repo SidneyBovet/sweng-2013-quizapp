@@ -73,7 +73,7 @@ public class ShowQuestionsActivityTest extends GUITest<ShowQuestionsActivity> {
 					"application/json");
 
 		getActivityAndWaitFor(TTChecks.QUESTION_SHOWN);
-		getSolo().sleep(1000);
+		getSolo().sleep(2000);
 		assertTrue("Correct answer must be displayed",
 				getSolo().searchText("Forty-two"));
 		
