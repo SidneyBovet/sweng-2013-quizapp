@@ -74,6 +74,7 @@ public class GUITest<T extends Activity> extends
 				return String.format("WaitFor(%s)", expected);
 			}
 		});
+		solo.sleep(500);
 	}
 
 	public Solo getSolo() {
