@@ -309,7 +309,7 @@ public class EditQuestionActivityTest extends GUITest<EditQuestionActivity> {
 
 	public void testRemoveSpecificRow() {
 		getSolo().sleep(100);
-		getSolo().clickOnButton("+");
+		getSolo().clickOnButton("\\+");
 		waitFor(TTChecks.QUESTION_EDITED);
 		getSolo().enterText(
 				(EditText) getSolo().getText(
