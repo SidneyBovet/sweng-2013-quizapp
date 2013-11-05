@@ -1,11 +1,17 @@
 package epfl.sweng.test.activities;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import org.apache.http.HttpStatus;
 
 import android.widget.EditText;
 import epfl.sweng.authentication.UserPreferences;
 import epfl.sweng.editquestions.EditQuestionActivity;
 import epfl.sweng.patterns.QuestionsProxy;
+import epfl.sweng.quizquestions.QuizQuestion;
 import epfl.sweng.servercomm.SwengHttpClientFactory;
 import epfl.sweng.test.minimalmock.MockHttpClient;
 import epfl.sweng.test.minimalmock.UnconnectedHttpClient;
@@ -23,8 +29,6 @@ public class EditQuestionActivityOfflineTest extends GUITest<EditQuestionActivit
 	@Override
 	protected void setUp() {
 		super.setUp();
-		UserPreferences.getInstance(getInstrumentation().getContext()).
-			createEntry("CONNECTION_STATE", "OFFLINE");
 		
 		/* Reseting both client for security */
 		mUnconnectedClient = new UnconnectedHttpClient();
@@ -46,6 +50,9 @@ public class EditQuestionActivityOfflineTest extends GUITest<EditQuestionActivit
 	}
 
 	public void testSubmittedQuestionIsInProxyOutbox() {
+		UserPreferences.getInstance(getInstrumentation().getTargetContext()).
+		createEntry("CONNECTION_STATE", "OFFLINE");
+		
 		SwengHttpClientFactory.setInstance(mUnconnectedClient);
 		
 		int expectedOutboxSize = QuestionsProxy.getInstance().getOutboxSize() + 1;
@@ -58,8 +65,14 @@ public class EditQuestionActivityOfflineTest extends GUITest<EditQuestionActivit
 	}
 
 	public void testOutboxIsCompletelySentAfterSuccessfulConnection() {
+
+		UserPreferences.getInstance(getInstrumentation().getTargetContext()).
+			createEntry("CONNECTION_STATE", "ONLINE");
+		
 		SwengHttpClientFactory.setInstance(mMockClient);
 		mMockClient.pushCannedResponse("", HttpStatus.SC_CREATED, "", "");
+		
+		QuestionsProxy.getInstance().addOutbox(createFakeQuestion());
 		
 		fillFormWithCorrectQuestion();
 
@@ -67,6 +80,20 @@ public class EditQuestionActivityOfflineTest extends GUITest<EditQuestionActivit
 		getActivityAndWaitFor(TTChecks.NEW_QUESTION_SUBMITTED);
 		
 		assertEquals(0, QuestionsProxy.getInstance().getOutboxSize());
+	}
+
+	private QuizQuestion createFakeQuestion() {
+		List<String> answers = new ArrayList<String>();
+		answers.add("100% accurate");
+		answers.add("Fully voodoo and could generate non-pseudorandom numbers");
+
+		Set<String> tags = new HashSet<String>();
+		tags.add("robotium");
+		tags.add("testing");
+		
+		QuizQuestion question = new QuizQuestion(
+				"How reliable Robotium testing is?", answers, 1, tags);
+		return question;
 	}
 
 	private void fillFormWithCorrectQuestion() {
