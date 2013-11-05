@@ -35,8 +35,8 @@ public class AuthenticationActivityTest extends GUITest<AuthenticationActivity> 
 	}
 
 	public void testShowEditTextAndLoginButton() {
-		assertTrue("Username asked", getSolo().searchText("GASPAR Username"));
-		assertTrue("Password Asked", getSolo().searchText("GASPAR Password"));
+		assertTrue("Username asked", getSolo().searchText("GASPAR\\ Username"));
+		assertTrue("Password Asked", getSolo().searchText("GASPAR\\ Password"));
 		assertTrue("Login Button is present",
 				getSolo().searchButton("Log in using Tequila"));
 	}

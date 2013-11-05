@@ -32,6 +32,23 @@ public class MainActivityNotAuthenticatedTest extends GUITest<MainActivity> {
 		persistentStorage.destroyAuthentication();
 		getActivityAndWaitFor(TTChecks.MAIN_ACTIVITY_SHOWN);
 	}
+
+	@Override
+	protected void tearDown() {
+		
+		try {
+			super.tearDown();
+			contextOfMainActivity = getInstrumentation()
+					.getTargetContext();
+			persistentStorage = UserPreferences.
+					getInstance(contextOfMainActivity);
+			UserPreferences.getInstance(getInstrumentation().getContext()).
+			createEntry("CONNECTION_STATE", "OFFLINE");
+			persistentStorage.destroyAuthentication();
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+	}
 	
 	public void testShowAllButtons() {
 		getSolo().sleep(500);
@@ -58,7 +75,7 @@ public class MainActivityNotAuthenticatedTest extends GUITest<MainActivity> {
 	public void testLogInButton() {
 		//XXX try to remove sleep... don't pass!
 		assertFalse(persistentStorage.isAuthenticated());
-		getSolo().clickOnButton("Log in using Tequila");
+		getSolo().clickOnButton("Log\\ in\\ using\\ Tequila");
 		getSolo().sleep(2000);
 		assertTrue("Password Asked", getSolo().searchText("GASPAR Password"));
 		getSolo().goBack();
@@ -73,6 +90,9 @@ public class MainActivityNotAuthenticatedTest extends GUITest<MainActivity> {
 				getSolo().searchText("Offline mode"));
 		 */
 		CheckBox connexionState = (CheckBox) getSolo().getView(R.id.switchOnlineModeCheckbox);
+		if (null == connexionState) {
+			fail("R.id.switchOnlineModeCheckbox cannot be fetched by Robotium!");
+		}
 		assertFalse(connexionState.isShown());
 	}
 }

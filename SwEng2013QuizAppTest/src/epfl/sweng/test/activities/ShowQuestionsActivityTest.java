@@ -225,7 +225,8 @@ public class ShowQuestionsActivityTest extends GUITest<ShowQuestionsActivity> {
 				MockHttpClient.FORBIDDEN_ERROR_CODE,
 				"", "");
 		getActivityAndWaitFor(TTChecks.OFFLINE_CHECKBOX_ENABLED);
-		getSolo().searchText("There was an error retrieving the question");
+		getSolo().searchText("There\\ was\\ an\\ error\\ retrieving\\ the\\ question");
+		// TODO Shouldn't we do an assert of some sort here?
 	}
 	
 }

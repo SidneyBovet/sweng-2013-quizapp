@@ -33,6 +33,17 @@ public class EditQuestionActivityOfflineTest extends GUITest<EditQuestionActivit
 		getActivityAndWaitFor(TTChecks.EDIT_QUESTIONS_SHOWN);
 		getSolo().sleep(100);
 	}
+	
+	@Override
+	protected void tearDown() {
+		try {
+			super.tearDown();
+			UserPreferences.getInstance(getInstrumentation().getContext()).
+			createEntry("CONNECTION_STATE", "ONLINE");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
 	public void testSubmittedQuestionIsInProxyOutbox() {
 		SwengHttpClientFactory.setInstance(mUnconnectedClient);
@@ -60,7 +71,7 @@ public class EditQuestionActivityOfflineTest extends GUITest<EditQuestionActivit
 
 	private void fillFormWithCorrectQuestion() {
 		getSolo().sleep(100);
-		getSolo().clickOnButton("+");
+		getSolo().clickOnButton("\\+");
 		waitFor(TTChecks.QUESTION_EDITED);
 		getSolo().enterText(
 				(EditText) getSolo().getText(

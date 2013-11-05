@@ -62,12 +62,12 @@ public class ShowQuestionsActivityOfflineTest extends GUITest<ShowQuestionsActiv
 				"Question must be displayed",
 				getSolo()
 						.searchText(
-								"How reliable Robotium testing is?"));
+								"How\\ reliable\\ Robotium\\ testing\\ is\\?"));
 		assertTrue("Incorrect answer must be displayed",
-				getSolo().searchText("100% accurate"));
+				getSolo().searchText("100%\\ accurate"));
 		assertTrue("Correct answer must be displayed",
-				getSolo().searchText("Fully voodoo and could generate non-" +
-						"pseudorandom numbers"));
+				getSolo().searchText("Fully\\ voodoo\\ and\\ could\\ generate\\ non\\-" +
+						"pseudorandom\\ numbers"));
 	}
 	
 	public void testNewlyRetrievedQuestionShouldBeCached() {

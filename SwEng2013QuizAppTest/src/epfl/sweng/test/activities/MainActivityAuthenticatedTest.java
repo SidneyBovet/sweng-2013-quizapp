@@ -30,44 +30,47 @@ public class MainActivityAuthenticatedTest extends GUITest<MainActivity> {
 	
 	@Override
 	protected void tearDown() throws Exception {
-		persistentStorage.destroyAuthentication();
 		super.tearDown();
+		contextOfMainActivity = getInstrumentation()
+				.getTargetContext();
+		persistentStorage = UserPreferences.
+				getInstance(contextOfMainActivity);
+		persistentStorage.destroyAuthentication();
 	};
 	
 	public void testLogOut() {
-		getSolo().clickOnButton("Log out");
+		getSolo().clickOnButton("Log\\ out");
 		getActivityAndWaitFor(TTChecks.LOGGED_OUT);
-		assertTrue("Submit Quizz Question Button should be present",
-				getSolo().searchButton("Submit a quiz question."));
-		assertTrue("Show Random Question Button should be present",
-				getSolo().searchButton("Show a random question."));
 		
-		Button showButton = getSolo().getButton("Show a random question.");
-		Button submitButton = getSolo().getButton("Submit a quiz question.");
-		assertTrue(!showButton.isEnabled());
-		assertTrue(!submitButton.isEnabled());
+		Button showButton = getSolo().getButton("Show\\ a\\ random\\ question.");
+		Button submitButton = getSolo().getButton("Submit\\ a\\ quiz\\ question.");
+		assertFalse(showButton.isEnabled());
+		assertFalse(submitButton.isEnabled());
 	}
 	
 	public void testShowAllButtons() {
-		assertTrue("Login Button is present",
-				getSolo().searchButton("Log out"));
+		assertTrue("Logout Button should be present",
+				getSolo().searchButton("Log\\ out"));
 		assertTrue("Show Random Question Button should be present",
-				getSolo().searchButton("Show a random question."));
+				getSolo().searchButton("Show\\ a\\ random\\ question."));
 		assertTrue("Submit Quizz Question Button should be present",
-				getSolo().searchButton("Submit a quiz question."));
+				getSolo().searchButton("Submit\\ a\\ quiz\\ question."));
 		assertTrue("Check Box should be present", 
-				getSolo().searchText("Offline mode"));
+				getSolo().searchText("Offline\\ mode"));
 	}
 	
 	public void testQuestionButtonsAreEnabledAtBeggining() {
-		Button showButton = getSolo().getButton("Show a random question.");
-		Button submitButton = getSolo().getButton("Submit a quiz question.");
+		Button showButton = getSolo().getButton("Show\\ a\\ random\\ question.");
+		Button submitButton = getSolo().getButton("Submit\\ a\\ quiz\\ question.");
 		assertTrue(showButton.isEnabled());
 		assertTrue(submitButton.isEnabled());
 	}
 	
 	public void testCheckBoxVisible() {
 		CheckBox connexionState = (CheckBox) getSolo().getView(R.id.switchOnlineModeCheckbox);
+		if (null == connexionState) {
+			fail("R.id.switchOnlineModeCheckbox not found by Robotium!");
+		}
 		assertTrue(connexionState.isShown());
 	}
 
