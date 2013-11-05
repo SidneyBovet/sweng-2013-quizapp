@@ -98,7 +98,7 @@ public final class UserPreferences {
 	/**
 	 * Checks if the user is connected.
 	 * 
-	 * @return <b>true</b> if the connectionState is already in the table.
+	 * @return <b>true</b> if the connectionState is ONLINE,
 	 *           <b>false</b> otherwise
 	 */
 	public boolean isConnected() {
