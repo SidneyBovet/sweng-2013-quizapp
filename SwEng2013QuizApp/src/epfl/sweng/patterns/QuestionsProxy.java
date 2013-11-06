@@ -20,8 +20,6 @@ import epfl.sweng.authentication.UserPreferences;
 import epfl.sweng.quizquestions.QuizQuestion;
 import epfl.sweng.servercomm.HttpFactory;
 import epfl.sweng.servercomm.SwengHttpClientFactory;
-import epfl.sweng.testing.TestCoordinator;
-import epfl.sweng.testing.TestCoordinator.TTChecks;
 
 /**
  * This class will perform all the server interactions in the place of our app.
@@ -42,6 +40,8 @@ public final class QuestionsProxy {
 	private List<QuizQuestion> mQuizzQuestionsOutbox;
 	// question to be retrieve
 	private List<QuizQuestion> mQuizzQuestionsInbox;
+	
+	private int mHttpStatusCommFailure = HttpStatus.SC_BAD_GATEWAY;
 
 	/**
 	 * Returns the singleton, creates it if it's not instancied.
@@ -100,20 +100,17 @@ public final class QuestionsProxy {
 					.execute(postQuery);
 			responseStatus = mResponse.getStatusLine().getStatusCode();
 		} catch (UnsupportedEncodingException e) {
-			UserPreferences.getInstance().createEntry("CONNECTION_STATE", "OFFLINE");
-			TestCoordinator.check(TTChecks.OFFLINE_CHECKBOX_ENABLED);
 			Log.e(this.getClass().getName(), "doInBackground(): Entity does "
 					+ "not support the local encoding.", e);
+			return mHttpStatusCommFailure;
 		} catch (ClientProtocolException e) {
-			UserPreferences.getInstance().createEntry("CONNECTION_STATE", "OFFLINE");
-			TestCoordinator.check(TTChecks.OFFLINE_CHECKBOX_ENABLED);
 			Log.e(this.getClass().getName(), "doInBackground(): Error in the "
 					+ "HTTP protocol.", e);
+			return mHttpStatusCommFailure;
 		} catch (IOException e) {
-			UserPreferences.getInstance().createEntry("CONNECTION_STATE", "OFFLINE");
-			TestCoordinator.check(TTChecks.OFFLINE_CHECKBOX_ENABLED);
-			Log.e(this.getClass().getName(), "doInBackground(): An I/O error "
+			Log.e(this.getClass().getName(), "doInBackground(): An I/O error"
 					+ "has occurred.", e);
+			return mHttpStatusCommFailure;
 		}
 		return responseStatus;
 	}
@@ -189,15 +186,13 @@ public final class QuestionsProxy {
 				fetchedQuestion = new QuizQuestion(jsonQuestion);
 				addInbox(fetchedQuestion);
 			} catch (ClientProtocolException e) {
-				UserPreferences.getInstance().createEntry("CONNECTION_STATE", "OFFLINE");
-				TestCoordinator.check(TTChecks.OFFLINE_CHECKBOX_ENABLED);
 				Log.e(this.getClass().getName(), "doInBackground(): Error in"
 						+ "the HTTP protocol.", e);
+				return null;
 			} catch (IOException e) {
-				UserPreferences.getInstance().createEntry("CONNECTION_STATE", "OFFLINE");
-				TestCoordinator.check(TTChecks.OFFLINE_CHECKBOX_ENABLED);
 				Log.e(this.getClass().getName(), "doInBackground(): An I/O"
 						+ "error has occurred.", e);
+				return null;
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
