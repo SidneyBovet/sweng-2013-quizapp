@@ -33,7 +33,7 @@ import epfl.sweng.servercomm.SwengHttpClientFactory;
  * @author born4new, JoTearoom, Merok
  * 
  */
-public final class QuestionsProxy implements Proxy {
+public final class QuestionsProxy implements ConnectivityProxy {
 
 	private static QuestionsProxy sQuestionProxy;
 	// question to be sent
@@ -199,27 +199,24 @@ public final class QuestionsProxy implements Proxy {
 	}
 	
 	/**
-	 * Notifies the connectivity state of the application. The proxy responds
-	 * with the HTTP code of the request which is made according to its current 
-	 * state and new state.
+	 * Notifies the proxy of a new connectivity state. The proxy will change to
+	 * the new state, send the according request, and return their corresponding
+	 * HTTP response code.
 	 * 
-	 * @return HTTP response code of Proxy's request.
+	 * @return The HTTP response code of the last proxy request.
 	 */
 	@Override
-	public int notifyConnectivityState(ConnectivityState state) {
+	public int notifyConnectivityChange(ConnectivityState newState) {
 		int proxyResponse = -1;
 		
-		// Online -> Offline
-		if (mConnectivityState == ConnectivityState.ONLINE
-				&& state == ConnectivityState.OFFLINE) {
+		if (mConnectivityState == newState) {
+			proxyResponse = 0;	// Indicates that no change were made
+		} else if (mConnectivityState == ConnectivityState.ONLINE
+				&& newState == ConnectivityState.OFFLINE) {
 			
-			// Nothing to do
-			proxyResponse = HttpStatus.SC_OK;
-		}
-		
-		// Offline -> Online
-		if (mConnectivityState == ConnectivityState.OFFLINE
-				&& state == ConnectivityState.ONLINE) {
+			proxyResponse = HttpStatus.SC_OK; // Nothing to do
+		} else if (mConnectivityState == ConnectivityState.OFFLINE
+				&& newState == ConnectivityState.ONLINE) {
 			
 			if (mQuizQuestionsOutbox.size() > 0) {
 				proxyResponse = sendCachedQuestions();
@@ -228,12 +225,7 @@ public final class QuestionsProxy implements Proxy {
 			}
 		}
 		
-		// Offline -> Offline or Online -> Online
-		if (mConnectivityState == state) {
-			proxyResponse = 0;	// Indicates that no change were made
-		}
-		
-		mConnectivityState = state;
+		mConnectivityState = newState;
 		return proxyResponse;
 	}
 

@@ -16,7 +16,7 @@ import epfl.sweng.authentication.AuthenticationActivity;
 import epfl.sweng.authentication.UserPreferences;
 import epfl.sweng.editquestions.EditQuestionActivity;
 import epfl.sweng.patterns.ConnectivityState;
-import epfl.sweng.patterns.Proxy;
+import epfl.sweng.patterns.ConnectivityProxy;
 import epfl.sweng.patterns.QuestionsProxy;
 import epfl.sweng.showquestions.ShowQuestionsActivity;
 import epfl.sweng.testing.TestCoordinator;
@@ -207,9 +207,9 @@ public class MainActivity extends Activity {
 	class AsyncProxyConnectivityNotifier extends
 			AsyncTask<ConnectivityState, Void, Integer> {
 
-		private Proxy mProxy;
+		private ConnectivityProxy mProxy;
 
-		public AsyncProxyConnectivityNotifier(Proxy proxy) {
+		public AsyncProxyConnectivityNotifier(ConnectivityProxy proxy) {
 			this.mProxy = proxy;
 		}
 
@@ -219,7 +219,7 @@ public class MainActivity extends Activity {
 				throw new IllegalArgumentException();
 			}
 
-			return mProxy.notifyConnectivityState(state[0]);
+			return mProxy.notifyConnectivityChange(state[0]);
 		}
 
 		@Override
