@@ -42,7 +42,6 @@ public class EditQuestionActivity extends Activity {
 	// fields related to the question
 	private String mQuestionBodyText;
 	private String mTagsText;
-	private UserPreferences mUserPreferences;
 
 	/**
 	 * Adds a new empty answer to the <code>ListView</code>.
@@ -132,8 +131,6 @@ public class EditQuestionActivity extends Activity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.submit_question, menu);
-		mUserPreferences = UserPreferences
-				.getInstance(this.getApplicationContext());
 		return true;
 	}
 
@@ -258,8 +255,10 @@ public class EditQuestionActivity extends Activity {
 		@Override
 		protected void onPostExecute(Integer result) {
 			super.onPostExecute(result);
-			if (result != HttpStatus.SC_CREATED && result != HttpStatus.SC_USE_PROXY) {
-				mUserPreferences.createEntry("CONNECTION_STATE", "OFFLINE");
+			if (result != HttpStatus.SC_CREATED && 
+					result != HttpStatus.SC_USE_PROXY) {
+				UserPreferences.getInstance()
+					.createEntry("CONNECTION_STATE", "OFFLINE");
 				TestCoordinator.check(TTChecks.OFFLINE_CHECKBOX_ENABLED);
 				Toast.makeText(
 						EditQuestionActivity.this,
