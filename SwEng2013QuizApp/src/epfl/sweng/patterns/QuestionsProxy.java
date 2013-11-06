@@ -33,15 +33,16 @@ import epfl.sweng.servercomm.SwengHttpClientFactory;
  * @author born4new, JoTearoom, Merok
  * 
  */
-public final class QuestionsProxy {
+public final class QuestionsProxy implements Proxy {
 
 	private static QuestionsProxy sQuestionProxy;
 	// question to be sent
-	private List<QuizQuestion> mQuizzQuestionsOutbox;
+	private List<QuizQuestion> mQuizQuestionsOutbox;
 	// question to be retrieve
-	private List<QuizQuestion> mQuizzQuestionsInbox;
+	private List<QuizQuestion> mQuizQuestionsInbox;
 	
 	private int mHttpStatusCommFailure = HttpStatus.SC_BAD_GATEWAY;
+	private ConnectivityState mConnectivityState = ConnectivityState.ONLINE;
 
 	/**
 	 * Returns the singleton, creates it if it's not instancied.
@@ -71,7 +72,7 @@ public final class QuestionsProxy {
 	 */
 	public void addInbox(QuizQuestion question) {
 		if (null != question && question.auditErrors() == 0) {
-			mQuizzQuestionsInbox.add(question);
+			mQuizQuestionsInbox.add(question);
 		}
 	}
 
@@ -84,7 +85,7 @@ public final class QuestionsProxy {
 	 */
 	public void addOutbox(QuizQuestion question) {
 		if (null != question && question.auditErrors() == 0) {
-			mQuizzQuestionsOutbox.add(question);
+			mQuizQuestionsOutbox.add(question);
 		}
 	}
 
@@ -141,28 +142,6 @@ public final class QuestionsProxy {
 		return returnVariable;
 	}
 
-	public int sendCachedQuestions() {
-		int responseStatus = -1;
-		// We first send all the questions that we stored when in
-		// offline mode.
-		while (mQuizzQuestionsOutbox.size() > 0) {
-
-			QuizQuestion questionOut = mQuizzQuestionsOutbox.get(0);
-
-			// XXX Is this method a blocking one? It should be.
-			responseStatus = sendQuizzQuestionHelper(questionOut);
-
-			if (HttpStatus.SC_CREATED == responseStatus) {
-				// If the question has been sent, we remove it from the queue.
-				questionOut = mQuizzQuestionsOutbox.remove(0);
-			} else {
-				return responseStatus;
-			}
-		}
-		return responseStatus;
-
-	}
-
 	/**
 	 * Retrieve a {@link QuizQuestion} from the server and store it in the cache
 	 * before returning it if online. Choose a random {@link QuizQuestion} from
@@ -198,10 +177,10 @@ public final class QuestionsProxy {
 			}
 
 		} else {
-			if (mQuizzQuestionsInbox.size() > 0) {				
+			if (mQuizQuestionsInbox.size() > 0) {				
 				int questionIDCache = new Random()
-						.nextInt(mQuizzQuestionsInbox.size());
-				fetchedQuestion = mQuizzQuestionsInbox.get(questionIDCache);
+						.nextInt(mQuizQuestionsInbox.size());
+				fetchedQuestion = mQuizQuestionsInbox.get(questionIDCache);
 			} else {
 				Log.i("QuestionProxy", "Inbox empty!");
 				fetchedQuestion = null;
@@ -212,11 +191,50 @@ public final class QuestionsProxy {
 	}
 
 	public int getOutboxSize() {
-		return mQuizzQuestionsOutbox.size();
+		return mQuizQuestionsOutbox.size();
 	}
 
 	public int getInboxSize() {
-		return mQuizzQuestionsInbox.size();
+		return mQuizQuestionsInbox.size();
+	}
+	
+	/**
+	 * Notifies the connectivity state of the application. The proxy responds
+	 * with the HTTP code of the request which is made according to its current 
+	 * state and new state.
+	 * 
+	 * @return HTTP response code of Proxy's request.
+	 */
+	@Override
+	public int notifyConnectivityState(ConnectivityState state) {
+		int proxyResponse = -1;
+		
+		// Online -> Offline
+		if (mConnectivityState == ConnectivityState.ONLINE
+				&& state == ConnectivityState.OFFLINE) {
+			
+			// Nothing to do
+			proxyResponse = HttpStatus.SC_OK;
+		}
+		
+		// Offline -> Online
+		if (mConnectivityState == ConnectivityState.OFFLINE
+				&& state == ConnectivityState.ONLINE) {
+			
+			if (mQuizQuestionsOutbox.size() > 0) {
+				proxyResponse = sendCachedQuestions();
+			} else {
+				proxyResponse = HttpStatus.SC_OK;
+			}
+		}
+		
+		// Offline -> Offline or Online -> Online
+		if (mConnectivityState == state) {
+			proxyResponse = 0;	// Indicates that no change were made
+		}
+		
+		mConnectivityState = state;
+		return proxyResponse;
 	}
 
 	/**
@@ -224,7 +242,29 @@ public final class QuestionsProxy {
 	 * 
 	 */
 	private QuestionsProxy() {
-		mQuizzQuestionsOutbox = new ArrayList<QuizQuestion>();
-		mQuizzQuestionsInbox = new ArrayList<QuizQuestion>();
+		mQuizQuestionsOutbox = new ArrayList<QuizQuestion>();
+		mQuizQuestionsInbox = new ArrayList<QuizQuestion>();
+	}
+	
+	private int sendCachedQuestions() {
+		int responseStatus = -1;
+		// We first send all the questions that we stored when in
+		// offline mode.
+		while (mQuizQuestionsOutbox.size() > 0) {
+
+			QuizQuestion questionOut = mQuizQuestionsOutbox.get(0);
+
+			// XXX Is this method a blocking one? It should be.
+			responseStatus = sendQuizzQuestionHelper(questionOut);
+
+			if (HttpStatus.SC_CREATED == responseStatus) {
+				// If the question has been sent, we remove it from the queue.
+				questionOut = mQuizQuestionsOutbox.remove(0);
+			} else {
+				return responseStatus;
+			}
+		}
+		return responseStatus;
+
 	}
 }

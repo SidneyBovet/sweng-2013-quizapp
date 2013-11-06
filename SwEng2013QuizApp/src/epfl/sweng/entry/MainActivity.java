@@ -15,6 +15,8 @@ import epfl.sweng.R;
 import epfl.sweng.authentication.AuthenticationActivity;
 import epfl.sweng.authentication.UserPreferences;
 import epfl.sweng.editquestions.EditQuestionActivity;
+import epfl.sweng.patterns.ConnectivityState;
+import epfl.sweng.patterns.Proxy;
 import epfl.sweng.patterns.QuestionsProxy;
 import epfl.sweng.showquestions.ShowQuestionsActivity;
 import epfl.sweng.testing.TestCoordinator;
@@ -71,18 +73,25 @@ public class MainActivity extends Activity {
 		CheckBox clickedCheckBox = (CheckBox) v;
 
 		// Change the connection state entry in the UserPreferences
+		ConnectivityState newState = ConnectivityState.ONLINE;
 		if (clickedCheckBox.isChecked()) {
+			newState = ConnectivityState.OFFLINE;
 			mUserPreferences.createEntry("CONNECTION_STATE", "OFFLINE");
 			TestCoordinator.check(TTChecks.OFFLINE_CHECKBOX_ENABLED);
-			setDisplayView();
 		} else {
+			newState = ConnectivityState.ONLINE;
 			mUserPreferences.createEntry("CONNECTION_STATE", "ONLINE");
 			TestCoordinator.check(TTChecks.OFFLINE_CHECKBOX_DISABLED);
-			setDisplayView();
 			
 			// See https://github.com/sweng-epfl/sweng-2013-team-swing/issues/67
 			// new AsyncSendCachedQuestion().execute(QuestionsProxy.getInstance());
 		}
+		setDisplayView();
+		
+		// Notify the change of connectivity state to the proxy
+		AsyncProxyConnectivityNotifier asyncProxyNotifier = 
+				new AsyncProxyConnectivityNotifier(QuestionsProxy.getInstance());
+		asyncProxyNotifier.execute(newState);
 
 		// // XXX is it implemented the correct way (throw AseertionError)?
 		// TODO issues #63
@@ -180,7 +189,7 @@ public class MainActivity extends Activity {
 				: View.INVISIBLE;
 		CheckBox isOffline = (CheckBox) findViewById(R.id.switchOnlineModeCheckbox);
 		isOffline.setVisibility(visibility);
-		isOffline.setChecked(!mUserPreferences.isConnected());	
+		isOffline.setChecked(!mUserPreferences.isConnected());
 	}
 
 	private int auditCheckbox() {
@@ -195,30 +204,51 @@ public class MainActivity extends Activity {
 		return numErrors;
 	}
 
-	class AsyncSendCachedQuestion extends AsyncTask<QuestionsProxy, Void, Integer> {
+	class AsyncProxyConnectivityNotifier extends
+			AsyncTask<ConnectivityState, Void, Integer> {
+
+		private Proxy mProxy;
+
+		public AsyncProxyConnectivityNotifier(Proxy proxy) {
+			this.mProxy = proxy;
+		}
 
 		@Override
-		protected Integer doInBackground(QuestionsProxy... proxy) {
-			if (null != proxy && proxy.length != 1) {
+		protected Integer doInBackground(ConnectivityState... state) {
+			if (null != state && state.length != 1) {
 				throw new IllegalArgumentException();
 			}
 
-			return proxy[0].sendCachedQuestions();
+			return mProxy.notifyConnectivityState(state[0]);
 		}
 
 		@Override
 		protected void onPostExecute(Integer result) {
 			super.onPostExecute(result);
-			if (result != HttpStatus.SC_CREATED) {
-				mUserPreferences.createEntry("CONNECTION_STATE", "OFFLINE");
-				TestCoordinator.check(TTChecks.OFFLINE_CHECKBOX_ENABLED);
-				Toast.makeText(
-						MainActivity.this,
-						getResources().getString(
-								R.string.error_uploading_question),
-						Toast.LENGTH_LONG).show();
+			
+			switch (result) {
+				
+				case HttpStatus.SC_CREATED:
+					TestCoordinator.check(TTChecks.NEW_QUESTION_SUBMITTED);
+				case HttpStatus.SC_OK:
+					break;
+				
+				case 0:
+					Toast.makeText(MainActivity.this,
+							"Sorry, something wrong happened. Try again.",
+							Toast.LENGTH_LONG).show();
+					break;
+				
+				default:	// Http code error
+					mUserPreferences.createEntry("CONNECTION_STATE", "OFFLINE");
+					TestCoordinator.check(TTChecks.OFFLINE_CHECKBOX_ENABLED);
+					Toast.makeText(
+							MainActivity.this,
+							getResources().getString(
+									R.string.error_uploading_question),
+							Toast.LENGTH_LONG).show();
+					TestCoordinator.check(TTChecks.NEW_QUESTION_SUBMITTED);
 			}
-			TestCoordinator.check(TTChecks.NEW_QUESTION_SUBMITTED);
 		}
 	}
 }
