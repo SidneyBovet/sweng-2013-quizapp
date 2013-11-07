@@ -266,7 +266,6 @@ public class EditQuestionActivity extends Activity {
 								R.string.error_uploading_question),
 						Toast.LENGTH_LONG).show();
 			}
-			TestCoordinator.check(TTChecks.NEW_QUESTION_SUBMITTED);
 		}
 	}
 

@@ -92,8 +92,8 @@ public class MainActivity extends Activity {
 		AsyncProxyConnectivityNotifier asyncProxyNotifier = 
 				new AsyncProxyConnectivityNotifier(QuestionsProxy.getInstance());
 		asyncProxyNotifier.execute(newState);
-
-		// // XXX is it implemented the correct way (throw AseertionError)?
+		
+		// XXX is it implemented the correct way (throw AseertionError)?
 		// TODO issues #63
 		// if (auditErrors() != 0) {
 		// throw new AssertionError();
@@ -212,7 +212,7 @@ public class MainActivity extends Activity {
 		public AsyncProxyConnectivityNotifier(ConnectivityProxy proxy) {
 			this.mProxy = proxy;
 		}
-
+		//*
 		@Override
 		protected Integer doInBackground(ConnectivityState... state) {
 			if (null != state && state.length != 1) {
@@ -229,8 +229,9 @@ public class MainActivity extends Activity {
 			switch (result) {
 				
 				case HttpStatus.SC_CREATED:
-					TestCoordinator.check(TTChecks.NEW_QUESTION_SUBMITTED);
+					break;
 				case HttpStatus.SC_OK:
+					// Outbox was empty OR Offline switch succeeded
 					break;
 				
 				case 0:
@@ -248,7 +249,9 @@ public class MainActivity extends Activity {
 									R.string.error_uploading_question),
 							Toast.LENGTH_LONG).show();
 					TestCoordinator.check(TTChecks.NEW_QUESTION_SUBMITTED);
+//					setDisplayView();
 			}
 		}
+		//*/
 	}
 }

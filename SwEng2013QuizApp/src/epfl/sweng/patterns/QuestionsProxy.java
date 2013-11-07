@@ -20,6 +20,8 @@ import epfl.sweng.authentication.UserPreferences;
 import epfl.sweng.quizquestions.QuizQuestion;
 import epfl.sweng.servercomm.HttpFactory;
 import epfl.sweng.servercomm.SwengHttpClientFactory;
+import epfl.sweng.testing.TestCoordinator;
+import epfl.sweng.testing.TestCoordinator.TTChecks;
 
 /**
  * This class will perform all the server interactions in the place of our app.
@@ -238,7 +240,7 @@ public final class QuestionsProxy implements ConnectivityProxy {
 		mQuizQuestionsInbox = new ArrayList<QuizQuestion>();
 	}
 	
-	private int sendCachedQuestions() {
+	private synchronized int sendCachedQuestions() {
 		int responseStatus = -1;
 		// We first send all the questions that we stored when in
 		// offline mode.
@@ -252,6 +254,7 @@ public final class QuestionsProxy implements ConnectivityProxy {
 			if (HttpStatus.SC_CREATED == responseStatus) {
 				// If the question has been sent, we remove it from the queue.
 				questionOut = mQuizQuestionsOutbox.remove(0);
+				TestCoordinator.check(TTChecks.NEW_QUESTION_SUBMITTED);
 			} else {
 				return responseStatus;
 			}

@@ -9,7 +9,7 @@ package epfl.sweng.patterns;
 public interface ConnectivityProxy {
 
 	/**
-	 * Notifies the proxy a change of the state of connectivity.
+	 * Notifies the proxy of a change of the state of connectivity.
 	 * 
 	 * @param  newState the new connectivity state
 	 * @return A code (generally HTTP) that indicates a success or a failure in
