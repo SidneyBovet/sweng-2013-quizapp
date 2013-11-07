@@ -1,5 +1,6 @@
 package epfl.sweng.authentication;
 
+import epfl.sweng.patterns.ConnectivityState;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -21,21 +22,7 @@ public final class UserPreferences {
 	private Editor mEditor;
 	private String mSharedPreferencesName = "user_session";
 	private final String mKeySessionIDName = "SESSION_ID";
-	private final String mKeyConnectionState = "CONNECTION_STATE";
-
-	/**
-	 * Private constructor of the singleton.
-	 * 
-	 * @param context
-	 *            Context of the activity that needs the storage.
-	 */
-	
-	private UserPreferences(Context context) {
-		this.mUserCredentialsPrefs = context.getSharedPreferences(
-				mSharedPreferencesName, Context.MODE_PRIVATE);
-		this.mEditor = mUserCredentialsPrefs.edit();
-		this.createEntry(mKeyConnectionState, "ONLINE");
-	}
+	private ConnectivityState mCurrentConnectivityState;
 
 	/**
 	 * Returns the singleton, creates it if it's not instancied.
@@ -78,9 +65,18 @@ public final class UserPreferences {
 	 * @param key 
 	 * @param value
 	 */
+	@Deprecated
 	public void createEntry(String key, String value) {
 		mEditor.putString(key, value);
 		mEditor.commit();
+	}
+	
+	public void setSessionId(String sessionId) {
+		mEditor.putString(mKeySessionIDName, sessionId);
+	}
+
+	public void setConnectivityState(ConnectivityState newState) {
+		mCurrentConnectivityState = newState;
 	}
 
 	/**
@@ -102,8 +98,7 @@ public final class UserPreferences {
 	 *           <b>false</b> otherwise
 	 */
 	public boolean isConnected() {
-		String value = mUserCredentialsPrefs.getString(mKeyConnectionState, null);
-		return value.equals("ONLINE");
+		return mCurrentConnectivityState.equals(ConnectivityState.ONLINE);
 	}
 	
 
@@ -124,5 +119,31 @@ public final class UserPreferences {
 	
 	public String getSessionId() {
 		return mUserCredentialsPrefs.getString(mKeySessionIDName, "NOT LOGGED IN!");
+	}
+
+	/**
+	 * Returns the current connectivity state of the app.
+	 * 
+	 * @return A copy of the {@link ConnectivityState} describing the current
+	 * connectivity state of the application.
+	 */
+	
+	public ConnectivityState getConnectivityState() {
+		//this is to avoid modifications through this getter
+		return ConnectivityState.valueOf(mCurrentConnectivityState.toString());
+	}
+
+	/**
+	 * Private constructor of the singleton.
+	 * 
+	 * @param context
+	 *            Context of the activity that needs the storage.
+	 */
+	
+	private UserPreferences(Context context) {
+		this.mUserCredentialsPrefs = context.getSharedPreferences(
+				mSharedPreferencesName, Context.MODE_PRIVATE);
+		this.mEditor = mUserCredentialsPrefs.edit();
+		this.mCurrentConnectivityState = ConnectivityState.ONLINE;
 	}
 }
