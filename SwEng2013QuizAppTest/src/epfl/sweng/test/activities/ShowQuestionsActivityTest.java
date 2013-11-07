@@ -4,6 +4,7 @@ import org.apache.http.HttpStatus;
 
 import android.widget.Button;
 import epfl.sweng.authentication.UserPreferences;
+import epfl.sweng.patterns.ConnectivityState;
 import epfl.sweng.servercomm.SwengHttpClientFactory;
 import epfl.sweng.showquestions.ShowQuestionsActivity;
 import epfl.sweng.test.minimalmock.MockHttpClient;
@@ -28,8 +29,9 @@ public class ShowQuestionsActivityTest extends GUITest<ShowQuestionsActivity> {
 		super.setUp();
 		mockClient = new MockHttpClient();
 		SwengHttpClientFactory.setInstance(mockClient);
-		UserPreferences.getInstance(getInstrumentation().getContext()).
-			createEntry("CONNECTION_STATE", "ONLINE");
+		UserPreferences.getInstance().
+			setConnectivityState(ConnectivityState.ONLINE);
+		
 	}
 
 	public void testFetchQuestion() {

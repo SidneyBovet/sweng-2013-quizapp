@@ -73,14 +73,11 @@ public class MainActivity extends Activity {
 		CheckBox clickedCheckBox = (CheckBox) v;
 
 		// Change the connection state entry in the UserPreferences
-		ConnectivityState newState = ConnectivityState.ONLINE;
 		if (clickedCheckBox.isChecked()) {
-			newState = ConnectivityState.OFFLINE;
-			mUserPreferences.createEntry("CONNECTION_STATE", "OFFLINE");
+			mUserPreferences.setConnectivityState(ConnectivityState.OFFLINE);
 			TestCoordinator.check(TTChecks.OFFLINE_CHECKBOX_ENABLED);
 		} else {
-			newState = ConnectivityState.ONLINE;
-			mUserPreferences.createEntry("CONNECTION_STATE", "ONLINE");
+			mUserPreferences.setConnectivityState(ConnectivityState.ONLINE);
 			TestCoordinator.check(TTChecks.OFFLINE_CHECKBOX_DISABLED);
 			
 			// See https://github.com/sweng-epfl/sweng-2013-team-swing/issues/67
@@ -91,7 +88,7 @@ public class MainActivity extends Activity {
 		// Notify the change of connectivity state to the proxy
 		AsyncProxyConnectivityNotifier asyncProxyNotifier = 
 				new AsyncProxyConnectivityNotifier(QuestionsProxy.getInstance());
-		asyncProxyNotifier.execute(newState);
+		asyncProxyNotifier.execute(mUserPreferences.getConnectivityState());
 		
 		if (auditErrors() != 0) {
 			throw new AssertionError();
@@ -214,7 +211,7 @@ public class MainActivity extends Activity {
 		@Override
 		protected Integer doInBackground(ConnectivityState... state) {
 			if (null != state && state.length != 1) {
-				throw new IllegalArgumentException();
+				throw new IllegalArgumentException("Should be only one state.");
 			}
 
 			return mProxy.notifyConnectivityChange(state[0]);
@@ -239,7 +236,8 @@ public class MainActivity extends Activity {
 					break;
 				
 				default:	// Http code error
-					mUserPreferences.createEntry("CONNECTION_STATE", "OFFLINE");
+					UserPreferences.getInstance().
+						setConnectivityState(ConnectivityState.OFFLINE);
 					TestCoordinator.check(TTChecks.OFFLINE_CHECKBOX_ENABLED);
 					Toast.makeText(
 							MainActivity.this,

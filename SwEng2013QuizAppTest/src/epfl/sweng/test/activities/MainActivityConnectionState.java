@@ -29,7 +29,7 @@ public class MainActivityConnectionState extends GUITest<MainActivity> {
 				.getTargetContext();
 		persistentStorage = UserPreferences.
 				getInstance(contextOfMainActivity);
-		persistentStorage.createEntry("SESSION_ID", "blabla");
+		persistentStorage.setSessionId("blabla");
 		getActivityAndWaitFor(TTChecks.MAIN_ACTIVITY_SHOWN);
 	}
 	

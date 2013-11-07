@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import epfl.sweng.R;
 import epfl.sweng.authentication.UserPreferences;
+import epfl.sweng.patterns.ConnectivityState;
 import epfl.sweng.patterns.QuestionsProxy;
 import epfl.sweng.quizquestions.QuizQuestion;
 import epfl.sweng.testing.TestCoordinator;
@@ -118,8 +119,8 @@ public class ShowQuestionsActivity extends Activity {
 		protected void onPostExecute(QuizQuestion question) {
 			super.onPostExecute(question);
 			if (null == question) {
-				UserPreferences.getInstance().createEntry("CONNECTION_STATE",
-						"OFFLINE");
+				UserPreferences.getInstance().
+					setConnectivityState(ConnectivityState.OFFLINE);
 				TestCoordinator.check(TTChecks.OFFLINE_CHECKBOX_ENABLED);
 				Toast.makeText(
 						ShowQuestionsActivity.this,

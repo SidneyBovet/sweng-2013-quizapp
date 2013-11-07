@@ -10,6 +10,7 @@ import org.apache.http.HttpStatus;
 import android.widget.EditText;
 import epfl.sweng.authentication.UserPreferences;
 import epfl.sweng.editquestions.EditQuestionActivity;
+import epfl.sweng.patterns.ConnectivityState;
 import epfl.sweng.patterns.QuestionsProxy;
 import epfl.sweng.quizquestions.QuizQuestion;
 import epfl.sweng.servercomm.SwengHttpClientFactory;
@@ -42,8 +43,8 @@ public class EditQuestionActivityOfflineTest extends GUITest<EditQuestionActivit
 	protected void tearDown() {
 		try {
 			super.tearDown();
-			UserPreferences.getInstance(getInstrumentation().getContext()).
-			createEntry("CONNECTION_STATE", "ONLINE");
+			UserPreferences.getInstance(getInstrumentation().getTargetContext()).
+				setConnectivityState(ConnectivityState.ONLINE);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -51,7 +52,7 @@ public class EditQuestionActivityOfflineTest extends GUITest<EditQuestionActivit
 
 	public void testSubmittedQuestionIsInProxyOutbox() {
 		UserPreferences.getInstance(getInstrumentation().getTargetContext()).
-		createEntry("CONNECTION_STATE", "OFFLINE");
+			setConnectivityState(ConnectivityState.OFFLINE);
 		
 		SwengHttpClientFactory.setInstance(mUnconnectedClient);
 		
@@ -67,7 +68,7 @@ public class EditQuestionActivityOfflineTest extends GUITest<EditQuestionActivit
 	public void testOutboxIsCompletelySentAfterSuccessfulConnection() {
 
 		UserPreferences.getInstance(getInstrumentation().getTargetContext()).
-			createEntry("CONNECTION_STATE", "ONLINE");
+			setConnectivityState(ConnectivityState.ONLINE);
 		
 		SwengHttpClientFactory.setInstance(mMockClient);
 		mMockClient.pushCannedResponse("", HttpStatus.SC_CREATED, "", "");

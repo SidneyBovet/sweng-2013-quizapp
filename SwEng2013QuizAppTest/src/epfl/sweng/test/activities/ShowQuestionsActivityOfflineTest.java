@@ -8,6 +8,7 @@ import java.util.Set;
 import org.apache.http.HttpStatus;
 
 import epfl.sweng.authentication.UserPreferences;
+import epfl.sweng.patterns.ConnectivityState;
 import epfl.sweng.patterns.QuestionsProxy;
 import epfl.sweng.quizquestions.QuizQuestion;
 import epfl.sweng.servercomm.SwengHttpClientFactory;
@@ -53,8 +54,8 @@ public class ShowQuestionsActivityOfflineTest extends GUITest<ShowQuestionsActiv
 	}
 
 	public void testQuestionInInboxIsDisplayedWhenOffline() {
-		UserPreferences.getInstance(getInstrumentation().getContext()).
-				createEntry("CONNECTION_STATE", "OFFLINE");
+		UserPreferences.getInstance(getInstrumentation().getTargetContext()).
+			setConnectivityState(ConnectivityState.OFFLINE);
 		SwengHttpClientFactory.setInstance(mUnconnectedClient);
 		
 		getActivityAndWaitFor(TTChecks.QUESTION_SHOWN);
@@ -74,11 +75,11 @@ public class ShowQuestionsActivityOfflineTest extends GUITest<ShowQuestionsActiv
 	public void testNewlyRetrievedQuestionShouldBeCached() {
 		int expectedInboxSize = QuestionsProxy.getInstance().getInboxSize() + 1;
 		
-		UserPreferences.getInstance(getInstrumentation().getContext()).
-				createEntry("CONNECTION_STATE", "ONLINE");
+		UserPreferences.getInstance(getInstrumentation().getTargetContext()).
+			setConnectivityState(ConnectivityState.ONLINE);
 		SwengHttpClientFactory.setInstance(mMockClient);
 		mMockClient
-		.pushCannedResponse(
+			.pushCannedResponse(
 				"GET (?:https?://[^/]+|[^/]+)?/+quizquestions/random\\b",
 				HttpStatus.SC_OK,
 				"{\"question\": \"What is the answer to life, the universe, and everything?\","
@@ -92,8 +93,8 @@ public class ShowQuestionsActivityOfflineTest extends GUITest<ShowQuestionsActiv
 	}
 
 	public void testNetworkUnavailableShouldMakeConnectionStateOffline() {
-		UserPreferences.getInstance(getInstrumentation().getContext()).
-			createEntry("CONNECTION_STATE", "ONLINE");
+		UserPreferences.getInstance(getInstrumentation().getTargetContext()).
+			setConnectivityState(ConnectivityState.ONLINE);
 		SwengHttpClientFactory.setInstance(mUnconnectedClient);
 		getActivityAndWaitFor(TTChecks.OFFLINE_CHECKBOX_ENABLED);
 		getSolo().sleep(500);
@@ -104,8 +105,8 @@ public class ShowQuestionsActivityOfflineTest extends GUITest<ShowQuestionsActiv
 	}
 
 	public void testStatus500ShouldMakeConnectionStateOffline() {
-		UserPreferences.getInstance(getInstrumentation().getContext()).
-			createEntry("CONNECTION_STATE", "ONLINE");
+		UserPreferences.getInstance(getInstrumentation().getTargetContext()).
+			setConnectivityState(ConnectivityState.ONLINE);
 		SwengHttpClientFactory.setInstance(mMockClient);
 		
 		mMockClient.pushCannedResponse(".", HttpStatus.SC_INTERNAL_SERVER_ERROR,

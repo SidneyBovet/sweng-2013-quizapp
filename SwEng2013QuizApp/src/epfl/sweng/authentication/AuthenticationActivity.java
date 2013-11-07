@@ -175,8 +175,7 @@ public class AuthenticationActivity extends Activity {
 						Toast.LENGTH_LONG).show();
 				resetGUIWhenAuthenticationFails();
 			} else {
-				UserPreferences.getInstance(AuthenticationActivity.this)
-						.createEntry("SESSION_ID", sessionId);
+				UserPreferences.getInstance().setSessionId(sessionId);
 				finish();
 			}
 		}
