@@ -2,8 +2,10 @@ package epfl.sweng.patterns;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Queue;
 import java.util.Random;
 
 import org.apache.http.HttpResponse;
@@ -39,7 +41,7 @@ public final class QuestionsProxy implements ConnectivityProxy {
 
 	private static QuestionsProxy sQuestionProxy;
 	// question to be sent
-	private List<QuizQuestion> mQuizQuestionsOutbox;
+	private Queue<QuizQuestion> mQuizQuestionsOutbox;
 	// question to be retrieve
 	private List<QuizQuestion> mQuizQuestionsInbox;
 	
@@ -236,7 +238,7 @@ public final class QuestionsProxy implements ConnectivityProxy {
 	 * 
 	 */
 	private QuestionsProxy() {
-		mQuizQuestionsOutbox = new ArrayList<QuizQuestion>();
+		mQuizQuestionsOutbox = new ArrayDeque<QuizQuestion>();
 		mQuizQuestionsInbox = new ArrayList<QuizQuestion>();
 	}
 	
@@ -246,14 +248,14 @@ public final class QuestionsProxy implements ConnectivityProxy {
 		// offline mode.
 		while (mQuizQuestionsOutbox.size() > 0) {
 
-			QuizQuestion questionOut = mQuizQuestionsOutbox.get(0);
+			QuizQuestion questionOut = mQuizQuestionsOutbox.remove();
 
 			// XXX Is this method a blocking one? It should be.
 			responseStatus = sendQuizzQuestionHelper(questionOut);
 
 			if (HttpStatus.SC_CREATED == responseStatus) {
 				// If the question has been sent, we remove it from the queue.
-				questionOut = mQuizQuestionsOutbox.remove(0);
+				questionOut = mQuizQuestionsOutbox.remove();
 				TestCoordinator.check(TTChecks.NEW_QUESTION_SUBMITTED);
 			} else {
 				return responseStatus;
