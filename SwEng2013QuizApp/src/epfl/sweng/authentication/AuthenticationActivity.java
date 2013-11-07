@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import epfl.sweng.R;
+import epfl.sweng.preferences.UserPreferences;
 import epfl.sweng.servercomm.AuthenticationProcess;
 import epfl.sweng.testing.TestCoordinator;
 import epfl.sweng.testing.TestCoordinator.TTChecks;

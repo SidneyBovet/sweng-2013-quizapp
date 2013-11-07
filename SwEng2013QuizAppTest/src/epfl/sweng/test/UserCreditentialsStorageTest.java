@@ -2,8 +2,8 @@ package epfl.sweng.test;
 
 import android.content.Context;
 import android.test.ActivityInstrumentationTestCase2;
-import epfl.sweng.authentication.UserPreferences;
 import epfl.sweng.entry.MainActivity;
+import epfl.sweng.preferences.UserPreferences;
 
 public class UserCreditentialsStorageTest extends
 		ActivityInstrumentationTestCase2<MainActivity> {

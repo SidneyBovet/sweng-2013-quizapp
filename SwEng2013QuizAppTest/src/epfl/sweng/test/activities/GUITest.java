@@ -5,7 +5,7 @@ import android.test.ActivityInstrumentationTestCase2;
 
 import com.jayway.android.robotium.solo.Solo;
 
-import epfl.sweng.authentication.UserPreferences;
+import epfl.sweng.preferences.UserPreferences;
 import epfl.sweng.testing.TestCoordinator;
 import epfl.sweng.testing.TestingTransaction;
 

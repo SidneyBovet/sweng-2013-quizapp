@@ -3,8 +3,8 @@ package epfl.sweng.test.activities;
 import org.apache.http.HttpStatus;
 
 import android.widget.Button;
-import epfl.sweng.authentication.UserPreferences;
 import epfl.sweng.patterns.ConnectivityState;
+import epfl.sweng.preferences.UserPreferences;
 import epfl.sweng.servercomm.SwengHttpClientFactory;
 import epfl.sweng.showquestions.ShowQuestionsActivity;
 import epfl.sweng.test.minimalmock.MockHttpClient;

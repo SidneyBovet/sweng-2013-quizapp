@@ -4,8 +4,8 @@ import android.content.Context;
 import android.widget.Button;
 import android.widget.CheckBox;
 import epfl.sweng.R;
-import epfl.sweng.authentication.UserPreferences;
 import epfl.sweng.entry.MainActivity;
+import epfl.sweng.preferences.UserPreferences;
 import epfl.sweng.testing.TestCoordinator.TTChecks;
 
 public class MainActivityAuthenticatedTest extends GUITest<MainActivity> {

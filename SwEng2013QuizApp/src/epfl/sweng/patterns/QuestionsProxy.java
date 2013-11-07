@@ -18,7 +18,7 @@ import org.apache.http.impl.client.BasicResponseHandler;
 import org.json.JSONException;
 
 import android.util.Log;
-import epfl.sweng.authentication.UserPreferences;
+import epfl.sweng.preferences.UserPreferences;
 import epfl.sweng.quizquestions.QuizQuestion;
 import epfl.sweng.servercomm.HttpFactory;
 import epfl.sweng.servercomm.SwengHttpClientFactory;

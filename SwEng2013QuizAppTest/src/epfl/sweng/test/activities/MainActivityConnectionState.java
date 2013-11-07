@@ -8,9 +8,9 @@ import java.util.Set;
 import android.content.Context;
 import android.widget.CheckBox;
 import epfl.sweng.R;
-import epfl.sweng.authentication.UserPreferences;
 import epfl.sweng.entry.MainActivity;
 import epfl.sweng.patterns.QuestionsProxy;
+import epfl.sweng.preferences.UserPreferences;
 import epfl.sweng.quizquestions.QuizQuestion;
 import epfl.sweng.testing.TestCoordinator.TTChecks;
 

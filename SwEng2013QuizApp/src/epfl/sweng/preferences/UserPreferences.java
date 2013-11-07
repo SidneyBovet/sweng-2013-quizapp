@@ -1,4 +1,4 @@
-package epfl.sweng.authentication;
+package epfl.sweng.preferences;
 
 import epfl.sweng.patterns.ConnectivityState;
 import android.content.Context;
