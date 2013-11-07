@@ -93,11 +93,9 @@ public class MainActivity extends Activity {
 				new AsyncProxyConnectivityNotifier(QuestionsProxy.getInstance());
 		asyncProxyNotifier.execute(newState);
 		
-		// XXX is it implemented the correct way (throw AseertionError)?
-		// TODO issues #63
-		// if (auditErrors() != 0) {
-		// throw new AssertionError();
-		// }
+		if (auditErrors() != 0) {
+			throw new AssertionError();
+		}
 	}
 
 	/**
@@ -196,8 +194,8 @@ public class MainActivity extends Activity {
 		int numErrors = 0;
 		CheckBox onfflineCheckbox = (CheckBox) this
 				.findViewById(R.id.switchOnlineModeCheckbox);
-		if ((onfflineCheckbox.isChecked() && !mUserPreferences.isConnected())
-				|| (!onfflineCheckbox.isChecked() && !!mUserPreferences
+		if ((!onfflineCheckbox.isChecked() && !mUserPreferences.isConnected())
+				|| (onfflineCheckbox.isChecked() && !!mUserPreferences
 						.isConnected())) {
 			numErrors++;
 		}
