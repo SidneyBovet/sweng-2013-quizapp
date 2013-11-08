@@ -341,29 +341,72 @@ public class EditQuestionActivityTest extends GUITest<EditQuestionActivity> {
 	}
 	
 	public void testAudit() {
-		getSolo().sleep(500);
 		
+		final Semaphore semaphore = new Semaphore(0);
+		
+		getSolo().sleep(500);
+		assertTrue( "Audit fresh Activity is not zero",getActivity().auditErrors() == 0);
+		
+		getActivity().runOnUiThread(new Runnable() {
+			
+			@Override
+			public void run() {
+				EditQuestionActivity activity = (EditQuestionActivity) getActivity();
+				Button button = (Button) activity.findViewById(R.id.submit_question_button);
+				button.setEnabled(true);
+				semaphore.release();
+			}
+		});
+		
+		try {
+			semaphore.acquire();
+			getSolo().sleep(500);
+			assertTrue("# Audit errors = " + getActivity().auditErrors() + " != 5",
+					getActivity().auditErrors() == 5);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
+		getSolo().enterText((EditText) getSolo().getText("Type in the answer"),
+				"answer D");
 		getSolo().clickOnButton("+");
 		waitFor(TTChecks.QUESTION_EDITED);
 		getSolo().enterText(
 				(EditText) getSolo().getText(
-						"Type in the question\'s text body"), "question");
+						"Type in the question\'s text body"), "my question1");
 
 		getSolo().enterText(
-				(EditText) getSolo().getText("tag"),
+				(EditText) getSolo().getText("Type in the question\'s tags"),
 				"tag");
-
+		
 		getSolo().enterText((EditText) getSolo().getText("Type in the answer"),
-				"answer 1");
-		getSolo().enterText((EditText) getSolo().getText("Type in the answer"),
-				"answer 2");
+				"answer BBBBBB");	
 		getSolo().clickOnButton("" + (char) 10008);
 		waitFor(TTChecks.QUESTION_EDITED);
 		
 		assertTrue("Number of audit errors = " + getActivity().auditErrors() + " != 0",
 				getActivity().auditErrors() == 0);
 		
-		final Semaphore semaphore = new Semaphore(0);
+		getActivity().runOnUiThread(new Runnable() {
+			
+			@Override
+			public void run() {
+				EditQuestionActivity activity = (EditQuestionActivity) getActivity();
+				Button button = (Button) activity.findViewById(R.id.submit_question_button);
+				button.setEnabled(false);
+				semaphore.release();
+			}
+		});
+		
+		try {
+			semaphore.acquire();
+			getSolo().sleep(500);
+			assertTrue("# Audit errors = " + getActivity().auditErrors() + " != 1",
+					getActivity().auditErrors() == 1);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
 		getActivity().runOnUiThread(new Runnable() {
 			
 			@Override
@@ -378,10 +421,11 @@ public class EditQuestionActivityTest extends GUITest<EditQuestionActivity> {
 		try {
 			semaphore.acquire();
 			getSolo().sleep(500);
-			assertTrue("# Audit errors = " + getActivity().auditErrors() + " != 1",
-					getActivity().auditErrors() == 1);
+			assertTrue("# Audit errors = " + getActivity().auditErrors() + " != 2",
+					getActivity().auditErrors() == 2);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+		
 	}
 }
