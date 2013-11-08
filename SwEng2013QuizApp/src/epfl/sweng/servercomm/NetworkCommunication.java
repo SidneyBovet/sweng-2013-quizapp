@@ -15,6 +15,11 @@ import org.json.JSONException;
 import android.util.Log;
 import epfl.sweng.quizquestions.QuizQuestion;
 
+/**
+ * This class will do the actual communication with the Sweng server(s).
+ * @author born4new
+ *
+ */
 public class NetworkCommunication implements INetworkCommunication {
 
 	private int mHttpStatusCommFailure = HttpStatus.SC_BAD_GATEWAY;

@@ -1,11 +1,17 @@
 package epfl.sweng.patterns;
 
+import epfl.sweng.servercomm.NetworkCommunication;
+
+/**
+ * Used for sweng Jenkins' testing.
+ * @author born4new
+ *
+ */
 public class CheckProxyHelper implements ICheckProxyHelper {
 
-	//TODO check before sumbmit if still the good class
 	@Override
 	public Class<?> getServerCommunicationClass() {
-		return QuestionsProxy.class;
+		return NetworkCommunication.class;
 	}
 
 	@Override

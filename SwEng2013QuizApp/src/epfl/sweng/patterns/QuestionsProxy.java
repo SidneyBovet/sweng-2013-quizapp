@@ -1,6 +1,5 @@
 package epfl.sweng.patterns;
 
-import java.io.IOException;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,18 +7,11 @@ import java.util.Queue;
 import java.util.Random;
 
 import org.apache.http.HttpStatus;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.BasicResponseHandler;
-import org.json.JSONException;
 
 import android.util.Log;
 import epfl.sweng.preferences.UserPreferences;
 import epfl.sweng.quizquestions.QuizQuestion;
-import epfl.sweng.servercomm.HttpFactory;
 import epfl.sweng.servercomm.INetworkCommunication;
-import epfl.sweng.servercomm.NetworkCommunication;
-import epfl.sweng.servercomm.SwengHttpClientFactory;
 import epfl.sweng.testing.TestCoordinator;
 import epfl.sweng.testing.TestCoordinator.TTChecks;
 
@@ -45,6 +37,8 @@ public final class QuestionsProxy
 	private List<QuizQuestion> mQuizQuestionsInbox;
 	
 	private ConnectivityState mConnectivityState = ConnectivityState.ONLINE;
+	
+	private INetworkCommunication mNetworkCommunication;
 
 	/**
 	 * Returns the singleton, creates it if it's not instancied.
@@ -99,7 +93,6 @@ public final class QuestionsProxy
 	 * @param question
 	 *            {@link QuizQuestion} that we want to send
 	 */
-	@Override
 	public int sendQuizQuestion(QuizQuestion question) {
 
 		// We add in the inbox to make this question accessible in offline mode.
@@ -134,7 +127,7 @@ public final class QuestionsProxy
 		if (UserPreferences.getInstance().isConnected()) {
 			// XXX Why don't we use one method for these two calls instead
 			// of giving URL to the getGetRequest?
-			fetchedQuestion = new NetworkCommunication().retrieveQuizQuestion();
+			fetchedQuestion = mNetworkCommunication.retrieveQuizQuestion();
 			addInbox(fetchedQuestion);
 
 		} else {
@@ -208,8 +201,7 @@ public final class QuestionsProxy
 			QuizQuestion questionOut = mQuizQuestionsOutbox.peek();
 
 			// XXX Is this method a blocking one? It should be.
-			responseStatus = new NetworkCommunication().
-					sendQuizQuestion(questionOut);
+			responseStatus = mNetworkCommunication.sendQuizQuestion(questionOut);
 
 			if (HttpStatus.SC_CREATED == responseStatus) {
 				// If the question has been sent, we remove it from the queue.
