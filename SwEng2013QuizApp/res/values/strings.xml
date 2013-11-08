@@ -34,7 +34,7 @@
     <string name="autenticationLoginButtonStateLogOut">Log out</string>
     <string name="error_fetching_question">There was an error retrieving the question</string>
     <string name="error_uploading_question">Could not upload the question to the server</string>
-    <string name="error_logging_in">Error in the authentication</string>
+    <string name="error_logging_in">Error in the authentication process</string>
     <string name="switchOnlineModeCheckbox">Offline mode</string>
 
 </resources>
