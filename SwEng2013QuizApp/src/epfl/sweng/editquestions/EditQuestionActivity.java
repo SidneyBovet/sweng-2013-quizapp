@@ -108,21 +108,6 @@ public class EditQuestionActivity extends Activity {
 	}
 
 	/**
-	 * Audit method that verifies if all rep-invariants are fulfilled.
-	 * 
-	 * @return the number of violated rep-invariants.
-	 */
-
-	public int auditErrors() {
-		int errorCount = 0;
-		errorCount += auditEditTexts();
-		errorCount += auditButtons();
-		errorCount += auditAnswers();
-		errorCount += auditSubmitButton();
-		return errorCount;
-	}
-
-	/**
 	 * Initializes the contents of the Activity's standard options menu.
 	 * <p>
 	 * This was not implemented.
@@ -276,6 +261,29 @@ public class EditQuestionActivity extends Activity {
 	 * ***************************************************
 	 */
 
+	
+	/**
+	 * Audit method that verifies if all rep-invariants are fulfilled.
+	 * 
+	 * @return the number of violated rep-invariants.
+	 */
+
+	public int auditErrors() {
+		int errorCount = 0;
+		errorCount += auditEditTexts();
+		errorCount += auditButtons();
+		errorCount += auditAnswers();
+		Button submitButton = (Button) mLayout
+				.findViewById(R.id.submit_question_button);
+		if (submitButton.isEnabled() &&  auditSubmitButton()>0) {	
+			errorCount += auditSubmitButton();
+		}
+		else if((!submitButton.isEnabled() &&  auditSubmitButton()==0)){
+			errorCount += 1;
+		}
+		return errorCount;
+	}
+	
 	/**
 	 * Checks the following requirements :
 	 * <ul>
@@ -434,7 +442,7 @@ public class EditQuestionActivity extends Activity {
 
 	private int auditSubmitButton() {
 		int errorCount = 0;
-
+		
 		errorCount += auditEmptyField();
 
 		// avoid IllegalStateException
