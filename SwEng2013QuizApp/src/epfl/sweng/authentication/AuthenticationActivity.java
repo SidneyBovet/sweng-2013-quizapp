@@ -1,6 +1,7 @@
 package epfl.sweng.authentication;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
@@ -155,6 +156,23 @@ public class AuthenticationActivity extends Activity {
 	 */
 	class AsyncAuthentication extends AsyncTask<String, Void, String> {
 
+		ProgressDialog mProgressDialog;
+		
+		public AsyncAuthentication() {
+			mProgressDialog = new ProgressDialog(AuthenticationActivity.this);
+		}
+		
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			
+			mProgressDialog.setTitle("Authenticating...");
+			mProgressDialog.setMessage("Please wait.");
+			mProgressDialog.setCancelable(false);
+			mProgressDialog.setIndeterminate(true);
+			mProgressDialog.show();
+		}
+		
 		@Override
 		protected String doInBackground(String... userInfos) {
 			if (null != userInfos && userInfos.length != 2) {
@@ -169,6 +187,8 @@ public class AuthenticationActivity extends Activity {
 		protected void onPostExecute(String sessionId) {
 			super.onPostExecute(sessionId);
 
+			mProgressDialog.dismiss();
+			
 			if (null == sessionId || sessionId.equals("")) {
 				// XXX switch to off line mode
 				Toast.makeText(AuthenticationActivity.this,
