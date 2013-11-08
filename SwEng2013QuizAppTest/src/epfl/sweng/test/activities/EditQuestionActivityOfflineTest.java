@@ -65,38 +65,6 @@ public class EditQuestionActivityOfflineTest extends GUITest<EditQuestionActivit
 		assertEquals(expectedOutboxSize, QuestionsProxy.getInstance().getOutboxSize());
 	}
 
-	public void testOutboxIsCompletelySentAfterSuccessfulConnection() {
-
-		UserPreferences.getInstance(getInstrumentation().getTargetContext()).
-			setConnectivityState(ConnectivityState.ONLINE);
-		
-		SwengHttpClientFactory.setInstance(mMockClient);
-		mMockClient.pushCannedResponse("", HttpStatus.SC_CREATED, "", "");
-		
-		QuestionsProxy.getInstance().addOutbox(createFakeQuestion());
-		
-		fillFormWithCorrectQuestion();
-
-		getSolo().clickOnButton("Submit");
-		getActivityAndWaitFor(TTChecks.NEW_QUESTION_SUBMITTED);
-		
-		assertEquals(0, QuestionsProxy.getInstance().getOutboxSize());
-	}
-
-	private QuizQuestion createFakeQuestion() {
-		List<String> answers = new ArrayList<String>();
-		answers.add("100% accurate");
-		answers.add("Fully voodoo and could generate non-pseudorandom numbers");
-
-		Set<String> tags = new HashSet<String>();
-		tags.add("robotium");
-		tags.add("testing");
-		
-		QuizQuestion question = new QuizQuestion(
-				"How reliable Robotium testing is?", answers, 1, tags);
-		return question;
-	}
-
 	private void fillFormWithCorrectQuestion() {
 		getSolo().sleep(100);
 		getSolo().clickOnButton("\\+");
