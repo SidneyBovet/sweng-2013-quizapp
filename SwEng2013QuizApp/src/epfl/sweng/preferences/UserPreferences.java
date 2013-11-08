@@ -73,6 +73,7 @@ public final class UserPreferences {
 	
 	public void setSessionId(String sessionId) {
 		mEditor.putString(mKeySessionIDName, sessionId);
+		mEditor.commit();
 	}
 
 	public void setConnectivityState(ConnectivityState newState) {
