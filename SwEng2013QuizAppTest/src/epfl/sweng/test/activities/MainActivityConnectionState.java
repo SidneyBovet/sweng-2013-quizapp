@@ -9,6 +9,7 @@ import android.content.Context;
 import android.widget.CheckBox;
 import epfl.sweng.R;
 import epfl.sweng.entry.MainActivity;
+import epfl.sweng.patterns.ConnectivityState;
 import epfl.sweng.patterns.QuestionsProxy;
 import epfl.sweng.preferences.UserPreferences;
 import epfl.sweng.quizquestions.QuizQuestion;
@@ -36,6 +37,7 @@ public class MainActivityConnectionState extends GUITest<MainActivity> {
 	@Override
 	protected void tearDown() throws Exception {
 		persistentStorage.destroyAuthentication();
+		persistentStorage.setConnectivityState(ConnectivityState.ONLINE);
 		super.tearDown();
 	};
 	
@@ -56,28 +58,48 @@ public class MainActivityConnectionState extends GUITest<MainActivity> {
 				R.id.switchOnlineModeCheckbox);;
 		getSolo().clickOnView(connexionState);
 		getActivityAndWaitFor(TTChecks.OFFLINE_CHECKBOX_ENABLED);
-		getSolo().sleep(1000);
+		getSolo().sleep(2000);
 		getSolo().clickOnView(connexionState);
 		getActivityAndWaitFor(TTChecks.OFFLINE_CHECKBOX_DISABLED);
-		getSolo().sleep(1000);
+		getSolo().sleep(2000);
 		assertTrue(persistentStorage.isConnected());
+	}
+	
+	public void testSendingOrderIsFIFO() {
+		CheckBox connexionState = (CheckBox) getSolo().getView(
+				R.id.switchOnlineModeCheckbox);
+				
+		getActivityAndWaitFor(TTChecks.OFFLINE_CHECKBOX_ENABLED);
+		
+		QuestionsProxy.getInstance().addOutbox(createFakeQuestion(
+				"Statement 1"));
+		QuestionsProxy.getInstance().addOutbox(createFakeQuestion(
+				"Statement 2"));
+		
+		getActivityAndWaitFor(TTChecks.OFFLINE_CHECKBOX_ENABLED);
 	}
 	
 	public void testUncheckingBoxEmptiesOutbox() {
 		CheckBox connexionState = (CheckBox) getSolo().getView(
-				R.id.switchOnlineModeCheckbox);;
-				
-		QuestionsProxy.getInstance().addOutbox(createFakeQuestion());
+				R.id.switchOnlineModeCheckbox);
 
+		getSolo().clickOnView(connexionState);
+		getActivityAndWaitFor(TTChecks.OFFLINE_CHECKBOX_ENABLED);
+		getSolo().sleep(2000);
+
+		QuestionsProxy.getInstance().addOutbox(createFakeQuestion(
+				"How reliable Robotium testing is?"));
+		
 		getSolo().clickOnView(connexionState);
 		getActivityAndWaitFor(TTChecks.OFFLINE_CHECKBOX_DISABLED);
 		getSolo().sleep(2000);
+		getActivityAndWaitFor(TTChecks.NEW_QUESTION_SUBMITTED);
 		
-		assertEquals("Outbox shoul be empty after going from offline to online",
+		assertEquals("Outbox should be empty after going from offline to online",
 				0, QuestionsProxy.getInstance().getOutboxSize());
 	}
 
-	private QuizQuestion createFakeQuestion() {
+	private QuizQuestion createFakeQuestion(String questionStatement) {
 		List<String> answers = new ArrayList<String>();
 		answers.add("100% accurate");
 		answers.add("Fully voodoo and could generate non-pseudorandom numbers");
@@ -87,7 +109,7 @@ public class MainActivityConnectionState extends GUITest<MainActivity> {
 		tags.add("testing");
 		
 		QuizQuestion question = new QuizQuestion(
-				"How reliable Robotium testing is?", answers, 1, tags);
+				questionStatement, answers, 1, tags);
 		return question;
 	}
 }

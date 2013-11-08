@@ -5,6 +5,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import epfl.sweng.R;
 import epfl.sweng.entry.MainActivity;
+import epfl.sweng.patterns.ConnectivityState;
 import epfl.sweng.preferences.UserPreferences;
 import epfl.sweng.testing.TestCoordinator.TTChecks;
 
@@ -43,7 +44,7 @@ public class MainActivityNotAuthenticatedTest extends GUITest<MainActivity> {
 			persistentStorage = UserPreferences.
 					getInstance(contextOfMainActivity);
 			UserPreferences.getInstance(getInstrumentation().getContext()).
-			createEntry("CONNECTION_STATE", "OFFLINE");
+				setConnectivityState(ConnectivityState.OFFLINE);
 			persistentStorage.destroyAuthentication();
 		} catch (Exception e1) {
 			e1.printStackTrace();
