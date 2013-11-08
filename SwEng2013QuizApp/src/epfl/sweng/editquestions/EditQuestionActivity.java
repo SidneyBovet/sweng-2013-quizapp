@@ -250,7 +250,7 @@ public class EditQuestionActivity extends Activity {
 				throw new IllegalArgumentException();
 			}
 
-			return QuestionsProxy.getInstance().sendQuizzQuestion(questions[0]);
+			return QuestionsProxy.getInstance().sendQuizQuestion(questions[0]);
 		}
 
 		@Override

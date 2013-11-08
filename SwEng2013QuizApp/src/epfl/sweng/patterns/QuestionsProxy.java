@@ -1,19 +1,15 @@
 package epfl.sweng.patterns;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
 import java.util.Random;
 
-import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.json.JSONException;
 
@@ -21,6 +17,8 @@ import android.util.Log;
 import epfl.sweng.preferences.UserPreferences;
 import epfl.sweng.quizquestions.QuizQuestion;
 import epfl.sweng.servercomm.HttpFactory;
+import epfl.sweng.servercomm.INetworkCommunication;
+import epfl.sweng.servercomm.NetworkCommunication;
 import epfl.sweng.servercomm.SwengHttpClientFactory;
 import epfl.sweng.testing.TestCoordinator;
 import epfl.sweng.testing.TestCoordinator.TTChecks;
@@ -37,7 +35,8 @@ import epfl.sweng.testing.TestCoordinator.TTChecks;
  * @author born4new, JoTearoom, Merok
  * 
  */
-public final class QuestionsProxy implements ConnectivityProxy {
+public final class QuestionsProxy 
+	implements ConnectivityProxy, INetworkCommunication {
 
 	private static QuestionsProxy sQuestionProxy;
 	// question to be sent
@@ -45,7 +44,6 @@ public final class QuestionsProxy implements ConnectivityProxy {
 	// question to be retrieve
 	private List<QuizQuestion> mQuizQuestionsInbox;
 	
-	private int mHttpStatusCommFailure = HttpStatus.SC_BAD_GATEWAY;
 	private ConnectivityState mConnectivityState = ConnectivityState.ONLINE;
 
 	/**
@@ -93,33 +91,6 @@ public final class QuestionsProxy implements ConnectivityProxy {
 		}
 	}
 
-	public int sendQuizzQuestionHelper(QuizQuestion question) {
-		HttpPost postQuery = HttpFactory.getPostRequest(HttpFactory
-				.getSwengBaseAddress() + "/quizquestions/");
-
-		int responseStatus = -1;
-		try {
-			postQuery.setEntity(new StringEntity(question.toJSON().toString()));
-			postQuery.setHeader("Content-type", "application/json");
-			HttpResponse mResponse = SwengHttpClientFactory.getInstance()
-					.execute(postQuery);
-			responseStatus = mResponse.getStatusLine().getStatusCode();
-		} catch (UnsupportedEncodingException e) {
-			Log.e(this.getClass().getName(), "doInBackground(): Entity does "
-					+ "not support the local encoding.", e);
-			return mHttpStatusCommFailure;
-		} catch (ClientProtocolException e) {
-			Log.e(this.getClass().getName(), "doInBackground(): Error in the "
-					+ "HTTP protocol.", e);
-			return mHttpStatusCommFailure;
-		} catch (IOException e) {
-			Log.e(this.getClass().getName(), "doInBackground(): An I/O error"
-					+ "has occurred.", e);
-			return mHttpStatusCommFailure;
-		}
-		return responseStatus;
-	}
-
 	/**
 	 * Send a {@link QuizQuestion} to the server after having stored it in the
 	 * cache and send the cached questions to be sent if online. Store the
@@ -128,7 +99,8 @@ public final class QuestionsProxy implements ConnectivityProxy {
 	 * @param question
 	 *            {@link QuizQuestion} that we want to send
 	 */
-	public int sendQuizzQuestion(QuizQuestion question) {
+	@Override
+	public int sendQuizQuestion(QuizQuestion question) {
 
 		// We add in the inbox to make this question accessible in offline mode.
 		addInbox(question);
@@ -153,7 +125,8 @@ public final class QuestionsProxy implements ConnectivityProxy {
 	 * 
 	 * @return {@link QuizQuestion} retrieve from the server
 	 */
-	public QuizQuestion retrieveQuizzQuestion() {
+	@Override
+	public QuizQuestion retrieveQuizQuestion() {
 		// TODO regler bug quand offline submit online submit online show issues
 		// #64
 		QuizQuestion fetchedQuestion = null;
@@ -161,24 +134,8 @@ public final class QuestionsProxy implements ConnectivityProxy {
 		if (UserPreferences.getInstance().isConnected()) {
 			// XXX Why don't we use one method for these two calls instead
 			// of giving URL to the getGetRequest?
-			String url = HttpFactory.getSwengFetchQuestion();
-			HttpGet firstRandom = HttpFactory.getGetRequest(url);
-			try {
-				String jsonQuestion = SwengHttpClientFactory.getInstance()
-						.execute(firstRandom, new BasicResponseHandler());
-				fetchedQuestion = new QuizQuestion(jsonQuestion);
-				addInbox(fetchedQuestion);
-			} catch (ClientProtocolException e) {
-				Log.e(this.getClass().getName(), "doInBackground(): Error in"
-						+ "the HTTP protocol.", e);
-				return null;
-			} catch (IOException e) {
-				Log.e(this.getClass().getName(), "doInBackground(): An I/O"
-						+ "error has occurred.", e);
-				return null;
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
+			fetchedQuestion = new NetworkCommunication().retrieveQuizQuestion();
+			addInbox(fetchedQuestion);
 
 		} else {
 			if (mQuizQuestionsInbox.size() > 0) {				
@@ -251,7 +208,8 @@ public final class QuestionsProxy implements ConnectivityProxy {
 			QuizQuestion questionOut = mQuizQuestionsOutbox.peek();
 
 			// XXX Is this method a blocking one? It should be.
-			responseStatus = sendQuizzQuestionHelper(questionOut);
+			responseStatus = new NetworkCommunication().
+					sendQuizQuestion(questionOut);
 
 			if (HttpStatus.SC_CREATED == responseStatus) {
 				// If the question has been sent, we remove it from the queue.
