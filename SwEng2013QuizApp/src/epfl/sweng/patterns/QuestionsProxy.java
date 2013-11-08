@@ -255,7 +255,7 @@ public final class QuestionsProxy implements ConnectivityProxy {
 
 			if (HttpStatus.SC_CREATED == responseStatus) {
 				// If the question has been sent, we remove it from the queue.
-				questionOut = mQuizQuestionsOutbox.remove();
+				mQuizQuestionsOutbox.remove();
 				TestCoordinator.check(TTChecks.NEW_QUESTION_SUBMITTED);
 			} else {
 				return responseStatus;
