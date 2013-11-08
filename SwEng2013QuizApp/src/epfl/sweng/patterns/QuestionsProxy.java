@@ -12,6 +12,7 @@ import android.util.Log;
 import epfl.sweng.preferences.UserPreferences;
 import epfl.sweng.quizquestions.QuizQuestion;
 import epfl.sweng.servercomm.INetworkCommunication;
+import epfl.sweng.servercomm.NetworkCommunication;
 import epfl.sweng.testing.TestCoordinator;
 import epfl.sweng.testing.TestCoordinator.TTChecks;
 
@@ -190,6 +191,7 @@ public final class QuestionsProxy
 	private QuestionsProxy() {
 		mQuizQuestionsOutbox = new ArrayDeque<QuizQuestion>();
 		mQuizQuestionsInbox = new ArrayList<QuizQuestion>();
+		mNetworkCommunication = new NetworkCommunication();
 	}
 	
 	private synchronized int sendCachedQuestions() {
