@@ -248,7 +248,7 @@ public final class QuestionsProxy implements ConnectivityProxy {
 		// offline mode.
 		while (mQuizQuestionsOutbox.size() > 0) {
 
-			QuizQuestion questionOut = mQuizQuestionsOutbox.remove();
+			QuizQuestion questionOut = mQuizQuestionsOutbox.peek();
 
 			// XXX Is this method a blocking one? It should be.
 			responseStatus = sendQuizzQuestionHelper(questionOut);
