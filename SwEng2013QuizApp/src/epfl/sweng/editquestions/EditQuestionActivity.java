@@ -275,10 +275,9 @@ public class EditQuestionActivity extends Activity {
 		errorCount += auditAnswers();
 		Button submitButton = (Button) mLayout
 				.findViewById(R.id.submit_question_button);
-		if (submitButton.isEnabled() &&  auditSubmitButton()>0) {	
+		if (submitButton.isEnabled() && auditSubmitButton() > 0) {	
 			errorCount += auditSubmitButton();
-		}
-		else if((!submitButton.isEnabled() &&  auditSubmitButton()==0)){
+		} else if (!submitButton.isEnabled() && auditSubmitButton() == 0) {
 			errorCount += 1;
 		}
 		return errorCount;
