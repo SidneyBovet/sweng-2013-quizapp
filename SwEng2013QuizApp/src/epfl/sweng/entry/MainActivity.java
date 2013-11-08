@@ -75,10 +75,8 @@ public class MainActivity extends Activity {
 		// Change the connection state entry in the UserPreferences
 		if (clickedCheckBox.isChecked()) {
 			mUserPreferences.setConnectivityState(ConnectivityState.OFFLINE);
-			TestCoordinator.check(TTChecks.OFFLINE_CHECKBOX_ENABLED);
 		} else {
 			mUserPreferences.setConnectivityState(ConnectivityState.ONLINE);
-			TestCoordinator.check(TTChecks.OFFLINE_CHECKBOX_DISABLED);
 			
 			// See https://github.com/sweng-epfl/sweng-2013-team-swing/issues/67
 			// new AsyncSendCachedQuestion().execute(QuestionsProxy.getInstance());
@@ -224,9 +222,10 @@ public class MainActivity extends Activity {
 			switch (result) {
 				
 				case HttpStatus.SC_CREATED:
+					TestCoordinator.check(TTChecks.OFFLINE_CHECKBOX_DISABLED);
 					break;
 				case HttpStatus.SC_OK:
-					// Outbox was empty OR Offline switch succeeded
+					TestCoordinator.check(TTChecks.OFFLINE_CHECKBOX_ENABLED);
 					break;
 				
 				case 0:
@@ -244,7 +243,6 @@ public class MainActivity extends Activity {
 							getResources().getString(
 									R.string.error_uploading_question),
 							Toast.LENGTH_LONG).show();
-					TestCoordinator.check(TTChecks.NEW_QUESTION_SUBMITTED);
 //					setDisplayView();
 			}
 		}

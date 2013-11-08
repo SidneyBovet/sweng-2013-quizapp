@@ -241,8 +241,7 @@ public class EditQuestionActivity extends Activity {
 		@Override
 		protected void onPostExecute(Integer result) {
 			super.onPostExecute(result);
-			if (result != HttpStatus.SC_CREATED && 
-					result != HttpStatus.SC_USE_PROXY) {
+			if (result != HttpStatus.SC_CREATED) {
 				UserPreferences.getInstance().
 					setConnectivityState(ConnectivityState.OFFLINE);
 				TestCoordinator.check(TTChecks.OFFLINE_CHECKBOX_ENABLED);
@@ -251,6 +250,8 @@ public class EditQuestionActivity extends Activity {
 						getResources().getString(
 								R.string.error_uploading_question),
 						Toast.LENGTH_LONG).show();
+			} else {
+				TestCoordinator.check(TTChecks.NEW_QUESTION_SUBMITTED);
 			}
 		}
 	}

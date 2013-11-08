@@ -106,7 +106,7 @@ public final class QuestionsProxy
 		if (UserPreferences.getInstance().isConnected()) {
 			returnVariable = sendCachedQuestions();
 		} else {
-			returnVariable = HttpStatus.SC_USE_PROXY;
+			returnVariable = HttpStatus.SC_CREATED;
 		}
 		
 		return returnVariable;
@@ -176,7 +176,7 @@ public final class QuestionsProxy
 			if (mQuizQuestionsOutbox.size() > 0) {
 				proxyResponse = sendCachedQuestions();
 			} else {
-				proxyResponse = HttpStatus.SC_OK;
+				proxyResponse = HttpStatus.SC_CREATED;
 			}
 		}
 		
@@ -208,7 +208,6 @@ public final class QuestionsProxy
 			if (HttpStatus.SC_CREATED == responseStatus) {
 				// If the question has been sent, we remove it from the queue.
 				mQuizQuestionsOutbox.remove();
-				TestCoordinator.check(TTChecks.NEW_QUESTION_SUBMITTED);
 			} else {
 				return responseStatus;
 			}
