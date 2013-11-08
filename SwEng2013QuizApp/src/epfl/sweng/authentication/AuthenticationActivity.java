@@ -156,7 +156,7 @@ public class AuthenticationActivity extends Activity {
 	 */
 	class AsyncAuthentication extends AsyncTask<String, Void, String> {
 
-		ProgressDialog mProgressDialog;
+		private ProgressDialog mProgressDialog;
 		
 		public AsyncAuthentication() {
 			mProgressDialog = new ProgressDialog(AuthenticationActivity.this);
