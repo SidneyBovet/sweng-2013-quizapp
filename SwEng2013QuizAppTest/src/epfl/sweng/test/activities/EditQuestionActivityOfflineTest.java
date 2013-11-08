@@ -1,18 +1,10 @@
 package epfl.sweng.test.activities;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import org.apache.http.HttpStatus;
-
 import android.widget.EditText;
 import epfl.sweng.editquestions.EditQuestionActivity;
 import epfl.sweng.patterns.ConnectivityState;
 import epfl.sweng.patterns.QuestionsProxy;
 import epfl.sweng.preferences.UserPreferences;
-import epfl.sweng.quizquestions.QuizQuestion;
 import epfl.sweng.servercomm.SwengHttpClientFactory;
 import epfl.sweng.test.minimalmock.MockHttpClient;
 import epfl.sweng.test.minimalmock.UnconnectedHttpClient;
