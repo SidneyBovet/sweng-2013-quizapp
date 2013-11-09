@@ -29,6 +29,7 @@ public class QuizQuestion {
 	final static int QUESTION_CONTENT_MAX_SIZE = 500;
 	final static int ANSWER_CONTENT_MAX_SIZE = 500;
 	final static int ANSWERLIST_MAX_SIZE = 10;
+	final static int TAGSET_MAX_SIZE = 20;
 	final static int TAGSLIST_MAX_SIZE = 20;
 
 	/**
@@ -224,14 +225,18 @@ public class QuizQuestion {
 			}
 		}
 
-		if (!(mAnswers.size() >= 0 && mAnswers.size() <= ANSWERLIST_MAX_SIZE)) {
+		if (!(mAnswers.size() > 1 && mAnswers.size() <= ANSWERLIST_MAX_SIZE)) {
 			++errorCount;
 		}
 
 		if (!(mSolutionIndex >= 0 && mSolutionIndex < mAnswers.size())) {
 			++errorCount;
 		}
-
+		
+		if (!(mTags.size() > 0 && mTags.size() <= TAGSET_MAX_SIZE)) {
+			++errorCount;
+		}
+		
 		for (String tag : mTags) {
 			if (tag.trim().length() == 0
 					|| !(0 < tag.length() && tag.length() <= TAGSLIST_MAX_SIZE)) {
