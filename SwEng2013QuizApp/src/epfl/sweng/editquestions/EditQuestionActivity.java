@@ -448,7 +448,6 @@ public class EditQuestionActivity extends Activity {
 	 * @return the number of violated rep-invariants.
 	 */
 
-	//TODO make it private (was just for testing)
 	public int auditSubmitButton() {
 		int errorCount = 0;
 		
@@ -456,9 +455,7 @@ public class EditQuestionActivity extends Activity {
 		QuizQuestion questionToAudit = createQuestionFromGui();
 		if (questionToAudit != null) {
 			errorCount += questionToAudit.auditErrors();
-			Log.v("Errors in question:", "audited");
 		}
-		Log.v("After Errors in question:", "after");
 		// avoid IllegalStateException
 		if (mAnswerListAdapter != null) {
 			errorCount += mAnswerListAdapter.auditErrors();
