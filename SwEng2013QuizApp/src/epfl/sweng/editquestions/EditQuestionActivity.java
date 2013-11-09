@@ -10,6 +10,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
@@ -57,6 +58,30 @@ public class EditQuestionActivity extends Activity {
 		TestCoordinator.check(TTChecks.QUESTION_EDITED);
 	}
 
+	
+	public QuizQuestion createQuestionFromGui() {
+		// WARNING : you MUST follow this structure
+		// elements : Question1 => Answer1 => ... => indexOfAnswer => tags
+		if (mAnswerListAdapter != null) {
+			List<String> listInputGUI = new ArrayList<String>();
+			
+			listInputGUI.add(mQuestionBodyText);
+			
+			List<String> listAnswers = mAnswerListAdapter.getAnswerList();
+			listInputGUI.addAll(listAnswers);
+			
+			int indexGoodAnswer = mAnswerListAdapter.getCorrectIndex();
+			String indexGoodAnswerString = Integer.toString(indexGoodAnswer);
+			
+			listInputGUI.add(indexGoodAnswerString);
+			listInputGUI.add(mTagsText);
+			QuizQuestion questionToSubmit = QuizQuestion
+					.createQuestionFromList(listInputGUI);
+			return questionToSubmit;
+		}
+		return null;
+	}
+	
 	/**
 	 * Retrieves the question and the answers data, put them in a list, and then
 	 * sends it to the SwEng server.
@@ -68,25 +93,8 @@ public class EditQuestionActivity extends Activity {
 	 */
 
 	public void sendEditedQuestion(View view) {
-
-		// WARNING : you MUST follow this structure
-		// elements : Question1 => Answer1 => ... => indexOfAnswer => tags
-		List<String> listInputGUI = new ArrayList<String>();
-
-		listInputGUI.add(mQuestionBodyText);
-
-		List<String> listAnswers = mAnswerListAdapter.getAnswerList();
-		listInputGUI.addAll(listAnswers);
-
-		int indexGoodAnswer = mAnswerListAdapter.getCorrectIndex();
-		String indexGoodAnswerString = Integer.toString(indexGoodAnswer);
-
-		listInputGUI.add(indexGoodAnswerString);
-		listInputGUI.add(mTagsText);
-		QuizQuestion questionToSubmit = QuizQuestion
-				.createQuestionFromList(listInputGUI);
 		
-		new AsyncPostQuestion().execute(questionToSubmit);
+		new AsyncPostQuestion().execute(createQuestionFromGui());
 
 		resetEditQuestionLayout();
 	}
@@ -440,16 +448,26 @@ public class EditQuestionActivity extends Activity {
 	 * @return the number of violated rep-invariants.
 	 */
 
-	private int auditSubmitButton() {
+	//TODO make it private (was just for testing)
+	public int auditSubmitButton() {
 		int errorCount = 0;
 		
 		errorCount += auditEmptyField();
-
+		QuizQuestion questionToAudit = createQuestionFromGui();
+		if (questionToAudit != null) {
+			errorCount += questionToAudit.auditErrors();
+			Log.v("Errors in question:", "audited");
+		}
+		Log.v("After Errors in question:", "after");
 		// avoid IllegalStateException
 		if (mAnswerListAdapter != null) {
 			errorCount += mAnswerListAdapter.auditErrors();
 		}
-
-		return errorCount;
+		
+		if (errorCount>0) {
+			return 1;
+		} else {
+			return 0;
+		}
 	}
 }
