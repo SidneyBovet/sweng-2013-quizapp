@@ -5,6 +5,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.http.HttpStatus;
+
 import android.content.Context;
 import android.widget.CheckBox;
 import epfl.sweng.R;
@@ -13,6 +15,8 @@ import epfl.sweng.patterns.ConnectivityState;
 import epfl.sweng.patterns.QuestionsProxy;
 import epfl.sweng.preferences.UserPreferences;
 import epfl.sweng.quizquestions.QuizQuestion;
+import epfl.sweng.servercomm.SwengHttpClientFactory;
+import epfl.sweng.test.minimalmock.MockHttpClient;
 import epfl.sweng.testing.TestCoordinator.TTChecks;
 
 public class MainActivityConnectionState extends GUITest<MainActivity> {
@@ -65,11 +69,24 @@ public class MainActivityConnectionState extends GUITest<MainActivity> {
 		assertTrue(persistentStorage.isConnected());
 	}
 	
+	public void testHTTPNotFoundStatusRightAfterAuthenticationWhenClickinOnShowRandomQuestion() {
+		UserPreferences.getInstance(getInstrumentation().getTargetContext()).
+			setSessionId("hahaFake");
+		UserPreferences.getInstance(getInstrumentation().getTargetContext()).
+			setConnectivityState(ConnectivityState.ONLINE);
+		MockHttpClient mockClient = new MockHttpClient();
+		mockClient.pushCannedResponse(".", HttpStatus.SC_INTERNAL_SERVER_ERROR,
+				"", "");
+		SwengHttpClientFactory.setInstance(mockClient);
+		
+		getSolo().clickOnButton("Show a random question.");
+		
+		getActivityAndWaitFor(TTChecks.OFFLINE_CHECKBOX_ENABLED);
+	}
+	
 	public void testSendingOrderIsFIFO() {
 		CheckBox connexionState = (CheckBox) getSolo().getView(
 				R.id.switchOnlineModeCheckbox);
-				
-		getActivityAndWaitFor(TTChecks.OFFLINE_CHECKBOX_ENABLED);
 		
 		QuestionsProxy.getInstance().addOutbox(createFakeQuestion(
 				"Statement 1"));
