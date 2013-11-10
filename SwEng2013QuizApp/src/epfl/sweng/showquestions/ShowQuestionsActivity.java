@@ -128,7 +128,6 @@ public class ShowQuestionsActivity extends Activity {
 								R.string.error_fetching_question),
 									Toast.LENGTH_LONG).show(); 
 				}
-				TestCoordinator.check(TTChecks.QUESTION_SHOWN);
 				finish();
 			} else {
 				TestCoordinator.check(TTChecks.QUESTION_SHOWN);
