@@ -119,7 +119,8 @@ public class ShowQuestionsActivity extends Activity {
 		protected void onPostExecute(QuizQuestion question) {
 			super.onPostExecute(question);
 			if (null == question) {
-				if (QuestionsProxy.getInstance().getInboxSize()==0) {
+				if (QuestionsProxy.getInstance().getInboxSize()==0 && 
+							UserPreferences.getInstance().getConnectivityState().equals(ConnectivityState.OFFLINE)) {
 					TestCoordinator.check(TTChecks.QUESTION_SHOWN);
 				} else {
 					UserPreferences.getInstance().
