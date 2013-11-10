@@ -77,17 +77,18 @@ public class MainActivity extends Activity {
 			mUserPreferences.setConnectivityState(ConnectivityState.OFFLINE);
 		} else {
 			mUserPreferences.setConnectivityState(ConnectivityState.ONLINE);
-			
+
 			// See https://github.com/sweng-epfl/sweng-2013-team-swing/issues/67
-			// new AsyncSendCachedQuestion().execute(QuestionsProxy.getInstance());
+			// new
+			// AsyncSendCachedQuestion().execute(QuestionsProxy.getInstance());
 		}
 		setDisplayView();
-		
+
 		// Notify the change of connectivity state to the proxy
-		AsyncProxyConnectivityNotifier asyncProxyNotifier = 
-				new AsyncProxyConnectivityNotifier(QuestionsProxy.getInstance());
+		AsyncProxyConnectivityNotifier asyncProxyNotifier = new AsyncProxyConnectivityNotifier(
+				QuestionsProxy.getInstance());
 		asyncProxyNotifier.execute(mUserPreferences.getConnectivityState());
-		
+
 		if (auditErrors() != 0) {
 			throw new AssertionError();
 		}
@@ -205,7 +206,8 @@ public class MainActivity extends Activity {
 		public AsyncProxyConnectivityNotifier(ConnectivityProxy proxy) {
 			this.mProxy = proxy;
 		}
-		//*
+
+		// *
 		@Override
 		protected Integer doInBackground(ConnectivityState... state) {
 			if (null != state && state.length != 1) {
@@ -218,31 +220,33 @@ public class MainActivity extends Activity {
 		@Override
 		protected void onPostExecute(Integer result) {
 			super.onPostExecute(result);
-			
+
 			switch (result) {
-				
-				case HttpStatus.SC_CREATED:
-					TestCoordinator.check(TTChecks.OFFLINE_CHECKBOX_DISABLED);
-					break;
-				case HttpStatus.SC_OK:
-					TestCoordinator.check(TTChecks.OFFLINE_CHECKBOX_ENABLED);
-					break;
-				
-				case 0:
-					Toast.makeText(MainActivity.this,
-							"Sorry, something wrong happened. Try again.",
-							Toast.LENGTH_LONG).show();
-					break;
-				
-				default:	// Http code error
-					Toast.makeText(
-							MainActivity.this,
-							getResources().getString(
-									R.string.error_uploading_question),
-							Toast.LENGTH_LONG).show();
-//					setDisplayView();
+
+			case HttpStatus.SC_CREATED:
+				TestCoordinator.check(TTChecks.OFFLINE_CHECKBOX_DISABLED);
+				break;
+			case HttpStatus.SC_OK:
+				TestCoordinator.check(TTChecks.OFFLINE_CHECKBOX_ENABLED);
+				break;
+
+			case 0:
+				Toast.makeText(MainActivity.this,
+						"Sorry, something wrong happened. Try again.",
+						Toast.LENGTH_LONG).show();
+				break;
+
+			default: // Http code error
+				Toast.makeText(
+						MainActivity.this,
+						getResources().getString(
+								R.string.error_uploading_question),
+						Toast.LENGTH_LONG).show();
+				CheckBox isOffline = (CheckBox) findViewById(R.id.switchOnlineModeCheckbox);
+				isOffline.setChecked(mUserPreferences.isConnected());
+
 			}
 		}
-		//*/
+		// */
 	}
 }
