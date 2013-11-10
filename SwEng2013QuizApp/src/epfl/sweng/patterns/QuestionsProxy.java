@@ -107,11 +107,9 @@ public final class QuestionsProxy
 				mConnectivityState = ConnectivityState.OFFLINE;
 				UserPreferences.getInstance()
 					.setConnectivityState(ConnectivityState.OFFLINE);
-				httpCodeResponse = HttpStatus.SC_CREATED;
 			}
-		} else {
-			httpCodeResponse = HttpStatus.SC_CREATED;
 		}
+		httpCodeResponse = HttpStatus.SC_CREATED;
 		return httpCodeResponse;
 	}
 
