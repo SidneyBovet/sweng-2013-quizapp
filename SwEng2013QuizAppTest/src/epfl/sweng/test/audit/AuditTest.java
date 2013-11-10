@@ -334,6 +334,12 @@ public class AuditTest extends GUITest<EditQuestionActivity> {
 				remouvebuton.setText("$");
 				Button remouvebuton2 = getSolo().getButton("-");
 				remouvebuton2.setText("U");
+				Button remouvebuton3 = getSolo().getButton("-");
+				remouvebuton3.setText("DO");
+				Button correctButton3 = getSolo().getButton("" + (char) 10008);
+				correctButton3.setText("**");
+				
+				
 
 				semaphore.release();
 			}
@@ -344,7 +350,7 @@ public class AuditTest extends GUITest<EditQuestionActivity> {
 			getSolo().sleep(6000);
 
 			assertTrue("AuditButton errors: => " + activity.auditErrors(),
-					activity.auditErrors() == 6);
+					activity.auditErrors() == 8);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
