@@ -86,8 +86,6 @@ public class ShowQuestionsActivity extends Activity {
 		AnswerSelectionListener listener = new AnswerSelectionListener(
 				buttonNext, randomQuestion);
 		displayAnswers.setOnItemClickListener(listener);
-
-		TestCoordinator.check(TTChecks.QUESTION_SHOWN);
 	}
 
 	/**
@@ -122,6 +120,7 @@ public class ShowQuestionsActivity extends Activity {
 				if (QuestionsProxy.getInstance().getInboxSize()==0 && 
 							UserPreferences.getInstance().
 							getConnectivityState().equals(ConnectivityState.OFFLINE)) {
+					TestCoordinator.check(TTChecks.QUESTION_SHOWN);
 				} else {
 					Toast.makeText(
 							ShowQuestionsActivity.this,
@@ -131,6 +130,8 @@ public class ShowQuestionsActivity extends Activity {
 				}
 				TestCoordinator.check(TTChecks.QUESTION_SHOWN);
 				finish();
+			} else {
+				TestCoordinator.check(TTChecks.QUESTION_SHOWN);
 			}
 		}
 	}

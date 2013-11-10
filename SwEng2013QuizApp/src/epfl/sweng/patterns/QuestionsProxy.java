@@ -13,6 +13,8 @@ import epfl.sweng.preferences.UserPreferences;
 import epfl.sweng.quizquestions.QuizQuestion;
 import epfl.sweng.servercomm.INetworkCommunication;
 import epfl.sweng.servercomm.NetworkCommunication;
+import epfl.sweng.testing.TestCoordinator;
+import epfl.sweng.testing.TestCoordinator.TTChecks;
 
 /**
  * This class will perform all the server interactions in the place of our app.
@@ -107,6 +109,7 @@ public final class QuestionsProxy
 				mConnectivityState = ConnectivityState.OFFLINE;
 				UserPreferences.getInstance()
 					.setConnectivityState(ConnectivityState.OFFLINE);
+				TestCoordinator.check(TTChecks.OFFLINE_CHECKBOX_ENABLED);
 			}
 		}
 		httpCodeResponse = HttpStatus.SC_CREATED;
@@ -136,6 +139,7 @@ public final class QuestionsProxy
 				mConnectivityState = ConnectivityState.OFFLINE;
 				UserPreferences.getInstance()
 					.setConnectivityState(ConnectivityState.OFFLINE);
+				TestCoordinator.check(TTChecks.OFFLINE_CHECKBOX_ENABLED);
 			}
 
 		} else {
