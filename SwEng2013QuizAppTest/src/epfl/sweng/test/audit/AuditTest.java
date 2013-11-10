@@ -287,4 +287,70 @@ public class AuditTest extends GUITest<EditQuestionActivity> {
 			e.printStackTrace();
 		}
 	}
+	
+	public void testAuditButton() {
+		// question sentence
+		getSolo().enterText(
+				(EditText) getSolo().getText(
+						"Type in the question\'s text body"), "my question1");
+		//question tag
+		getSolo().enterText(
+				(EditText) getSolo().getText("Type in the question\'s tags"),
+				"tag");
+		
+		getSolo().clickOnButton("\\+");
+		waitFor(TTChecks.QUESTION_EDITED);
+		getSolo().enterText(
+				(EditText) getSolo().getText("Type in the answer"),
+				"an1");
+		getSolo().clickOnButton("\\+");
+		waitFor(TTChecks.QUESTION_EDITED);
+		getSolo().enterText(
+				(EditText) getSolo().getText("Type in the answer"),
+				"an2");
+		getSolo().enterText(
+				(EditText) getSolo().getText("Type in the answer"),
+				"an3");
+
+		getSolo().clickOnButton("" + (char) 10008);
+		waitFor(TTChecks.QUESTION_EDITED);
+		final EditQuestionActivity activity = (EditQuestionActivity) getActivity();
+		QuizQuestion question = activity.createQuestionFromGui();
+
+		getActivity().runOnUiThread(new Runnable() {
+
+			@Override
+			public void run() {
+				Button button = (Button) activity
+						.findViewById(R.id.submit_question_button);
+				Button correctButton1 = (Button) activity
+						.findViewById(R.id.submit_question_correct_switch);
+				Button correctButton2 = getSolo().getButton("" + (char) 10008);
+				Button addbuton = getSolo().getButton("+");
+				Button remouvebuton = getSolo().getButton("-");
+				
+				
+				button.setText("SSS");
+				correctButton1.setText("O");
+				correctButton2.setText("X");
+				addbuton.setText("?");
+				remouvebuton.setText("$");
+				Button remouvebuton2 = getSolo().getButton("-");
+				remouvebuton2.setText("U");
+				
+				semaphore.release();
+			}
+		});
+
+		try {
+			semaphore.acquire();
+			getSolo().sleep(3000);
+
+			assertTrue("AuditButton errors: => " + activity.auditErrors(),
+					activity.auditErrors() == 6);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+
+	}
 }
