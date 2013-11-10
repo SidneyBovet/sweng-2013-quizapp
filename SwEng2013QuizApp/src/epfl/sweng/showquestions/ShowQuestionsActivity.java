@@ -120,8 +120,8 @@ public class ShowQuestionsActivity extends Activity {
 			super.onPostExecute(question);
 			if (null == question) {
 				if (QuestionsProxy.getInstance().getInboxSize()==0 && 
-							UserPreferences.getInstance().getConnectivityState().equals(ConnectivityState.OFFLINE)) {
-					TestCoordinator.check(TTChecks.QUESTION_SHOWN);
+							UserPreferences.getInstance().
+							getConnectivityState().equals(ConnectivityState.OFFLINE)) {
 				} else {
 					Toast.makeText(
 							ShowQuestionsActivity.this,
@@ -129,6 +129,7 @@ public class ShowQuestionsActivity extends Activity {
 								R.string.error_fetching_question),
 									Toast.LENGTH_LONG).show(); 
 				}
+				TestCoordinator.check(TTChecks.QUESTION_SHOWN);
 				finish();
 			}
 		}

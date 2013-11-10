@@ -348,13 +348,13 @@ public class AuditTest extends GUITest<EditQuestionActivity> {
 		try {
 			semaphore.acquire();
 			getSolo().sleep(6000);
-
+			getSolo().clickOnButton("**");
+			getSolo().sleep(6000);
 			assertTrue("AuditButton errors: => " + activity.auditErrors(),
 					activity.auditErrors() == 8);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-
 	}
 
 	public void testAuditButtonWithoutErrors() {

@@ -18,9 +18,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 import epfl.sweng.R;
-import epfl.sweng.patterns.ConnectivityState;
 import epfl.sweng.patterns.QuestionsProxy;
-import epfl.sweng.preferences.UserPreferences;
 import epfl.sweng.quizquestions.QuizQuestion;
 import epfl.sweng.testing.TestCoordinator;
 import epfl.sweng.testing.TestCoordinator.TTChecks;
@@ -254,9 +252,8 @@ public class EditQuestionActivity extends Activity {
 						getResources().getString(
 								R.string.error_uploading_question),
 						Toast.LENGTH_LONG).show();
-			} else {
-				TestCoordinator.check(TTChecks.NEW_QUESTION_SUBMITTED);
 			}
+			TestCoordinator.check(TTChecks.NEW_QUESTION_SUBMITTED);
 		}
 	}
 
