@@ -4,8 +4,10 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 import org.apache.http.ConnectionReuseStrategy;
@@ -53,7 +55,8 @@ public class MockHttpClient extends DefaultHttpClient {
             this.contentType = contentType;
         }
     }
-
+    private final Set<CannedResponse> responsesToUseOnlyOnce =
+    		new HashSet<CannedResponse>();
     private final List<CannedResponse> responses = new ArrayList<CannedResponse>();
     /* note: those are real HTTP response but we're highly unlikely to want our
      * mock client to return these, therefore using them as internal error codes
@@ -72,6 +75,19 @@ public class MockHttpClient extends DefaultHttpClient {
         		contentType)
         );
         Log.i("MOCK HTTP CLIENT", "Request "+ requestRegex + " added.");
+    }
+    public void pushCannedResponse(String requestRegex, int status,
+        	String responseBody, String contentType, boolean onlyOnce) {
+	    	CannedResponse cannedResponse = 
+	    			new CannedResponse(Pattern.compile(requestRegex),
+	    					status,
+	    					responseBody,
+	    					contentType);
+            responses.add(0,cannedResponse);
+            if (onlyOnce) {
+				responsesToUseOnlyOnce.add(cannedResponse);
+			}
+            Log.i("MOCK HTTP CLIENT", "Request "+ requestRegex + " added.");
     }
 
     public void popCannedResponse() {
@@ -113,6 +129,12 @@ public class MockHttpClient extends DefaultHttpClient {
 	public boolean responsesIsEmpty() {
 		return responses.isEmpty();
 	}
+	public void usingResponse(HttpResponse response) {
+		if (responsesToUseOnlyOnce.contains(response)) {
+			responses.remove(response);
+			responsesToUseOnlyOnce.remove(responses);
+		}
+	}
 }
 
 /**
@@ -137,6 +159,8 @@ class MockRequestDirector implements RequestDirector {
         if (response == null) {
             throw new AssertionError("Request \"" + request.getRequestLine().toString()
                     + "\" did not match any known pattern");
+        } else {
+        	httpClient.usingResponse(response);
         }
         switch (response.getStatusLine().getStatusCode()) {
 			case MockHttpClient.IOEXCEPTION_ERROR_CODE:
@@ -150,7 +174,6 @@ class MockRequestDirector implements RequestDirector {
 		        return response;
         }
     }
-
 }
 
 /** The HTTP Response returned by a MockHttpServer */
