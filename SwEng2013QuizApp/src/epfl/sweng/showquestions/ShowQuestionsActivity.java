@@ -119,15 +119,18 @@ public class ShowQuestionsActivity extends Activity {
 		protected void onPostExecute(QuizQuestion question) {
 			super.onPostExecute(question);
 			if (null == question) {
-				UserPreferences.getInstance().
-					setConnectivityState(ConnectivityState.OFFLINE);
-				TestCoordinator.check(TTChecks.OFFLINE_CHECKBOX_ENABLED);
-				Toast.makeText(
-						ShowQuestionsActivity.this,
-						getResources().getString(
+				if (QuestionsProxy.getInstance().getInboxSize()==0) {
+					TestCoordinator.check(TTChecks.QUESTION_SHOWN);
+				} else {
+					UserPreferences.getInstance().
+						setConnectivityState(ConnectivityState.OFFLINE);
+					TestCoordinator.check(TTChecks.OFFLINE_CHECKBOX_ENABLED);
+					Toast.makeText(
+							ShowQuestionsActivity.this,
+							getResources().getString(
 								R.string.error_fetching_question),
-						Toast.LENGTH_LONG).show();
-				
+									Toast.LENGTH_LONG).show(); 
+				}
 				finish();
 			}
 		}
