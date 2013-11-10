@@ -223,27 +223,27 @@ public class MainActivity extends Activity {
 
 			switch (result) {
 
-			case HttpStatus.SC_CREATED:
-				TestCoordinator.check(TTChecks.OFFLINE_CHECKBOX_DISABLED);
-				break;
-			case HttpStatus.SC_OK:
-				TestCoordinator.check(TTChecks.OFFLINE_CHECKBOX_ENABLED);
-				break;
-
-			case 0:
-				Toast.makeText(MainActivity.this,
-						"Sorry, something wrong happened. Try again.",
-						Toast.LENGTH_LONG).show();
-				break;
-
-			default: // Http code error
-				Toast.makeText(
-						MainActivity.this,
-						getResources().getString(
-								R.string.error_uploading_question),
-						Toast.LENGTH_LONG).show();
-				CheckBox isOffline = (CheckBox) findViewById(R.id.switchOnlineModeCheckbox);
-				isOffline.setChecked(mUserPreferences.isConnected());
+				case HttpStatus.SC_CREATED:
+					TestCoordinator.check(TTChecks.OFFLINE_CHECKBOX_DISABLED);
+					break;
+				case HttpStatus.SC_OK:
+					TestCoordinator.check(TTChecks.OFFLINE_CHECKBOX_ENABLED);
+					break;
+	
+				case 0:
+					Toast.makeText(MainActivity.this,
+							"Sorry, something wrong happened. Try again.",
+							Toast.LENGTH_LONG).show();
+					break;
+	
+				default: // Http code error
+					Toast.makeText(
+							MainActivity.this,
+							getResources().getString(
+									R.string.error_uploading_question),
+							Toast.LENGTH_LONG).show();
+					CheckBox isOffline = (CheckBox) findViewById(R.id.switchOnlineModeCheckbox);
+					isOffline.setChecked(mUserPreferences.isConnected());
 
 			}
 		}
