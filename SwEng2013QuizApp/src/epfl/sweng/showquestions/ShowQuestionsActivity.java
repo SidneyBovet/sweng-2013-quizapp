@@ -123,9 +123,6 @@ public class ShowQuestionsActivity extends Activity {
 							UserPreferences.getInstance().getConnectivityState().equals(ConnectivityState.OFFLINE)) {
 					TestCoordinator.check(TTChecks.QUESTION_SHOWN);
 				} else {
-					UserPreferences.getInstance().
-						setConnectivityState(ConnectivityState.OFFLINE);
-					TestCoordinator.check(TTChecks.OFFLINE_CHECKBOX_ENABLED);
 					Toast.makeText(
 							ShowQuestionsActivity.this,
 							getResources().getString(

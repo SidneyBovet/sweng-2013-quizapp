@@ -100,14 +100,19 @@ public final class QuestionsProxy
 		// independently of the state we are in (online or offline).
 		addOutbox(question);
 
-		int returnVariable = -1;
+		int httpCodeResponse = -1;
 		if (UserPreferences.getInstance().isConnected()) {
-			returnVariable = sendCachedQuestions();
+			httpCodeResponse = sendCachedQuestions();
+			if (httpCodeResponse != HttpStatus.SC_CREATED) {
+				mConnectivityState = ConnectivityState.OFFLINE;
+				UserPreferences.getInstance()
+					.setConnectivityState(ConnectivityState.OFFLINE);
+			}
 		} else {
-			returnVariable = HttpStatus.SC_CREATED;
+			httpCodeResponse = HttpStatus.SC_CREATED;
 		}
 		
-		return returnVariable;
+		return httpCodeResponse;
 	}
 
 	/**
@@ -127,10 +132,16 @@ public final class QuestionsProxy
 			// XXX Why don't we use one method for these two calls instead
 			// of giving URL to the getGetRequest?
 			fetchedQuestion = mNetworkCommunication.retrieveQuizQuestion();
-			addInbox(fetchedQuestion);
+			if (null != fetchedQuestion) {
+				addInbox(fetchedQuestion);
+			} else {
+				mConnectivityState = ConnectivityState.OFFLINE;
+				UserPreferences.getInstance()
+					.setConnectivityState(ConnectivityState.OFFLINE);
+			}
 
 		} else {
-			if (mQuizQuestionsInbox.size() > 0) {				
+			if (mQuizQuestionsInbox.size() > 0) {
 				int questionIDCache = new Random()
 						.nextInt(mQuizQuestionsInbox.size());
 				fetchedQuestion = mQuizQuestionsInbox.get(questionIDCache);

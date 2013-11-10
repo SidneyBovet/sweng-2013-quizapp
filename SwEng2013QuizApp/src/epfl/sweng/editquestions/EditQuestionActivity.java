@@ -249,9 +249,6 @@ public class EditQuestionActivity extends Activity {
 		protected void onPostExecute(Integer result) {
 			super.onPostExecute(result);
 			if (result != HttpStatus.SC_CREATED) {
-				UserPreferences.getInstance().
-					setConnectivityState(ConnectivityState.OFFLINE);
-				TestCoordinator.check(TTChecks.OFFLINE_CHECKBOX_ENABLED);
 				Toast.makeText(
 						EditQuestionActivity.this,
 						getResources().getString(

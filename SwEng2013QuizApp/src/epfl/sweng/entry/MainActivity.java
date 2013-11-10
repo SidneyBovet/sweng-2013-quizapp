@@ -235,9 +235,6 @@ public class MainActivity extends Activity {
 					break;
 				
 				default:	// Http code error
-					UserPreferences.getInstance().
-						setConnectivityState(ConnectivityState.OFFLINE);
-					TestCoordinator.check(TTChecks.OFFLINE_CHECKBOX_ENABLED);
 					Toast.makeText(
 							MainActivity.this,
 							getResources().getString(
