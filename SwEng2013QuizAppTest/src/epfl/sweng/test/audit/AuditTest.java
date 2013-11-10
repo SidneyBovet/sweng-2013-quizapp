@@ -29,6 +29,50 @@ public class AuditTest extends GUITest<EditQuestionActivity> {
 		super.tearDown();
 		semaphore.release();
 	}
+	
+	public void testMinimalValidQuestionDisabledButton() {
+		
+		getSolo().sleep(500);
+		assertTrue("Audit fresh Activity is not zero", getActivity()
+				.auditErrors() == 0);
+		
+		getSolo().enterText((EditText) getSolo().getText("Type in the question\'s text body"),
+				"My question");
+		getSolo().enterText((EditText) getSolo().getText("Type in the question\'s tags"),
+				"tag");
+		getSolo().enterText((EditText) getSolo().getText("Type in the answer"),
+				"Answer 1");
+		getSolo().clickOnButton("" + (char) 10008);
+		getSolo().clickOnButton("\\+");
+		
+		waitFor(TTChecks.QUESTION_EDITED);
+		getSolo().enterText((EditText) getSolo().getText("Type in the answer"),
+				"Answer 2");
+		
+		assertTrue("Audit minimal valid question is not zero", getActivity()
+				.auditErrors() == 0);
+		
+		getActivity().runOnUiThread(new Runnable() {
+
+			@Override
+			public void run() {
+				EditQuestionActivity activity = (EditQuestionActivity) getActivity();
+				Button button = (Button) activity
+						.findViewById(R.id.submit_question_button);
+				button.setEnabled(false);
+				semaphore.release();
+			}
+		});
+		
+		try {
+			semaphore.acquire();
+			getSolo().sleep(500);
+			assertTrue("# Audit errors = " + getActivity().auditErrors()
+					+ " != 1", getActivity().auditErrors() == 1);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
 
 	public void testAudit() {
 
