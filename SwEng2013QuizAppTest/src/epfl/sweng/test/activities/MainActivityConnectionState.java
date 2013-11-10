@@ -75,7 +75,7 @@ public class MainActivityConnectionState extends GUITest<MainActivity> {
 		UserPreferences.getInstance(getInstrumentation().getTargetContext()).
 			setConnectivityState(ConnectivityState.ONLINE);
 		MockHttpClient mockClient = new MockHttpClient();
-		mockClient.pushCannedResponse(".", HttpStatus.SC_INTERNAL_SERVER_ERROR,
+		mockClient.pushCannedResponse(".", HttpStatus.SC_NOT_FOUND,
 				"", "");
 		SwengHttpClientFactory.setInstance(mockClient);
 		
