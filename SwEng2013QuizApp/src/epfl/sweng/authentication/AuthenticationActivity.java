@@ -190,7 +190,6 @@ public class AuthenticationActivity extends Activity {
 			mProgressDialog.dismiss();
 			
 			if (null == sessionId || sessionId.equals("")) {
-				// XXX switch to off line mode
 				Toast.makeText(AuthenticationActivity.this,
 						getResources().getString(R.string.error_logging_in),
 						Toast.LENGTH_LONG).show();

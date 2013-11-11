@@ -21,10 +21,6 @@ import epfl.sweng.testing.TestCoordinator.TTChecks;
  * It will also cache all the questions that we fetch from the server and take
  * place of the server when in offline mode.
  * 
- * XXX If we don't use a Singleton, how do we ensure that we only have one proxy
- * class? Do we have a boolean flag that tells us if it has been instanciated?
- * 
- * 
  * @author born4new, JoTearoom, Merok
  * 
  */
@@ -121,13 +117,9 @@ public final class QuestionsProxy
 	 */
 	@Override
 	public QuizQuestion retrieveQuizQuestion() {
-		// TODO regler bug quand offline submit online submit online show issues
-		// #64
 		QuizQuestion fetchedQuestion = null;
 
 		if (UserPreferences.getInstance().isConnected()) {
-			// XXX Why don't we use one method for these two calls instead
-			// of giving URL to the getGetRequest?
 			fetchedQuestion = mNetworkCommunication.retrieveQuizQuestion();
 			if (null != fetchedQuestion) {
 				addInbox(fetchedQuestion);
@@ -213,7 +205,6 @@ public final class QuestionsProxy
 
 			QuizQuestion questionOut = mQuizQuestionsOutbox.peek();
 
-			// XXX Is this method a blocking one? It should be.
 			responseStatus = mNetworkCommunication.sendQuizQuestion(questionOut);
 
 			if (HttpStatus.SC_CREATED == responseStatus) {

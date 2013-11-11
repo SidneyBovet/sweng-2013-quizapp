@@ -13,7 +13,6 @@ import epfl.sweng.testing.TestCoordinator.TTChecks;
 //import java.io.IOException;
 
 /** A test that illustrates the use of MockHttpClients */
-// XXX : Tests work separetely, find out why it doesn't work together.
 public class ShowQuestionsActivityTest extends GUITest<ShowQuestionsActivity> {
 
 	protected static final String RANDOM_QUESTION_BUTTON_LABEL = "Show a random question";
