@@ -108,12 +108,12 @@ public class ShowQuestionsActivity extends Activity {
 
 	class AsyncRetrieveQuestion extends AsyncTask<Void, Void, QuizQuestion> {
 
-		private boolean mWasConnectedBeforeRetrieving;
+		private boolean mWasDisconnectedBeforeRetrieving;
 		
 		@Override
 		protected QuizQuestion doInBackground(Void... params) {
 
-			mWasConnectedBeforeRetrieving = UserPreferences.getInstance().
+			mWasDisconnectedBeforeRetrieving = UserPreferences.getInstance().
 				getConnectivityState().equals(ConnectivityState.OFFLINE);
 			return QuestionsProxy.getInstance().retrieveQuizQuestion();
 		}
@@ -123,7 +123,7 @@ public class ShowQuestionsActivity extends Activity {
 			super.onPostExecute(question);
 			if (null == question) {
 				if (QuestionsProxy.getInstance().getInboxSize()==0 &&
-						mWasConnectedBeforeRetrieving) {
+						mWasDisconnectedBeforeRetrieving) {
 					TestCoordinator.check(TTChecks.QUESTION_SHOWN);
 				} else {
 					Toast.makeText(
