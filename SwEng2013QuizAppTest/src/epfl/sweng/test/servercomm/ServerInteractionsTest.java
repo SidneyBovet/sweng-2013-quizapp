@@ -60,7 +60,6 @@
 //		try {
 //			int serverReturn = ServerInteractions.
 //					submitQuestion(questionToSubmit);
-//			// XXX This was 400 at the time of writing.
 //			assertEquals(serverReturn, 200);
 //		} catch (ServerSubmitFailedException e) {
 //			fail("An exception occured while doing the test.");

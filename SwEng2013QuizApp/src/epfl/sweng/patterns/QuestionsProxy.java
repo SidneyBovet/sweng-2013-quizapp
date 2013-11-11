@@ -21,10 +21,6 @@ import epfl.sweng.testing.TestCoordinator.TTChecks;
  * It will also cache all the questions that we fetch from the server and take
  * place of the server when in offline mode.
  * 
- * XXX If we don't use a Singleton, how do we ensure that we only have one proxy
- * class? Do we have a boolean flag that tells us if it has been instanciated?
- * 
- * 
  * @author born4new, JoTearoom, Merok
  * 
  */
@@ -36,9 +32,7 @@ public final class QuestionsProxy
 	private Queue<QuizQuestion> mQuizQuestionsOutbox;
 	// question to be retrieve
 	private List<QuizQuestion> mQuizQuestionsInbox;
-	
-	private ConnectivityState mConnectivityState = ConnectivityState.ONLINE;
-	
+		
 	private INetworkCommunication mNetworkCommunication;
 
 	/**
@@ -106,10 +100,8 @@ public final class QuestionsProxy
 		if (UserPreferences.getInstance().isConnected()) {
 			httpCodeResponse = sendCachedQuestions();
 			if (httpCodeResponse != HttpStatus.SC_CREATED) {
-				mConnectivityState = ConnectivityState.OFFLINE;
 				UserPreferences.getInstance()
 					.setConnectivityState(ConnectivityState.OFFLINE);
-				TestCoordinator.check(TTChecks.OFFLINE_CHECKBOX_ENABLED);
 			}
 		}
 		httpCodeResponse = HttpStatus.SC_CREATED;
@@ -125,32 +117,19 @@ public final class QuestionsProxy
 	 */
 	@Override
 	public QuizQuestion retrieveQuizQuestion() {
-		// TODO regler bug quand offline submit online submit online show issues
-		// #64
 		QuizQuestion fetchedQuestion = null;
 
 		if (UserPreferences.getInstance().isConnected()) {
-			// XXX Why don't we use one method for these two calls instead
-			// of giving URL to the getGetRequest?
 			fetchedQuestion = mNetworkCommunication.retrieveQuizQuestion();
 			if (null != fetchedQuestion) {
 				addInbox(fetchedQuestion);
 			} else {
-				mConnectivityState = ConnectivityState.OFFLINE;
 				UserPreferences.getInstance()
 					.setConnectivityState(ConnectivityState.OFFLINE);
-				TestCoordinator.check(TTChecks.OFFLINE_CHECKBOX_ENABLED);
+				fetchedQuestion = extractQuizQuestionFromInbox();
 			}
-
 		} else {
-			if (mQuizQuestionsInbox.size() > 0) {
-				int questionIDCache = new Random()
-						.nextInt(mQuizQuestionsInbox.size());
-				fetchedQuestion = mQuizQuestionsInbox.get(questionIDCache);
-			} else {
-				Log.i("QuestionProxy", "Inbox empty!");
-				fetchedQuestion = null;
-			}
+			fetchedQuestion = extractQuizQuestionFromInbox();
 		}
 
 		return fetchedQuestion;
@@ -175,14 +154,10 @@ public final class QuestionsProxy
 	public int notifyConnectivityChange(ConnectivityState newState) {
 		int proxyResponse = -1;
 		
-		if (mConnectivityState == newState) {
-			proxyResponse = 0;	// Indicates that no change were made
-		} else if (mConnectivityState == ConnectivityState.ONLINE
-				&& newState == ConnectivityState.OFFLINE) {
+		if (newState == ConnectivityState.OFFLINE) {
 			
 			proxyResponse = HttpStatus.SC_OK; // Nothing to do
-		} else if (mConnectivityState == ConnectivityState.OFFLINE
-				&& newState == ConnectivityState.ONLINE) {
+		} else if (newState == ConnectivityState.ONLINE) {
 			
 			if (mQuizQuestionsOutbox.size() > 0) {
 				proxyResponse = sendCachedQuestions();
@@ -191,8 +166,25 @@ public final class QuestionsProxy
 			}
 		}
 		
-		mConnectivityState = newState;
 		return proxyResponse;
+	}
+
+	/**
+	 * Extracts a {@link QuizQuestion} from the Inbox, returning null if empty
+	 * 
+	 * @return The extracted question, null if empty.
+	 */
+	private QuizQuestion extractQuizQuestionFromInbox() {
+		QuizQuestion extractedQuestion = null;
+		if (mQuizQuestionsInbox.size() > 0) {
+			int questionIDCache = new Random()
+					.nextInt(mQuizQuestionsInbox.size());
+			extractedQuestion = mQuizQuestionsInbox.get(questionIDCache);
+		} else {
+			Log.i("QuestionProxy", "Inbox empty!");
+			extractedQuestion = null;
+		}
+		return extractedQuestion;
 	}
 
 	/**
@@ -213,7 +205,6 @@ public final class QuestionsProxy
 
 			QuizQuestion questionOut = mQuizQuestionsOutbox.peek();
 
-			// XXX Is this method a blocking one? It should be.
 			responseStatus = mNetworkCommunication.sendQuizQuestion(questionOut);
 
 			if (HttpStatus.SC_CREATED == responseStatus) {

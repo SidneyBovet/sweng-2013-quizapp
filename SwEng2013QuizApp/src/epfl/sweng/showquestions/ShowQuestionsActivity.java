@@ -124,18 +124,16 @@ public class ShowQuestionsActivity extends Activity {
 			if (null == question) {
 				if (QuestionsProxy.getInstance().getInboxSize()==0 &&
 						mWasDisconnectedBeforeRetrieving) {
-					TestCoordinator.check(TTChecks.QUESTION_SHOWN);
 				} else {
 					Toast.makeText(
 							ShowQuestionsActivity.this,
 							getResources().getString(
 								R.string.error_fetching_question),
-									Toast.LENGTH_LONG).show(); 
+									Toast.LENGTH_LONG).show();
 				}
 				finish();
-			} else {
-				TestCoordinator.check(TTChecks.QUESTION_SHOWN);
 			}
+			TestCoordinator.check(TTChecks.QUESTION_SHOWN);
 		}
 	}
 }

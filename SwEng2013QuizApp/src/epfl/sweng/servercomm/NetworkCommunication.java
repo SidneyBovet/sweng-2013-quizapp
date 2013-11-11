@@ -37,7 +37,6 @@ public class NetworkCommunication implements INetworkCommunication {
 					.execute(postQuery);
 			responseStatus = mResponse.getStatusLine().getStatusCode();
 			
-			// TODO Explain what happened here (for now, we consider it voodoo).
 			mResponse.getEntity().consumeContent();
 		} catch (UnsupportedEncodingException e) {
 			Log.e(this.getClass().getName(), "doInBackground(): Entity does "

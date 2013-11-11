@@ -7,6 +7,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.util.Log;
+
 public class MockJSON extends JSONObject {
 	private int mId;
 	private String mQuestion;
@@ -41,8 +43,7 @@ public class MockJSON extends JSONObject {
 			mockJSON.put("tags", tagsJSONArray);
 			mockJSON.put("owner", mOwner);
 		} catch (JSONException e) {
-			// TODO Aymeric log error system.
-			e.printStackTrace();
+			Log.e(this.getClass().getName(),"MockJSON(): could not parse JSON", e);
 		}
 	}
 }

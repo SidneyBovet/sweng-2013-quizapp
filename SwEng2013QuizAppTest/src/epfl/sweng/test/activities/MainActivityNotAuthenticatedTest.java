@@ -54,14 +54,13 @@ public class MainActivityNotAuthenticatedTest extends GUITest<MainActivity> {
 	public void testShowAllButtons() {
 		getSolo().sleep(500);
 		assertTrue("Login Button is present",
-				getSolo().searchButton("Log in using Tequila"));
+				getSolo().searchButton("Log\\ in\\ using\\ Tequila"));
 		assertTrue("Show Random Question Button is present",
 				getSolo().searchButton("Show a random question."));
 		assertTrue("Submit Quizz Question Button is present",
 				getSolo().searchButton("Submit a quiz question."));
-		//XXX why failed?
-		/*assertFalse("Check Box should be present", 
-				getSolo().searchText("Offline mode"));*/
+		assertTrue("Check Box should be present", 
+				getSolo().searchText("Offline mode"));
 	}
 	
 	public void testQuestionButtonsAreDisabledAtBeggining() {
@@ -74,7 +73,6 @@ public class MainActivityNotAuthenticatedTest extends GUITest<MainActivity> {
 	}
 	
 	public void testLogInButton() {
-		//XXX try to remove sleep... don't pass!
 		assertFalse(persistentStorage.isAuthenticated());
 		getSolo().clickOnButton("Log\\ in\\ using\\ Tequila");
 		getSolo().sleep(2000);
@@ -86,10 +84,8 @@ public class MainActivityNotAuthenticatedTest extends GUITest<MainActivity> {
 	}
 	
 	public void testCheckBoxInvisible() {
-		//XXX why false??
-		 /* 		assertFalse("Check Box should be present", 
+ 		assertTrue("Check Box should be present", 
 				getSolo().searchText("Offline mode"));
-		 */
 		CheckBox connexionState = (CheckBox) getSolo().getView(R.id.switchOnlineModeCheckbox);
 		if (null == connexionState) {
 			fail("R.id.switchOnlineModeCheckbox cannot be fetched by Robotium!");

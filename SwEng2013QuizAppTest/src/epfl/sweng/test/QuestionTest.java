@@ -123,7 +123,6 @@ public class QuestionTest extends TestCase {
 
 		listToQuestion.add(indexGoodAnswerString);
 		listToQuestion.add("tag1, tag2");
-		//TODO check why if we compare the two objects the tags are switched??
 		assertEquals(mQuestion2.getAnswers(), 
 				QuizQuestion.createQuestionFromList(listToQuestion).getAnswers());
 	}	
