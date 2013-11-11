@@ -243,7 +243,7 @@ public class AuditTest extends GUITest<EditQuestionActivity> {
 			assertTrue("Audit questions != 1", question.auditErrors() == 1);
 			assertTrue("Number of audit errors = "
 					+ getActivity().auditErrors() + " != 1", getActivity()
-					.auditSubmitButton() == 1);
+					.auditErrors() == 1);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -285,7 +285,7 @@ public class AuditTest extends GUITest<EditQuestionActivity> {
 			assertTrue("Audit questions != 2", question.auditErrors() == 2);
 			assertTrue("Number of audit errors = "
 					+ getActivity().auditErrors() + " != 1", getActivity()
-					.auditSubmitButton() == 1);
+					.auditErrors() == 1);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -332,7 +332,7 @@ public class AuditTest extends GUITest<EditQuestionActivity> {
 			assertTrue("Audit questions != 1", question.auditErrors() == 1);
 			assertTrue("Number of audit errors = "
 					+ getActivity().auditErrors() + " != 1", getActivity()
-					.auditSubmitButton() == 1);
+					.auditErrors() == 1);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -370,7 +370,7 @@ public class AuditTest extends GUITest<EditQuestionActivity> {
 			assertTrue("Audit questions != 3", question.auditErrors() == 3);
 			assertTrue("Number of audit errors = "
 					+ getActivity().auditErrors() + " != 1", getActivity()
-					.auditSubmitButton() == 1);
+					.auditErrors() == 1);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}

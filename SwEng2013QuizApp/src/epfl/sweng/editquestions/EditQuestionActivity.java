@@ -441,7 +441,7 @@ public class EditQuestionActivity extends Activity {
 	 * @return the number of violated rep-invariants.
 	 */
 
-	public int auditSubmitButton() {
+	private int auditSubmitButton() {
 		int errorCount = 0;
 		
 		errorCount += auditEmptyField();
