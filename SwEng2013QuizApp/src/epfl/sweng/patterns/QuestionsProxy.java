@@ -13,8 +13,6 @@ import epfl.sweng.preferences.UserPreferences;
 import epfl.sweng.quizquestions.QuizQuestion;
 import epfl.sweng.servercomm.INetworkCommunication;
 import epfl.sweng.servercomm.NetworkCommunication;
-import epfl.sweng.testing.TestCoordinator;
-import epfl.sweng.testing.TestCoordinator.TTChecks;
 
 /**
  * This class will perform all the server interactions in the place of our app.
@@ -99,10 +97,6 @@ public final class QuestionsProxy
 		int httpCodeResponse = -1;
 		if (UserPreferences.getInstance().isConnected()) {
 			httpCodeResponse = sendCachedQuestions();
-			if (httpCodeResponse != HttpStatus.SC_CREATED) {
-				UserPreferences.getInstance()
-					.setConnectivityState(ConnectivityState.OFFLINE);
-			}
 		}
 		httpCodeResponse = HttpStatus.SC_CREATED;
 		return httpCodeResponse;
@@ -155,10 +149,8 @@ public final class QuestionsProxy
 		int proxyResponse = -1;
 		
 		if (newState == ConnectivityState.OFFLINE) {
-			
 			proxyResponse = HttpStatus.SC_OK; // Nothing to do
 		} else if (newState == ConnectivityState.ONLINE) {
-			
 			if (mQuizQuestionsOutbox.size() > 0) {
 				proxyResponse = sendCachedQuestions();
 			} else {
@@ -211,6 +203,8 @@ public final class QuestionsProxy
 				// If the question has been sent, we remove it from the queue.
 				mQuizQuestionsOutbox.remove();
 			} else {
+				UserPreferences.getInstance()
+					.setConnectivityState(ConnectivityState.OFFLINE);
 				return responseStatus;
 			}
 		}
