@@ -21,7 +21,7 @@ import org.json.JSONObject;
 public class QuizQuestion {
 
 	private long mId;
-	private String mQuestionContent;
+	private String mQuestionStatement;
 	private List<String> mAnswers;
 	private int mSolutionIndex;
 	private Set<String> mTags;
@@ -55,7 +55,7 @@ public class QuizQuestion {
 			final int solutionIndex, final Set<String> tags, final int id,
 			final String owner) {
 		this.mId = id;
-		this.mQuestionContent = question;
+		this.mQuestionStatement = question;
 		this.mAnswers = answers;
 		this.mSolutionIndex = solutionIndex;
 		this.mTags = tags;
@@ -103,7 +103,7 @@ public class QuizQuestion {
 		String owner = jsonParser.getString("owner");
 
 		this.mId = id;
-		this.mQuestionContent = question;
+		this.mQuestionStatement = question;
 		this.mAnswers = answers;
 		this.mSolutionIndex = solutionIndex;
 		this.mTags = tags;
@@ -173,7 +173,7 @@ public class QuizQuestion {
 		JSONObject jsonObject = new JSONObject();
 		try {
 			jsonObject.put("id", mId);
-			jsonObject.put("question", mQuestionContent);
+			jsonObject.put("question", mQuestionStatement);
 			JSONArray jsonArrayAnswers = new JSONArray(mAnswers);
 			jsonObject.put("answers", jsonArrayAnswers);
 			jsonObject.put("solutionIndex", mSolutionIndex);
@@ -193,7 +193,7 @@ public class QuizQuestion {
 
 	@Override
 	public String toString() {
-		return "Question [id=" + mId + ", questionContent=" + mQuestionContent
+		return "Question [id=" + mId + ", questionContent=" + mQuestionStatement
 				+ ", answers=" + mAnswers.toString() + ", solutionIndex="
 				+ mSolutionIndex + ", tags=" + mTags.toString() + ", owner="
 				+ mOwner + "]";
@@ -213,8 +213,8 @@ public class QuizQuestion {
 	 */
 	public int auditErrors() {
 		int errorCount = 0;
-		if (mQuestionContent.trim().length() == 0
-				|| !(0 < mQuestionContent.length() && mQuestionContent.length() <= QUESTION_CONTENT_MAX_SIZE)) {
+		if (mQuestionStatement.trim().length() == 0
+				|| !(0 < mQuestionStatement.length() && mQuestionStatement.length() <= QUESTION_CONTENT_MAX_SIZE)) {
 			++errorCount;
 		}
 
@@ -299,8 +299,8 @@ public class QuizQuestion {
 	 * @return question text body.
 	 */
 
-	public String getQuestionContent() {
-		return "Question: " + mQuestionContent;
+	public String getQuestionStatement() {
+		return "Question: " + mQuestionStatement;
 	}
 
 	/**
