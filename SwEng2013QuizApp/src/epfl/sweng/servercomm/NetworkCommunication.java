@@ -62,9 +62,16 @@ public class NetworkCommunication implements INetworkCommunication {
 		String url = HttpFactory.getSwengFetchQuestion();
 		HttpGet firstRandom = HttpFactory.getGetRequest(url);
 		try {
-			String jsonQuestion = SwengHttpClientFactory.getInstance()
-					.execute(firstRandom, new BasicResponseHandler());
-			fetchedQuestion = new QuizQuestion(jsonQuestion);
+			HttpResponse response = SwengHttpClientFactory.getInstance()
+					.execute(firstRandom);
+			int httpResponseCode = response.getStatusLine().getStatusCode();
+			if (httpResponseCode == HttpStatus.SC_OK) {
+				String jsonQuestion = new BasicResponseHandler()
+						.handleResponse(response);
+				fetchedQuestion = new QuizQuestion(jsonQuestion);
+			} else {
+				return null;
+			}
 		} catch (ClientProtocolException e) {
 			Log.e(this.getClass().getName(), "doInBackground(): Error in"
 					+ "the HTTP protocol.", e);
