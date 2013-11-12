@@ -130,13 +130,18 @@ public class MainActivityConnectionState extends GUITest<MainActivity> {
 	public void testUncheckingBoxEmptiesOutbox() {
 		CheckBox connexionState = (CheckBox) getSolo().getView(
 				R.id.switchOnlineModeCheckbox);
-		UserPreferences.getInstance(getInstrumentation().getTargetContext()).
-				setConnectivityState(ConnectivityState.OFFLINE);
 		setSimpleMockClient(HttpStatus.SC_CREATED);
 		
-		QuestionsProxy.getInstance().addOutbox(createFakeQuestion(
-				"How reliable Robotium testing is?"));
+
+		// 1. manually switching to offline state
+		getSolo().clickOnView(connexionState);
+		getActivityAndWaitFor(TTChecks.OFFLINE_CHECKBOX_ENABLED);
+		getSolo().sleep(500);
 		
+		// 2. adding stuff to the outbox
+		QuestionsProxy.getInstance().addOutbox(createFakeQuestion("Robotium?"));
+		
+		// 3. let's test 
 		getSolo().clickOnView(connexionState);
 		getActivityAndWaitFor(TTChecks.OFFLINE_CHECKBOX_DISABLED);
 		getSolo().sleep(500);
