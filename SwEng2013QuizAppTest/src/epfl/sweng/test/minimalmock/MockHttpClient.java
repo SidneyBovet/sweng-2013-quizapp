@@ -1,23 +1,17 @@
 package epfl.sweng.test.minimalmock;
 
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
-import java.util.Set;
 import java.util.regex.Pattern;
 
 import org.apache.http.ConnectionReuseStrategy;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpRequest;
 import org.apache.http.HttpResponse;
-import org.apache.http.ProtocolException;
 import org.apache.http.ProtocolVersion;
 import org.apache.http.client.AuthenticationHandler;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpRequestRetryHandler;
 import org.apache.http.client.RedirectHandler;
 import org.apache.http.client.RequestDirector;
@@ -47,47 +41,32 @@ public class MockHttpClient extends DefaultHttpClient {
         private final String responseBody;
         private final String contentType;
 
-        public CannedResponse(Pattern pattern, int statusCode,
-        	String responseBody, String contentType) {
+        public CannedResponse(Pattern pattern, int statusCode, String responseBody, String contentType) {
             this.pattern = pattern;
             this.statusCode = statusCode;
             this.responseBody = responseBody;
             this.contentType = contentType;
         }
+
+        @Override
+        public boolean equals(Object o) {
+            if (!(o instanceof CannedResponse)) {
+                return false;
+            }
+            CannedResponse _o = (CannedResponse) o;
+            return _o.pattern.pattern().equals(pattern.pattern());
+        }
+
+        @Override
+        public int hashCode() {
+            return pattern.pattern().hashCode();
+        }
     }
-    private final Set<CannedResponse> responsesToUseOnlyOnce =
-    		new HashSet<CannedResponse>();
+
     private final List<CannedResponse> responses = new ArrayList<CannedResponse>();
-    /* note: those are real HTTP response but we're highly unlikely to want our
-     * mock client to return these, therefore using them as internal error codes
-     */
-    public static final int IOEXCEPTION_ERROR_CODE = 402;
-	public static final int CLIENTPROTOCOLEXCEPTION_ERROR_CODE = 414;
-	public static final int FORBIDDEN_ERROR_CODE = 400;
-    
-    public void pushCannedResponse(String requestRegex, int status,
-    	String responseBody, String contentType) {
-        responses.add(
-        	0,
-        	new CannedResponse(Pattern.compile(requestRegex),
-        		status,
-        		responseBody,
-        		contentType)
-        );
-        Log.i("MOCK HTTP CLIENT", "Request "+ requestRegex + " added.");
-    }
-    public void pushCannedResponse(String requestRegex, int status,
-        	String responseBody, String contentType, boolean onlyOnce) {
-	    	CannedResponse cannedResponse = 
-	    			new CannedResponse(Pattern.compile(requestRegex),
-	    					status,
-	    					responseBody,
-	    					contentType);
-            responses.add(0,cannedResponse);
-            if (onlyOnce) {
-				responsesToUseOnlyOnce.add(cannedResponse);
-			}
-            Log.i("MOCK HTTP CLIENT", "Request "+ requestRegex + " added.");
+
+    public void pushCannedResponse(String requestRegex, int status, String responseBody, String contentType) {
+        responses.add(0, new CannedResponse(Pattern.compile(requestRegex), status, responseBody, contentType));
     }
 
     public void popCannedResponse() {
@@ -98,19 +77,12 @@ public class MockHttpClient extends DefaultHttpClient {
     }
 
     @Override
-    protected RequestDirector createClientRequestDirector(
-            final HttpRequestExecutor requestExec,
-            final ClientConnectionManager conman,
-            final ConnectionReuseStrategy reustrat,
-            final ConnectionKeepAliveStrategy kastrat,
-            final HttpRoutePlanner rouplan,
-            final HttpProcessor httpProcessor,
-            final HttpRequestRetryHandler retryHandler,
-            final RedirectHandler redirectHandler,
-            final AuthenticationHandler targetAuthHandler,
-            final AuthenticationHandler proxyAuthHandler,
-            final UserTokenHandler stateHandler,
-            final HttpParams params) {
+    protected RequestDirector createClientRequestDirector(final HttpRequestExecutor requestExec,
+            final ClientConnectionManager conman, final ConnectionReuseStrategy reustrat,
+            final ConnectionKeepAliveStrategy kastrat, final HttpRoutePlanner rouplan,
+            final HttpProcessor httpProcessor, final HttpRequestRetryHandler retryHandler,
+            final RedirectHandler redirectHandler, final AuthenticationHandler targetAuthHandler,
+            final AuthenticationHandler proxyAuthHandler, final UserTokenHandler stateHandler, final HttpParams params) {
         return new MockRequestDirector(this);
     }
 
@@ -125,16 +97,6 @@ public class MockHttpClient extends DefaultHttpClient {
 
         return null;
     }
-
-	public boolean responsesIsEmpty() {
-		return responses.isEmpty();
-	}
-	public void usingResponse(HttpResponse response) {
-		if (responsesToUseOnlyOnce.contains(response)) {
-			responses.remove(response);
-			responsesToUseOnlyOnce.remove(responses);
-		}
-	}
 }
 
 /**
@@ -143,37 +105,27 @@ public class MockHttpClient extends DefaultHttpClient {
  */
 class MockRequestDirector implements RequestDirector {
 
-	private MockHttpClient httpClient;
+    private MockHttpClient httpClient;
 
     public MockRequestDirector(MockHttpClient httpClient) {
         this.httpClient = httpClient;
     }
-
+    
     @Override
     public HttpResponse execute(HttpHost target, HttpRequest request,
-            HttpContext context) throws IOException, ProtocolException {
+            HttpContext context) {
         Log.v("HTTP", request.getRequestLine().toString());
-		Log.d("HTTP HEADER", Arrays.toString(request.getAllHeaders()));
         
         HttpResponse response = httpClient.processRequest(request);
         if (response == null) {
             throw new AssertionError("Request \"" + request.getRequestLine().toString()
                     + "\" did not match any known pattern");
-        } else {
-        	httpClient.usingResponse(response);
         }
-        switch (response.getStatusLine().getStatusCode()) {
-			case MockHttpClient.IOEXCEPTION_ERROR_CODE:
-				Log.d("HTTP ERR", "Throwing IOE");
-				throw new IOException("Bam!");
-			case MockHttpClient.CLIENTPROTOCOLEXCEPTION_ERROR_CODE:
-				Log.d("HTTP ERR", "Throwing CPE");
-				throw new ClientProtocolException("Take this, code!");
-			default:
-		        Log.v("HTTP", response.getStatusLine().toString());
-		        return response;
-        }
+
+        Log.v("HTTP", response.getStatusLine().toString());
+        return response;
     }
+
 }
 
 /** The HTTP Response returned by a MockHttpServer */
@@ -183,7 +135,7 @@ class MockHttpResponse extends BasicHttpResponse {
                 statusCode,
                 EnglishReasonPhraseCatalog.INSTANCE.getReason(
                         statusCode, Locale.getDefault()));
-
+        
         if (responseBody != null) {
             try {
                 StringEntity responseBodyEntity = new StringEntity(responseBody);
@@ -197,3 +149,4 @@ class MockHttpResponse extends BasicHttpResponse {
         }
     }
 }
+
