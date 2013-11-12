@@ -16,6 +16,7 @@ import epfl.sweng.patterns.QuestionsProxy;
 import epfl.sweng.preferences.UserPreferences;
 import epfl.sweng.quizquestions.QuizQuestion;
 import epfl.sweng.servercomm.SwengHttpClientFactory;
+import epfl.sweng.test.minimalmock.AdvancedMockHttpClient;
 import epfl.sweng.test.minimalmock.MockHttpClient;
 import epfl.sweng.testing.TestCoordinator.TTChecks;
 
@@ -59,7 +60,10 @@ public class MainActivityConnectionState extends GUITest<MainActivity> {
 	
 	public void testCheckBoxCheckConnected() {
 		CheckBox connexionState = (CheckBox) getSolo().getView(
-				R.id.switchOnlineModeCheckbox);;
+				R.id.switchOnlineModeCheckbox);
+		UserPreferences.getInstance(getInstrumentation().getTargetContext()).
+				setConnectivityState(ConnectivityState.ONLINE);
+		
 		getSolo().clickOnView(connexionState);
 		getActivityAndWaitFor(TTChecks.OFFLINE_CHECKBOX_ENABLED);
 		getSolo().sleep(2000);
@@ -68,7 +72,7 @@ public class MainActivityConnectionState extends GUITest<MainActivity> {
 		getSolo().sleep(2000);
 		assertTrue(persistentStorage.isConnected());
 	}
-	
+
 	public void testHTTPNotFoundStatusRightAfterAuthenticationWhenClickinOnShowRandomQuestion() {
 		UserPreferences.getInstance(getInstrumentation().getTargetContext()).
 			setSessionId("hahaFake");
@@ -81,19 +85,45 @@ public class MainActivityConnectionState extends GUITest<MainActivity> {
 		
 		getSolo().clickOnButton("Show a random question.");
 		
-		getActivityAndWaitFor(TTChecks.OFFLINE_CHECKBOX_ENABLED);
+		getActivityAndWaitFor(TTChecks.QUESTION_SHOWN);
 	}
 	
 	public void testSendingOrderIsFIFO() {
 		CheckBox connexionState = (CheckBox) getSolo().getView(
 				R.id.switchOnlineModeCheckbox);
+		UserPreferences.getInstance(getInstrumentation().getTargetContext()).
+			setConnectivityState(ConnectivityState.OFFLINE);
 		
+		// preparing the responses scenario
+		AdvancedMockHttpClient client = new AdvancedMockHttpClient();
+		client.pushCannedResponse(
+				".", HttpStatus.SC_CREATED, "", "", true);
+		client.pushCannedResponse(
+				".", AdvancedMockHttpClient.IOEXCEPTION_ERROR_CODE,"", "", true);
+		client.pushCannedResponse(
+				".", HttpStatus.SC_CREATED, "", "", true);
+		SwengHttpClientFactory.setInstance(client);
+		
+		// filling the outbox
 		QuestionsProxy.getInstance().addOutbox(createFakeQuestion(
 				"Statement 1"));
 		QuestionsProxy.getInstance().addOutbox(createFakeQuestion(
 				"Statement 2"));
 		
+		// let the test begin...
+		getSolo().clickOnView(connexionState);
 		getActivityAndWaitFor(TTChecks.OFFLINE_CHECKBOX_ENABLED);
+		getSolo().sleep(500);
+		
+		assertEquals(1, QuestionsProxy.getInstance().getOutboxSize());
+		assertEquals("Only question in outbox should be the last one put in it",
+				"Statement 2", client.getLastSubmittedQuestion().getQuestionContent());
+		
+		getSolo().clickOnView(connexionState);
+		getActivityAndWaitFor(TTChecks.OFFLINE_CHECKBOX_DISABLED);
+		getSolo().sleep(500);
+		
+		assertEquals(0, QuestionsProxy.getInstance().getOutboxSize());
 	}
 	
 	public void testUncheckingBoxEmptiesOutbox() {
@@ -129,4 +159,19 @@ public class MainActivityConnectionState extends GUITest<MainActivity> {
 				questionStatement, answers, 1, tags);
 		return question;
 	}
+
+	/*
+	/**
+	 * Sets the instance of the {@link SwengHttpClientFactory} to a simple
+	 * {@link MockHttpClient} answering all the requests with the specified
+	 * status.
+	 * 
+	 * @param status The status answered with.
+
+	private void setSimpleMockClient(int status) {
+		MockHttpClient client = new MockHttpClient();
+		SwengHttpClientFactory.setInstance(client);
+		client.pushCannedResponse(".", status, "", "");
+	}
+	*/
 }
