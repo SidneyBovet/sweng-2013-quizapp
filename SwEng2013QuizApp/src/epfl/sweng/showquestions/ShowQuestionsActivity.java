@@ -113,8 +113,9 @@ public class ShowQuestionsActivity extends Activity {
 		@Override
 		protected QuizQuestion doInBackground(Void... params) {
 
-			mWasDisconnectedBeforeRetrieving = UserPreferences.getInstance().
-				getConnectivityState().equals(ConnectivityState.OFFLINE);
+			mWasDisconnectedBeforeRetrieving = UserPreferences.getInstance(
+					ShowQuestionsActivity.this).getConnectivityState().
+					equals(ConnectivityState.OFFLINE);
 			return QuestionsProxy.getInstance().retrieveQuizQuestion();
 		}
 
