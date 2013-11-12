@@ -1,7 +1,8 @@
 package epfl.sweng.test.minimalmock;
 
-import java.io.DataInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -35,9 +36,10 @@ import org.apache.http.params.HttpParams;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.protocol.HttpProcessor;
 import org.apache.http.protocol.HttpRequestExecutor;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.util.Log;
-import epfl.sweng.quizquestions.QuizQuestion;
 
 
 /** An advanced mock HTTP Client doing more than the {@link MockHttpClient} */
@@ -61,7 +63,7 @@ public class AdvancedMockHttpClient extends DefaultHttpClient {
     private final Set<CannedResponse> responsesToUseOnlyOnce =
     		new HashSet<CannedResponse>();
     private final List<CannedResponse> responses = new ArrayList<CannedResponse>();
-	private QuizQuestion mLasSubmittedQuestion;
+	private String mLasSubmittedQuestionStatement = null;
     /* note: those are real HTTP response but we're highly unlikely to want our
      * mock client to return these, therefore using them as internal error codes
      */
@@ -137,21 +139,36 @@ public class AdvancedMockHttpClient extends DefaultHttpClient {
     	
     	// Yes, I did slap me in the face before writing that... Sidney
     	if (request instanceof HttpPost) {
-    		try {
+    			String content = "--not yet set--";
     			HttpPost post = (HttpPost) request;
-				DataInputStream dis = new DataInputStream(
-						post.getEntity().getContent());
-				mLasSubmittedQuestion = new QuizQuestion(dis.readUTF());
-			} catch (Exception e) {
-				Log.e(this.getClass().getName(), "An error occured during " +
-						"storing a question posted.", e);
-			}
+				try {
+					InputStream in = post.getEntity().getContent();
+					
+					content = convertStreamToString(in, "UTF-8");
+					
+					JSONObject json = new JSONObject(content);
+					
+					mLasSubmittedQuestionStatement = json.getString("question");
+				} catch (IllegalStateException e) {
+					Log.e(this.getClass().getName(), "ISE occured during " +
+							"storing a question posted.", e);
+				} catch (IOException e) {
+					Log.e(this.getClass().getName(), "IOE occured during " +
+							"storing a question posted.", e);
+				} catch (JSONException e) {
+					Log.e(this.getClass().getName(), "JSONE occured during " +
+							"storing a question posted. Contend was: " + content, e);
+				}
+			
 		}
     	
         for (CannedResponse cr : responses) {
             if (cr.pattern.matcher(request.getRequestLine().toString()).find()) {
                 Log.v("HTTP", "Mocking request since it matches pattern " + cr.pattern);
                 Log.v("HTTP", "Response body: " + cr.responseBody);
+                
+                usingResponse(cr);
+                
                 return new AdvancedMockHttpResponse(cr.statusCode, cr.responseBody, cr.contentType);
             }
         }
@@ -162,15 +179,35 @@ public class AdvancedMockHttpClient extends DefaultHttpClient {
 	public boolean responsesIsEmpty() {
 		return responses.isEmpty();
 	}
-	public void usingResponse(HttpResponse response) {
+	
+	public void usingResponse(CannedResponse response) {
 		if (responsesToUseOnlyOnce.contains(response)) {
 			responses.remove(response);
 			responsesToUseOnlyOnce.remove(responses);
 		}
 	}
 
-	public QuizQuestion getLastSubmittedQuestion() {
-		return mLasSubmittedQuestion;
+	public String getLastSubmittedQuestionStatement() {
+		return mLasSubmittedQuestionStatement;
+	}
+
+	public Object getResponsesListSize() {
+		return responses.size();
+	}
+	
+	private static String convertStreamToString( InputStream is, String ecoding ) throws IOException
+	{
+	    StringBuilder sb = new StringBuilder( Math.max( 16, is.available() ) );
+	    char[] tmp = new char[ 4096 ];
+
+	    try {
+	       InputStreamReader reader = new InputStreamReader( is, ecoding );
+	       for( int cnt; ( cnt = reader.read( tmp ) ) > 0; )
+	            sb.append( tmp, 0, cnt );
+	    } finally {
+	        is.close();
+	    }
+	    return sb.toString();
 	}
 }
 
@@ -196,8 +233,6 @@ class AdvancedMockRequestDirector implements RequestDirector {
         if (response == null) {
             throw new AssertionError("Request \"" + request.getRequestLine().toString()
                     + "\" did not match any known pattern");
-        } else {
-        	httpClient.usingResponse(response);
         }
         switch (response.getStatusLine().getStatusCode()) {
 			case AdvancedMockHttpClient.IOEXCEPTION_ERROR_CODE:
