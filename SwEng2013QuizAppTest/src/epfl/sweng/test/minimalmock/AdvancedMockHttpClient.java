@@ -59,6 +59,10 @@ public class AdvancedMockHttpClient extends DefaultHttpClient {
             this.responseBody = responseBody;
             this.contentType = contentType;
         }
+
+		public int getStatus() {
+			return this.statusCode;
+		}
     }
     private final Set<CannedResponse> responsesToUseOnlyOnce =
     		new HashSet<CannedResponse>();
@@ -137,35 +141,13 @@ public class AdvancedMockHttpClient extends DefaultHttpClient {
 
     public HttpResponse processRequest(HttpRequest request) {
     	
-    	// Yes, I did slap me in the face before writing that... Sidney
-    	if (request instanceof HttpPost) {
-    			String content = "--not yet set--";
-    			HttpPost post = (HttpPost) request;
-				try {
-					InputStream in = post.getEntity().getContent();
-					
-					content = convertStreamToString(in, "UTF-8");
-					
-					JSONObject json = new JSONObject(content);
-					
-					mLasSubmittedQuestionStatement = json.getString("question");
-				} catch (IllegalStateException e) {
-					Log.e(this.getClass().getName(), "ISE occured during " +
-							"storing a question posted.", e);
-				} catch (IOException e) {
-					Log.e(this.getClass().getName(), "IOE occured during " +
-							"storing a question posted.", e);
-				} catch (JSONException e) {
-					Log.e(this.getClass().getName(), "JSONE occured during " +
-							"storing a question posted. Contend was: " + content, e);
-				}
-			
-		}
+    	storePostedQuestionIfApplicable(request);
     	
         for (CannedResponse cr : responses) {
             if (cr.pattern.matcher(request.getRequestLine().toString()).find()) {
                 Log.v("HTTP", "Mocking request since it matches pattern " + cr.pattern);
-                Log.v("HTTP", "Response body: " + cr.responseBody);
+                Log.v("HTTP", "Response body: " + cr.responseBody +
+                		", response status=" + cr.getStatus());
                 
                 usingResponse(cr);
                 
@@ -195,6 +177,38 @@ public class AdvancedMockHttpClient extends DefaultHttpClient {
 		return responses.size();
 	}
 	
+	/**
+	 * Analyzes the HttpRequest and extracts the question's statement if the
+	 * request is a POST sending a QuizQuestion to the sweng server. 
+	 * 
+	 * @param request The request to analyze
+	 */
+	private void storePostedQuestionIfApplicable(HttpRequest request) {
+		// Yes, I did slap me in the face before writing that... Sidney
+		if (request instanceof HttpPost) {
+				String content = "--not yet set--";
+				HttpPost post = (HttpPost) request;
+				try {
+					InputStream in = post.getEntity().getContent();
+					
+					content = convertStreamToString(in, "UTF-8");
+					
+					JSONObject json = new JSONObject(content);
+					
+					mLasSubmittedQuestionStatement = json.getString("question");
+				} catch (IllegalStateException e) {
+					Log.e(this.getClass().getName(), "ISE occured during " +
+							"storing a question posted.", e);
+				} catch (IOException e) {
+					Log.e(this.getClass().getName(), "IOE occured during " +
+							"storing a question posted.", e);
+				} catch (JSONException e) {
+					Log.e(this.getClass().getName(), "JSONE occured during " +
+							"storing a question posted.", e);
+				}
+		}
+	}
+
 	private static String convertStreamToString( InputStream is, String ecoding ) throws IOException
 	{
 	    StringBuilder sb = new StringBuilder( Math.max( 16, is.available() ) );
