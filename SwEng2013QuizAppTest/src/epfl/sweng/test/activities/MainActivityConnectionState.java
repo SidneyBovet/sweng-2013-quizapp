@@ -92,8 +92,11 @@ public class MainActivityConnectionState extends GUITest<MainActivity> {
 		int expectedSize = QuestionsProxy.getInstance().getOutboxSize() + 1;
 		CheckBox connexionState = (CheckBox) getSolo().getView(
 				R.id.switchOnlineModeCheckbox);
-		UserPreferences.getInstance(getInstrumentation().getTargetContext()).
-			setConnectivityState(ConnectivityState.OFFLINE);
+		
+		// manually switch to offline mode
+		getSolo().clickOnView(connexionState);
+		getActivityAndWaitFor(TTChecks.OFFLINE_CHECKBOX_ENABLED);
+		getSolo().sleep(300);
 		
 		// preparing the responses scenario
 		AdvancedMockHttpClient client = new AdvancedMockHttpClient();
