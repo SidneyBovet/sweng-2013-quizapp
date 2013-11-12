@@ -237,7 +237,13 @@ public class MainActivity extends Activity {
 									R.string.error_uploading_question),
 							Toast.LENGTH_LONG).show();
 					CheckBox isOffline = (CheckBox) findViewById(R.id.switchOnlineModeCheckbox);
-					isOffline.setChecked(mUserPreferences.isConnected());
+					isOffline.setChecked(!mUserPreferences.isConnected());
+					
+					if (mUserPreferences.isConnected()) {
+						TestCoordinator.check(TTChecks.OFFLINE_CHECKBOX_DISABLED);
+					} else {
+						TestCoordinator.check(TTChecks.OFFLINE_CHECKBOX_ENABLED);
+					}
 
 			}
 		}
