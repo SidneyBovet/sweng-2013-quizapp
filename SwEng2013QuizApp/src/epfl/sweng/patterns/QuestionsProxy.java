@@ -118,8 +118,8 @@ public final class QuestionsProxy
 			if (null != fetchedQuestion) {
 				addInbox(fetchedQuestion);
 			} else {
-				UserPreferences.getInstance()
-					.setConnectivityState(ConnectivityState.OFFLINE);
+//				UserPreferences.getInstance()
+//					.setConnectivityState(ConnectivityState.OFFLINE);
 				fetchedQuestion = extractQuizQuestionFromInbox();
 			}
 		} else {

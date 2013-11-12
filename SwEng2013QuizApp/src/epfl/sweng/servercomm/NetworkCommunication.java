@@ -13,6 +13,8 @@ import org.apache.http.impl.client.BasicResponseHandler;
 import org.json.JSONException;
 
 import android.util.Log;
+import epfl.sweng.patterns.ConnectivityState;
+import epfl.sweng.preferences.UserPreferences;
 import epfl.sweng.quizquestions.QuizQuestion;
 
 /**
@@ -65,20 +67,40 @@ public class NetworkCommunication implements INetworkCommunication {
 			HttpResponse response = SwengHttpClientFactory.getInstance()
 					.execute(firstRandom);
 			int httpResponseCode = response.getStatusLine().getStatusCode();
-			if (httpResponseCode == HttpStatus.SC_OK) {
-				String jsonQuestion = new BasicResponseHandler()
+			
+			switch (httpResponseCode) {
+				case HttpStatus.SC_OK:
+					String jsonQuestion = new BasicResponseHandler()
 						.handleResponse(response);
-				fetchedQuestion = new QuizQuestion(jsonQuestion);
-			} else {
-				return null;
+					fetchedQuestion = new QuizQuestion(jsonQuestion);
+					break;
+				
+				case HttpStatus.SC_INTERNAL_SERVER_ERROR:
+					UserPreferences.getInstance()
+						.setConnectivityState(ConnectivityState.OFFLINE);
+					break;
+				
+				case HttpStatus.SC_SERVICE_UNAVAILABLE:
+					// XXX Not sure about this one, we'll have to check it again
+					UserPreferences.getInstance()
+						.setConnectivityState(ConnectivityState.OFFLINE);
+					break;
+					
+				default:
+					break;
 			}
+			
 		} catch (ClientProtocolException e) {
 			Log.e(this.getClass().getName(), "doInBackground(): Error in"
 					+ "the HTTP protocol.", e);
+			UserPreferences.getInstance()
+				.setConnectivityState(ConnectivityState.OFFLINE);
 			return null;
 		} catch (IOException e) {
 			Log.e(this.getClass().getName(), "doInBackground(): An I/O"
 					+ "error has occurred.", e);
+			UserPreferences.getInstance()
+				.setConnectivityState(ConnectivityState.OFFLINE);
 			return null;
 		} catch (JSONException e) {
 			e.printStackTrace();
