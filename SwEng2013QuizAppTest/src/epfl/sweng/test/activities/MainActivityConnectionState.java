@@ -89,6 +89,7 @@ public class MainActivityConnectionState extends GUITest<MainActivity> {
 	}
 	
 	public void testSendingOrderIsFIFO() {
+		int expectedSize = QuestionsProxy.getInstance().getOutboxSize() + 1;
 		CheckBox connexionState = (CheckBox) getSolo().getView(
 				R.id.switchOnlineModeCheckbox);
 		UserPreferences.getInstance(getInstrumentation().getTargetContext()).
@@ -97,7 +98,7 @@ public class MainActivityConnectionState extends GUITest<MainActivity> {
 		// preparing the responses scenario
 		AdvancedMockHttpClient client = new AdvancedMockHttpClient();
 		client.pushCannedResponse(
-				".", HttpStatus.SC_CREATED, "", "", true);
+				".", HttpStatus.SC_CREATED, "", "");
 		client.pushCannedResponse(
 				".", AdvancedMockHttpClient.IOEXCEPTION_ERROR_CODE,"", "", true);
 		client.pushCannedResponse(
@@ -115,9 +116,9 @@ public class MainActivityConnectionState extends GUITest<MainActivity> {
 		getActivityAndWaitFor(TTChecks.OFFLINE_CHECKBOX_ENABLED);
 		getSolo().sleep(500);
 		
-		assertEquals(1, QuestionsProxy.getInstance().getOutboxSize());
+		assertEquals(expectedSize, QuestionsProxy.getInstance().getOutboxSize());
 		assertEquals("Only question in outbox should be the last one put in it",
-				"Statement 2", client.getLastSubmittedQuestion().getQuestionContent());
+				"Statement 2", client.getLastSubmittedQuestionStatement());
 		
 		getSolo().clickOnView(connexionState);
 		getActivityAndWaitFor(TTChecks.OFFLINE_CHECKBOX_DISABLED);
