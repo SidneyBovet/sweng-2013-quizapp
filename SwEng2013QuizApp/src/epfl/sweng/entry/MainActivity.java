@@ -229,13 +229,7 @@ public class MainActivity extends Activity {
 				case HttpStatus.SC_OK:
 					TestCoordinator.check(TTChecks.OFFLINE_CHECKBOX_ENABLED);
 					break;
-	
-				case 0:
-					Toast.makeText(MainActivity.this,
-							"Sorry, something wrong happened. Try again.",
-							Toast.LENGTH_LONG).show();
-					break;
-	
+				
 				default: // Http code error
 					Toast.makeText(
 							MainActivity.this,
