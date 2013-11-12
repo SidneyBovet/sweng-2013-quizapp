@@ -129,18 +129,16 @@ public class MainActivityConnectionState extends GUITest<MainActivity> {
 	public void testUncheckingBoxEmptiesOutbox() {
 		CheckBox connexionState = (CheckBox) getSolo().getView(
 				R.id.switchOnlineModeCheckbox);
-
-		getSolo().clickOnView(connexionState);
-		getActivityAndWaitFor(TTChecks.OFFLINE_CHECKBOX_ENABLED);
-		getSolo().sleep(2000);
-
+		UserPreferences.getInstance(getInstrumentation().getTargetContext()).
+				setConnectivityState(ConnectivityState.OFFLINE);
+		setSimpleMockClient(HttpStatus.SC_CREATED);
+		
 		QuestionsProxy.getInstance().addOutbox(createFakeQuestion(
 				"How reliable Robotium testing is?"));
 		
 		getSolo().clickOnView(connexionState);
 		getActivityAndWaitFor(TTChecks.OFFLINE_CHECKBOX_DISABLED);
-		getSolo().sleep(2000);
-		getActivityAndWaitFor(TTChecks.NEW_QUESTION_SUBMITTED);
+		getSolo().sleep(500);
 		
 		assertEquals("Outbox should be empty after going from offline to online",
 				0, QuestionsProxy.getInstance().getOutboxSize());
@@ -160,18 +158,17 @@ public class MainActivityConnectionState extends GUITest<MainActivity> {
 		return question;
 	}
 
-	/*
 	/**
 	 * Sets the instance of the {@link SwengHttpClientFactory} to a simple
 	 * {@link MockHttpClient} answering all the requests with the specified
 	 * status.
 	 * 
 	 * @param status The status answered with.
+	 */
 
 	private void setSimpleMockClient(int status) {
 		MockHttpClient client = new MockHttpClient();
 		SwengHttpClientFactory.setInstance(client);
 		client.pushCannedResponse(".", status, "", "");
 	}
-	*/
 }
