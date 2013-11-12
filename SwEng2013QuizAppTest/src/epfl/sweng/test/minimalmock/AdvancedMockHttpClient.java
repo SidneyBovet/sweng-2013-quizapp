@@ -35,11 +35,9 @@ import org.apache.http.params.HttpParams;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.protocol.HttpProcessor;
 import org.apache.http.protocol.HttpRequestExecutor;
-import org.json.JSONObject;
-
-import epfl.sweng.quizquestions.QuizQuestion;
 
 import android.util.Log;
+import epfl.sweng.quizquestions.QuizQuestion;
 
 
 /** An advanced mock HTTP Client doing more than the {@link MockHttpClient} */
