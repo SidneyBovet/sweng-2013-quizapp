@@ -29,28 +29,30 @@ public class AuditTest extends GUITest<EditQuestionActivity> {
 		super.tearDown();
 		semaphore.release();
 	}
-	
+
 	public void testInvalidQuestionNoCorrectAnswerDisabledButton() {
 
 		getSolo().sleep(500);
 		assertTrue("Audit fresh Activity is not zero", getActivity()
 				.auditErrors() == 0);
-		
+
 		getSolo().clickOnButton("\\+");
 		waitFor(TTChecks.QUESTION_EDITED);
-		
-		getSolo().enterText((EditText) getSolo().getText("Type in the question\'s text body"),
-				"My question");
-		getSolo().enterText((EditText) getSolo().getText("Type in the question\'s tags"),
+
+		getSolo().enterText(
+				(EditText) getSolo().getText(
+						"Type in the question\'s text body"), "My question");
+		getSolo().enterText(
+				(EditText) getSolo().getText("Type in the question\'s tags"),
 				"tag");
 		getSolo().enterText((EditText) getSolo().getText("Type in the answer"),
 				"Answer 1");
 		getSolo().enterText((EditText) getSolo().getText("Type in the answer"),
 				"Answer 2");
-		
+
 		assertTrue("Audit invalid question is not zero", getActivity()
 				.auditErrors() == 0);
-		
+
 		getActivity().runOnUiThread(new Runnable() {
 
 			@Override
@@ -62,7 +64,7 @@ public class AuditTest extends GUITest<EditQuestionActivity> {
 				semaphore.release();
 			}
 		});
-		
+
 		try {
 			semaphore.acquire();
 			getSolo().sleep(500);
@@ -72,30 +74,32 @@ public class AuditTest extends GUITest<EditQuestionActivity> {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void testMinimalValidQuestionDisabledButton() {
-		
+
 		getSolo().sleep(500);
 		assertTrue("Audit fresh Activity is not zero", getActivity()
 				.auditErrors() == 0);
-		
-		getSolo().enterText((EditText) getSolo().getText("Type in the question\'s text body"),
-				"My question");
-		getSolo().enterText((EditText) getSolo().getText("Type in the question\'s tags"),
+
+		getSolo().enterText(
+				(EditText) getSolo().getText(
+						"Type in the question\'s text body"), "My question");
+		getSolo().enterText(
+				(EditText) getSolo().getText("Type in the question\'s tags"),
 				"tag");
 		getSolo().enterText((EditText) getSolo().getText("Type in the answer"),
 				"Answer 1");
 		getSolo().clickOnButton("" + (char) 10008);
 		waitFor(TTChecks.QUESTION_EDITED);
-		
+
 		getSolo().clickOnButton("\\+");
 		waitFor(TTChecks.QUESTION_EDITED);
 		getSolo().enterText((EditText) getSolo().getText("Type in the answer"),
 				"Answer 2");
-		
+
 		assertTrue("Audit minimal valid question is not zero", getActivity()
 				.auditErrors() == 0);
-		
+
 		getActivity().runOnUiThread(new Runnable() {
 
 			@Override
@@ -107,7 +111,7 @@ public class AuditTest extends GUITest<EditQuestionActivity> {
 				semaphore.release();
 			}
 		});
-		
+
 		try {
 			semaphore.acquire();
 			getSolo().sleep(500);
@@ -121,8 +125,8 @@ public class AuditTest extends GUITest<EditQuestionActivity> {
 	public void testAudit() {
 
 		getSolo().sleep(500);
-		assertTrue("Audit fresh Activity is not zero but " + getActivity()
-				.auditErrors(), getActivity().auditErrors() == 0);
+		assertTrue("Audit fresh Activity is not zero but "
+				+ getActivity().auditErrors(), getActivity().auditErrors() == 0);
 
 		getActivity().runOnUiThread(new Runnable() {
 
@@ -434,7 +438,7 @@ public class AuditTest extends GUITest<EditQuestionActivity> {
 		try {
 			semaphore.acquire();
 			getSolo().sleep(1000);
-			getSolo().clickOnButton("**");	// resets the adapter
+			getSolo().clickOnButton("**"); // resets the adapter
 			getSolo().sleep(1000);
 			assertTrue("AuditButton errors: => " + activity.auditErrors(),
 					activity.auditErrors() == 8);
@@ -487,6 +491,100 @@ public class AuditTest extends GUITest<EditQuestionActivity> {
 			e.printStackTrace();
 		}
 
+	}
+
+	public void testIssueTestMinimalValidQuestionDisabledButton() {
+		// // question sentence
+		getSolo().enterText(
+				(EditText) getSolo().getText(
+						"Type in the question\'s text body"), "my question1");
+		// question tag
+		getSolo().enterText(
+				(EditText) getSolo().getText("Type in the question\'s tags"),
+				"tag");
+
+		getSolo().clickOnButton("\\+");
+		waitFor(TTChecks.QUESTION_EDITED);
+		getSolo().enterText((EditText) getSolo().getText("Type in the answer"),
+				"an1");
+		getSolo().clickOnButton("\\+");
+		waitFor(TTChecks.QUESTION_EDITED);
+		getSolo().enterText((EditText) getSolo().getText("Type in the answer"),
+				"an2");
+		getSolo().enterText((EditText) getSolo().getText("Type in the answer"),
+				"an3");
+		getSolo().clickOnButton("" + (char) 10008);
+		getActivityAndWaitFor(TTChecks.QUESTION_EDITED);
+		// HERE IS THE WRONG SET UP
+		getSolo().clickOnButton("\\+");
+		waitFor(TTChecks.QUESTION_EDITED);
+		getSolo().sleep(3000);
+		final EditQuestionActivity activity = (EditQuestionActivity) getActivity();
+
+		getActivity().runOnUiThread(new Runnable() {
+
+			@Override
+			public void run() {
+				// HERE WE FORCE THE SUBMIT BUTTON TO BE ENABLED
+				getSolo().getButton("Submit").setEnabled(true);
+				// getSolo().sleep(1000);
+				semaphore.release();
+			}
+		});
+
+		try {
+			semaphore.acquire();
+
+			assertTrue("AuditButton is: " + activity.auditErrors()
+					+ "but was expected 1", activity.auditErrors() == 1);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	public void testIssuetestInvalidQuestionNoCorrectAnswerDisabledButton() {
+		getSolo().enterText(
+				(EditText) getSolo().getText(
+						"Type in the question\'s text body"), "my question1");
+		// question tag
+		getSolo().enterText(
+				(EditText) getSolo().getText("Type in the question\'s tags"),
+				"tag");
+
+		getSolo().clickOnButton("\\+");
+		waitFor(TTChecks.QUESTION_EDITED);
+		getSolo().enterText((EditText) getSolo().getText("Type in the answer"),
+				"an1");
+		getSolo().clickOnButton("\\+");
+		waitFor(TTChecks.QUESTION_EDITED);
+		getSolo().enterText((EditText) getSolo().getText("Type in the answer"),
+				"an2");
+		getSolo().enterText((EditText) getSolo().getText("Type in the answer"),
+				"an3");
+
+		getSolo().sleep(3000);
+		final EditQuestionActivity activity = (EditQuestionActivity) getActivity();
+
+		getActivity().runOnUiThread(new Runnable() {
+
+			@Override
+			public void run() {
+				// HERE WE FORCE THE SUBMIT BUTTON TO BE ENABLED
+				getSolo().getButton("Submit").setEnabled(true);
+				getSolo().sleep(2000);
+				semaphore.release();
+			}
+		});
+
+		try {
+			semaphore.acquire();
+
+			assertTrue("AuditButton is: " + activity.auditErrors()
+					+ "but was expected 1", activity.auditErrors() == 1);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 
 }
