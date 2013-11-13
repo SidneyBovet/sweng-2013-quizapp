@@ -51,23 +51,23 @@ public class MainActivityConnectionState extends GUITest<MainActivity> {
 	}
 	
 	public void testCheckBoxCheckDisconnected() {
-		CheckBox connexionState = (CheckBox) getSolo().getView(
+		CheckBox connectivityState = (CheckBox) getSolo().getView(
 				R.id.switchOnlineModeCheckbox);;
-		getSolo().clickOnView(connexionState);
+		getSolo().clickOnView(connectivityState);
 		getActivityAndWaitFor(TTChecks.OFFLINE_CHECKBOX_ENABLED);
 		assertFalse(persistentStorage.isConnected());
 	}
 	
 	public void testCheckBoxCheckConnected() {
-		CheckBox connexionState = (CheckBox) getSolo().getView(
+		CheckBox connectivityState = (CheckBox) getSolo().getView(
 				R.id.switchOnlineModeCheckbox);
 		UserPreferences.getInstance(getInstrumentation().getTargetContext()).
 				setConnectivityState(ConnectivityState.ONLINE);
 		
-		getSolo().clickOnView(connexionState);
+		getSolo().clickOnView(connectivityState);
 		getActivityAndWaitFor(TTChecks.OFFLINE_CHECKBOX_ENABLED);
 		getSolo().sleep(2000);
-		getSolo().clickOnView(connexionState);
+		getSolo().clickOnView(connectivityState);
 		getActivityAndWaitFor(TTChecks.OFFLINE_CHECKBOX_DISABLED);
 		getSolo().sleep(2000);
 		assertTrue(persistentStorage.isConnected());
@@ -86,15 +86,19 @@ public class MainActivityConnectionState extends GUITest<MainActivity> {
 		getSolo().clickOnButton("Show a random question.");
 		
 		getActivityAndWaitFor(TTChecks.QUESTION_SHOWN);
+		
+		CheckBox connectivityState = (CheckBox) getSolo().getView(
+				R.id.switchOnlineModeCheckbox);
+		assertTrue("The checkbox should stay disabled", !connectivityState.isChecked());
 	}
 	
 	public void testSendingOrderIsFIFO() {
 		int expectedSize = QuestionsProxy.getInstance().getOutboxSize() + 1;
-		CheckBox connexionState = (CheckBox) getSolo().getView(
+		CheckBox connectivityState = (CheckBox) getSolo().getView(
 				R.id.switchOnlineModeCheckbox);
 		
 		// manually switch to offline mode
-		getSolo().clickOnView(connexionState);
+		getSolo().clickOnView(connectivityState);
 		getActivityAndWaitFor(TTChecks.OFFLINE_CHECKBOX_ENABLED);
 		getSolo().sleep(300);
 		
@@ -115,7 +119,7 @@ public class MainActivityConnectionState extends GUITest<MainActivity> {
 				"Statement 2"));
 		
 		// let the test begin...
-		getSolo().clickOnView(connexionState);
+		getSolo().clickOnView(connectivityState);
 		getActivityAndWaitFor(TTChecks.OFFLINE_CHECKBOX_ENABLED);
 		getSolo().sleep(500);
 		
@@ -123,7 +127,7 @@ public class MainActivityConnectionState extends GUITest<MainActivity> {
 		assertEquals("Only question in outbox should be the last one put in it",
 				"Statement 2", client.getLastSubmittedQuestionStatement());
 		
-		getSolo().clickOnView(connexionState);
+		getSolo().clickOnView(connectivityState);
 		getActivityAndWaitFor(TTChecks.OFFLINE_CHECKBOX_DISABLED);
 		getSolo().sleep(500);
 		
@@ -131,13 +135,13 @@ public class MainActivityConnectionState extends GUITest<MainActivity> {
 	}
 	
 	public void testUncheckingBoxEmptiesOutbox() {
-		CheckBox connexionState = (CheckBox) getSolo().getView(
+		CheckBox connectivityState = (CheckBox) getSolo().getView(
 				R.id.switchOnlineModeCheckbox);
 		setSimpleMockClient(HttpStatus.SC_CREATED);
 		
 
 		// 1. manually switching to offline state
-		getSolo().clickOnView(connexionState);
+		getSolo().clickOnView(connectivityState);
 		getActivityAndWaitFor(TTChecks.OFFLINE_CHECKBOX_ENABLED);
 		getSolo().sleep(500);
 		
@@ -145,7 +149,7 @@ public class MainActivityConnectionState extends GUITest<MainActivity> {
 		QuestionsProxy.getInstance().addOutbox(createFakeQuestion("Robotium?"));
 		
 		// 3. let's test 
-		getSolo().clickOnView(connexionState);
+		getSolo().clickOnView(connectivityState);
 		getActivityAndWaitFor(TTChecks.OFFLINE_CHECKBOX_DISABLED);
 		getSolo().sleep(500);
 		
