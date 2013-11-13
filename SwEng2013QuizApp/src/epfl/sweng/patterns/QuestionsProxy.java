@@ -190,25 +190,23 @@ public final class QuestionsProxy
 	}
 	
 	private synchronized int sendCachedQuestions() {
-		int responseStatus = -1;
+		int httpCodeResponse = -1;
 		// We first send all the questions that we stored when in
 		// offline mode.
 		while (mQuizQuestionsOutbox.size() > 0) {
 
 			QuizQuestion questionOut = mQuizQuestionsOutbox.peek();
 
-			responseStatus = mNetworkCommunication.sendQuizQuestion(questionOut);
+			httpCodeResponse = mNetworkCommunication.sendQuizQuestion(questionOut);
 
-			if (HttpStatus.SC_CREATED == responseStatus) {
+			if (HttpStatus.SC_CREATED == httpCodeResponse) {
 				// If the question has been sent, we remove it from the queue.
 				mQuizQuestionsOutbox.remove();
 			} else {
-				UserPreferences.getInstance()
-					.setConnectivityState(ConnectivityState.OFFLINE);
-				return responseStatus;
+				return httpCodeResponse;
 			}
 		}
-		return responseStatus;
+		return httpCodeResponse;
 
 	}
 }

@@ -31,15 +31,34 @@ public class NetworkCommunication implements INetworkCommunication {
 		HttpPost postQuery = HttpFactory.getPostRequest(HttpFactory
 				.getSwengBaseAddress() + "/quizquestions/");
 
-		int responseStatus = -1;
+		int httpCodeResponse = -1;
 		try {
 			postQuery.setEntity(new StringEntity(question.toJSON().toString()));
 			postQuery.setHeader("Content-type", "application/json");
-			HttpResponse mResponse = SwengHttpClientFactory.getInstance()
+			HttpResponse response = SwengHttpClientFactory.getInstance()
 					.execute(postQuery);
-			responseStatus = mResponse.getStatusLine().getStatusCode();
+			httpCodeResponse = response.getStatusLine().getStatusCode();
 			
-			mResponse.getEntity().consumeContent();
+			switch (httpCodeResponse) {
+				case HttpStatus.SC_CREATED:
+					break;
+				
+				case HttpStatus.SC_INTERNAL_SERVER_ERROR:
+					UserPreferences.getInstance()
+						.setConnectivityState(ConnectivityState.OFFLINE);
+					break;
+				
+				case HttpStatus.SC_SERVICE_UNAVAILABLE:
+					// XXX Not sure about this one, we'll have to check it again
+					UserPreferences.getInstance()
+						.setConnectivityState(ConnectivityState.OFFLINE);
+					break;
+					
+				default:
+					break;
+			}
+			
+			response.getEntity().consumeContent();
 		} catch (UnsupportedEncodingException e) {
 			Log.e(this.getClass().getName(), "doInBackground(): Entity does "
 					+ "not support the local encoding.", e);
@@ -47,13 +66,17 @@ public class NetworkCommunication implements INetworkCommunication {
 		} catch (ClientProtocolException e) {
 			Log.e(this.getClass().getName(), "doInBackground(): Error in the "
 					+ "HTTP protocol.", e);
+			UserPreferences.getInstance()
+					.setConnectivityState(ConnectivityState.OFFLINE);
 			return mHttpStatusCommFailure;
 		} catch (IOException e) {
 			Log.e(this.getClass().getName(), "doInBackground(): An I/O error"
 					+ "has occurred.", e);
+			UserPreferences.getInstance()
+					.setConnectivityState(ConnectivityState.OFFLINE);
 			return mHttpStatusCommFailure;
 		}
-		return responseStatus;
+		return httpCodeResponse;
 	}
 
 	@Override
@@ -66,9 +89,9 @@ public class NetworkCommunication implements INetworkCommunication {
 		try {
 			HttpResponse response = SwengHttpClientFactory.getInstance()
 					.execute(firstRandom);
-			int httpResponseCode = response.getStatusLine().getStatusCode();
+			int httpCodeResponse = response.getStatusLine().getStatusCode();
 			
-			switch (httpResponseCode) {
+			switch (httpCodeResponse) {
 				case HttpStatus.SC_OK:
 					String jsonQuestion = new BasicResponseHandler()
 						.handleResponse(response);
