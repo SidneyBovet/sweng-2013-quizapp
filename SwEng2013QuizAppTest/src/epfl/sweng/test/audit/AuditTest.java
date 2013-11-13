@@ -36,15 +36,15 @@ public class AuditTest extends GUITest<EditQuestionActivity> {
 		assertTrue("Audit fresh Activity is not zero", getActivity()
 				.auditErrors() == 0);
 		
+		getSolo().clickOnButton("\\+");
+		waitFor(TTChecks.QUESTION_EDITED);
+		
 		getSolo().enterText((EditText) getSolo().getText("Type in the question\'s text body"),
 				"My question");
 		getSolo().enterText((EditText) getSolo().getText("Type in the question\'s tags"),
 				"tag");
 		getSolo().enterText((EditText) getSolo().getText("Type in the answer"),
 				"Answer 1");
-		getSolo().clickOnButton("\\+");
-		
-		waitFor(TTChecks.QUESTION_EDITED);
 		getSolo().enterText((EditText) getSolo().getText("Type in the answer"),
 				"Answer 2");
 		
@@ -86,8 +86,9 @@ public class AuditTest extends GUITest<EditQuestionActivity> {
 		getSolo().enterText((EditText) getSolo().getText("Type in the answer"),
 				"Answer 1");
 		getSolo().clickOnButton("" + (char) 10008);
-		getSolo().clickOnButton("\\+");
+		waitFor(TTChecks.QUESTION_EDITED);
 		
+		getSolo().clickOnButton("\\+");
 		waitFor(TTChecks.QUESTION_EDITED);
 		getSolo().enterText((EditText) getSolo().getText("Type in the answer"),
 				"Answer 2");
@@ -120,8 +121,8 @@ public class AuditTest extends GUITest<EditQuestionActivity> {
 	public void testAudit() {
 
 		getSolo().sleep(500);
-		assertTrue("Audit fresh Activity is not zero", getActivity()
-				.auditErrors() == 0);
+		assertTrue("Audit fresh Activity is not zero but " + getActivity()
+				.auditErrors(), getActivity().auditErrors() == 0);
 
 		getActivity().runOnUiThread(new Runnable() {
 
@@ -340,7 +341,8 @@ public class AuditTest extends GUITest<EditQuestionActivity> {
 
 	public void testBlankTagEmptyAnswers() {
 
-		getSolo().clickOnButton("+");
+		getSolo().sleep(500);
+		getSolo().clickOnButton("\\+");
 		waitFor(TTChecks.QUESTION_EDITED);
 		getSolo().enterText(
 				(EditText) getSolo().getText(
@@ -400,7 +402,6 @@ public class AuditTest extends GUITest<EditQuestionActivity> {
 		getSolo().clickOnButton("" + (char) 10008);
 		waitFor(TTChecks.QUESTION_EDITED);
 		final EditQuestionActivity activity = (EditQuestionActivity) getActivity();
-		QuizQuestion question = activity.createQuestionFromGui();
 
 		getActivity().runOnUiThread(new Runnable() {
 
@@ -425,8 +426,6 @@ public class AuditTest extends GUITest<EditQuestionActivity> {
 				remouvebuton3.setText("DO");
 				Button correctButton3 = getSolo().getButton("" + (char) 10008);
 				correctButton3.setText("**");
-				
-				
 
 				semaphore.release();
 			}
@@ -434,9 +433,9 @@ public class AuditTest extends GUITest<EditQuestionActivity> {
 
 		try {
 			semaphore.acquire();
-			getSolo().sleep(6000);
-			getSolo().clickOnButton("**");
-			getSolo().sleep(6000);
+			getSolo().sleep(1000);
+			getSolo().clickOnButton("**");	// resets the adapter
+			getSolo().sleep(1000);
 			assertTrue("AuditButton errors: => " + activity.auditErrors(),
 					activity.auditErrors() == 8);
 		} catch (InterruptedException e) {
