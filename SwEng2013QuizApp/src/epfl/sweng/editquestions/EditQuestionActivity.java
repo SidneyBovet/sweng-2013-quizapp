@@ -36,12 +36,17 @@ public class EditQuestionActivity extends Activity {
 
 	private AnswerListAdapter mAnswerListAdapter;
 	private ListView mListview;
-	private RelativeLayout mLayout;
-
+	private RelativeLayout mEditQuestionLayout;
+	
+	private Button mAddButton;
+	private Button mSubmitButton;
+	private EditText mQuestionEditText;
+	private EditText mTagsEditText;
+	
 	// fields related to the question
 	private String mQuestionBodyText;
 	private String mTagsText;
-
+	
 	/**
 	 * Adds a new empty answer to the <code>ListView</code>.
 	 * <p>
@@ -49,16 +54,29 @@ public class EditQuestionActivity extends Activity {
 	 * 
 	 * @param view
 	 */
-
+	
 	public void addMoreAnswer(View view) {
 		mAnswerListAdapter.add("");
 		TestCoordinator.check(TTChecks.QUESTION_EDITED);
 	}
-
+	
+	/**
+	 * Creates a {@link QuizQuestion} with the fields of the graphical user
+	 * interface.
+	 * <p>
+	 * The structure of the inputs list must follow this order :
+	 * <ul>
+	 * 	<li>Question text</li>
+	 * 	<li>Answer #1 text</li>
+	 * 	<li>Answer #2 text</li>
+	 * 	<li>...</li>
+	 * 	<li>Index of the correct answer</li>
+	 * 	<li>Tags text</li>
+	 * </ul>
+	 * @return
+	 */
 	
 	public QuizQuestion createQuestionFromGui() {
-		// WARNING : you MUST follow this structure
-		// elements : Question1 => Answer1 => ... => indexOfAnswer => tags
 		if (mAnswerListAdapter != null) {
 			List<String> listInputGUI = new ArrayList<String>();
 			
@@ -88,14 +106,13 @@ public class EditQuestionActivity extends Activity {
 	 * @param view
 	 *            Reference to the widget that was clicked.
 	 */
-
+	
 	public void sendEditedQuestion(View view) {
-		
 		new AsyncPostQuestion().execute(createQuestionFromGui());
-
+		
 		resetEditQuestionLayout();
 	}
-
+	
 	/**
 	 * Tries to update the status of the submit button with the value parameter,
 	 * along with the success of the {@link #auditEmptyField()} method.
@@ -103,34 +120,32 @@ public class EditQuestionActivity extends Activity {
 	 * @param value
 	 *            The new status value of the submit button.
 	 */
-
+	
 	public void updateSubmitButton() {
-		Button submitButton = (Button) mLayout
-				.findViewById(R.id.submit_question_button);
-		if (submitButton != null) {
-			submitButton.setEnabled(auditSubmitButton() == 0);
+		if (mSubmitButton != null) {
+			mSubmitButton.setEnabled(auditSubmitButton() == 0);
 		}
 	}
-
+	
 	/**
 	 * Initializes the contents of the Activity's standard options menu.
 	 * <p>
 	 * This was not implemented.
 	 */
-
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.submit_question, menu);
 		return true;
 	}
-
+	
 	/**
 	 * Initializes the activity by setting the view.
 	 * 
 	 * @see #setDisplayView()
 	 */
-
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -138,28 +153,29 @@ public class EditQuestionActivity extends Activity {
 		setDisplayView();
 		TestCoordinator.check(TTChecks.EDIT_QUESTIONS_SHOWN);
 	}
-
+	
 	/**
 	 * Sets the view by binding the {@link AnswerListAdapter} with the
 	 * <code>ListView</code>, and adding a <code>TextWatcher</code> on the
 	 * question and tags fields.
 	 */
-
+	
 	private void setDisplayView() {
-
+		
 		mQuestionBodyText = "";
 		mTagsText = "";
-
-		mLayout = (RelativeLayout) findViewById(R.id.layoutEditQuestion);
+		
+		mEditQuestionLayout = (RelativeLayout) findViewById(R.id.layoutEditQuestion);
 		mAnswerListAdapter = new AnswerListAdapter(this);
 		mListview = (ListView) findViewById(R.id.submit_question_listview);
-
+		
 		mListview.setAdapter(mAnswerListAdapter);
-		EditText questionEditText = (EditText) findViewById(R.id.submit_question_text_body_edit);
-
+		mQuestionEditText = (EditText) 
+				findViewById(R.id.submit_question_text_body_edit);
+		
 		// TextChanged Listener for questionEditText
-		questionEditText.addTextChangedListener(new TextWatcher() {
-
+		mQuestionEditText.addTextChangedListener(new TextWatcher() {
+			
 			@Override
 			public void afterTextChanged(Editable s) {
 				// Proceed only if there has been user changes.
@@ -169,23 +185,23 @@ public class EditQuestionActivity extends Activity {
 					TestCoordinator.check(TTChecks.QUESTION_EDITED);
 				}
 			}
-
+			
 			@Override
 			public void beforeTextChanged(CharSequence s, int start, int count,
 					int after) {
 				// Nothing to do here
 			}
-
+			
 			@Override
 			public void onTextChanged(CharSequence s, int start, int count,
 					int after) {
 				// Nothing to do here
 			}
 		});
-
-		EditText tagsEditText = (EditText) findViewById(R.id.submit_question_tags);
-		tagsEditText.addTextChangedListener(new TextWatcher() {
-
+		
+		mTagsEditText = (EditText) findViewById(R.id.submit_question_tags);
+		mTagsEditText.addTextChangedListener(new TextWatcher() {
+			
 			@Override
 			public void afterTextChanged(Editable s) {
 				if (!mTagsText.equals(s.toString())) {
@@ -207,21 +223,25 @@ public class EditQuestionActivity extends Activity {
 				// Nothing to do here
 			}
 		});
-
+		
+		mAddButton = (Button) findViewById(R.id.submit_question_add_button);
+		mSubmitButton = (Button) findViewById(R.id.submit_question_button);
+		updateSubmitButton();
+		
 	}
-
+	
 	/**
 	 * Resets the layout by emptying every <code>EditText</code> on the Activty,
 	 * and by resetting the <code>ListView</code> adapter.
 	 */
-
+	
 	private void resetEditQuestionLayout() {
 		mQuestionBodyText = "";
 		mTagsText = "";
 		EditText editTextToFocus = null;
-		for (int i = 0; i < mLayout.getChildCount(); i++) {
-			if (mLayout.getChildAt(i) instanceof EditText) {
-				EditText currentEditText = (EditText) mLayout.getChildAt(i);
+		for (int i = 0; i < mEditQuestionLayout.getChildCount(); i++) {
+			if (mEditQuestionLayout.getChildAt(i) instanceof EditText) {
+				EditText currentEditText = (EditText) mEditQuestionLayout.getChildAt(i);
 				currentEditText.setText("");
 				if (i == 0) {
 					editTextToFocus = currentEditText;
@@ -232,17 +252,18 @@ public class EditQuestionActivity extends Activity {
 		editTextToFocus.requestFocus();
 	}
 
-	class AsyncPostQuestion extends AsyncTask<QuizQuestion, Void, Integer> {
-
+	private final class AsyncPostQuestion
+		extends AsyncTask<QuizQuestion, Void, Integer> {
+		
 		@Override
 		protected Integer doInBackground(QuizQuestion... questions) {
 			if (null != questions && questions.length != 1) {
 				throw new IllegalArgumentException();
 			}
-
+			
 			return QuestionsProxy.getInstance().sendQuizQuestion(questions[0]);
 		}
-
+		
 		@Override
 		protected void onPostExecute(Integer result) {
 			super.onPostExecute(result);
@@ -256,127 +277,94 @@ public class EditQuestionActivity extends Activity {
 			TestCoordinator.check(TTChecks.NEW_QUESTION_SUBMITTED);
 		}
 	}
-
+	
 	/*
 	 * ***************************************************
 	 * ********************* Audit ***********************
 	 * ***************************************************
 	 */
-
 	
 	/**
 	 * Audit method that verifies if all rep-invariants are fulfilled.
 	 * 
 	 * @return the number of violated rep-invariants.
 	 */
-
+	
 	public int auditErrors() {
 		int errorCount = 0;
 		errorCount += auditEditTexts();
 		errorCount += auditButtons();
 		errorCount += auditAnswers();
-		Button submitButton = (Button) mLayout
-				.findViewById(R.id.submit_question_button);
-		if (submitButton.isEnabled() && auditSubmitButton() > 0) {	
+		
+		if (mSubmitButton.isEnabled() && auditSubmitButton() > 0) {	
 			errorCount += auditSubmitButton();
-		} else if (!submitButton.isEnabled() && auditSubmitButton() == 0) {
+		} else if (!mSubmitButton.isEnabled() && auditSubmitButton() == 0) {
 			errorCount += 1;
 		}
+		
 		return errorCount;
 	}
 	
-	/**
-	 * Checks the following requirements :
-	 * <ul>
-	 * <li>The question field must not be an empty string</li>
-	 * <li>The tags field must not be an empty string.</li>
-	 * </ul>
-	 * 
-	 * @return The number of the previously described errors.
-	 */
-
-	private int auditEmptyField() {
-		int errors = 0;
-
-		if (mQuestionBodyText.matches("\\s*")) {
-			errors++;
-		}
-		if (mTagsText.matches("\\s*")) {
-			errors++;
-		}
-
-		return errors;
-	}
-
 	/**
 	 * Audit method that verifies if all rep-invariants for EditTexts are
 	 * fulfilled.
 	 * 
 	 * @return the number of violated rep-invariants.
 	 */
-
+	
 	private int auditEditTexts() {
 		int errorCount = 0;
-
-		EditText editQuestionBody = (EditText) mLayout
-				.findViewById(R.id.submit_question_text_body_edit);
-		EditText editTags = (EditText) mLayout
-				.findViewById(R.id.submit_question_tags);
-
+		
 		String questionBodyHint = getString(R.string.submit_question_text_body);
-		if (editQuestionBody == null
-				|| !editQuestionBody.getHint().equals(questionBodyHint)
-				|| editQuestionBody.getVisibility() != View.VISIBLE) {
+		if (mQuestionEditText == null
+				|| !mQuestionEditText.getHint().equals(questionBodyHint)
+				|| mQuestionEditText.getVisibility() != View.VISIBLE) {
 			errorCount++;
 		}
-
+		
 		String answerHint = getString(R.string.submit_question_answer_hint);
 		for (int i = 0; i < mListview.getCount(); i++) {
 			View answerView = mListview.getChildAt(i);
 			EditText editAnswer = (EditText) answerView
 					.findViewById(R.id.submit_question_answer_text);
-
+			
 			if (editAnswer == null || !editAnswer.getHint().equals(answerHint)
 					|| editAnswer.getVisibility() != View.VISIBLE) {
 				errorCount++;
 			}
 		}
-
+		
 		String tagsHint = getString(R.string.submit_question_tags);
-		if (editTags == null || !editTags.getHint().equals(tagsHint)
-				|| editTags.getVisibility() != View.VISIBLE) {
+		if (mTagsEditText == null || !mTagsEditText.getHint().equals(tagsHint)
+				|| mTagsEditText.getVisibility() != View.VISIBLE) {
 			errorCount++;
 		}
 		return errorCount;
 	}
-
+	
 	/**
 	 * Audit method that verifies if all rep-invariants for Buttons are
 	 * fulfilled.
 	 * 
 	 * @return the number of violated rep-invariants.
 	 */
-
+	
 	private int auditButtons() {
 		int errorCount = 0;
-		Button addButton = (Button) mLayout
-				.findViewById(R.id.submit_question_add_button);
-		Button submitButton = (Button) mLayout
-				.findViewById(R.id.submit_question_button);
-
+		
 		String addButtonText = getString(R.string.submit_question_add_button);
-		if (addButton == null || !addButton.getText().equals(addButtonText)
-				|| addButton.getVisibility() != View.VISIBLE) {
+		if (mAddButton == null || !mAddButton.getText().equals(addButtonText)
+				|| mAddButton.getVisibility() != View.VISIBLE) {
 			++errorCount;
 		}
-
+		
 		String submitButtonText = getString(R.string.submit_question_button);
-		if (submitButton == null
-				|| !submitButton.getText().equals(submitButtonText)
-				|| submitButton.getVisibility() != View.VISIBLE) {
+		if (mSubmitButton == null
+				|| !mSubmitButton.getText().equals(submitButtonText)
+				|| mSubmitButton.getVisibility() != View.VISIBLE) {
 			++errorCount;
 		}
-
+		
 		String removeButtonText = getString(R.string.submit_question_remove_answer);
 		String correctAnswerText = getString(R.string.question_correct_answer);
 		String wrongAnswerText = getString(R.string.question_wrong_answer);
@@ -386,30 +374,30 @@ public class EditQuestionActivity extends Activity {
 					.findViewById(R.id.submit_question_remove_answer_edit);
 			Button correctnessButton = (Button) answerView
 					.findViewById(R.id.submit_question_correct_switch);
-
+			
 			if (removeButton == null
 					|| !removeButton.getText().equals(removeButtonText)
 					|| removeButton.getVisibility() != View.VISIBLE) {
 				++errorCount;
 			}
-
+			
 			if (correctnessButton == null
-					|| (!correctnessButton.getText().equals(correctAnswerText) && !correctnessButton
-							.getText().equals(wrongAnswerText))
+					|| (!correctnessButton.getText().equals(correctAnswerText) 
+							&& !correctnessButton.getText().equals(wrongAnswerText))
 					|| correctnessButton.getVisibility() != View.VISIBLE) {
 				++errorCount;
 			}
 		}
 		return errorCount;
 	}
-
+	
 	/**
 	 * Audit method that verifies if all rep-invariants for answers are
 	 * fulfilled.
 	 * 
 	 * @return the number of violated rep-invariants.
 	 */
-
+	
 	private int auditAnswers() {
 		boolean oneAnswerChecked = false;
 		
@@ -420,7 +408,7 @@ public class EditQuestionActivity extends Activity {
 					.findViewById(R.id.submit_question_correct_switch);
 			
 			if (correctnessButton == null) {
-				return 2; // then you've met with a terrible fate
+				return 1; // then you've met with a terrible fate
 			}
 			if (correctnessButton.getText().equals(correctAnswerCheck)) {
 				if (!oneAnswerChecked) {
@@ -430,7 +418,7 @@ public class EditQuestionActivity extends Activity {
 				}
 			}
 		}
-
+		
 		return 0;
 	}
 
@@ -444,17 +432,23 @@ public class EditQuestionActivity extends Activity {
 	private int auditSubmitButton() {
 		int errorCount = 0;
 		
-		errorCount += auditEmptyField();
 		QuizQuestion questionToAudit = createQuestionFromGui();
+		
+		// avoid IllegalStateException
 		if (questionToAudit != null) {
 			errorCount += questionToAudit.auditErrors();
+		} else {
+			errorCount += 1;
 		}
+		
 		// avoid IllegalStateException
 		if (mAnswerListAdapter != null) {
 			errorCount += mAnswerListAdapter.auditErrors();
+		} else {
+			errorCount += 1;
 		}
 		
-		if (errorCount>0) {
+		if (errorCount > 0) {
 			return 1;
 		} else {
 			return 0;
