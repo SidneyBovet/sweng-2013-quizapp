@@ -146,6 +146,7 @@ public class AuthenticationActivity extends Activity {
 		}
 
 		new AsyncAuthentication().execute(username, password);
+		password = null;
 	}
 
 	/**
