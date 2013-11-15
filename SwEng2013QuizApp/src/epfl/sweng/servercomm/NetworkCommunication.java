@@ -41,7 +41,7 @@ public class NetworkCommunication implements INetworkCommunication {
 					.execute(postQuery);
 			httpCodeResponse = response.getStatusLine().getStatusCode();
 			
-			if (Math.ceil(httpCodeResponse/ONE_HUNDRED) == BASE_SERVER_ERRORS) {
+			if (Math.floor(httpCodeResponse/ONE_HUNDRED) == BASE_SERVER_ERRORS) {
 				UserPreferences.getInstance()
 					.setConnectivityState(ConnectivityState.OFFLINE);
 			}
@@ -79,7 +79,7 @@ public class NetworkCommunication implements INetworkCommunication {
 					.execute(firstRandom);
 			int httpCodeResponse = response.getStatusLine().getStatusCode();
 			
-			if (Math.ceil(httpCodeResponse/ONE_HUNDRED) == BASE_SERVER_ERRORS) {
+			if (Math.floor(httpCodeResponse/ONE_HUNDRED) == BASE_SERVER_ERRORS) {
 				UserPreferences.getInstance()
 					.setConnectivityState(ConnectivityState.OFFLINE);
 			} else if (httpCodeResponse == HttpStatus.SC_OK) {
