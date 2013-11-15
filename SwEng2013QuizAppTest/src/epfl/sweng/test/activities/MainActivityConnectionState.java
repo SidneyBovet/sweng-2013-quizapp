@@ -36,13 +36,13 @@ public class MainActivityConnectionState extends GUITest<MainActivity> {
 		persistentStorage = UserPreferences.
 				getInstance(contextOfMainActivity);
 		persistentStorage.setSessionId("blabla");
+		persistentStorage.setConnectivityState(ConnectivityState.ONLINE);
 		getActivityAndWaitFor(TTChecks.MAIN_ACTIVITY_SHOWN);
 	}
 	
 	@Override
 	protected void tearDown() throws Exception {
 		persistentStorage.destroyAuthentication();
-		persistentStorage.setConnectivityState(ConnectivityState.ONLINE);
 		super.tearDown();
 	};
 	
