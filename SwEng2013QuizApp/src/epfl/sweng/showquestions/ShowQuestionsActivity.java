@@ -116,7 +116,7 @@ public class ShowQuestionsActivity extends Activity {
 			mWasDisconnectedBeforeRetrieving = UserPreferences.getInstance(
 					ShowQuestionsActivity.this).getConnectivityState().
 					equals(ConnectivityState.OFFLINE);
-			return QuestionsProxy.getInstance().retrieveQuizQuestion();
+			return QuestionsProxy.getInstance().retrieveRandomQuizQuestion();
 		}
 
 		@Override

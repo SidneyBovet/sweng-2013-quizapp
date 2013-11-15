@@ -110,11 +110,11 @@ public final class QuestionsProxy
 	 * @return {@link QuizQuestion} retrieve from the server
 	 */
 	@Override
-	public QuizQuestion retrieveQuizQuestion() {
+	public QuizQuestion retrieveRandomQuizQuestion() {
 		QuizQuestion fetchedQuestion = null;
 
 		if (UserPreferences.getInstance().isConnected()) {
-			fetchedQuestion = mNetworkCommunication.retrieveQuizQuestion();
+			fetchedQuestion = mNetworkCommunication.retrieveRandomQuizQuestion();
 			if (null != fetchedQuestion) {
 				addInbox(fetchedQuestion);
 			} else {
@@ -127,6 +127,11 @@ public final class QuestionsProxy
 		}
 
 		return fetchedQuestion;
+	}
+	
+	public List<QuizQuestion> retrieveQuizQuestion(String query) {
+		
+		return null;
 	}
 
 	public int getOutboxSize() {

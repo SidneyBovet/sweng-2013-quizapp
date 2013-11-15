@@ -1,6 +1,9 @@
 package epfl.sweng.searchquestions;
 
+import java.util.List;
+
 import android.app.Activity;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -9,6 +12,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import epfl.sweng.R;
+import epfl.sweng.patterns.QuestionsProxy;
+import epfl.sweng.quizquestions.QuizQuestion;
 import epfl.sweng.testing.TestCoordinator;
 import epfl.sweng.testing.TestCoordinator.TTChecks;
 
@@ -28,8 +33,7 @@ public class SearchActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_search);
 		setDisplayView();
-		
-		
+
 	}
 
 	@Override
@@ -102,18 +106,47 @@ public class SearchActivity extends Activity {
 	 * Send the Query to the server and process accordingly.
 	 */
 	public void sendQuery(View view) {
-		// DO query Stuff and go to ShowQuestionActivity
-
-		restetQuerySearchField();
-
+		new AsyncSearchForQuestions().execute(mQueryFieldText);
+		resetQuerySearchField();
 	}
 
 	/**
 	 * Resets the layout by emptying the queryField on the Activity, and by
 	 * disabling the sendQuery Button.
 	 */
-	private void restetQuerySearchField() {
+	private void resetQuerySearchField() {
 		mQueryFieldText = "";
 		mQueryField.setText("");
+	}
+
+	/**
+	 * Sends the query to the server and get a list of questions to display.
+	 * @author born4new
+	 *
+	 */
+	private final class AsyncSearchForQuestions extends
+			AsyncTask<String, Void, List<QuizQuestion>> {
+
+		@Override
+		protected List<QuizQuestion> doInBackground(String... queries) {
+			if (null != queries && queries.length != 1) {
+				throw new IllegalArgumentException();
+			}
+
+			return QuestionsProxy.getInstance().retrieveQuizQuestion(queries[0]);
+		}
+
+		@Override
+		protected void onPostExecute(List<QuizQuestion> questions) {
+			super.onPostExecute(questions);
+			// if (result != HttpStatus.SC_CREATED) {
+			// Toast.makeText(
+			// SearchActivity.this,
+			// getResources().getString(
+			// R.string.error_uploading_question),
+			// Toast.LENGTH_LONG).show();
+			// }
+			// TestCoordinator.check(TTChecks.NEW_QUESTION_SUBMITTED);
+		}
 	}
 }
