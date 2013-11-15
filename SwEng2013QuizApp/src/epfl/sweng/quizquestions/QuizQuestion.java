@@ -12,6 +12,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.util.Log;
+
 /**
  * Data structure of a question for the quiz application.
  * 
@@ -215,31 +217,37 @@ public class QuizQuestion {
 		int errorCount = 0;
 		if (mQuestionStatement.trim().length() == 0
 				|| !(0 < mQuestionStatement.length() && mQuestionStatement.length() <= QUESTION_CONTENT_MAX_SIZE)) {
+			logErrorIncrement("Statement is empty or has invalid lenght");
 			++errorCount;
 		}
 
 		for (String answer : mAnswers) {
 			if (answer.trim().length() == 0
 					|| !(0 < answer.length() && answer.length() <= ANSWER_CONTENT_MAX_SIZE)) {
+				logErrorIncrement("One answer is empty or has invalid lenght");
 				++errorCount;
 			}
 		}
 
 		if (!(mAnswers.size() > 1 && mAnswers.size() <= ANSWERLIST_MAX_SIZE)) {
+			logErrorIncrement("Number of answers is invalid");
 			++errorCount;
 		}
 
 		if (!(mSolutionIndex >= 0 && mSolutionIndex < mAnswers.size())) {
+			logErrorIncrement("Index of the solution is invalid");
 			++errorCount;
 		}
 		
 		if (!(mTags.size() > 0 && mTags.size() <= TAGSET_MAX_SIZE)) {
+			logErrorIncrement("Number of tags is invalid");
 			++errorCount;
 		}
 		
 		for (String tag : mTags) {
 			if (tag.trim().length() == 0
 					|| !(0 < tag.length() && tag.length() <= TAGSLIST_MAX_SIZE)) {
+				logErrorIncrement("one of the tags is empty or has invalit lenght");
 				++errorCount;
 			}
 		}
@@ -313,4 +321,47 @@ public class QuizQuestion {
 		return mAnswers;
 	}
 
+	/**
+	 * Just a helper to log audit-related things.
+	 * @param message the message to append to this log
+	 */
+	private void logErrorIncrement(String message) {
+		Log.d("auditErrors increment @ " + this.getClass().getName(), message);
+	}
+
+	public int isQuestionValid() {
+		int errorCount = 0;
+		if (mQuestionStatement.trim().length() == 0
+				|| !(0 < mQuestionStatement.length() && mQuestionStatement.length() <= QUESTION_CONTENT_MAX_SIZE)) {
+			++errorCount;
+		}
+
+		for (String answer : mAnswers) {
+			if (answer.trim().length() == 0
+					|| !(0 < answer.length() && answer.length() <= ANSWER_CONTENT_MAX_SIZE)) {
+				++errorCount;
+			}
+		}
+
+		if (!(mAnswers.size() > 1 && mAnswers.size() <= ANSWERLIST_MAX_SIZE)) {
+			++errorCount;
+		}
+
+		if (!(mSolutionIndex >= 0 && mSolutionIndex < mAnswers.size())) {
+			++errorCount;
+		}
+		
+		if (!(mTags.size() > 0 && mTags.size() <= TAGSET_MAX_SIZE)) {
+			++errorCount;
+		}
+		
+		for (String tag : mTags) {
+			if (tag.trim().length() == 0
+					|| !(0 < tag.length() && tag.length() <= TAGSLIST_MAX_SIZE)) {
+				++errorCount;
+			}
+		}
+
+		return errorCount;
+	}
 }

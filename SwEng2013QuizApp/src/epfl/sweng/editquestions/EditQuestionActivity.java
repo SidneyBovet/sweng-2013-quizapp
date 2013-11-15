@@ -10,6 +10,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
@@ -123,7 +124,7 @@ public class EditQuestionActivity extends Activity {
 	
 	public void updateSubmitButton() {
 		if (mSubmitButton != null) {
-			mSubmitButton.setEnabled(auditSubmitButton() == 0);
+			mSubmitButton.setEnabled(isQuestionValid());
 		}
 	}
 	
@@ -296,9 +297,11 @@ public class EditQuestionActivity extends Activity {
 		errorCount += auditButtons();
 		errorCount += auditAnswers();
 		
-		if (mSubmitButton.isEnabled() && auditSubmitButton() > 0) {	
+		if (mSubmitButton.isEnabled() && auditSubmitButton() > 0) {
+			logErrorIncrement("Submit button enabled and auditSubmitButton() > 0");
 			errorCount += auditSubmitButton();
 		} else if (!mSubmitButton.isEnabled() && auditSubmitButton() == 0) {
+			logErrorIncrement("Submit button disabled and auditSubmitButton() == 0");
 			errorCount += 1;
 		}
 		
@@ -319,6 +322,7 @@ public class EditQuestionActivity extends Activity {
 		if (mQuestionEditText == null
 				|| !mQuestionEditText.getHint().equals(questionBodyHint)
 				|| mQuestionEditText.getVisibility() != View.VISIBLE) {
+			logErrorIncrement("No text entered in question EditText or not visible");
 			errorCount++;
 		}
 		
@@ -330,6 +334,7 @@ public class EditQuestionActivity extends Activity {
 			
 			if (editAnswer == null || !editAnswer.getHint().equals(answerHint)
 					|| editAnswer.getVisibility() != View.VISIBLE) {
+				logErrorIncrement("One answer's EditText is empty or not visible");
 				errorCount++;
 			}
 		}
@@ -337,6 +342,7 @@ public class EditQuestionActivity extends Activity {
 		String tagsHint = getString(R.string.submit_question_tags);
 		if (mTagsEditText == null || !mTagsEditText.getHint().equals(tagsHint)
 				|| mTagsEditText.getVisibility() != View.VISIBLE) {
+			logErrorIncrement("Tag EditText is empty or not visible");
 			errorCount++;
 		}
 		return errorCount;
@@ -355,6 +361,7 @@ public class EditQuestionActivity extends Activity {
 		String addButtonText = getString(R.string.submit_question_add_button);
 		if (mAddButton == null || !mAddButton.getText().equals(addButtonText)
 				|| mAddButton.getVisibility() != View.VISIBLE) {
+			logErrorIncrement("Add button corrupted or not visible");
 			++errorCount;
 		}
 		
@@ -362,6 +369,7 @@ public class EditQuestionActivity extends Activity {
 		if (mSubmitButton == null
 				|| !mSubmitButton.getText().equals(submitButtonText)
 				|| mSubmitButton.getVisibility() != View.VISIBLE) {
+			logErrorIncrement("submit button corrupted or not visible");
 			++errorCount;
 		}
 		
@@ -378,6 +386,7 @@ public class EditQuestionActivity extends Activity {
 			if (removeButton == null
 					|| !removeButton.getText().equals(removeButtonText)
 					|| removeButton.getVisibility() != View.VISIBLE) {
+				logErrorIncrement("Remove button is corrupted or not visible");
 				++errorCount;
 			}
 			
@@ -385,6 +394,7 @@ public class EditQuestionActivity extends Activity {
 					|| (!correctnessButton.getText().equals(correctAnswerText) 
 							&& !correctnessButton.getText().equals(wrongAnswerText))
 					|| correctnessButton.getVisibility() != View.VISIBLE) {
+				logErrorIncrement("Correctness button corrupted or not visible");
 				++errorCount;
 			}
 		}
@@ -408,12 +418,14 @@ public class EditQuestionActivity extends Activity {
 					.findViewById(R.id.submit_question_correct_switch);
 			
 			if (correctnessButton == null) {
+				logErrorIncrement("Correctness button is null?!");
 				return 1; // then you've met with a terrible fate
 			}
 			if (correctnessButton.getText().equals(correctAnswerCheck)) {
 				if (!oneAnswerChecked) {
 					oneAnswerChecked = true;
 				} else {
+					logErrorIncrement("More than one answer marked as corect");
 					return 1;
 				}
 			}
@@ -438,20 +450,43 @@ public class EditQuestionActivity extends Activity {
 		if (questionToAudit != null) {
 			errorCount += questionToAudit.auditErrors();
 		} else {
+			logErrorIncrement("Question to be audited is null?!");
 			errorCount += 1;
 		}
 		
-		// avoid IllegalStateException
-		if (mAnswerListAdapter != null) {
-			errorCount += mAnswerListAdapter.auditErrors();
-		} else {
-			errorCount += 1;
-		}
+//		// avoid IllegalStateException
+//		if (mAnswerListAdapter != null) {
+//			errorCount += mAnswerListAdapter.auditErrors();
+//		} else {
+//			logErrorIncrement("AnswerListAdapter is null?!");
+//			errorCount += 1;
+//		}
 		
 		if (errorCount > 0) {
 			return 1;
 		} else {
 			return 0;
 		}
+	}
+
+	private boolean isQuestionValid() {
+		QuizQuestion questionToAudit = createQuestionFromGui();
+		int errorCount = 0;
+		// avoid IllegalStateException
+		if (questionToAudit != null) {
+			errorCount += questionToAudit.isQuestionValid();
+		} else {
+			logErrorIncrement("Question to be audited is null?!");
+			errorCount += 1;
+		}
+		return errorCount == 0;
+	}
+	
+	/**
+	 * Just a helper to log audit-related things.
+	 * @param message the message to append to this log
+	 */
+	private void logErrorIncrement(String message) {
+		Log.d("auditErrors increment @ " + this.getClass().getName(), message);
 	}
 }
