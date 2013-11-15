@@ -5,31 +5,69 @@ import org.json.JSONObject;
 
 /**
  * Used to filter data from the SwEng server.
+ * 
  * @author born4new
- *
+ * 
  */
 public class QuizQuery {
 
 	private String query;
-	
+
 	public QuizQuery(String query) {
 		if (QuizQuery.isQueryValid(query)) {
 			this.query = query;
 		}
 	}
-	
+
 	/**
 	 * John is a wizard.
-	 * @param query Query to be verified.
+	 * 
+	 * @param query
+	 *            Query to be verified.
 	 * @return true if valid, false otherwise.
 	 */
 	public static boolean isQueryValid(String query) {
-		
-		// John's magic
-		
+
+		String alphanumeric = "(?:[a-zA-Z0-9])+";
+		String allowedOperators = "(?:\\+|\\*|\\s|\\(|\\))*";
+
+		//
+		// verify : no characters other than alphanumeric characters,
+		// ' ',(,),*,+
+		boolean expectedChara = query.matches(alphanumeric + allowedOperators);
+		// verifiy that the syntax is correct: (i.e banana++* is not accepted)
+		boolean correctSyntax = hasGoodSyntax(query);
+		// verifiy that the nested parenthesis are correct: (i.e (banana)) is
+		// not accepted)
+		boolean correctNested = isWellNested(query);
+
 		return false;
 	}
-	
+
+	private static boolean hasGoodSyntax(String query) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	private static boolean isWellNested(String query) {
+		String onlyParenthesiString = query.replaceAll("[^\\(\\)]", "");
+
+		if (query.length() % 2 != 0) {
+			return false;
+		}
+
+		String[] array = onlyParenthesiString.split("");
+		int nestedCounter = 0;
+		for (String c : array) {
+			nestedCounter += c.equals("(") ? 1 : -1;
+			if (nestedCounter < 0) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
 	/**
 	 * Returns a {@link JSONObject} representing the current query.
 	 * 

@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import epfl.sweng.R;
+import epfl.sweng.backend.QuizQuery;
 import epfl.sweng.patterns.QuestionsProxy;
 import epfl.sweng.quizquestions.QuizQuestion;
 import epfl.sweng.testing.TestCoordinator;
@@ -82,16 +83,13 @@ public class SearchActivity extends Activity {
 			@Override
 			public void afterTextChanged(Editable s) {
 				// Proceed only if there has been user changes.
-				// XXX repris du code dans EditQuesiton mais compris comment ca
-				// marche
+
 				if (!mQueryFieldText.equals(s.toString())) {
 					mQueryFieldText = s.toString();
 					updateSearchButton();
 
 					TestCoordinator.check(TTChecks.QUERY_EDITED);
-
 				}
-				TestCoordinator.check(TTChecks.QUERY_EDITED);
 			}
 		});
 	}
@@ -102,7 +100,45 @@ public class SearchActivity extends Activity {
 	 */
 	private void updateSearchButton() {
 
-		mSubmitQuery.setEnabled(mQueryFieldText.length() != 0);
+		mSubmitQuery.setEnabled((mQueryFieldText.length() != 0)
+				&& QuizQuery.isQueryValid(mQueryFieldText));
+	}
+
+	private boolean checkQuery() {
+		// verify : no characters other than alphanumeric characters,
+		// ' ',(,),*,+
+		boolean expectedChara = mQueryFieldText
+				.matches("(?:[a-zA-Z0-9])+(?:\\+|\\*|\\s|\\(|\\))*");
+		// verifiy that the syntax is correct: (i.e banana++* is not accepted)
+		boolean correctSyntax = hasGoodSyntax();
+		// verifiy that the nested parenthesis are correct: (i.e (banana)) is
+		// not accepted)
+		boolean correctNested = isWellNested();
+	}
+
+	private boolean hasGoodSyntax() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	private boolean isWellNested() {
+		String onlyParenthesiString = mQueryFieldText.replaceAll("[^\\(\\)]",
+				"");
+
+		if (mQueryFieldText.length() % 2 != 0) {
+			return false;
+		}
+
+		String[] array = onlyParenthesiString.split("");
+		int nestedCounter = 0;
+		for (String c : array) {
+			nestedCounter += c.equals("(") ? 1 : -1;
+			if (nestedCounter < 0) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 	/**
@@ -124,8 +160,9 @@ public class SearchActivity extends Activity {
 
 	/**
 	 * Sends the query to the server and get a list of questions to display.
+	 * 
 	 * @author born4new
-	 *
+	 * 
 	 */
 	private final class AsyncSearchForQuestions extends
 			AsyncTask<String, Void, List<QuizQuestion>> {
@@ -142,8 +179,9 @@ public class SearchActivity extends Activity {
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
-			
-			return QuestionsProxy.getInstance().retrieveQuizQuestions(jsonQuery);
+
+			return QuestionsProxy.getInstance()
+					.retrieveQuizQuestions(jsonQuery);
 		}
 
 		@Override

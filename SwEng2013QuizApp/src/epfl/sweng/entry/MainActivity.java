@@ -185,6 +185,8 @@ public class MainActivity extends Activity {
 				.setEnabled(mUserPreferences.isAuthenticated());
 		((Button) findViewById(R.id.submitQuestionButton))
 				.setEnabled(mUserPreferences.isAuthenticated());
+		((Button) findViewById(R.id.SearchQueryButton))
+		.setEnabled(mUserPreferences.isAuthenticated());
 		int visibility = mUserPreferences.isAuthenticated() ? View.VISIBLE
 				: View.INVISIBLE;
 		CheckBox isOffline = (CheckBox) findViewById(R.id.switchOnlineModeCheckbox);
