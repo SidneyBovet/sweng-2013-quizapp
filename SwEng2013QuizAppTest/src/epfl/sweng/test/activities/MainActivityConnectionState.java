@@ -72,6 +72,11 @@ public class MainActivityConnectionState extends GUITest<MainActivity> {
 	}
 
 	public void testHTTPNotFoundStatusRightAfterAuthenticationWhenClickinOnShowRandomQuestion() {
+
+		CheckBox connectivityState = (CheckBox) getSolo().getView(
+				R.id.switchOnlineModeCheckbox);
+		assertTrue("The checkbox should stay disabled", !connectivityState.isChecked());
+		
 		UserPreferences.getInstance(getInstrumentation().getTargetContext()).
 			setSessionId("hahaFake");
 		UserPreferences.getInstance(getInstrumentation().getTargetContext()).
@@ -87,9 +92,10 @@ public class MainActivityConnectionState extends GUITest<MainActivity> {
 		getSolo().getCurrentActivity().finish();
 		getSolo().sleep(1000);
 		
-		CheckBox connectivityState = (CheckBox) getSolo().getView(
-				R.id.switchOnlineModeCheckbox);
 		assertTrue("The checkbox should stay disabled", !connectivityState.isChecked());
+		getSolo().clickOnView(connectivityState);
+		getActivityAndWaitFor(TTChecks.OFFLINE_CHECKBOX_ENABLED);
+		assertTrue("The checkbox has not switched in offline mode", connectivityState.isChecked());
 	}
 	
 	public void testSendingOrderIsFIFO() {
@@ -139,7 +145,6 @@ public class MainActivityConnectionState extends GUITest<MainActivity> {
 				R.id.switchOnlineModeCheckbox);
 		setSimpleMockClient(HttpStatus.SC_CREATED);
 		
-
 		// 1. manually switching to offline state
 		getSolo().clickOnView(connectivityState);
 		getActivityAndWaitFor(TTChecks.OFFLINE_CHECKBOX_ENABLED);
@@ -161,7 +166,7 @@ public class MainActivityConnectionState extends GUITest<MainActivity> {
 		List<String> answers = new ArrayList<String>();
 		answers.add("100% accurate");
 		answers.add("Fully voodoo and could generate non-pseudorandom numbers");
-
+		
 		Set<String> tags = new HashSet<String>();
 		tags.add("robotium");
 		tags.add("testing");
