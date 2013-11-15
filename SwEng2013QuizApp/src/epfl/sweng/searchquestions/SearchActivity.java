@@ -28,7 +28,7 @@ public class SearchActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_search);
 		setDisplayView();
-		TestCoordinator.check(TTChecks.SEARCH_ACTIVITY_SHOWN);
+		
 		
 	}
 
@@ -41,7 +41,7 @@ public class SearchActivity extends Activity {
 	@Override
 	protected void onStart() {
 		super.onStart();
-		// XXX OnStart ??
+		TestCoordinator.check(TTChecks.SEARCH_ACTIVITY_SHOWN);
 	}
 
 	/**

@@ -38,5 +38,6 @@
     <string name="search_question_query">Type in the search query</string>
     <string name="submit_query_button">Search</string>
     <string name="title_activity_search">SearchActivity</string>
+    <string name="SearchQueryButton">Search</string>
 
 </resources>

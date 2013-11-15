@@ -18,6 +18,7 @@ import epfl.sweng.patterns.ConnectivityState;
 import epfl.sweng.patterns.ConnectivityProxy;
 import epfl.sweng.patterns.QuestionsProxy;
 import epfl.sweng.preferences.UserPreferences;
+import epfl.sweng.searchquestions.SearchActivity;
 import epfl.sweng.showquestions.ShowQuestionsActivity;
 import epfl.sweng.testing.TestCoordinator;
 import epfl.sweng.testing.TestCoordinator.TTChecks;
@@ -102,7 +103,7 @@ public class MainActivity extends Activity {
 	 * 
 	 * @param view
 	 */
-	
+
 	public void displayAuthenticationActivity(View view) {
 		if (!mUserPreferences.isAuthenticated()) {
 			// Case LoginUsingTequila
@@ -120,6 +121,11 @@ public class MainActivity extends Activity {
 			setDisplayView();
 			TestCoordinator.check(TTChecks.LOGGED_OUT);
 		}
+	}
+
+	public void searchActivity(View view) {
+		Intent searchActivityIntent = new Intent(this, SearchActivity.class);
+		startActivity(searchActivityIntent);
 	}
 
 	@Override
@@ -223,27 +229,27 @@ public class MainActivity extends Activity {
 
 			switch (result) {
 
-				case HttpStatus.SC_CREATED:
+			case HttpStatus.SC_CREATED:
+				TestCoordinator.check(TTChecks.OFFLINE_CHECKBOX_DISABLED);
+				break;
+			case HttpStatus.SC_OK:
+				TestCoordinator.check(TTChecks.OFFLINE_CHECKBOX_ENABLED);
+				break;
+
+			default: // Http code error
+				Toast.makeText(
+						MainActivity.this,
+						getResources().getString(
+								R.string.error_uploading_question),
+						Toast.LENGTH_LONG).show();
+				CheckBox isOffline = (CheckBox) findViewById(R.id.switchOnlineModeCheckbox);
+				isOffline.setChecked(!mUserPreferences.isConnected());
+
+				if (mUserPreferences.isConnected()) {
 					TestCoordinator.check(TTChecks.OFFLINE_CHECKBOX_DISABLED);
-					break;
-				case HttpStatus.SC_OK:
+				} else {
 					TestCoordinator.check(TTChecks.OFFLINE_CHECKBOX_ENABLED);
-					break;
-				
-				default: // Http code error
-					Toast.makeText(
-							MainActivity.this,
-							getResources().getString(
-									R.string.error_uploading_question),
-							Toast.LENGTH_LONG).show();
-					CheckBox isOffline = (CheckBox) findViewById(R.id.switchOnlineModeCheckbox);
-					isOffline.setChecked(!mUserPreferences.isConnected());
-					
-					if (mUserPreferences.isConnected()) {
-						TestCoordinator.check(TTChecks.OFFLINE_CHECKBOX_DISABLED);
-					} else {
-						TestCoordinator.check(TTChecks.OFFLINE_CHECKBOX_ENABLED);
-					}
+				}
 
 			}
 		}

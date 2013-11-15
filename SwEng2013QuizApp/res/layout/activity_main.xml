@@ -32,5 +32,12 @@
         android:id="@+id/switchOnlineModeCheckbox"
         android:text="@string/switchOnlineModeCheckbox"
         android:onClick="onCheckboxSwitchModeClicked" />
+    
+        <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/SearchQueryButton"
+        android:text="@string/SearchQueryButton"
+        android:onClick="searchActivity" />
 
 </LinearLayout>
