@@ -2,6 +2,9 @@ package epfl.sweng.searchquestions;
 
 import java.util.List;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -133,7 +136,14 @@ public class SearchActivity extends Activity {
 				throw new IllegalArgumentException();
 			}
 
-			return QuestionsProxy.getInstance().retrieveQuizQuestion(queries[0]);
+			JSONObject jsonQuery = new JSONObject();
+			try {
+				jsonQuery.put("query", queries[0]);
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+			
+			return QuestionsProxy.getInstance().retrieveQuizQuestions(jsonQuery);
 		}
 
 		@Override

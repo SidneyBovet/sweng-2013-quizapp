@@ -12,6 +12,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import epfl.sweng.backend.Converter;
+
 /**
  * Data structure of a question for the quiz application.
  * 
@@ -168,7 +170,6 @@ public class QuizQuestion {
 	 * 
 	 * @return A JSONObject of the question.
 	 */
-
 	public JSONObject toJSON() {
 		JSONObject jsonObject = new JSONObject();
 		try {

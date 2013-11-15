@@ -7,6 +7,8 @@ import java.util.Queue;
 import java.util.Random;
 
 import org.apache.http.HttpStatus;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.util.Log;
 import epfl.sweng.preferences.UserPreferences;
@@ -129,7 +131,7 @@ public final class QuestionsProxy
 		return fetchedQuestion;
 	}
 	
-	public List<QuizQuestion> retrieveQuizQuestion(String query) {
+	public List<QuizQuestion> retrieveQuizQuestions(JSONObject query) {
 		
 		return null;
 	}
