@@ -102,7 +102,7 @@ public class MainActivity extends Activity {
 	 * 
 	 * @param view
 	 */
-
+	
 	public void displayAuthenticationActivity(View view) {
 		if (!mUserPreferences.isAuthenticated()) {
 			// Case LoginUsingTequila

@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
 
     <string name="app_name">SwEng2013QuizApp</string>
@@ -36,5 +35,8 @@
     <string name="error_uploading_question">Could not upload the question to the server</string>
     <string name="error_logging_in">Error in the authentication process</string>
     <string name="switchOnlineModeCheckbox">Offline mode</string>
+    <string name="search_question_query">Type in the search query</string>
+    <string name="submit_query_button">Search</string>
+    <string name="title_activity_search">SearchActivity</string>
 
 </resources>
