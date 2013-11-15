@@ -123,16 +123,18 @@ public class ShowQuestionsActivity extends Activity {
 		protected void onPostExecute(QuizQuestion question) {
 			super.onPostExecute(question);
 			if (null == question) {
+				TextView textViewQuestion = (TextView) findViewById(R.id.displayQuestion);
 				if (QuestionsProxy.getInstance().getInboxSize()==0 &&
 						mWasDisconnectedBeforeRetrieving) {
+					textViewQuestion.setText(R.string.error_cache_empty);
 				} else {
-					Toast.makeText(
-							ShowQuestionsActivity.this,
-							getResources().getString(
-								R.string.error_fetching_question),
-									Toast.LENGTH_LONG).show();
+					textViewQuestion.setText(R.string.error_fetching_question);
 				}
-				finish();
+				Toast.makeText(
+						ShowQuestionsActivity.this,
+						getResources().getString(
+								R.string.error_fetching_question),
+								Toast.LENGTH_LONG).show();
 			}
 			TestCoordinator.check(TTChecks.QUESTION_SHOWN);
 		}
