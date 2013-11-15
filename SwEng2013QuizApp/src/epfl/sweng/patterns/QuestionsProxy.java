@@ -11,6 +11,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.util.Log;
+import epfl.sweng.backend.QuizQuery;
 import epfl.sweng.preferences.UserPreferences;
 import epfl.sweng.quizquestions.QuizQuestion;
 import epfl.sweng.servercomm.INetworkCommunication;
@@ -131,7 +132,7 @@ public final class QuestionsProxy
 		return fetchedQuestion;
 	}
 	
-	public List<QuizQuestion> retrieveQuizQuestions(JSONObject query) {
+	public List<QuizQuestion> retrieveQuizQuestions(QuizQuery query) {
 		
 		return null;
 	}

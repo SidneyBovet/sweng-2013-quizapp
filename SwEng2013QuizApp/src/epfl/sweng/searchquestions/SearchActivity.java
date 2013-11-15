@@ -104,14 +104,13 @@ public class SearchActivity extends Activity {
 				&& QuizQuery.isQueryValid(mQueryFieldText));
 	}
 
-
-
 	/**
 	 * Send the Query to the server and process accordingly.
 	 */
 	public void sendQuery(View view) {
-		new AsyncSearchForQuestions().execute(mQueryFieldText);
-		
+		QuizQuery query = new QuizQuery(mQueryFieldText);
+		new AsyncSearchForQuestions().execute(query);
+		resetQuerySearchField();
 	}
 
 	/**
@@ -130,23 +129,15 @@ public class SearchActivity extends Activity {
 	 * 
 	 */
 	private final class AsyncSearchForQuestions extends
-			AsyncTask<String, Void, List<QuizQuestion>> {
+			AsyncTask<QuizQuery, Void, List<QuizQuestion>> {
 
-		@Override
-		protected List<QuizQuestion> doInBackground(String... queries) {
+		@Override 
+		protected List<QuizQuestion> doInBackground(QuizQuery... queries) {
 			if (null != queries && queries.length != 1) {
 				throw new IllegalArgumentException();
 			}
 
-			JSONObject jsonQuery = new JSONObject();
-			try {
-				jsonQuery.put("query", queries[0]);
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
-
-			return QuestionsProxy.getInstance()
-					.retrieveQuizQuestions(jsonQuery);
+			return QuestionsProxy.getInstance().retrieveQuizQuestions(queries[0]);
 		}
 
 		@Override
