@@ -24,6 +24,8 @@ import epfl.sweng.quizquestions.QuizQuestion;
  */
 public class NetworkCommunication implements INetworkCommunication {
 
+	private static final int BASE_SERVER_ERRORS = 5;
+	private static final double ONE_HUNDRED = 100.0;
 	private int mHttpStatusCommFailure = HttpStatus.SC_BAD_GATEWAY;
 	
 	@Override
@@ -39,26 +41,12 @@ public class NetworkCommunication implements INetworkCommunication {
 					.execute(postQuery);
 			httpCodeResponse = response.getStatusLine().getStatusCode();
 			
-			switch (httpCodeResponse) {
-				case HttpStatus.SC_CREATED:
-					break;
-				
-				case HttpStatus.SC_INTERNAL_SERVER_ERROR:
-					UserPreferences.getInstance()
-						.setConnectivityState(ConnectivityState.OFFLINE);
-					break;
-				
-				case HttpStatus.SC_SERVICE_UNAVAILABLE:
-					// XXX Not sure about this one, we'll have to check it again
-					UserPreferences.getInstance()
-						.setConnectivityState(ConnectivityState.OFFLINE);
-					break;
-					
-				default:
-					break;
+			if (Math.ceil(httpCodeResponse/ONE_HUNDRED) == BASE_SERVER_ERRORS) {
+				UserPreferences.getInstance()
+					.setConnectivityState(ConnectivityState.OFFLINE);
 			}
-			
 			response.getEntity().consumeContent();
+			
 		} catch (UnsupportedEncodingException e) {
 			Log.e(this.getClass().getName(), "doInBackground(): Entity does "
 					+ "not support the local encoding.", e);
@@ -91,28 +79,14 @@ public class NetworkCommunication implements INetworkCommunication {
 					.execute(firstRandom);
 			int httpCodeResponse = response.getStatusLine().getStatusCode();
 			
-			switch (httpCodeResponse) {
-				case HttpStatus.SC_OK:
-					String jsonQuestion = new BasicResponseHandler()
-						.handleResponse(response);
-					fetchedQuestion = new QuizQuestion(jsonQuestion);
-					break;
-				
-				case HttpStatus.SC_INTERNAL_SERVER_ERROR:
-					UserPreferences.getInstance()
-						.setConnectivityState(ConnectivityState.OFFLINE);
-					break;
-				
-				case HttpStatus.SC_SERVICE_UNAVAILABLE:
-					// XXX Not sure about this one, we'll have to check it again
-					UserPreferences.getInstance()
-						.setConnectivityState(ConnectivityState.OFFLINE);
-					break;
-					
-				default:
-					break;
+			if (Math.ceil(httpCodeResponse/ONE_HUNDRED) == BASE_SERVER_ERRORS) {
+				UserPreferences.getInstance()
+					.setConnectivityState(ConnectivityState.OFFLINE);
+			} else if (httpCodeResponse == HttpStatus.SC_OK) {
+				String jsonQuestion = new BasicResponseHandler()
+					.handleResponse(response);
+				fetchedQuestion = new QuizQuestion(jsonQuestion);
 			}
-			
 		} catch (ClientProtocolException e) {
 			Log.e(this.getClass().getName(), "doInBackground(): Error in"
 					+ "the HTTP protocol.", e);
