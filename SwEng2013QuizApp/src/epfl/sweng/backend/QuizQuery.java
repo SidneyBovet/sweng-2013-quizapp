@@ -28,13 +28,10 @@ public class QuizQuery {
 	 */
 	public static boolean isQueryValid(String query) {
 
-		String alphanumeric = "(?:[a-zA-Z0-9])+";
-		String allowedOperators = "(?:\\+|\\*|\\s|\\(|\\))*";
-
 		//
 		// verify : no characters other than alphanumeric characters,
 		// ' ',(,),*,+
-		boolean expectedChara = query.matches(alphanumeric + allowedOperators);
+		boolean expectedChara = hasExpectedCharacters(query);
 		// verifiy that the syntax is correct: (i.e banana++* is not accepted)
 		boolean correctSyntax = hasGoodSyntax(query);
 		// verifiy that the nested parenthesis are correct: (i.e (banana)) is
@@ -45,8 +42,14 @@ public class QuizQuery {
 	}
 
 	private static boolean hasGoodSyntax(String query) {
-		// TODO Auto-generated method stub
+
 		return false;
+	}
+
+	private static boolean hasExpectedCharacters(String query) {
+		String alphanumeric = "(?:[a-zA-Z0-9])+";
+		String allowedOperators = "(?:\\+|\\*|\\s|\\(|\\))*";
+		return query.matches(alphanumeric + allowedOperators);
 	}
 
 	private static boolean isWellNested(String query) {

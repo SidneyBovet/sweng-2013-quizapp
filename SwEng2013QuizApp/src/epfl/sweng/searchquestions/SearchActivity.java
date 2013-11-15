@@ -104,49 +104,14 @@ public class SearchActivity extends Activity {
 				&& QuizQuery.isQueryValid(mQueryFieldText));
 	}
 
-	private boolean checkQuery() {
-		// verify : no characters other than alphanumeric characters,
-		// ' ',(,),*,+
-		boolean expectedChara = mQueryFieldText
-				.matches("(?:[a-zA-Z0-9])+(?:\\+|\\*|\\s|\\(|\\))*");
-		// verifiy that the syntax is correct: (i.e banana++* is not accepted)
-		boolean correctSyntax = hasGoodSyntax();
-		// verifiy that the nested parenthesis are correct: (i.e (banana)) is
-		// not accepted)
-		boolean correctNested = isWellNested();
-	}
 
-	private boolean hasGoodSyntax() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	private boolean isWellNested() {
-		String onlyParenthesiString = mQueryFieldText.replaceAll("[^\\(\\)]",
-				"");
-
-		if (mQueryFieldText.length() % 2 != 0) {
-			return false;
-		}
-
-		String[] array = onlyParenthesiString.split("");
-		int nestedCounter = 0;
-		for (String c : array) {
-			nestedCounter += c.equals("(") ? 1 : -1;
-			if (nestedCounter < 0) {
-				return false;
-			}
-		}
-
-		return true;
-	}
 
 	/**
 	 * Send the Query to the server and process accordingly.
 	 */
 	public void sendQuery(View view) {
 		new AsyncSearchForQuestions().execute(mQueryFieldText);
-		resetQuerySearchField();
+		
 	}
 
 	/**
