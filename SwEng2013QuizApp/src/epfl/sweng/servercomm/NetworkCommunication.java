@@ -11,8 +11,10 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.util.Log;
+import epfl.sweng.backend.QuizQuery;
 import epfl.sweng.patterns.ConnectivityState;
 import epfl.sweng.preferences.UserPreferences;
 import epfl.sweng.quizquestions.QuizQuestion;
@@ -103,6 +105,12 @@ public class NetworkCommunication implements INetworkCommunication {
 			e.printStackTrace();
 		}
 		return fetchedQuestion;
+	}
+
+	@Override
+	public JSONObject retrieveQuizQuestions(QuizQuery query) {
+		// TODO Send the query to the server.
+		return null;
 	}
 
 }

@@ -146,10 +146,9 @@ public final class QuestionsProxy
 
 		return fetchedQuestion;
 	}
-	
-	public List<QuizQuestion> retrieveQuizQuestions(QuizQuery query) {
-		
-		return null;
+
+	public JSONObject retrieveQuizQuestions(QuizQuery query) {
+		return mNetworkCommunication.retrieveQuizQuestions(query);
 	}
 
 	public int getOutboxSize() {

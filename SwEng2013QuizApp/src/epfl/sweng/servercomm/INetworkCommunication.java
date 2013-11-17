@@ -1,5 +1,8 @@
 package epfl.sweng.servercomm;
 
+import org.json.JSONObject;
+
+import epfl.sweng.backend.QuizQuery;
 import epfl.sweng.quizquestions.QuizQuestion;
 
 /**
@@ -21,4 +24,10 @@ public interface INetworkCommunication {
 	 * @return Question retrieved.
 	 */
 	QuizQuestion retrieveRandomQuizQuestion();
+	
+	/**
+	 * Retrieve a question from the server using a filtering query.
+	 * @return JSON sent by the server.
+	 */
+	JSONObject retrieveQuizQuestions(QuizQuery query);
 }

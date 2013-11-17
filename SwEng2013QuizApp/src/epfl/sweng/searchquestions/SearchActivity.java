@@ -13,7 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import epfl.sweng.R;
 import epfl.sweng.backend.QuizQuery;
-import epfl.sweng.patterns.QuestionsProxy;
+import epfl.sweng.patterns.JsonToQuestionsAdapter;
 import epfl.sweng.quizquestions.QuizQuestion;
 import epfl.sweng.testing.TestCoordinator;
 import epfl.sweng.testing.TestCoordinator.TTChecks;
@@ -131,25 +131,18 @@ public class SearchActivity extends Activity {
 
 		@Override
 		protected List<QuizQuestion> doInBackground(QuizQuery... queries) {
-			if (null != queries && queries.length != 1) {
+			if (null == queries || queries.length != 1) {
 				throw new IllegalArgumentException();
 			}
 
-			return QuestionsProxy.getInstance(SearchActivity.this)
-					.retrieveQuizQuestions(queries[0]);
+			return JsonToQuestionsAdapter.retrieveQuizQuestions(queries[0]);
 		}
 
 		@Override
 		protected void onPostExecute(List<QuizQuestion> questions) {
 			super.onPostExecute(questions);
-			// if (result != HttpStatus.SC_CREATED) {
-			// Toast.makeText(
-			// SearchActivity.this,
-			// getResources().getString(
-			// R.string.error_uploading_question),
-			// Toast.LENGTH_LONG).show();
-			// }
-			// TestCoordinator.check(TTChecks.NEW_QUESTION_SUBMITTED);
+			
+			// TODO Additional manipulations, such as TTCHECKS, etc
 		}
 	}
 }
