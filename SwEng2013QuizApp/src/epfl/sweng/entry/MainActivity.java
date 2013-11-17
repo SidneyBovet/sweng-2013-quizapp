@@ -176,6 +176,11 @@ public class MainActivity extends Activity {
 		TestCoordinator.check(TTChecks.MAIN_ACTIVITY_SHOWN);
 	}
 
+	@Override
+	protected void onDestroy() {
+		QuestionsProxy.getInstance(this).closeDB();
+		super.onDestroy();
+	}
 	/**
 	 * Sets the view of the activity, by enabling or disabling the buttons and
 	 * the checkbox according to the authentication state.
