@@ -2,9 +2,6 @@ package epfl.sweng.searchquestions;
 
 import java.util.List;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -137,7 +134,8 @@ public class SearchActivity extends Activity {
 				throw new IllegalArgumentException();
 			}
 
-			return QuestionsProxy.getInstance().retrieveQuizQuestions(queries[0]);
+			return QuestionsProxy.getInstance(SearchActivity.this).
+					retrieveQuizQuestions(queries[0]);
 		}
 
 		@Override

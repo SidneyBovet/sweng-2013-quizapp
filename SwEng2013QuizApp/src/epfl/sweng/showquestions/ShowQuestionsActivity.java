@@ -116,14 +116,16 @@ public class ShowQuestionsActivity extends Activity {
 			mWasDisconnectedBeforeRetrieving = UserPreferences.getInstance(
 					ShowQuestionsActivity.this).getConnectivityState().
 					equals(ConnectivityState.OFFLINE);
-			return QuestionsProxy.getInstance().retrieveRandomQuizQuestion();
+			return QuestionsProxy.getInstance(ShowQuestionsActivity.this).
+					retrieveRandomQuizQuestion();
 		}
 
 		@Override
 		protected void onPostExecute(QuizQuestion question) {
 			super.onPostExecute(question);
 			if (null == question) {
-				if (QuestionsProxy.getInstance().getInboxSize()==0 &&
+				if (QuestionsProxy.getInstance(ShowQuestionsActivity.this).
+						getInboxSize()==0 &&
 						mWasDisconnectedBeforeRetrieving) {
 				} else {
 					Toast.makeText(

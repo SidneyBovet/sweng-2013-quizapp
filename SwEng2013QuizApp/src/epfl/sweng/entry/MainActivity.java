@@ -87,7 +87,7 @@ public class MainActivity extends Activity {
 
 		// Notify the change of connectivity state to the proxy
 		AsyncProxyConnectivityNotifier asyncProxyNotifier = new AsyncProxyConnectivityNotifier(
-				QuestionsProxy.getInstance());
+				QuestionsProxy.getInstance(this));
 		asyncProxyNotifier.execute(mUserPreferences.getConnectivityState());
 
 		if (auditErrors() != 0) {
