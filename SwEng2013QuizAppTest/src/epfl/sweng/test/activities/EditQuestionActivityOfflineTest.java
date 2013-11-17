@@ -48,13 +48,15 @@ public class EditQuestionActivityOfflineTest extends GUITest<EditQuestionActivit
 		
 		SwengHttpClientFactory.setInstance(mUnconnectedClient);
 		
-		int expectedOutboxSize = QuestionsProxy.getInstance().getOutboxSize() + 1;
+		int expectedOutboxSize = QuestionsProxy.getInstance(
+				getInstrumentation().getTargetContext()).getOutboxSize() + 1;
 		
 		fillFormWithCorrectQuestion();
 		getSolo().clickOnButton("Submit");
 		getActivityAndWaitFor(TTChecks.NEW_QUESTION_SUBMITTED);
 		
-		assertEquals(expectedOutboxSize, QuestionsProxy.getInstance().getOutboxSize());
+		assertEquals(expectedOutboxSize, QuestionsProxy.getInstance(
+				getInstrumentation().getTargetContext()).getOutboxSize());
 	}
 
 	private void fillFormWithCorrectQuestion() {

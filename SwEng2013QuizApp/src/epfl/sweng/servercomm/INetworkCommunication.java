@@ -20,5 +20,5 @@ public interface INetworkCommunication {
 	 * Retrieve a question from the server.
 	 * @return Question retrieved.
 	 */
-	QuizQuestion retrieveQuizQuestion();
+	QuizQuestion retrieveRandomQuizQuestion();
 }

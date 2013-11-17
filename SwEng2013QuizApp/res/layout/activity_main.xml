@@ -25,12 +25,19 @@
         android:onClick="submitQuestion"
         android:id="@+id/submitQuestionButton"
         android:text="@string/submitQuestionButton" />
-
-    <CheckBox
+    
+        <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/switchOnlineModeCheckbox"
-        android:text="@string/switchOnlineModeCheckbox"
-        android:onClick="onCheckboxSwitchModeClicked" />
+        android:id="@+id/SearchQueryButton"
+        android:text="@string/SearchQueryButton"
+        android:onClick="searchActivity" />
+
+        <CheckBox
+            android:id="@+id/switchOnlineModeCheckbox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="onCheckboxSwitchModeClicked"
+            android:text="@string/switchOnlineModeCheckbox" />
 
 </LinearLayout>

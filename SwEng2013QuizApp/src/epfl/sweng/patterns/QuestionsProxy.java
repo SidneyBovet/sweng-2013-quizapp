@@ -8,7 +8,11 @@ import java.util.Random;
 
 import org.apache.http.HttpStatus;
 
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
+import epfl.sweng.backend.QuizQuery;
+import epfl.sweng.caching.CacheOpenHelper;
 import epfl.sweng.preferences.UserPreferences;
 import epfl.sweng.quizquestions.QuizQuestion;
 import epfl.sweng.servercomm.INetworkCommunication;
@@ -32,20 +36,20 @@ public final class QuestionsProxy
 	private List<QuizQuestion> mQuizQuestionsInbox;
 		
 	private INetworkCommunication mNetworkCommunication;
+	private SQLiteDatabase mSQLiteWritableCache;
 
 	/**
-	 * Returns the singleton, creates it if it's not instancied.
+	 * Returns the singleton, creates it if it's not instantiated.
 	 * 
 	 * @return Singleton instance of the class.
 	 */
 
-	public static QuestionsProxy getInstance() {
-		// double-checked singleton: avoids calling costly synchronized if
-		// unnecessary
+	public static QuestionsProxy getInstance(Context context) {
+		// double-checked singleton: avoids calling costly synchronized if unnecessary
 		if (null == sQuestionProxy) {
 			synchronized (QuestionsProxy.class) {
 				if (null == sQuestionProxy) {
-					sQuestionProxy = new QuestionsProxy();
+					sQuestionProxy = new QuestionsProxy(context);
 				}
 			}
 		}
@@ -61,6 +65,7 @@ public final class QuestionsProxy
 	 */
 	public void addInbox(QuizQuestion question) {
 		if (null != question && question.auditErrors() == 0) {
+			mSQLiteWritableCache.execSQL("");
 			mQuizQuestionsInbox.add(question);
 		}
 	}
@@ -110,11 +115,11 @@ public final class QuestionsProxy
 	 * @return {@link QuizQuestion} retrieve from the server
 	 */
 	@Override
-	public QuizQuestion retrieveQuizQuestion() {
+	public QuizQuestion retrieveRandomQuizQuestion() {
 		QuizQuestion fetchedQuestion = null;
 
 		if (UserPreferences.getInstance().isConnected()) {
-			fetchedQuestion = mNetworkCommunication.retrieveQuizQuestion();
+			fetchedQuestion = mNetworkCommunication.retrieveRandomQuizQuestion();
 			if (null != fetchedQuestion) {
 				addInbox(fetchedQuestion);
 			} else {
@@ -127,6 +132,11 @@ public final class QuestionsProxy
 		}
 
 		return fetchedQuestion;
+	}
+	
+	public List<QuizQuestion> retrieveQuizQuestions(QuizQuery query) {
+		
+		return null;
 	}
 
 	public int getOutboxSize() {
@@ -183,10 +193,11 @@ public final class QuestionsProxy
 	 * Private constructor of the singleton.
 	 * 
 	 */
-	private QuestionsProxy() {
+	private QuestionsProxy(Context context) {
 		mQuizQuestionsOutbox = new ArrayDeque<QuizQuestion>();
 		mQuizQuestionsInbox = new ArrayList<QuizQuestion>();
 		mNetworkCommunication = new NetworkCommunication();
+		mSQLiteWritableCache = new CacheOpenHelper(context).getWritableDatabase();
 	}
 	
 	private synchronized int sendCachedQuestions() {
@@ -207,6 +218,10 @@ public final class QuestionsProxy
 			}
 		}
 		return httpCodeResponse;
+	}
 
+	public void closeDB() {
+		// here we have to close the db and all unclosed Cursor objects
+		mSQLiteWritableCache.close();
 	}
 }

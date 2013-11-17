@@ -116,7 +116,8 @@ public class ShowQuestionsActivity extends Activity {
 			mWasDisconnectedBeforeRetrieving = UserPreferences.getInstance(
 					ShowQuestionsActivity.this).getConnectivityState().
 					equals(ConnectivityState.OFFLINE);
-			return QuestionsProxy.getInstance().retrieveQuizQuestion();
+			return QuestionsProxy.getInstance(ShowQuestionsActivity.this).
+					retrieveRandomQuizQuestion();
 		}
 
 		@Override
@@ -124,7 +125,8 @@ public class ShowQuestionsActivity extends Activity {
 			super.onPostExecute(question);
 			if (null == question) {
 				TextView textViewQuestion = (TextView) findViewById(R.id.displayQuestion);
-				if (QuestionsProxy.getInstance().getInboxSize()==0 &&
+				if (QuestionsProxy.getInstance(ShowQuestionsActivity.this).
+						getInboxSize()==0 &&
 						mWasDisconnectedBeforeRetrieving) {
 					textViewQuestion.setText(R.string.error_cache_empty);
 				} else {

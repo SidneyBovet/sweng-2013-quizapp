@@ -18,6 +18,7 @@ import epfl.sweng.patterns.ConnectivityState;
 import epfl.sweng.patterns.ConnectivityProxy;
 import epfl.sweng.patterns.QuestionsProxy;
 import epfl.sweng.preferences.UserPreferences;
+import epfl.sweng.searchquestions.SearchActivity;
 import epfl.sweng.showquestions.ShowQuestionsActivity;
 import epfl.sweng.testing.TestCoordinator;
 import epfl.sweng.testing.TestCoordinator.TTChecks;
@@ -86,7 +87,7 @@ public class MainActivity extends Activity {
 
 		// Notify the change of connectivity state to the proxy
 		AsyncProxyConnectivityNotifier asyncProxyNotifier = new AsyncProxyConnectivityNotifier(
-				QuestionsProxy.getInstance());
+				QuestionsProxy.getInstance(this));
 		asyncProxyNotifier.execute(mUserPreferences.getConnectivityState());
 
 		if (auditErrors() != 0) {
@@ -120,6 +121,11 @@ public class MainActivity extends Activity {
 			setDisplayView();
 			TestCoordinator.check(TTChecks.LOGGED_OUT);
 		}
+	}
+
+	public void searchActivity(View view) {
+		Intent searchActivityIntent = new Intent(this, SearchActivity.class);
+		startActivity(searchActivityIntent);
 	}
 
 	@Override
@@ -179,6 +185,8 @@ public class MainActivity extends Activity {
 				.setEnabled(mUserPreferences.isAuthenticated());
 		((Button) findViewById(R.id.submitQuestionButton))
 				.setEnabled(mUserPreferences.isAuthenticated());
+		((Button) findViewById(R.id.SearchQueryButton))
+		.setEnabled(mUserPreferences.isAuthenticated());
 		int visibility = mUserPreferences.isAuthenticated() ? View.VISIBLE
 				: View.INVISIBLE;
 		CheckBox isOffline = (CheckBox) findViewById(R.id.switchOnlineModeCheckbox);
@@ -229,7 +237,7 @@ public class MainActivity extends Activity {
 				case HttpStatus.SC_OK:
 					TestCoordinator.check(TTChecks.OFFLINE_CHECKBOX_ENABLED);
 					break;
-				
+	
 				default: // Http code error
 					Toast.makeText(
 							MainActivity.this,
@@ -238,7 +246,7 @@ public class MainActivity extends Activity {
 							Toast.LENGTH_LONG).show();
 					CheckBox isOffline = (CheckBox) findViewById(R.id.switchOnlineModeCheckbox);
 					isOffline.setChecked(!mUserPreferences.isConnected());
-					
+	
 					if (mUserPreferences.isConnected()) {
 						TestCoordinator.check(TTChecks.OFFLINE_CHECKBOX_DISABLED);
 					} else {

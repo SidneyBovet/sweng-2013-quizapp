@@ -68,7 +68,7 @@ public class NetworkCommunication implements INetworkCommunication {
 	}
 
 	@Override
-	public QuizQuestion retrieveQuizQuestion() {
+	public QuizQuestion retrieveRandomQuizQuestion() {
 		
 		QuizQuestion fetchedQuestion = null;
 		

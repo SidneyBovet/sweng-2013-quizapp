@@ -12,7 +12,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import epfl.sweng.quizquestions.Converter;
+import epfl.sweng.backend.Converter;
 import epfl.sweng.quizquestions.QuizQuestion;
 
 /**
