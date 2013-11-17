@@ -84,7 +84,6 @@ public class SearchActivity extends Activity {
 				if (!mQueryFieldText.equals(s.toString())) {
 					mQueryFieldText = s.toString();
 					updateSearchButton();
-
 					TestCoordinator.check(TTChecks.QUERY_EDITED);
 				}
 			}
@@ -96,17 +95,19 @@ public class SearchActivity extends Activity {
 	 * content of the queryField EditText.
 	 */
 	private void updateSearchButton() {
-
-		mSubmitQuery.setEnabled((mQueryFieldText.length() != 0)
-				&& QuizQuery.isQueryValid(mQueryFieldText));
+		// && QuizQuery.isQueryValid(mQueryFieldText));
+		mSubmitQuery.setEnabled(mQueryFieldText.length() != 0);
 	}
 
 	/**
 	 * Send the Query to the server and process accordingly.
 	 */
 	public void sendQuery(View view) {
+
 		QuizQuery query = new QuizQuery(mQueryFieldText);
+
 		new AsyncSearchForQuestions().execute(query);
+
 		resetQuerySearchField();
 	}
 
@@ -128,14 +129,14 @@ public class SearchActivity extends Activity {
 	private final class AsyncSearchForQuestions extends
 			AsyncTask<QuizQuery, Void, List<QuizQuestion>> {
 
-		@Override 
+		@Override
 		protected List<QuizQuestion> doInBackground(QuizQuery... queries) {
 			if (null != queries && queries.length != 1) {
 				throw new IllegalArgumentException();
 			}
 
-			return QuestionsProxy.getInstance(SearchActivity.this).
-					retrieveQuizQuestions(queries[0]);
+			return QuestionsProxy.getInstance(SearchActivity.this)
+					.retrieveQuizQuestions(queries[0]);
 		}
 
 		@Override
