@@ -35,6 +35,7 @@ public class QuizQuestion {
 	public final static int ANSWERLIST_MAX_SIZE = 10;
 	public final static int TAGSET_MAX_SIZE = 20;
 	public final static int TAGSLIST_MAX_SIZE = 20;
+	public static final int FIELDS_COUNT = 6;
 
 	/**
 	 * Constructor
@@ -145,26 +146,6 @@ public class QuizQuestion {
 		}
 
 		return new QuizQuestion(questionText, answerList, solutionIndex, tagSet);
-	}
-
-	/**
-	 * Returns all the tags in a single <code>String</code>, delimited by a
-	 * comma.
-	 * 
-	 * @return A printable representation of all the tags.
-	 * @throws JSONException
-	 */
-
-	public String getTagsToString() {
-		Iterator<String> tagsIterator = mTags.iterator();
-		String tagsTogether = "Tags: ";
-		while (tagsIterator.hasNext()) {
-			tagsTogether += tagsIterator.next();
-			if (tagsIterator.hasNext()) {
-				tagsTogether += ", ";
-			}
-		}
-		return tagsTogether;
 	}
 
 	/**
@@ -290,6 +271,27 @@ public class QuizQuestion {
 
 	public Set<String> getTags() {
 		return mTags;
+	}
+
+	/**
+	 * Returns all the tags in a single <code>String</code>, delimited by a
+	 * comma.<br/>
+	 * For instance the tag list {t1, t2, t3} outputs "Tags: t1, t2, t3"
+	 * 
+	 * @return A printable representation of all the tags.
+	 * @throws JSONException
+	 */
+	// XXX Sidney Is it possible to remove the "Tags: "
+	public String getTagsToString() {
+		Iterator<String> tagsIterator = mTags.iterator();
+		String tagsTogether = "Tags: ";
+		while (tagsIterator.hasNext()) {
+			tagsTogether += tagsIterator.next();
+			if (tagsIterator.hasNext()) {
+				tagsTogether += ", ";
+			}
+		}
+		return tagsTogether;
 	}
 
 	/**
