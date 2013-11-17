@@ -85,10 +85,16 @@ public class QuizQuestionDB {
 	}
  
 	//XXX to quizquestion cursorToQuizQuestion(Cursor c) to build
+	/* see: http://www.vogella.com/articles/AndroidSQLite/article.html
+	 * To get the number of elements of the resulting query use the getCount() method.
+		To move between individual data rows, you can use the moveToFirst() 
+		and moveToNext() methods. The isAfterLast() method allows to check if the end of the query result has been reached.
+	 */
 	public String getQuizQuestionWithContent (String content){
 		//Récupère dans un Cursor les valeurs correspondant à un livre contenu dans la BDD (ici on sélectionne le livre grâce à son titre)
 		Cursor c = bdd.query(CACHE_TABLE_NAME, result_columns, COL_CONTENT + " LIKE \"" + content +"\"", null, null, null, null);
 		return c.getString(NUM_COL_OWNER);
+	
 	}
 	
 }
