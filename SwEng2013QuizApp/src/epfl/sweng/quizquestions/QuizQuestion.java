@@ -28,11 +28,11 @@ public class QuizQuestion {
 	private int mSolutionIndex;
 	private Set<String> mTags;
 	private String mOwner;
-	final static int QUESTION_CONTENT_MAX_SIZE = 500;
-	final static int ANSWER_CONTENT_MAX_SIZE = 500;
-	final static int ANSWERLIST_MAX_SIZE = 10;
-	final static int TAGSET_MAX_SIZE = 20;
-	final static int TAGSLIST_MAX_SIZE = 20;
+	public final static int QUESTION_CONTENT_MAX_SIZE = 500;
+	public final static int ANSWER_CONTENT_MAX_SIZE = 500;
+	public final static int ANSWERLIST_MAX_SIZE = 10;
+	public final static int TAGSET_MAX_SIZE = 20;
+	public final static int TAGSLIST_MAX_SIZE = 20;
 
 	/**
 	 * Constructor
