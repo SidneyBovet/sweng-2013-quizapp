@@ -28,7 +28,8 @@ public final class JsonToQuestionsAdapter {
 	 */
 	public static List<QuizQuestion> retrieveQuizQuestions(QuizQuery query) {
 		
-		JSONObject jsonResponse = QuestionsProxy.getInstance()
+		// XXX What to do with the context?
+		JSONObject jsonResponse = QuestionsProxy.getInstance(null)
 				.retrieveQuizQuestions(query);
 
 		// TODO parse JSON object, get questions AND find a way
