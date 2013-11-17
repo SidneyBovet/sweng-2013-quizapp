@@ -2,13 +2,16 @@ package epfl.sweng.patterns;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Queue;
 import java.util.Random;
 
 import org.apache.http.HttpStatus;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 import epfl.sweng.backend.QuizQuery;
@@ -65,7 +68,17 @@ public final class QuestionsProxy
 	 */
 	public void addInbox(QuizQuestion question) {
 		if (null != question && question.auditErrors() == 0) {
-			mSQLiteWritableCache.execSQL("");
+			ContentValues values = new ContentValues(QuizQuestion.FIELDS_COUNT);
+			// XXX Sidney possible to change behavior of getTagsToString()?
+			values.put("id", question.getId());
+			values.put("tags", Arrays.toString(question.getTags().toArray()));
+			values.put("statement", question.getQuestionStatement());
+			values.put("answers", Arrays.toString(question.getAnswers().toArray()));
+			values.put("solutionIndex", question.getSolutionIndex());
+			values.put("owner", question.getOwner());
+			
+			mSQLiteWritableCache.insert(CacheOpenHelper.CACHE_TABLE_NAME,
+					null, values);
 			mQuizQuestionsInbox.add(question);
 		}
 	}
@@ -178,6 +191,15 @@ public final class QuestionsProxy
 	 */
 	private QuizQuestion extractQuizQuestionFromInbox() {
 		QuizQuestion extractedQuestion = null;
+		
+		Cursor randomQuestionCursor = mSQLiteWritableCache.rawQuery(
+				"SELECT * FROM " + CacheOpenHelper.CACHE_TABLE_NAME +
+				" ORDER BY RANDOM() LIMIT 1;", null);
+		randomQuestionCursor.getString(0);
+		Log.i("QuestionProxy", "string returned: "+randomQuestionCursor.getString(0));
+		randomQuestionCursor.close();
+		
+		
 		if (mQuizQuestionsInbox.size() > 0) {
 			int questionIDCache = new Random()
 					.nextInt(mQuizQuestionsInbox.size());
