@@ -42,7 +42,7 @@ public class QuizQuery {
 	}
 
 	private static boolean hasGoodSyntax(String query) {
-
+		
 		return false;
 	}
 
