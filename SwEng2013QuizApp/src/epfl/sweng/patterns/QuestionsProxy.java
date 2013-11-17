@@ -218,10 +218,10 @@ public final class QuestionsProxy
 			}
 		}
 		return httpCodeResponse;
-
 	}
 
 	public void closeDB() {
+		// here we have to close the db and all unclosed Cursor objects
 		mSQLiteWritableCache.close();
 	}
 }
