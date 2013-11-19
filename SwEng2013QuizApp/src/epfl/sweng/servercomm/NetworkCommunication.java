@@ -109,8 +109,46 @@ public class NetworkCommunication implements INetworkCommunication {
 
 	@Override
 	public JSONObject retrieveQuizQuestions(QuizQuery query) {
-		// TODO Send the query to the server.
+		HttpPost postQuery = HttpFactory.getPostRequest(HttpFactory
+				.getSwengQueryQuestions());
+		String jsonStringQuestions = null;
+		try {
+			postQuery.setEntity(new StringEntity(query.toJSON().toString()));
+			postQuery.setHeader("Content-type", "application/json");
+			HttpResponse response = SwengHttpClientFactory.getInstance()
+					.execute(postQuery);
+			int httpCodeResponse = response.getStatusLine().getStatusCode();
+			
+			if (Math.floor(httpCodeResponse/ONE_HUNDRED) == BASE_SERVER_ERRORS) {
+				UserPreferences.getInstance()
+					.setConnectivityState(ConnectivityState.OFFLINE);
+			} else if (httpCodeResponse == HttpStatus.SC_OK) {
+				jsonStringQuestions = new BasicResponseHandler()
+					.handleResponse(response);
+				return new JSONObject(jsonStringQuestions);
+			}
+		} catch (UnsupportedEncodingException e) {
+			Log.e(this.getClass().getName(), "doInBackground(): Entity does "
+					+ "not support the local encoding.", e);
+			return null;
+		} catch (ClientProtocolException e) {
+			Log.e(this.getClass().getName(), "doInBackground(): Error in the "
+					+ "HTTP protocol.", e);
+			UserPreferences.getInstance()
+					.setConnectivityState(ConnectivityState.OFFLINE);
+			return null;
+		} catch (IOException e) {
+			Log.e(this.getClass().getName(), "doInBackground(): An I/O error"
+					+ "has occurred.", e);
+			UserPreferences.getInstance()
+					.setConnectivityState(ConnectivityState.OFFLINE);
+			return null;
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
 		return null;
 	}
+
+}
 
 }

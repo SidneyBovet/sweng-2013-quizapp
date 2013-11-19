@@ -20,6 +20,8 @@ public class HttpFactory {
 			"https://sweng-quiz.appspot.com/login";
 	private static final String TEQUILA_LOGIN =
 			"https://tequila.epfl.ch/cgi-bin/tequila/login";
+	private static final String SWENG_QUERY_QUESTION =
+			"https://sweng-quiz.appspot.com/search";
 
 	/**
 	 * @return the sweng server base address
@@ -35,6 +37,10 @@ public class HttpFactory {
 		return SWENG_FETCH_QUESTION;
 	}
 
+	public static String getSwengQueryQuestions() {
+		return SWENG_QUERY_QUESTION;
+	}
+	
 	/**
 	 * @return the sweng server login address
 	 */
