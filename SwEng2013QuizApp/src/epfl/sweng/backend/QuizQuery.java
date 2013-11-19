@@ -38,7 +38,7 @@ public class QuizQuery {
 		// not accepted)
 		boolean correctNested = isWellNested(query);
 
-		return false;
+		return true;
 	}
 
 	private static boolean hasGoodSyntax(String query) {
