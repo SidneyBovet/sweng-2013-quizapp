@@ -9,7 +9,7 @@ import epfl.sweng.servercomm.NetworkCommunication;
 import junit.framework.TestCase;
 
 public class ServerQueryTest extends TestCase{
-	public void testQuerySuccesful(){
+	/*public void testQuerySuccesful(){
 		NetworkCommunication mNetworkCommunication = new NetworkCommunication();
 		QuizQuery query = new QuizQuery("(banana + garlic) fruit");
 		JSONObject queryJSON;
@@ -30,5 +30,5 @@ public class ServerQueryTest extends TestCase{
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-	}
+	}*/
 }

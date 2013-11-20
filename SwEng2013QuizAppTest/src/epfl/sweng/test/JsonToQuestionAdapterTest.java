@@ -17,7 +17,7 @@ import epfl.sweng.test.minimalmock.MockHttpClient;
 import junit.framework.TestCase;
 
 public class JsonToQuestionAdapterTest extends TestCase{
-	private MockHttpClient httpClient;
+	/*private MockHttpClient httpClient;
 	
 	//TODO find a way to post a JSONObject in the mockHttpClient
 	public void testRetrieveQuizQuestions() {
@@ -29,6 +29,13 @@ public class JsonToQuestionAdapterTest extends TestCase{
                 + " \"solutionIndex\": 0, \"tags\": [\"h2g2\", \"trivia\"], \"id\": \"1\" }",
                 "application/json");
 	}
+	
+	public void testRetrieveQuizQuestionsExampleGivenInHW() {
+		QuizQuery query = new QuizQuery("(banana + garlic) fruit");
+		List<QuizQuestion> questions = JsonToQuestionsAdapter.retrieveQuizQuestions(query);
+		assertEquals("How many calories are in a banana?", questions.get(0).getQuestionStatement());
+	}
+	*/
 	
 	public void testfillQuizQuestion() {
 		QuizQuestion question1 = new QuizQuestion("q", new ArrayList<String>(
