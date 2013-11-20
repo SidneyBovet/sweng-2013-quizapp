@@ -1,12 +1,14 @@
 package epfl.sweng.searchquestions;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
@@ -14,6 +16,7 @@ import android.widget.EditText;
 import epfl.sweng.R;
 import epfl.sweng.backend.QuizQuery;
 import epfl.sweng.patterns.JsonToQuestionsAdapter;
+import epfl.sweng.patterns.QuestionsProxy;
 import epfl.sweng.quizquestions.QuizQuestion;
 import epfl.sweng.testing.TestCoordinator;
 import epfl.sweng.testing.TestCoordinator.TTChecks;
@@ -103,11 +106,26 @@ public class SearchActivity extends Activity {
 	 * Send the Query to the server and process accordingly.
 	 */
 	public void sendQuery(View view) {
-
 		QuizQuery query = new QuizQuery(mQueryFieldText);
-
-		new AsyncSearchForQuestions().execute(query);
-
+		QuestionsProxy.getInstance(this);
+		AsyncSearchForQuestions asyncFetchSearchQuestion = new AsyncSearchForQuestions();
+		asyncFetchSearchQuestion.execute(query);
+		List<QuizQuestion> searchQuestions = null;
+		try {
+			searchQuestions = asyncFetchSearchQuestion.get();
+		}
+		catch (InterruptedException e) {
+			Log.wtf(this.getClass().getName(),
+					"AsyncFetchQuestion was interrupted");
+		} catch (ExecutionException e) {
+			// TestCoordinator.check(TTChecks.QUESTION_SHOWN);
+			Log.e(this.getClass().getName(), "Process crashed");
+			return;
+		} finally {
+			if (null == searchQuestions) {
+				// TestCoordinator.check(TTChecks.QUESTION_SHOWN);
+			}
+		}		
 		resetQuerySearchField();
 	}
 
