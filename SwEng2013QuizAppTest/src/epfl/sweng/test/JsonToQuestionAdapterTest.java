@@ -20,7 +20,7 @@ public class JsonToQuestionAdapterTest extends TestCase{
 	/*private MockHttpClient httpClient;
 	
 	//TODO find a way to post a JSONObject in the mockHttpClient
-	public void testRetrieveQuizQuestions() {
+	/*public void testRetrieveQuizQuestions() {
         httpClient.pushCannedResponse(
                 "POST (?:https?://[^/]+|[^/]+)?/+quizquestions/search\\b",
                 HttpStatus.SC_OK,
@@ -28,7 +28,7 @@ public class JsonToQuestionAdapterTest extends TestCase{
                 + " \"answers\": [\"Forty-two\", \"Twenty-seven\"], \"owner\": \"sweng\","
                 + " \"solutionIndex\": 0, \"tags\": [\"h2g2\", \"trivia\"], \"id\": \"1\" }",
                 "application/json");
-	}
+	}*/
 	
 	public void testRetrieveQuizQuestionsExampleGivenInHW() {
 		QuizQuery query = new QuizQuery("(banana + garlic) fruit");
