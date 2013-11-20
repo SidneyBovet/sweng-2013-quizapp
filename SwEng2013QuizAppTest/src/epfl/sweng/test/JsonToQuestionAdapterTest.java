@@ -28,7 +28,7 @@ public class JsonToQuestionAdapterTest extends TestCase{
                 + " \"answers\": [\"Forty-two\", \"Twenty-seven\"], \"owner\": \"sweng\","
                 + " \"solutionIndex\": 0, \"tags\": [\"h2g2\", \"trivia\"], \"id\": \"1\" }",
                 "application/json");
-	}*/
+	}
 	
 	public void testRetrieveQuizQuestionsExampleGivenInHW() {
 		QuizQuery query = new QuizQuery("(banana + garlic) fruit");
