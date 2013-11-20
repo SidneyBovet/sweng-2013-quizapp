@@ -150,5 +150,3 @@ public class NetworkCommunication implements INetworkCommunication {
 	}
 
 }
-
-}

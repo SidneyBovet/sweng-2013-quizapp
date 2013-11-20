@@ -18,6 +18,17 @@ public class QuizQuery {
 			this.query = query;
 		}
 	}
+	
+	public QuizQuery(JSONObject jsonQuery){
+		String from = null;
+		try {
+			from = jsonQuery.getString("next");
+			jsonQuery.put("from", from);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		this.query = jsonQuery.toString();
+	}
 
 	/**
 	 * John is a wizard.

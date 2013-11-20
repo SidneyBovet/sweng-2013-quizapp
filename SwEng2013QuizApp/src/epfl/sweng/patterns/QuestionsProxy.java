@@ -59,6 +59,21 @@ public final class QuestionsProxy
 		}
 		return sQuestionProxy;
 	}
+	
+	/**
+	 * Singleton getter when no context is available.
+	 * @return
+	 * 		The singleton instance of this object (may be null!)
+	 */
+	
+	public static QuestionsProxy getInstance() {
+		if (null == sQuestionProxy) {
+			Log.e(UserPreferences.class.getName(), "getInstance()"
+					+ "without context was used before the one with a Context!");
+		}
+		return sQuestionProxy;
+	}
+	
 
 	/**
 	 * Add a {@link QuizQuestion} to the Inbox only if it is a well formed
