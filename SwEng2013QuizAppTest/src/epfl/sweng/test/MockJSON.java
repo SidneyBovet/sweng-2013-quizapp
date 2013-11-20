@@ -2,6 +2,8 @@ package epfl.sweng.test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -14,11 +16,11 @@ public class MockJSON extends JSONObject {
 	private String mQuestion;
 	private List<String> mAnswers = new ArrayList<String>();
 	private int mSolutionIndex;
-	private List<String> mTags = new ArrayList<String>();
+	private Set<String> mTags = new TreeSet<String>();
 	private String mOwner;
 
 	public MockJSON(int id, String question, List<String> answers,
-			int solutionIndex, List<String> tags, String owner) {
+			int solutionIndex, Set<String> tags, String owner) {
 		mId = id;
 		mQuestion = question;
 		mAnswers = answers;
