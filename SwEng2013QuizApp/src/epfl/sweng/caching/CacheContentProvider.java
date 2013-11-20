@@ -1,8 +1,12 @@
 package epfl.sweng.caching;
 
+import java.util.Arrays;
+
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 import epfl.sweng.backend.QuizQuery;
 import epfl.sweng.quizquestions.QuizQuestion;
 
@@ -31,7 +35,17 @@ public class CacheContentProvider {
 	 */
 	public QuizQuestion getRandomQuestion() {
 		sanityDatabaseCheck();
-		return null;
+		QuizQuestion extractedQuestion = null;
+
+		Cursor randomQuestionCursor = mDatabase.rawQuery(
+				"SELECT * FROM " + CacheOpenHelper.CACHE_TABLE_NAME +
+				" ORDER BY RANDOM() LIMIT 1;", null);
+		randomQuestionCursor.getString(0);
+		Log.i("QuestionProxy", "string returned: "+randomQuestionCursor.getString(0));
+		randomQuestionCursor.close();
+		
+		
+		return extractedQuestion;
 	}
 	
 	/**
@@ -52,7 +66,18 @@ public class CacheContentProvider {
 	 */
 	public void addQuizQuestion(QuizQuestion questionToAdd) {
 		sanityDatabaseCheck();
+
+		ContentValues values = new ContentValues(QuizQuestion.FIELDS_COUNT);
+		// XXX Sidney possible to change behavior of getTagsToString()?
+		values.put("id", questionToAdd.getId());
+		values.put("tags", Arrays.toString(questionToAdd.getTags().toArray()));
+		values.put("statement", questionToAdd.getQuestionStatement());
+		values.put("answers", Arrays.toString(questionToAdd.getAnswers().toArray()));
+		values.put("solutionIndex", questionToAdd.getSolutionIndex());
+		values.put("owner", questionToAdd.getOwner());
 		
+		mDatabase.insert(CacheOpenHelper.CACHE_TABLE_NAME,
+				null, values);
 	}
 	
 	public void destroy() {

@@ -2,7 +2,6 @@ package epfl.sweng.patterns;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Queue;
 import java.util.Random;
@@ -10,13 +9,9 @@ import java.util.Random;
 import org.apache.http.HttpStatus;
 import org.json.JSONObject;
 
-import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 import epfl.sweng.backend.QuizQuery;
-import epfl.sweng.caching.CacheOpenHelper;
 import epfl.sweng.preferences.UserPreferences;
 import epfl.sweng.quizquestions.QuizQuestion;
 import epfl.sweng.servercomm.INetworkCommunication;
@@ -40,7 +35,6 @@ public final class QuestionsProxy
 	private List<QuizQuestion> mQuizQuestionsInbox;
 		
 	private INetworkCommunication mNetworkCommunication;
-	private SQLiteDatabase mSQLiteWritableCache;
 
 	/**
 	 * Returns the singleton, creates it if it's not instantiated.
@@ -84,17 +78,6 @@ public final class QuestionsProxy
 	 */
 	public void addInbox(QuizQuestion question) {
 		if (null != question && question.auditErrors() == 0) {
-			ContentValues values = new ContentValues(QuizQuestion.FIELDS_COUNT);
-			// XXX Sidney possible to change behavior of getTagsToString()?
-			values.put("id", question.getId());
-			values.put("tags", Arrays.toString(question.getTags().toArray()));
-			values.put("statement", question.getQuestionStatement());
-			values.put("answers", Arrays.toString(question.getAnswers().toArray()));
-			values.put("solutionIndex", question.getSolutionIndex());
-			values.put("owner", question.getOwner());
-			
-			mSQLiteWritableCache.insert(CacheOpenHelper.CACHE_TABLE_NAME,
-					null, values);
 			mQuizQuestionsInbox.add(question);
 		}
 	}
@@ -207,14 +190,6 @@ public final class QuestionsProxy
 	private QuizQuestion extractQuizQuestionFromInbox() {
 		QuizQuestion extractedQuestion = null;
 		
-		Cursor randomQuestionCursor = mSQLiteWritableCache.rawQuery(
-				"SELECT * FROM " + CacheOpenHelper.CACHE_TABLE_NAME +
-				" ORDER BY RANDOM() LIMIT 1;", null);
-		randomQuestionCursor.getString(0);
-		Log.i("QuestionProxy", "string returned: "+randomQuestionCursor.getString(0));
-		randomQuestionCursor.close();
-		
-		
 		if (mQuizQuestionsInbox.size() > 0) {
 			int questionIDCache = new Random()
 					.nextInt(mQuizQuestionsInbox.size());
@@ -234,7 +209,6 @@ public final class QuestionsProxy
 		mQuizQuestionsOutbox = new ArrayDeque<QuizQuestion>();
 		mQuizQuestionsInbox = new ArrayList<QuizQuestion>();
 		mNetworkCommunication = new NetworkCommunication();
-		mSQLiteWritableCache = new CacheOpenHelper(context).getWritableDatabase();
 	}
 	
 	private synchronized int sendCachedQuestions() {
@@ -255,10 +229,5 @@ public final class QuestionsProxy
 			}
 		}
 		return httpCodeResponse;
-	}
-
-	public void closeDB() {
-		// here we have to close the db and all unclosed Cursor objects
-		mSQLiteWritableCache.close();
 	}
 }
