@@ -1,8 +1,10 @@
 package epfl.sweng.showquestions;
 
+import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -30,25 +32,28 @@ import epfl.sweng.testing.TestCoordinator.TTChecks;
  */
 
 public class ShowQuestionsActivity extends Activity {
+	QuizQuestion mQuestion = null;
+	DisplayState mState = DisplayState.RANDOM;
+	ArrayList<QuizQuestion> mQuestions = null;
+	
 	
 	@Override
 	protected void onCreate(final Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+	    // get Intent that started this Activity
+	    Intent startingIntent = getIntent();
+	    // get the value of the user string
+	    ArrayList<QuizQuestion> mQuestions = startingIntent.getParcelableArrayListExtra("Questions");
+	    if (mQuestions != null) {
+	    	mState = DisplayState.QUERY;
+	    } else {
+	    	mState = DisplayState.RANDOM;
+	    }
 		setContentView(R.layout.activity_display_question);
 		setDisplayView();
 	}
 
-	/**
-	 * Sets all the view in this activity, by disabling the button, filling the
-	 * <code>TextView</code>, initializing the <code>ListView</code> bounded
-	 * with its adapter and putting it under a listener.
-	 */
-
-	private void setDisplayView() {
-		// setting button look
-		Button buttonNext = (Button) findViewById(R.id.buttonNext);
-		buttonNext.setEnabled(false);
-
+	public QuizQuestion getRandomQuestion(){
 		AsyncRetrieveQuestion asyncFetchQuestion = new AsyncRetrieveQuestion();
 		asyncFetchQuestion.execute();
 		QuizQuestion randomQuestion = null;
@@ -60,31 +65,49 @@ public class ShowQuestionsActivity extends Activity {
 		} catch (ExecutionException e) {
 			// TestCoordinator.check(TTChecks.QUESTION_SHOWN);
 			Log.e(this.getClass().getName(), "Process crashed");
-			return;
+			return null;
 		} finally {
 			if (null == randomQuestion) {
 				// TestCoordinator.check(TTChecks.QUESTION_SHOWN);
-				return;
+				return null;
 			}
+		}
+		return randomQuestion;
+	}
+	/**
+	 * Sets all the view in this activity, by disabling the button, filling the
+	 * <code>TextView</code>, initializing the <code>ListView</code> bounded
+	 * with its adapter and putting it under a listener.
+	 */
+
+	private void setDisplayView() {
+		// setting button look
+		Button buttonNext = (Button) findViewById(R.id.buttonNext);
+		buttonNext.setEnabled(false);
+		
+		if (mState == DisplayState.QUERY){
+			mQuestion = mQuestions.remove(0);
+		} else {
+			mQuestion = getRandomQuestion();
 		}
 
 		// setting tags
 		TextView textViewQuestion = (TextView) findViewById(R.id.displayQuestion);
-		textViewQuestion.setText(randomQuestion.getQuestionStatement());
+		textViewQuestion.setText(mQuestion.getQuestionStatement());
 
 		TextView textViewTag = (TextView) findViewById(R.id.displayTags);
-		textViewTag.setText(randomQuestion.getTagsToString());
+		textViewTag.setText(mQuestion.getTagsToString());
 
 		// setting answer list
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
 				android.R.layout.simple_list_item_1,
-				randomQuestion.getAnswers());
+				mQuestion.getAnswers());
 		ListView displayAnswers = (ListView) findViewById(R.id.displayAnswers);
 		displayAnswers.setAdapter(adapter);
 
 		// put answer list under listening
 		AnswerSelectionListener listener = new AnswerSelectionListener(
-				buttonNext, randomQuestion);
+				buttonNext, mQuestion);
 		displayAnswers.setOnItemClickListener(listener);
 	}
 
