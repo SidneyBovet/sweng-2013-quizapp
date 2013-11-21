@@ -12,6 +12,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.util.Log;
 import epfl.sweng.backend.Converter;
 
@@ -22,7 +24,7 @@ import epfl.sweng.backend.Converter;
  * @author born4new
  * 
  */
-public class QuizQuestion {
+public class QuizQuestion implements Parcelable {
 
 	private long mId;
 	private String mQuestionStatement;
@@ -367,4 +369,45 @@ public class QuizQuestion {
 
 		return errorCount;
 	}
+	
+	@Override
+	public int describeContents() {
+		return 0;
+	}
+
+	@Override
+	public void writeToParcel(Parcel dest, int flags) {
+		dest.writeLong(mId);
+		dest.writeString(mQuestionStatement);
+		dest.writeStringList(mAnswers);
+		dest.writeInt(mSolutionIndex);
+		//dest.writeArray(mTags.toArray(new Set[]{}));
+		String[] array = new String[mTags.size()];
+		int i = 0;
+		for (String s : mTags) {
+			array[i] = s;
+			i++;
+		}
+		dest.writeStringArray(array);
+		dest.writeString(mOwner);
+	}
+	
+	 public static final Parcelable.Creator<QuizQuestion> CREATOR
+	 	= new Parcelable.Creator<QuizQuestion>() {
+		 public QuizQuestion createFromParcel(Parcel in) {
+		     return new QuizQuestion(in);
+		 }
+		 public QuizQuestion[] newArray(int size) {
+		     return new QuizQuestion[size];
+		 }
+	 };
+	 
+     private QuizQuestion(Parcel in) {
+ 		mId = in.readLong();
+ 		mQuestionStatement = in.readString();
+ 		mAnswers = in.createStringArrayList();
+ 		mSolutionIndex = in.readInt();
+ 		mTags = new TreeSet<String>(in.createStringArrayList());
+ 		mOwner = in.readString();
+     }
 }
