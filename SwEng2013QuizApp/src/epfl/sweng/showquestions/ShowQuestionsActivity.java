@@ -34,7 +34,7 @@ import epfl.sweng.testing.TestCoordinator.TTChecks;
 public class ShowQuestionsActivity extends Activity {
 	QuizQuestion mQuestion = null;
 	DisplayState mState = DisplayState.RANDOM;
-	ArrayList<QuizQuestion> mQuestions = null;
+	ArrayList<QuizQuestion> mQuestions;
 	
 	
 	@Override
@@ -43,7 +43,7 @@ public class ShowQuestionsActivity extends Activity {
 	    // get Intent that started this Activity
 	    Intent startingIntent = getIntent();
 	    // get the value of the user string
-	    ArrayList<QuizQuestion> mQuestions = startingIntent.getParcelableArrayListExtra("Questions");
+	    mQuestions = startingIntent.getParcelableArrayListExtra("Questions");
 	    if (mQuestions != null) {
 	    	mState = DisplayState.QUERY;
 	    } else {
@@ -86,7 +86,12 @@ public class ShowQuestionsActivity extends Activity {
 		buttonNext.setEnabled(false);
 		
 		if (mState == DisplayState.QUERY){
-			mQuestion = mQuestions.remove(0);
+			if(mQuestions.size() > 0){
+				mQuestion = mQuestions.remove(0);
+			}else{
+				mState = DisplayState.RANDOM;
+				mQuestion = getRandomQuestion();
+			}
 		} else {
 			mQuestion = getRandomQuestion();
 		}
