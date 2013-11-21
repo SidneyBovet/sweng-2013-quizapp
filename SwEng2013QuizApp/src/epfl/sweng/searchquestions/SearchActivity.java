@@ -1,16 +1,20 @@
 package epfl.sweng.searchquestions;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
+import android.view.textservice.SentenceSuggestionsInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import epfl.sweng.R;
@@ -18,6 +22,7 @@ import epfl.sweng.backend.QuizQuery;
 import epfl.sweng.patterns.JsonToQuestionsAdapter;
 import epfl.sweng.patterns.QuestionsProxy;
 import epfl.sweng.quizquestions.QuizQuestion;
+import epfl.sweng.showquestions.ShowQuestionsActivity;
 import epfl.sweng.testing.TestCoordinator;
 import epfl.sweng.testing.TestCoordinator.TTChecks;
 
@@ -127,8 +132,15 @@ public class SearchActivity extends Activity {
 			}
 		}		
 		resetQuerySearchField();
+		sendToShowQuestionActivity(searchQuestions);
 	}
-
+	
+	private void sendToShowQuestionActivity(List<QuizQuestion> questions){
+	    Intent displayActivityIntent = new Intent(this, ShowQuestionsActivity.class);	
+	    displayActivityIntent.putParcelableArrayListExtra("Questions",  (ArrayList<QuizQuestion>) questions);
+	    startActivity(displayActivityIntent);
+	}
+	
 	/**
 	 * Resets the layout by emptying the queryField on the Activity, and by
 	 * disabling the sendQuery Button.
