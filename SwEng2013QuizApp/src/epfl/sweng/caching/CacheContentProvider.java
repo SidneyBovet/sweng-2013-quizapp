@@ -104,8 +104,7 @@ public class CacheContentProvider {
 		if (mDatabase.isReadOnly()) {
 			throw new IllegalStateException("Cannot wipe read-only database.");
 		} else {
-			mDatabase.rawQuery("TRUNCATE TABLE " + 
-					CacheOpenHelper.CACHE_TABLE_NAME, null);
+			// clear DB
 		}
 	}
 	
