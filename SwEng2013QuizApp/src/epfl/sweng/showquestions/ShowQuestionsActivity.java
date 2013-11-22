@@ -32,9 +32,9 @@ import epfl.sweng.testing.TestCoordinator.TTChecks;
  */
 
 public class ShowQuestionsActivity extends Activity {
-	QuizQuestion mQuestion = null;
-	DisplayState mState = DisplayState.RANDOM;
-	ArrayList<QuizQuestion> mQuestions;
+	private QuizQuestion mQuestion = null;
+	private DisplayState mState = DisplayState.RANDOM;
+	private ArrayList<QuizQuestion> mQuestions;
 	
 	
 	@Override
@@ -98,7 +98,7 @@ public class ShowQuestionsActivity extends Activity {
 
 		// setting tags
 		TextView textViewQuestion = (TextView) findViewById(R.id.displayQuestion);
-		textViewQuestion.setText("Question: " + randomQuestion.getStatement());
+		textViewQuestion.setText("Question: " + mQuestion.getStatement());
 
 		TextView textViewTag = (TextView) findViewById(R.id.displayTags);
 		textViewTag.setText(mQuestion.getTagsToString());
