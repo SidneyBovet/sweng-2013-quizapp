@@ -1,12 +1,14 @@
 package epfl.sweng.caching;
 
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 import epfl.sweng.backend.QuizQuery;
 import epfl.sweng.quizquestions.QuizQuestion;
 
@@ -18,8 +20,21 @@ import epfl.sweng.quizquestions.QuizQuestion;
  */
 public class CacheContentProvider {
 	
+	private static final int OWNER_COLUMN = 5;
+	private static final int SOLUTION_INDEX_COLUMN = 4;
+	private static final int ANSWER_COLUMN = 3;
+	private static final int STATEMENT_COLUMN = 2;
+	private static final int ID_COLUMN = 0;
+	private static final int TAGS_COLUMN = 1;
 	private SQLiteDatabase mDatabase = null;
 
+	/**
+	 * A content provider for the persistent cache.<br/>
+	 * <i><b>NOTE:</b> It must be closed via its <code>destroy()</code>
+	 * method!</i>
+	 * @param context The activity's context
+	 * @param writable Indicates whether this content provider is read-only.
+	 */
 	public CacheContentProvider(Context context, boolean writable) {
 		SQLiteCacheHelper openHelper = new SQLiteCacheHelper(context);
 		if (writable) {
@@ -40,8 +55,8 @@ public class CacheContentProvider {
 		Cursor randomQuestionCursor = mDatabase.rawQuery(
 				"SELECT * FROM " + SQLiteCacheHelper.TABLE_QUESTIONS +
 				" ORDER BY RANDOM() LIMIT 1;", null);
-		randomQuestionCursor.getString(0);
-		Log.i("QuestionProxy", "string returned: "+randomQuestionCursor.getString(0));
+		randomQuestionCursor.moveToFirst();
+		extractedQuestion = extractQuestionFromCursor(randomQuestionCursor);
 		randomQuestionCursor.close();
 		
 		
@@ -61,6 +76,7 @@ public class CacheContentProvider {
 	}
 	
 	/**
+	 * Adds a {@link QuizQuestion}to the persistent cache.
 	 * 
 	 * @param questionToAdd The question to be added to the cache
 	 */
@@ -71,7 +87,7 @@ public class CacheContentProvider {
 		// XXX Sidney possible to change behavior of getTagsToString()?
 		values.put("id", questionToAdd.getId());
 		values.put("tags", Arrays.toString(questionToAdd.getTags().toArray()));
-		values.put("statement", questionToAdd.getQuestionStatement());
+		values.put("statement", questionToAdd.getStatement());
 		values.put("answers", Arrays.toString(questionToAdd.getAnswers().toArray()));
 		values.put("solutionIndex", questionToAdd.getSolutionIndex());
 		values.put("owner", questionToAdd.getOwner());
@@ -80,6 +96,22 @@ public class CacheContentProvider {
 				null, values);
 	}
 	
+	/**
+	 * Cleans the database (cannot be undone!)
+	 */
+	public void cleanDatabase() {
+		//XXX does it work?
+		if (mDatabase.isReadOnly()) {
+			throw new IllegalStateException("Cannot wipe read-only database.");
+		} else {
+			mDatabase.rawQuery("TRUNCATE TABLE " + 
+					CacheOpenHelper.CACHE_TABLE_NAME, null);
+		}
+	}
+	
+	/**
+	 * Closes this object (it cannot furthermore be used to access the DB).
+	 */
 	public void destroy() {
 		sanityDatabaseCheck();
 		mDatabase.close();
@@ -91,6 +123,25 @@ public class CacheContentProvider {
 		if (null == mDatabase || !mDatabase.isOpen()) {
 			throw new IllegalStateException(
 					"The database object is either null or closed");
+		}
+	}
+
+	private QuizQuestion extractQuestionFromCursor(Cursor questionCursor) {
+		if (questionCursor.isBeforeFirst() || questionCursor.isAfterLast()) {
+			throw new IllegalStateException("Trying to create a QuizQuestion " +
+					"from Cursor pointing before or after the rows.");
+		} else {
+			// id, tags, statement, answer, solutionIndex, owner
+			int id = questionCursor.getInt(ID_COLUMN);
+			String[] tagsArray = questionCursor.getString(TAGS_COLUMN).split(", ");
+			Set<String> tags = new HashSet<String>(Arrays.asList(tagsArray));
+			String statement = questionCursor.getString(STATEMENT_COLUMN);
+			String[] answersArray = questionCursor.getString(ANSWER_COLUMN).split(", ");
+			List<String> answers = Arrays.asList(answersArray);
+			int solutionIndex = questionCursor.getInt(SOLUTION_INDEX_COLUMN);
+			String owner = questionCursor.getString(OWNER_COLUMN);
+			
+			return new QuizQuestion(statement, answers, solutionIndex, tags, id, owner);
 		}
 	}
 }
