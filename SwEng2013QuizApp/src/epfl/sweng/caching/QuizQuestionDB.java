@@ -55,7 +55,6 @@
 //	public long insertQuizQuestion(QuizQuestion question){
 //		//Cr��ation d'un ContentValues (fonctionne comme une HashMap)
 //		ContentValues values = new ContentValues();
-//		//on lui ajoute une valeur associ��e �� une cl�� (qui est le nom de la colonne dans laquelle on veut mettre la valeur)
 //		values.put(COL_ID, question.getId());
 //		values.put(COL_CONTENT, question.getQuestionStatement());
 //		values.put(COL_ANSWER, question.getAnswers().get(0));
@@ -70,7 +69,8 @@
 //		//La mise �� jour d'un livre dans la BDD fonctionne plus ou moins comme une insertion
 //		//il faut simplement pr��ciser quel livre on doit mettre �� jour gr��ce �� l'ID
 //		ContentValues values = new ContentValues();
-//		//on lui ajoute une valeur associ��e �� une cl�� (qui est le nom de la colonne dans laquelle on veut mettre la valeur)
+//		//on lui ajoute une valeur associ��e �� une cl��
+// 		(qui est le nom de la colonne dans laquelle on veut mettre la valeur)
 //		values.put(COL_CONTENT, question.getQuestionStatement());
 //		values.put(COL_ANSWER, question.getAnswers().get(0));
 //		//values.put(COL_TAG, question.getTags());
@@ -88,11 +88,14 @@
 //	/* see: http://www.vogella.com/articles/AndroidSQLite/article.html
 //	 * To get the number of elements of the resulting query use the getCount() method.
 //		To move between individual data rows, you can use the moveToFirst() 
-//		and moveToNext() methods. The isAfterLast() method allows to check if the end of the query result has been reached.
+//		and moveToNext() methods. The isAfterLast() method allows to check if the
+//end of the query result has been reached.
 //	 */
 //	public String getQuizQuestionWithContent (String content){
-//		//R��cup��re dans un Cursor les valeurs correspondant �� un livre contenu dans la BDD (ici on s��lectionne le livre gr��ce �� son titre)
-//		Cursor c = bdd.query(CACHE_TABLE_NAME, result_columns, COL_CONTENT + " LIKE \"" + content +"\"", null, null, null, null);
+//		//R��cup��re dans un Cursor les valeurs correspondant �� un
+//livre contenu dans la BDD (ici on s��lectionne le livre gr��ce �� son titre)
+//		Cursor c = bdd.query(CACHE_TABLE_NAME, result_columns, COL_CONTENT +
+//" LIKE \"" + content +"\"", null, null, null, null);
 //		return c.getString(NUM_COL_OWNER);
 //	
 //	}
