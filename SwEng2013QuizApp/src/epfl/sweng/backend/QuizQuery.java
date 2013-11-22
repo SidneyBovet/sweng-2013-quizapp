@@ -18,8 +18,8 @@ public class QuizQuery {
 			this.query = query;
 		}
 	}
-	
-	public QuizQuery(JSONObject jsonQuery){
+
+	public QuizQuery(JSONObject jsonQuery) {
 		String from = null;
 		try {
 			from = jsonQuery.getString("next");
@@ -53,7 +53,7 @@ public class QuizQuery {
 	}
 
 	private static boolean hasGoodSyntax(String query) {
-		
+
 		return false;
 	}
 

@@ -17,7 +17,6 @@ import android.os.Parcelable;
 import android.util.Log;
 import epfl.sweng.backend.Converter;
 
-
 /**
  * Data structure of a question for the quiz application.
  * 
@@ -179,10 +178,10 @@ public class QuizQuestion implements Parcelable {
 
 	@Override
 	public String toString() {
-		return "Question [id=" + mId + ", questionContent=" + mQuestionStatement
-				+ ", answers=" + mAnswers.toString() + ", solutionIndex="
-				+ mSolutionIndex + ", tags=" + mTags.toString() + ", owner="
-				+ mOwner + "]";
+		return "Question [id=" + mId + ", questionContent="
+				+ mQuestionStatement + ", answers=" + mAnswers.toString()
+				+ ", solutionIndex=" + mSolutionIndex + ", tags="
+				+ mTags.toString() + ", owner=" + mOwner + "]";
 	}
 
 	/*
@@ -200,7 +199,8 @@ public class QuizQuestion implements Parcelable {
 	public int auditErrors() {
 		int errorCount = 0;
 		if (mQuestionStatement.trim().length() == 0
-				|| !(0 < mQuestionStatement.length() && mQuestionStatement.length() <= QUESTION_CONTENT_MAX_SIZE)) {
+				|| !(0 < mQuestionStatement.length() && mQuestionStatement
+						.length() <= QUESTION_CONTENT_MAX_SIZE)) {
 			logErrorIncrement("Statement is empty or has invalid lenght");
 			++errorCount;
 		}
@@ -222,12 +222,12 @@ public class QuizQuestion implements Parcelable {
 			logErrorIncrement("Index of the solution is invalid");
 			++errorCount;
 		}
-		
+
 		if (!(mTags.size() > 0 && mTags.size() <= TAGSET_MAX_SIZE)) {
 			logErrorIncrement("Number of tags is invalid");
 			++errorCount;
 		}
-		
+
 		for (String tag : mTags) {
 			if (tag.trim().length() == 0
 					|| !(0 < tag.length() && tag.length() <= TAGSLIST_MAX_SIZE)) {
@@ -328,7 +328,9 @@ public class QuizQuestion implements Parcelable {
 
 	/**
 	 * Just a helper to log audit-related things.
-	 * @param message the message to append to this log
+	 * 
+	 * @param message
+	 *            the message to append to this log
 	 */
 	private void logErrorIncrement(String message) {
 		Log.d("auditErrors increment @ " + this.getClass().getName(), message);
@@ -337,7 +339,8 @@ public class QuizQuestion implements Parcelable {
 	public int isQuestionValid() {
 		int errorCount = 0;
 		if (mQuestionStatement.trim().length() == 0
-				|| !(0 < mQuestionStatement.length() && mQuestionStatement.length() <= QUESTION_CONTENT_MAX_SIZE)) {
+				|| !(0 < mQuestionStatement.length() && mQuestionStatement
+						.length() <= QUESTION_CONTENT_MAX_SIZE)) {
 			++errorCount;
 		}
 
@@ -355,11 +358,11 @@ public class QuizQuestion implements Parcelable {
 		if (!(mSolutionIndex >= 0 && mSolutionIndex < mAnswers.size())) {
 			++errorCount;
 		}
-		
+
 		if (!(mTags.size() > 0 && mTags.size() <= TAGSET_MAX_SIZE)) {
 			++errorCount;
 		}
-		
+
 		for (String tag : mTags) {
 			if (tag.trim().length() == 0
 					|| !(0 < tag.length() && tag.length() <= TAGSLIST_MAX_SIZE)) {
@@ -369,7 +372,7 @@ public class QuizQuestion implements Parcelable {
 
 		return errorCount;
 	}
-	
+
 	@Override
 	public int describeContents() {
 		return 0;
@@ -381,7 +384,7 @@ public class QuizQuestion implements Parcelable {
 		dest.writeString(mQuestionStatement);
 		dest.writeStringList(mAnswers);
 		dest.writeInt(mSolutionIndex);
-		//dest.writeArray(mTags.toArray(new Set[]{}));
+		// dest.writeArray(mTags.toArray(new Set[]{}));
 		String[] array = new String[mTags.size()];
 		int i = 0;
 		for (String s : mTags) {
@@ -391,23 +394,24 @@ public class QuizQuestion implements Parcelable {
 		dest.writeStringArray(array);
 		dest.writeString(mOwner);
 	}
-	
-	 public static final Parcelable.Creator<QuizQuestion> CREATOR
-	 	= new Parcelable.Creator<QuizQuestion>() {
-		 public QuizQuestion createFromParcel(Parcel in) {
-		     return new QuizQuestion(in);
-		 }
-		 public QuizQuestion[] newArray(int size) {
-		     return new QuizQuestion[size];
-		 }
-	 };
-	 
-     private QuizQuestion(Parcel in) {
- 		mId = in.readLong();
- 		mQuestionStatement = in.readString();
- 		mAnswers = in.createStringArrayList();
- 		mSolutionIndex = in.readInt();
- 		mTags = new TreeSet<String>(in.createStringArrayList());
- 		mOwner = in.readString();
-     }
+
+	public static final Parcelable.Creator<QuizQuestion> CREATOR = new 
+			Parcelable.Creator<QuizQuestion>() {
+		public QuizQuestion createFromParcel(Parcel in) {
+			return new QuizQuestion(in);
+		}
+
+		public QuizQuestion[] newArray(int size) {
+			return new QuizQuestion[size];
+		}
+	};
+
+	private QuizQuestion(Parcel in) {
+		mId = in.readLong();
+		mQuestionStatement = in.readString();
+		mAnswers = in.createStringArrayList();
+		mSolutionIndex = in.readInt();
+		mTags = new TreeSet<String>(in.createStringArrayList());
+		mOwner = in.readString();
+	}
 }

@@ -21,7 +21,7 @@ public class CacheContentProvider {
 	private SQLiteDatabase mDatabase = null;
 
 	public CacheContentProvider(Context context, boolean writable) {
-		CacheOpenHelper openHelper = new CacheOpenHelper(context);
+		SQLiteCacheHelper openHelper = new SQLiteCacheHelper(context);
 		if (writable) {
 			mDatabase = openHelper.getReadableDatabase();
 		} else {
@@ -38,7 +38,7 @@ public class CacheContentProvider {
 		QuizQuestion extractedQuestion = null;
 
 		Cursor randomQuestionCursor = mDatabase.rawQuery(
-				"SELECT * FROM " + CacheOpenHelper.CACHE_TABLE_NAME +
+				"SELECT * FROM " + SQLiteCacheHelper.TABLE_QUESTIONS +
 				" ORDER BY RANDOM() LIMIT 1;", null);
 		randomQuestionCursor.getString(0);
 		Log.i("QuestionProxy", "string returned: "+randomQuestionCursor.getString(0));
@@ -76,7 +76,7 @@ public class CacheContentProvider {
 		values.put("solutionIndex", questionToAdd.getSolutionIndex());
 		values.put("owner", questionToAdd.getOwner());
 		
-		mDatabase.insert(CacheOpenHelper.CACHE_TABLE_NAME,
+		mDatabase.insert(SQLiteCacheHelper.TABLE_QUESTIONS,
 				null, values);
 	}
 	

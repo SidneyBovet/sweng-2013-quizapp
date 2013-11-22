@@ -18,7 +18,7 @@ import epfl.sweng.quizquestions.QuizQuestion;
  * It is indeed a singleton.
  */
 public final class JsonToQuestionsAdapter {
-	
+
 	private JsonToQuestionsAdapter() {
 	}
 
@@ -30,7 +30,7 @@ public final class JsonToQuestionsAdapter {
 	 * @return A list of questions.
 	 */
 	public static List<QuizQuestion> retrieveQuizQuestions(QuizQuery query) {
-		
+
 		JSONObject jsonResponse = QuestionsProxy.getInstance()
 				.retrieveQuizQuestions(query);
 		List<QuizQuestion> questions = new ArrayList<QuizQuestion>();
@@ -43,32 +43,35 @@ public final class JsonToQuestionsAdapter {
 		// TODO parse JSON object, get questions AND find a way
 		// to store the next token that will be parsed (would be a good idea
 		// to store it here instead of the proxy!)
-		//XXX no need to store the next field?
+		// XXX no need to store the next field?
 
 		return questions;
 	}
-	
-	//XXX find another way to test it without static
-	public static List<QuizQuestion> fillQuizQuestionListFromQuery(JSONObject jsonResponse) throws JSONException{
+
+	// XXX find another way to test it without static
+	public static List<QuizQuestion> fillQuizQuestionListFromQuery(
+			JSONObject jsonResponse) throws JSONException {
 		JSONArray array = null;
 		List<QuizQuestion> questions = new ArrayList<QuizQuestion>();
 		array = jsonResponse.getJSONArray("questions");
-		if(array != null && array.opt(0) != null){
+		if (array != null && array.opt(0) != null) {
 			for (int i = 0; i < array.length(); i++) {
-				QuizQuestion question = new QuizQuestion(array.opt(i).toString());
-				//TODO add a field in QuizQuery to store the expected tags? Joanna
-				//if(question.getTags().contains(query.getTag()))
+				QuizQuestion question = new QuizQuestion(array.opt(i)
+						.toString());
+				// TODO add a field in QuizQuery to store the expected tags?
+				// Joanna
+				// if(question.getTags().contains(query.getTag()))
 				questions.add(question);
-				//XXX bad recursive idea?
+				// XXX bad recursive idea?
 			}
 		}
 		return questions;
 	}
-	
-	
-	private List<QuizQuestion> nextQuery(JSONObject jsonResponse) throws JSONException{
+
+	private List<QuizQuestion> nextQuery(JSONObject jsonResponse)
+		throws JSONException {
 		List<QuizQuestion> questions = new ArrayList<QuizQuestion>();
-		while(jsonResponse.getJSONArray("next") != null){
+		while (jsonResponse.getJSONArray("next") != null) {
 			JSONObject jsonResponseNext = QuestionsProxy.getInstance()
 					.retrieveQuizQuestions(new QuizQuery(jsonResponse));
 			questions.addAll(fillQuizQuestionListFromQuery(jsonResponseNext));
@@ -76,4 +79,4 @@ public final class JsonToQuestionsAdapter {
 		}
 		return questions;
 	}
-}	 
+}
