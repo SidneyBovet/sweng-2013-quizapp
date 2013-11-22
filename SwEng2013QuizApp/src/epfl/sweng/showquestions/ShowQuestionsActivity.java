@@ -98,7 +98,7 @@ public class ShowQuestionsActivity extends Activity {
 
 		// setting tags
 		TextView textViewQuestion = (TextView) findViewById(R.id.displayQuestion);
-		textViewQuestion.setText(mQuestion.getQuestionStatement());
+		textViewQuestion.setText("Question: " + randomQuestion.getStatement());
 
 		TextView textViewTag = (TextView) findViewById(R.id.displayTags);
 		textViewTag.setText(mQuestion.getTagsToString());

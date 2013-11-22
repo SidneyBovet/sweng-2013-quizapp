@@ -1,3 +1,4 @@
+<<<<<<< bb62ed49a7ee3353886095cd4f5b54f59a25d74a
 //package epfl.sweng.caching;
 //
 //import android.content.ContentValues;

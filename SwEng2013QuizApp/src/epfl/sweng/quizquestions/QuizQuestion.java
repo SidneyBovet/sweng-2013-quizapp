@@ -305,15 +305,14 @@ public class QuizQuestion implements Parcelable {
 	public long getId() {
 		return mId;
 	}
-
+	
 	/**
-	 * Returns the question text body.
+	 * Returns the statement string.
 	 * 
-	 * @return question text body.
+	 * @return The statement string.
 	 */
-
-	public String getQuestionStatement() {
-		return "Question: " + mQuestionStatement;
+	public String getStatement() {
+		return mQuestionStatement;
 	}
 
 	/**
