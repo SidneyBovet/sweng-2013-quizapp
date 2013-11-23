@@ -99,8 +99,7 @@ public class MainActivityConnectionState extends GUITest<MainActivity> {
 	}
 	
 	public void testSendingOrderIsFIFO() {
-		int expectedSize = QuestionsProxy.getInstance(
-				getInstrumentation().getTargetContext()).getOutboxSize() + 1;
+		int expectedSize = QuestionsProxy.getInstance().getOutboxSize() + 1;
 		CheckBox connectivityState = (CheckBox) getSolo().getView(
 				R.id.switchOnlineModeCheckbox);
 		
@@ -120,11 +119,9 @@ public class MainActivityConnectionState extends GUITest<MainActivity> {
 		SwengHttpClientFactory.setInstance(client);
 		
 		// filling the outbox
-		QuestionsProxy.getInstance(
-				getInstrumentation().getTargetContext()).addOutbox(createFakeQuestion(
+		QuestionsProxy.getInstance().addOutbox(createFakeQuestion(
 				"Statement 1"));
-		QuestionsProxy.getInstance(
-				getInstrumentation().getTargetContext()).addOutbox(createFakeQuestion(
+		QuestionsProxy.getInstance().addOutbox(createFakeQuestion(
 				"Statement 2"));
 		
 		// let the test begin...
@@ -132,7 +129,7 @@ public class MainActivityConnectionState extends GUITest<MainActivity> {
 		getActivityAndWaitFor(TTChecks.OFFLINE_CHECKBOX_ENABLED);
 		getSolo().sleep(500);
 		
-		assertEquals(expectedSize, QuestionsProxy.getInstance(contextOfMainActivity).getOutboxSize());
+		assertEquals(expectedSize, QuestionsProxy.getInstance().getOutboxSize());
 		assertEquals("Only submitted question should be 'Statement 2'",
 				"Statement 2", client.getLastSubmittedQuestionStatement());
 		
@@ -140,8 +137,7 @@ public class MainActivityConnectionState extends GUITest<MainActivity> {
 		getActivityAndWaitFor(TTChecks.OFFLINE_CHECKBOX_DISABLED);
 		getSolo().sleep(500);
 		
-		assertEquals(0, QuestionsProxy.getInstance(
-				getInstrumentation().getTargetContext()).getOutboxSize());
+		assertEquals(0, QuestionsProxy.getInstance().getOutboxSize());
 	}
 	
 	public void testUncheckingBoxEmptiesOutbox() {
@@ -155,8 +151,7 @@ public class MainActivityConnectionState extends GUITest<MainActivity> {
 		getSolo().sleep(500);
 		
 		// 2. adding stuff to the outbox
-		QuestionsProxy.getInstance(
-				getInstrumentation().getTargetContext()).
+		QuestionsProxy.getInstance().
 				addOutbox(createFakeQuestion("Robotium?"));
 		
 		// 3. let's test 
@@ -165,8 +160,7 @@ public class MainActivityConnectionState extends GUITest<MainActivity> {
 		getSolo().sleep(500);
 		
 		assertEquals("Outbox should be empty after going from offline to online",
-				0, QuestionsProxy.getInstance(
-						getInstrumentation().getTargetContext()).getOutboxSize());
+				0, QuestionsProxy.getInstance().getOutboxSize());
 	}
 
 	private QuizQuestion createFakeQuestion(String questionStatement) {

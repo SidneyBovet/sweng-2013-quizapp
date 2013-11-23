@@ -49,8 +49,7 @@ public class ShowQuestionsActivityOfflineTest extends GUITest<ShowQuestionsActiv
 		
 		QuizQuestion question = new QuizQuestion(
 				"How reliable Robotium testing is?", answers, 1, tags);
-		QuestionsProxy.getInstance(
-				getInstrumentation().getTargetContext()).addInbox(question);
+		QuestionsProxy.getInstance().addInbox(question);
 	}
 
 	public void testQuestionInInboxIsDisplayedWhenOffline() {
@@ -73,8 +72,7 @@ public class ShowQuestionsActivityOfflineTest extends GUITest<ShowQuestionsActiv
 	}
 	
 	public void testNewlyRetrievedQuestionShouldBeCached() {
-		int expectedInboxSize = QuestionsProxy.getInstance(
-				getInstrumentation().getTargetContext()).getInboxSize() + 1;
+		int expectedInboxSize = QuestionsProxy.getInstance().getInboxSize() + 1;
 		
 		UserPreferences.getInstance(getInstrumentation().getTargetContext()).
 			setConnectivityState(ConnectivityState.ONLINE);
@@ -90,8 +88,7 @@ public class ShowQuestionsActivityOfflineTest extends GUITest<ShowQuestionsActiv
 		
 		getActivityAndWaitFor(TTChecks.QUESTION_SHOWN);
 		getSolo().sleep(500);
-		assertEquals(expectedInboxSize, QuestionsProxy.getInstance(
-				getInstrumentation().getTargetContext()).getInboxSize());
+		assertEquals(expectedInboxSize, QuestionsProxy.getInstance().getInboxSize());
 	}
 
 	public void testNetworkUnavailableShouldMakeConnectionStateOffline() {

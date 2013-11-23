@@ -9,7 +9,6 @@ import java.util.Random;
 import org.apache.http.HttpStatus;
 import org.json.JSONObject;
 
-import android.content.Context;
 import android.util.Log;
 import epfl.sweng.backend.QuizQuery;
 import epfl.sweng.preferences.UserPreferences;
@@ -35,26 +34,7 @@ public final class QuestionsProxy implements ConnectivityProxy,
 	private List<QuizQuestion> mQuizQuestionsInbox;
 
 	private INetworkCommunication mNetworkCommunication;
-
-	/**
-	 * Returns the singleton, creates it if it's not instantiated.
-	 * 
-	 * @return Singleton instance of the class.
-	 */
-
-	public static QuestionsProxy getInstance(Context context) {
-		// double-checked singleton: avoids calling costly synchronized if
-		// unnecessary
-		if (null == sQuestionProxy) {
-			synchronized (QuestionsProxy.class) {
-				if (null == sQuestionProxy) {
-					sQuestionProxy = new QuestionsProxy(context);
-				}
-			}
-		}
-		return sQuestionProxy;
-	}
-
+	
 	/**
 	 * Singleton getter when no context is available.
 	 * 
@@ -62,13 +42,17 @@ public final class QuestionsProxy implements ConnectivityProxy,
 	 */
 
 	public static QuestionsProxy getInstance() {
+		// double-checked singleton: avoids calling costly synchronized if unnecessary
 		if (null == sQuestionProxy) {
-			Log.e(UserPreferences.class.getName(), "getInstance()"
-					+ "without context was used before the one with a Context!");
+			synchronized (QuestionsProxy.class) {
+				if (null == sQuestionProxy) {
+					sQuestionProxy = new QuestionsProxy();
+				}
+			}
 		}
 		return sQuestionProxy;
 	}
-
+	
 	/**
 	 * Add a {@link QuizQuestion} to the Inbox only if it is a well formed
 	 * question
@@ -76,12 +60,13 @@ public final class QuestionsProxy implements ConnectivityProxy,
 	 * @param question
 	 *            The {@link QuizQuestion} to be verify
 	 */
+	
 	public void addInbox(QuizQuestion question) {
 		if (null != question && question.auditErrors() == 0) {
 			mQuizQuestionsInbox.add(question);
 		}
 	}
-
+	
 	/**
 	 * Add a {@link QuizQuestion} to the Outbox only if it is a well formed
 	 * question
@@ -89,12 +74,13 @@ public final class QuestionsProxy implements ConnectivityProxy,
 	 * @param question
 	 *            The {@link QuizQuestion} to be verify
 	 */
+	
 	public void addOutbox(QuizQuestion question) {
 		if (null != question && question.auditErrors() == 0) {
 			mQuizQuestionsOutbox.add(question);
 		}
 	}
-
+	
 	/**
 	 * Send a {@link QuizQuestion} to the server after having stored it in the
 	 * cache and send the cached questions to be sent if online. Store the
@@ -104,13 +90,13 @@ public final class QuestionsProxy implements ConnectivityProxy,
 	 *            {@link QuizQuestion} that we want to send
 	 */
 	public int sendQuizQuestion(QuizQuestion question) {
-
+		
 		// We add in the inbox to make this question accessible in offline mode.
 		addInbox(question);
 		// We add the current question to the outbox by default to send it
 		// independently of the state we are in (online or offline).
 		addOutbox(question);
-
+		
 		int httpCodeResponse = -1;
 		if (UserPreferences.getInstance().isConnected()) {
 			httpCodeResponse = sendCachedQuestions();
@@ -118,7 +104,7 @@ public final class QuestionsProxy implements ConnectivityProxy,
 		httpCodeResponse = HttpStatus.SC_CREATED;
 		return httpCodeResponse;
 	}
-
+	
 	/**
 	 * Retrieve a {@link QuizQuestion} from the server and store it in the cache
 	 * before returning it if online. Choose a random {@link QuizQuestion} from
@@ -129,7 +115,7 @@ public final class QuestionsProxy implements ConnectivityProxy,
 	@Override
 	public QuizQuestion retrieveRandomQuizQuestion() {
 		QuizQuestion fetchedQuestion = null;
-
+		
 		if (UserPreferences.getInstance().isConnected()) {
 			fetchedQuestion = mNetworkCommunication
 					.retrieveRandomQuizQuestion();
@@ -143,18 +129,18 @@ public final class QuestionsProxy implements ConnectivityProxy,
 		} else {
 			fetchedQuestion = extractQuizQuestionFromInbox();
 		}
-
+		
 		return fetchedQuestion;
 	}
-
+	
 	public JSONObject retrieveQuizQuestions(QuizQuery query) {
 		return mNetworkCommunication.retrieveQuizQuestions(query);
 	}
-
+	
 	public int getOutboxSize() {
 		return mQuizQuestionsOutbox.size();
 	}
-
+	
 	public int getInboxSize() {
 		return mQuizQuestionsInbox.size();
 	}
@@ -166,6 +152,7 @@ public final class QuestionsProxy implements ConnectivityProxy,
 	 * 
 	 * @return The HTTP response code of the last proxy request.
 	 */
+	
 	@Override
 	public int notifyConnectivityChange(ConnectivityState newState) {
 		int proxyResponse = -1;
@@ -182,12 +169,13 @@ public final class QuestionsProxy implements ConnectivityProxy,
 
 		return proxyResponse;
 	}
-
+	
 	/**
 	 * Extracts a {@link QuizQuestion} from the Inbox, returning null if empty
 	 * 
 	 * @return The extracted question, null if empty.
 	 */
+	
 	private QuizQuestion extractQuizQuestionFromInbox() {
 		QuizQuestion extractedQuestion = null;
 
@@ -201,12 +189,13 @@ public final class QuestionsProxy implements ConnectivityProxy,
 		}
 		return extractedQuestion;
 	}
-
+	
 	/**
 	 * Private constructor of the singleton.
 	 * 
 	 */
-	private QuestionsProxy(Context context) {
+	
+	private QuestionsProxy() {
 		mQuizQuestionsOutbox = new ArrayDeque<QuizQuestion>();
 		mQuizQuestionsInbox = new ArrayList<QuizQuestion>();
 		mNetworkCommunication = new NetworkCommunication();

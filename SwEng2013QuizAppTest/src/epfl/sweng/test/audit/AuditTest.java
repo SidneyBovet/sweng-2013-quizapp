@@ -244,7 +244,7 @@ public class AuditTest extends GUITest<EditQuestionActivity> {
 			semaphore.acquire();
 			getSolo().sleep(500);
 			assertEquals("Question: my question1",
-					question.getQuestionStatement());
+					question.getStatement());
 			assertTrue("Audit questions != 1", question.auditErrors() == 1);
 			assertTrue("Number of audit errors = "
 					+ getActivity().auditErrors() + " != 1", getActivity()
@@ -286,7 +286,7 @@ public class AuditTest extends GUITest<EditQuestionActivity> {
 			semaphore.acquire();
 			getSolo().sleep(500);
 			assertEquals("Question: my question1",
-					question.getQuestionStatement());
+					question.getStatement());
 			assertTrue("Audit questions != 2", question.auditErrors() == 2);
 			assertTrue("Number of audit errors = "
 					+ getActivity().auditErrors() + " != 1", getActivity()
@@ -332,7 +332,7 @@ public class AuditTest extends GUITest<EditQuestionActivity> {
 			semaphore.acquire();
 			getSolo().sleep(500);
 			assertEquals("Question: my question1",
-					question.getQuestionStatement());
+					question.getStatement());
 			assertTrue("Size of Tag Set != 21", question.getTags().size() == 21);
 			assertTrue("Audit questions != 1", question.auditErrors() == 1);
 			assertTrue("Number of audit errors = "
@@ -372,7 +372,7 @@ public class AuditTest extends GUITest<EditQuestionActivity> {
 			semaphore.acquire();
 			getSolo().sleep(500);
 			assertEquals("Question: my question1",
-					question.getQuestionStatement());
+					question.getStatement());
 			assertTrue("Audit questions != 3", question.auditErrors() == 3);
 			assertTrue("Number of audit errors = "
 					+ getActivity().auditErrors() + " != 1", getActivity()

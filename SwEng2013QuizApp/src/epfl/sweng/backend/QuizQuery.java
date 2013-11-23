@@ -5,8 +5,8 @@ import org.antlr.runtime.CommonTokenStream;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import epfl.sweng.interpreter.QueryLexer;
-import epfl.sweng.interpreter.QueryParser;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 /**
  * Used to filter data from the SwEng server.
@@ -15,14 +15,14 @@ import epfl.sweng.interpreter.QueryParser;
  * @author Merok
  * 
  */
-public class QuizQuery {
+public class QuizQuery implements Parcelable {
 
-	private String query;
+	private String mQuery;
+	private String mFrom;
 
-	public QuizQuery(String query) {
-		if (this.hasGoodSyntax(query)) {
-			this.query = query;
-		}
+	public QuizQuery(String query, String from) {
+		this.mQuery = query;
+		this.mFrom = from;
 	}
 
 	public QuizQuery(JSONObject jsonQuery) {
@@ -33,7 +33,7 @@ public class QuizQuery {
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-		this.query = jsonQuery.toString();
+		this.mQuery = jsonQuery.toString();
 	}
 
 	/**
@@ -64,9 +64,55 @@ public class QuizQuery {
 	 * 
 	 * @return A JSONObject of the question.
 	 */
+	
 	public JSONObject toJSON() throws JSONException {
 		JSONObject jsonQuery = new JSONObject();
-		jsonQuery.put("query", query);
+		jsonQuery.put("query", mQuery);
+		if (mFrom != null) {
+			jsonQuery.put("from", mFrom);
+		}
 		return jsonQuery;
+	}
+	
+	public String getQuery() {
+		return mQuery;
+	}
+
+	private boolean hasGoodSyntax(String query) {
+
+		return false;
+	}
+
+	private boolean hasExpectedCharacters(String query) {
+		String alphanumeric = "(?:[a-zA-Z0-9])+";
+		String allowedOperators = "(?:\\+|\\*|\\s|\\(|\\))*";
+		return query.matches(alphanumeric + allowedOperators);
+	}
+	
+	@Override
+	public int describeContents() {
+		return 0;
+	}
+
+	@Override
+	public void writeToParcel(Parcel dest, int flags) {
+		dest.writeString(mQuery);
+		dest.writeString(mFrom);
+	}
+
+	public static final Parcelable.Creator<QuizQuery> CREATOR = new 
+			Parcelable.Creator<QuizQuery>() {
+		public QuizQuery createFromParcel(Parcel in) {
+			return new QuizQuery(in);
+		}
+
+		public QuizQuery[] newArray(int size) {
+			return new QuizQuery[size];
+		}
+	};
+
+	private QuizQuery(Parcel in) {
+		mQuery = in.readString();
+		mFrom = in.readString();
 	}
 }

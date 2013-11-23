@@ -19,7 +19,7 @@
         android:id="@+id/submit_query_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="sendQuery"
+        android:onClick="createQuery"
         android:text="@string/submit_query_button" />
 
 </LinearLayout>
