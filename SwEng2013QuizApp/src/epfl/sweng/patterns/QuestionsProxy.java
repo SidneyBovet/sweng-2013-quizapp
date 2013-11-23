@@ -25,15 +25,15 @@ import epfl.sweng.servercomm.NetworkCommunication;
  * @author born4new, JoTearoom, Merok
  * 
  */
-public final class QuestionsProxy 
-	implements ConnectivityProxy, INetworkCommunication {
+public final class QuestionsProxy implements ConnectivityProxy,
+		INetworkCommunication {
 
 	private static QuestionsProxy sQuestionProxy;
 	// question to be sent
 	private Queue<QuizQuestion> mQuizQuestionsOutbox;
 	// question to be retrieve
 	private List<QuizQuestion> mQuizQuestionsInbox;
-		
+
 	private INetworkCommunication mNetworkCommunication;
 
 	/**
@@ -43,7 +43,8 @@ public final class QuestionsProxy
 	 */
 
 	public static QuestionsProxy getInstance(Context context) {
-		// double-checked singleton: avoids calling costly synchronized if unnecessary
+		// double-checked singleton: avoids calling costly synchronized if
+		// unnecessary
 		if (null == sQuestionProxy) {
 			synchronized (QuestionsProxy.class) {
 				if (null == sQuestionProxy) {
@@ -53,13 +54,13 @@ public final class QuestionsProxy
 		}
 		return sQuestionProxy;
 	}
-	
+
 	/**
 	 * Singleton getter when no context is available.
-	 * @return
-	 * 		The singleton instance of this object (may be null!)
+	 * 
+	 * @return The singleton instance of this object (may be null!)
 	 */
-	
+
 	public static QuestionsProxy getInstance() {
 		if (null == sQuestionProxy) {
 			Log.e(UserPreferences.class.getName(), "getInstance()"
@@ -67,7 +68,6 @@ public final class QuestionsProxy
 		}
 		return sQuestionProxy;
 	}
-	
 
 	/**
 	 * Add a {@link QuizQuestion} to the Inbox only if it is a well formed
@@ -131,12 +131,13 @@ public final class QuestionsProxy
 		QuizQuestion fetchedQuestion = null;
 
 		if (UserPreferences.getInstance().isConnected()) {
-			fetchedQuestion = mNetworkCommunication.retrieveRandomQuizQuestion();
+			fetchedQuestion = mNetworkCommunication
+					.retrieveRandomQuizQuestion();
 			if (null != fetchedQuestion) {
 				addInbox(fetchedQuestion);
 			} else {
-//				UserPreferences.getInstance()
-//					.setConnectivityState(ConnectivityState.OFFLINE);
+				// UserPreferences.getInstance()
+				// .setConnectivityState(ConnectivityState.OFFLINE);
 				fetchedQuestion = extractQuizQuestionFromInbox();
 			}
 		} else {
@@ -157,7 +158,7 @@ public final class QuestionsProxy
 	public int getInboxSize() {
 		return mQuizQuestionsInbox.size();
 	}
-	
+
 	/**
 	 * Notifies the proxy of a new connectivity state. The proxy will change to
 	 * the new state, send the according request, and return their corresponding
@@ -168,7 +169,7 @@ public final class QuestionsProxy
 	@Override
 	public int notifyConnectivityChange(ConnectivityState newState) {
 		int proxyResponse = -1;
-		
+
 		if (newState == ConnectivityState.OFFLINE) {
 			proxyResponse = HttpStatus.SC_OK; // Nothing to do
 		} else if (newState == ConnectivityState.ONLINE) {
@@ -178,7 +179,7 @@ public final class QuestionsProxy
 				proxyResponse = HttpStatus.SC_CREATED;
 			}
 		}
-		
+
 		return proxyResponse;
 	}
 
@@ -189,10 +190,10 @@ public final class QuestionsProxy
 	 */
 	private QuizQuestion extractQuizQuestionFromInbox() {
 		QuizQuestion extractedQuestion = null;
-		
+
 		if (mQuizQuestionsInbox.size() > 0) {
-			int questionIDCache = new Random()
-					.nextInt(mQuizQuestionsInbox.size());
+			int questionIDCache = new Random().nextInt(mQuizQuestionsInbox
+					.size());
 			extractedQuestion = mQuizQuestionsInbox.get(questionIDCache);
 		} else {
 			Log.i("QuestionProxy", "Inbox empty!");
@@ -210,7 +211,7 @@ public final class QuestionsProxy
 		mQuizQuestionsInbox = new ArrayList<QuizQuestion>();
 		mNetworkCommunication = new NetworkCommunication();
 	}
-	
+
 	private synchronized int sendCachedQuestions() {
 		int httpCodeResponse = -1;
 		// We first send all the questions that we stored when in
@@ -219,7 +220,8 @@ public final class QuestionsProxy
 
 			QuizQuestion questionOut = mQuizQuestionsOutbox.peek();
 
-			httpCodeResponse = mNetworkCommunication.sendQuizQuestion(questionOut);
+			httpCodeResponse = mNetworkCommunication
+					.sendQuizQuestion(questionOut);
 
 			if (HttpStatus.SC_CREATED == httpCodeResponse) {
 				// If the question has been sent, we remove it from the queue.

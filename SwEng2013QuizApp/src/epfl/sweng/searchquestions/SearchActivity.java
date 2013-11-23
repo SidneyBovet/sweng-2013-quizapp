@@ -33,6 +33,7 @@ import epfl.sweng.testing.TestCoordinator.TTChecks;
  * 
  */
 public class SearchActivity extends Activity {
+	private QuizQuery mQuery;
 	private Button mSubmitQuery;
 	private EditText mQueryField;
 	private String mQueryFieldText;
@@ -103,23 +104,24 @@ public class SearchActivity extends Activity {
 	 * content of the queryField EditText.
 	 */
 	private void updateSearchButton() {
+		mQuery = new QuizQuery(mQueryFieldText);
 		// && QuizQuery.isQueryValid(mQueryFieldText));
-		mSubmitQuery.setEnabled(mQueryFieldText.length() != 0);
+		mSubmitQuery.setEnabled(mQueryFieldText.length() != 0
+				&& mQueryFieldText.length() < 500
+				&& mQuery.hasGoodSyntax(mQueryFieldText));
 	}
 
 	/**
 	 * Send the Query to the server and process accordingly.
 	 */
 	public void sendQuery(View view) {
-		QuizQuery query = new QuizQuery(mQueryFieldText);
 		QuestionsProxy.getInstance(this);
 		AsyncSearchForQuestions asyncFetchSearchQuestion = new AsyncSearchForQuestions();
-		asyncFetchSearchQuestion.execute(query);
+		asyncFetchSearchQuestion.execute(mQuery);
 		List<QuizQuestion> searchQuestions = null;
 		try {
 			searchQuestions = asyncFetchSearchQuestion.get();
-		}
-		catch (InterruptedException e) {
+		} catch (InterruptedException e) {
 			Log.wtf(this.getClass().getName(),
 					"AsyncFetchQuestion was interrupted");
 		} catch (ExecutionException e) {
@@ -130,17 +132,19 @@ public class SearchActivity extends Activity {
 			if (null == searchQuestions) {
 				// TestCoordinator.check(TTChecks.QUESTION_SHOWN);
 			}
-		}		
+		}
 		resetQuerySearchField();
 		sendToShowQuestionActivity(searchQuestions);
 	}
-	
-	private void sendToShowQuestionActivity(List<QuizQuestion> questions){
-	    Intent displayActivityIntent = new Intent(this, ShowQuestionsActivity.class);	
-	    displayActivityIntent.putParcelableArrayListExtra("Questions",  (ArrayList<QuizQuestion>) questions);
-	    startActivity(displayActivityIntent);
+
+	private void sendToShowQuestionActivity(List<QuizQuestion> questions) {
+		Intent displayActivityIntent = new Intent(this,
+				ShowQuestionsActivity.class);
+		displayActivityIntent.putParcelableArrayListExtra("Questions",
+				(ArrayList<QuizQuestion>) questions);
+		startActivity(displayActivityIntent);
 	}
-	
+
 	/**
 	 * Resets the layout by emptying the queryField on the Activity, and by
 	 * disabling the sendQuery Button.
@@ -171,7 +175,7 @@ public class SearchActivity extends Activity {
 		@Override
 		protected void onPostExecute(List<QuizQuestion> questions) {
 			super.onPostExecute(questions);
-			
+
 			// TODO Additional manipulations, such as TTCHECKS, etc
 		}
 	}

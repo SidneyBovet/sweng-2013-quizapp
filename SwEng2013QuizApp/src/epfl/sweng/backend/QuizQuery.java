@@ -1,12 +1,18 @@
 package epfl.sweng.backend;
 
+import org.antlr.runtime.ANTLRStringStream;
+import org.antlr.runtime.CommonTokenStream;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import epfl.sweng.interpreter.QueryLexer;
+import epfl.sweng.interpreter.QueryParser;
 
 /**
  * Used to filter data from the SwEng server.
  * 
  * @author born4new
+ * @author Merok
  * 
  */
 public class QuizQuery {
@@ -14,7 +20,7 @@ public class QuizQuery {
 	private String query;
 
 	public QuizQuery(String query) {
-		if (QuizQuery.isQueryValid(query)) {
+		if (this.hasGoodSyntax(query)) {
 			this.query = query;
 		}
 	}
@@ -31,55 +37,26 @@ public class QuizQuery {
 	}
 
 	/**
-	 * John is a wizard.
+	 * Verify that that the querry has a syntax that follow the correct Grammar
+	 * (i.e ")(banana++ fruit)" is not accepted). See Query.g for the grammar.
 	 * 
 	 * @param query
-	 *            Query to be verified.
-	 * @return true if valid, false otherwise.
+	 *            to be verified.
+	 * @return true if it has a good Syntax, false otherwise.
 	 */
-	public static boolean isQueryValid(String query) {
+	public boolean hasGoodSyntax(String query) {
+		boolean ok = true;
+		ANTLRStringStream in = new ANTLRStringStream(query);
+		QueryLexer lexer = new QueryLexer(in);
+		CommonTokenStream tokens = new CommonTokenStream(lexer);
+		QueryParser parser = new QueryParser(tokens);
 
-		//
-		// verify : no characters other than alphanumeric characters,
-		// ' ',(,),*,+
-		boolean expectedChara = hasExpectedCharacters(query);
-		// verifiy that the syntax is correct: (i.e banana++* is not accepted)
-		boolean correctSyntax = hasGoodSyntax(query);
-		// verifiy that the nested parenthesis are correct: (i.e (banana)) is
-		// not accepted)
-		boolean correctNested = isWellNested(query);
-
-		return true;
-	}
-
-	private static boolean hasGoodSyntax(String query) {
-
-		return false;
-	}
-
-	private static boolean hasExpectedCharacters(String query) {
-		String alphanumeric = "(?:[a-zA-Z0-9])+";
-		String allowedOperators = "(?:\\+|\\*|\\s|\\(|\\))*";
-		return query.matches(alphanumeric + allowedOperators);
-	}
-
-	private static boolean isWellNested(String query) {
-		String onlyParenthesiString = query.replaceAll("[^\\(\\)]", "");
-
-		if (query.length() % 2 != 0) {
-			return false;
+		try {
+			parser.eval();
+		} catch (Exception e) {
+			ok = false;
 		}
-
-		String[] array = onlyParenthesiString.split("");
-		int nestedCounter = 0;
-		for (String c : array) {
-			nestedCounter += c.equals("(") ? 1 : -1;
-			if (nestedCounter < 0) {
-				return false;
-			}
-		}
-
-		return true;
+		return ok;
 	}
 
 	/**
