@@ -1,8 +1,6 @@
 // $ANTLR 3.5.1 Query.g 2013-11-23 09:02:53
 package epfl.sweng.interpreter;
 
-
-
 import org.antlr.runtime.CharStream;
 import org.antlr.runtime.EarlyExitException;
 import org.antlr.runtime.Lexer;
@@ -20,115 +18,118 @@ public class QueryLexer extends Lexer {
 	public static final int RPAREN=7;
 	public static final int TIME=8;
 	public static final int WS=9;
-
-	  @Override
-	  public void reportError(RecognitionException e) {
-	   throw new RuntimeException("PARSER FAIL"); 
-	  }
-
-
+	
+	@Override
+	public void reportError(RecognitionException e) {
+		throw new RuntimeException("PARSER FAIL"); 
+	}
+	
 	// delegates
 	// delegators
 	public Lexer[] getDelegates() {
 		return new Lexer[] {};
 	}
-
-	public QueryLexer() {} 
+	
+	public QueryLexer() { }
+	
 	public QueryLexer(CharStream input) {
 		this(input, new RecognizerSharedState());
 	}
+	
 	public QueryLexer(CharStream input, RecognizerSharedState state) {
-		super(input,state);
+		super(input, state);
 	}
-	@Override public String getGrammarFileName() { return "Query.g"; }
-
+	
+	@Override
+	public String getGrammarFileName() { return "Query.g"; }
+	
 	// $ANTLR start "PLUS"
 	public final void mPLUS() throws RecognitionException {
 		try {
-			int _type = PLUS;
-			int _channel = DEFAULT_TOKEN_CHANNEL;
+			int type = PLUS;
+			int channel = DEFAULT_TOKEN_CHANNEL;
 			// Query.g:36:10: ( '+' )
 			// Query.g:36:12: '+'
 			{
-			match('+'); 
+				match('+'); 
 			}
-
-			state.type = _type;
-			state.channel = _channel;
-		}
-		finally {
+			
+			state.type = type;
+			state.channel = channel;
+		} finally {
 			// do for sure before leaving
 		}
 	}
 	// $ANTLR end "PLUS"
-
+	
 	// $ANTLR start "ID"
 	public final void mID() throws RecognitionException {
 		try {
-			int _type = ID;
-			int _channel = DEFAULT_TOKEN_CHANNEL;
+			int type = ID;
+			int channel = DEFAULT_TOKEN_CHANNEL;
 			// Query.g:38:7: ( ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' )+ )
 			// Query.g:38:9: ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' )+
 			{
 			// Query.g:38:9: ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' )+
-			int cnt1=0;
+				int cnt1=0;
 			loop1:
-			while (true) {
-				int alt1=2;
-				int LA1_0 = input.LA(1);
-				if ( ((LA1_0 >= '0' && LA1_0 <= '9')||(LA1_0 >= 'A' && LA1_0 <= 'Z')||(LA1_0 >= 'a' && LA1_0 <= 'z')) ) {
-					alt1=1;
+				while (true) {
+					int alt1=2;
+					int la1 = input.LA(1);
+					if ((la1 >= '0' && la1 <= '9') || (la1 >= 'A' && la1 <= 'Z')
+							|| (la1 >= 'a' && la1 <= 'z')) {
+						alt1=1;
+					}
+					
+					switch (alt1) {
+						case 1 :
+						// Query.g:
+						{
+							if ((input.LA(1) >= '0' && input.LA(1) <= '9')
+									|| (input.LA(1) >= 'A' && input.LA(1) <= 'Z')
+									|| (input.LA(1) >= 'a' && input.LA(1) <= 'z')) {
+								input.consume();
+							} else {
+								MismatchedSetException mse =
+										new MismatchedSetException(null, input);
+								recover(mse);
+								throw mse;
+							}
+						}
+							break;
+						
+						default :
+							if (cnt1 >= 1) {
+								break loop1;
+							}
+							EarlyExitException eee = new EarlyExitException(1, input);
+							throw eee;
+					}
+					cnt1++;
 				}
-
-				switch (alt1) {
-				case 1 :
-					// Query.g:
-					{
-					if ( (input.LA(1) >= '0' && input.LA(1) <= '9')||(input.LA(1) >= 'A' && input.LA(1) <= 'Z')||(input.LA(1) >= 'a' && input.LA(1) <= 'z') ) {
-						input.consume();
-					}
-					else {
-						MismatchedSetException mse = new MismatchedSetException(null,input);
-						recover(mse);
-						throw mse;
-					}
-					}
-					break;
-
-				default :
-					if ( cnt1 >= 1 ) break loop1;
-					EarlyExitException eee = new EarlyExitException(1, input);
-					throw eee;
-				}
-				cnt1++;
 			}
-
-			}
-
-			state.type = _type;
-			state.channel = _channel;
-		}
-		finally {
+			state.type = type;
+			state.channel = channel;
+		} finally {
 			// do for sure before leaving
 		}
 	}
 	// $ANTLR end "ID"
-
+	
 	// $ANTLR start "TIME"
 	public final void mTIME() throws RecognitionException {
 		try {
-			int _type = TIME;
-			int _channel = DEFAULT_TOKEN_CHANNEL;
+			int type = TIME;
+			int channel = DEFAULT_TOKEN_CHANNEL;
 			// Query.g:39:10: ( '*' )
 			// Query.g:39:12: '*'
 			{
-			match('*'); 
+				match('*'); 
 			}
-
-			state.type = _type;
-			state.channel = _channel;
-		}
-		finally {
+			
+			state.type = type;
+			state.channel = channel;
+		} finally {
 			// do for sure before leaving
 		}
 	}
@@ -137,18 +138,17 @@ public class QueryLexer extends Lexer {
 	// $ANTLR start "LPAREN"
 	public final void mLPAREN() throws RecognitionException {
 		try {
-			int _type = LPAREN;
-			int _channel = DEFAULT_TOKEN_CHANNEL;
+			int type = LPAREN;
+			int channel = DEFAULT_TOKEN_CHANNEL;
 			// Query.g:40:9: ( '(' )
 			// Query.g:40:11: '('
 			{
-			match('('); 
+				match('('); 
 			}
 
-			state.type = _type;
-			state.channel = _channel;
-		}
-		finally {
+			state.type = type;
+			state.channel = channel;
+		} finally {
 			// do for sure before leaving
 		}
 	}
@@ -157,18 +157,17 @@ public class QueryLexer extends Lexer {
 	// $ANTLR start "RPAREN"
 	public final void mRPAREN() throws RecognitionException {
 		try {
-			int _type = RPAREN;
-			int _channel = DEFAULT_TOKEN_CHANNEL;
+			int type = RPAREN;
+			int channel = DEFAULT_TOKEN_CHANNEL;
 			// Query.g:41:9: ( ')' )
 			// Query.g:41:11: ')'
 			{
-			match(')'); 
+				match(')'); 
 			}
-
-			state.type = _type;
-			state.channel = _channel;
-		}
-		finally {
+			
+			state.type = type;
+			state.channel = channel;
+		} finally {
 			// do for sure before leaving
 		}
 	}
@@ -177,26 +176,26 @@ public class QueryLexer extends Lexer {
 	// $ANTLR start "WS"
 	public final void mWS() throws RecognitionException {
 		try {
-			int _type = WS;
-			int _channel = DEFAULT_TOKEN_CHANNEL;
+			int type = WS;
+			int channel = DEFAULT_TOKEN_CHANNEL;
 			// Query.g:44:8: ( ( ' ' | '\\t' | '\\r' | '\\n' ) )
 			// Query.g:44:12: ( ' ' | '\\t' | '\\r' | '\\n' )
 			{
-			if ( (input.LA(1) >= '\t' && input.LA(1) <= '\n')||input.LA(1)=='\r'||input.LA(1)==' ' ) {
-				input.consume();
-			}
-			else {
-				MismatchedSetException mse = new MismatchedSetException(null,input);
-				recover(mse);
-				throw mse;
-			}
-			_channel=HIDDEN;
+				if ((input.LA(1) >= '\t' && input.LA(1) <= '\n')
+						|| input.LA(1)=='\r' || input.LA(1)==' ') {
+					input.consume();
+				} else {
+					MismatchedSetException mse =
+							new MismatchedSetException(null, input);
+					recover(mse);
+					throw mse;
+				}
+				channel=HIDDEN;
 			}
 
-			state.type = _type;
-			state.channel = _channel;
-		}
-		finally {
+			state.type = type;
+			state.channel = channel;
+		} finally {
 			// do for sure before leaving
 		}
 	}
@@ -205,154 +204,145 @@ public class QueryLexer extends Lexer {
 	@Override
 	public void mTokens() throws RecognitionException {
 		// Query.g:1:8: ( PLUS | ID | TIME | LPAREN | RPAREN | WS )
-		int alt2=6;
-		switch ( input.LA(1) ) {
-		case '+':
+		int alt2 = 6;
+		switch (input.LA(1)) {
+			case '+':
 			{
-			alt2=1;
+				alt2=1;
 			}
-			break;
-		case '0':
-		case '1':
-		case '2':
-		case '3':
-		case '4':
-		case '5':
-		case '6':
-		case '7':
-		case '8':
-		case '9':
-		case 'A':
-		case 'B':
-		case 'C':
-		case 'D':
-		case 'E':
-		case 'F':
-		case 'G':
-		case 'H':
-		case 'I':
-		case 'J':
-		case 'K':
-		case 'L':
-		case 'M':
-		case 'N':
-		case 'O':
-		case 'P':
-		case 'Q':
-		case 'R':
-		case 'S':
-		case 'T':
-		case 'U':
-		case 'V':
-		case 'W':
-		case 'X':
-		case 'Y':
-		case 'Z':
-		case 'a':
-		case 'b':
-		case 'c':
-		case 'd':
-		case 'e':
-		case 'f':
-		case 'g':
-		case 'h':
-		case 'i':
-		case 'j':
-		case 'k':
-		case 'l':
-		case 'm':
-		case 'n':
-		case 'o':
-		case 'p':
-		case 'q':
-		case 'r':
-		case 's':
-		case 't':
-		case 'u':
-		case 'v':
-		case 'w':
-		case 'x':
-		case 'y':
-		case 'z':
+				break;
+			case '0':
+			case '1':
+			case '2':
+			case '3':
+			case '4':
+			case '5':
+			case '6':
+			case '7':
+			case '8':
+			case '9':
+			case 'A':
+			case 'B':
+			case 'C':
+			case 'D':
+			case 'E':
+			case 'F':
+			case 'G':
+			case 'H':
+			case 'I':
+			case 'J':
+			case 'K':
+			case 'L':
+			case 'M':
+			case 'N':
+			case 'O':
+			case 'P':
+			case 'Q':
+			case 'R':
+			case 'S':
+			case 'T':
+			case 'U':
+			case 'V':
+			case 'W':
+			case 'X':
+			case 'Y':
+			case 'Z':
+			case 'a':
+			case 'b':
+			case 'c':
+			case 'd':
+			case 'e':
+			case 'f':
+			case 'g':
+			case 'h':
+			case 'i':
+			case 'j':
+			case 'k':
+			case 'l':
+			case 'm':
+			case 'n':
+			case 'o':
+			case 'p':
+			case 'q':
+			case 'r':
+			case 's':
+			case 't':
+			case 'u':
+			case 'v':
+			case 'w':
+			case 'x':
+			case 'y':
+			case 'z':
 			{
-			alt2=2;
+				alt2 = 2;
 			}
-			break;
-		case '*':
+				break;
+			case '*':
 			{
-			alt2=3;
+				alt2 = 3;
 			}
-			break;
-		case '(':
+				break;
+			case '(':
 			{
-			alt2=4;
+				alt2 = 4;
 			}
-			break;
-		case ')':
+				break;
+			case ')':
 			{
-			alt2=5;
+				alt2 = 5;
 			}
-			break;
-		case '\t':
-		case '\n':
-		case '\r':
-		case ' ':
+				break;
+			case '\t':
+			case '\n':
+			case '\r':
+			case ' ':
 			{
-			alt2=6;
+				alt2 = 6;
 			}
-			break;
-		default:
-			NoViableAltException nvae =
-				new NoViableAltException("", 2, 0, input);
-			throw nvae;
+				break;
+			default:
+				NoViableAltException nvae =
+					new NoViableAltException("", 2, 0, input);
+				throw nvae;
 		}
 		switch (alt2) {
 			case 1 :
-				// Query.g:1:10: PLUS
-				{
+			// Query.g:1:10: PLUS
+			{
 				mPLUS(); 
-
-				}
+			}
 				break;
 			case 2 :
-				// Query.g:1:15: ID
-				{
+			// Query.g:1:15: ID
+			{
 				mID(); 
-
-				}
+			}
 				break;
 			case 3 :
-				// Query.g:1:18: TIME
-				{
+			// Query.g:1:18: TIME
+			{
 				mTIME(); 
-
-				}
+			}
 				break;
 			case 4 :
-				// Query.g:1:23: LPAREN
-				{
+			// Query.g:1:23: LPAREN
+			{
 				mLPAREN(); 
-
-				}
+			}
 				break;
 			case 5 :
-				// Query.g:1:30: RPAREN
-				{
+			// Query.g:1:30: RPAREN
+			{
 				mRPAREN(); 
-
-				}
+			}
 				break;
 			case 6 :
-				// Query.g:1:37: WS
-				{
+			// Query.g:1:37: WS
+			{
 				mWS(); 
-
-				}
+			}
 				break;
-
+			default:
 		}
 	}
-
-
-
 }
