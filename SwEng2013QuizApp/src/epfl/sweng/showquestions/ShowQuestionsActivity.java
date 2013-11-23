@@ -97,27 +97,23 @@ public class ShowQuestionsActivity extends Activity {
 		// setting button look
 		Button buttonNext = (Button) findViewById(R.id.buttonNext);
 		buttonNext.setEnabled(false);
-	
+		
 		mQuestion = fetchQuestion();
 		
-		if (mQuestion == null) {
-			return;
-		}
-	
 		// setting tags
 		TextView textViewQuestion = (TextView) findViewById(R.id.displayQuestion);
 		textViewQuestion.setText("Question: " + mQuestion.getStatement());
-	
+		
 		TextView textViewTag = (TextView) findViewById(R.id.displayTags);
 		textViewTag.setText(mQuestion.getTagsToString());
-	
+		
 		// setting answer list
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
 				android.R.layout.simple_list_item_1,
 				mQuestion.getAnswers());
 		ListView displayAnswers = (ListView) findViewById(R.id.displayAnswers);
 		displayAnswers.setAdapter(adapter);
-	
+		
 		// put answer list under listening
 		AnswerSelectionListener listener = new AnswerSelectionListener(
 				buttonNext, mQuestion);

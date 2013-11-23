@@ -26,27 +26,28 @@ public class SearchActivity extends Activity {
 	private Button mSubmitQuery;
 	private EditText mQueryField;
 	private String mQueryFieldText;
-
+	
+	private final static int QUERY_MAX_LENGTH = 500;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_search);
 		setDisplayView();
-
 	}
-
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.search, menu);
 		return true;
 	}
-
+	
 	@Override
 	protected void onStart() {
 		super.onStart();
 		TestCoordinator.check(TTChecks.SEARCH_ACTIVITY_SHOWN);
 	}
-
+	
 	/**
 	 * Sets all the view in this activity, by disabling the button, filling the
 	 * <code>TextView</code>, setting the status of the mSubmitQuery Button
@@ -88,7 +89,7 @@ public class SearchActivity extends Activity {
 			}
 		});
 	}
-
+	
 	/**
 	 * Creates a query that will be sent to the server and process accordingly.
 	 */
@@ -98,29 +99,27 @@ public class SearchActivity extends Activity {
 		resetQuerySearchField();
 		sendToShowQuestionsActivity(quizQuery);
 	}
-
+	
 	/**
 	 * Tries to update the status of the submit query button according to the
 	 * content of the queryField EditText.
 	 */
 	
 	private void updateSearchButton() {
-		mQuery = new QuizQuery(mQueryFieldText);
+		mQuery = new QuizQuery(mQueryFieldText, null);
 		// && QuizQuery.isQueryValid(mQueryFieldText));
 		mSubmitQuery.setEnabled(mQueryFieldText.length() != 0
-				&& mQueryFieldText.length() < 500
+				&& mQueryFieldText.length() < QUERY_MAX_LENGTH
 				&& mQuery.hasGoodSyntax(mQueryFieldText));
-	}
-
 		mSubmitQuery.setEnabled(mQueryFieldText.length() != 0);
 	}
-
+	
 	private void sendToShowQuestionsActivity(QuizQuery quizQuery) {
 	    Intent displayActivityIntent = new Intent(this, ShowQuestionsActivity.class);	
 	    displayActivityIntent.putExtra("QuizQuery", quizQuery);
 	    startActivity(displayActivityIntent);
 	}
-
+	
 	/**
 	 * Resets the layout by emptying the queryField on the Activity, and by
 	 * disabling the sendQuery Button.

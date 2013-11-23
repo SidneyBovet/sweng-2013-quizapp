@@ -2,11 +2,14 @@ package epfl.sweng.backend;
 
 import org.antlr.runtime.ANTLRStringStream;
 import org.antlr.runtime.CommonTokenStream;
+import org.antlr.runtime.RecognitionException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import epfl.sweng.interpreter.QueryLexer;
+import epfl.sweng.interpreter.QueryParser;
 
 /**
  * Used to filter data from the SwEng server.
@@ -19,23 +22,13 @@ public class QuizQuery implements Parcelable {
 
 	private String mQuery;
 	private String mFrom;
-
+	
 	public QuizQuery(String query, String from) {
 		this.mQuery = query;
 		this.mFrom = from;
 	}
-
-	public QuizQuery(JSONObject jsonQuery) {
-		String from = null;
-		try {
-			from = jsonQuery.getString("next");
-			jsonQuery.put("from", from);
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-		this.mQuery = jsonQuery.toString();
-	}
-
+	
+	
 	/**
 	 * Verify that that the querry has a syntax that follow the correct Grammar
 	 * (i.e ")(banana++ fruit)" is not accepted). See Query.g for the grammar.
@@ -44,21 +37,22 @@ public class QuizQuery implements Parcelable {
 	 *            to be verified.
 	 * @return true if it has a good Syntax, false otherwise.
 	 */
+	
 	public boolean hasGoodSyntax(String query) {
 		boolean ok = true;
 		ANTLRStringStream in = new ANTLRStringStream(query);
 		QueryLexer lexer = new QueryLexer(in);
 		CommonTokenStream tokens = new CommonTokenStream(lexer);
 		QueryParser parser = new QueryParser(tokens);
-
+		
 		try {
 			parser.eval();
-		} catch (Exception e) {
+		} catch (RecognitionException e) {
 			ok = false;
 		}
 		return ok;
 	}
-
+	
 	/**
 	 * Returns a {@link JSONObject} representing the current query.
 	 * 
@@ -77,40 +71,29 @@ public class QuizQuery implements Parcelable {
 	public String getQuery() {
 		return mQuery;
 	}
-
-	private boolean hasGoodSyntax(String query) {
-
-		return false;
-	}
-
-	private boolean hasExpectedCharacters(String query) {
-		String alphanumeric = "(?:[a-zA-Z0-9])+";
-		String allowedOperators = "(?:\\+|\\*|\\s|\\(|\\))*";
-		return query.matches(alphanumeric + allowedOperators);
-	}
 	
 	@Override
 	public int describeContents() {
 		return 0;
 	}
-
+	
 	@Override
 	public void writeToParcel(Parcel dest, int flags) {
 		dest.writeString(mQuery);
 		dest.writeString(mFrom);
 	}
-
+	
 	public static final Parcelable.Creator<QuizQuery> CREATOR = new 
 			Parcelable.Creator<QuizQuery>() {
 		public QuizQuery createFromParcel(Parcel in) {
 			return new QuizQuery(in);
 		}
-
+		
 		public QuizQuery[] newArray(int size) {
 			return new QuizQuery[size];
 		}
 	};
-
+	
 	private QuizQuery(Parcel in) {
 		mQuery = in.readString();
 		mFrom = in.readString();
