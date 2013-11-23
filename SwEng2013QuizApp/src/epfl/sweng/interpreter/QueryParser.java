@@ -1,3 +1,4 @@
+// $ANTLR 3.5.1 Query.g 2013-11-23 09:02:53
 package epfl.sweng.interpreter;
 
 import org.antlr.runtime.BitSet;

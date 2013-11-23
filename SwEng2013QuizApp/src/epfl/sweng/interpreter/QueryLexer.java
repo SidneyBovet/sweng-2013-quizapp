@@ -1,4 +1,7 @@
+// $ANTLR 3.5.1 Query.g 2013-11-23 09:02:53
 package epfl.sweng.interpreter;
+
+
 
 import org.antlr.runtime.CharStream;
 import org.antlr.runtime.EarlyExitException;
@@ -10,18 +13,19 @@ import org.antlr.runtime.RecognizerSharedState;
 
 @SuppressWarnings("all")
 public class QueryLexer extends Lexer {
-	public static final int EOF = -1;
-	public static final int ID = 4;
-	public static final int LPAREN = 5;
-	public static final int PLUS = 6;
-	public static final int RPAREN = 7;
-	public static final int TIME = 8;
-	public static final int WS = 9;
+	public static final int EOF=-1;
+	public static final int ID=4;
+	public static final int LPAREN=5;
+	public static final int PLUS=6;
+	public static final int RPAREN=7;
+	public static final int TIME=8;
+	public static final int WS=9;
 
-	@Override
-	public void reportError(RecognitionException e) {
-		throw new RuntimeException("PARSER FAIL");
-	}
+	  @Override
+	  public void reportError(RecognitionException e) {
+	   throw new RuntimeException("PARSER FAIL"); 
+	  }
+
 
 	// delegates
 	// delegators
@@ -29,21 +33,14 @@ public class QueryLexer extends Lexer {
 		return new Lexer[] {};
 	}
 
-	public QueryLexer() {
-	}
-
+	public QueryLexer() {} 
 	public QueryLexer(CharStream input) {
 		this(input, new RecognizerSharedState());
 	}
-
 	public QueryLexer(CharStream input, RecognizerSharedState state) {
-		super(input, state);
+		super(input,state);
 	}
-
-	@Override
-	public String getGrammarFileName() {
-		return "Query.g";
-	}
+	@Override public String getGrammarFileName() { return "Query.g"; }
 
 	// $ANTLR start "PLUS"
 	public final void mPLUS() throws RecognitionException {
@@ -53,16 +50,16 @@ public class QueryLexer extends Lexer {
 			// Query.g:36:10: ( '+' )
 			// Query.g:36:12: '+'
 			{
-				match('+');
+			match('+'); 
 			}
 
 			state.type = _type;
 			state.channel = _channel;
-		} finally {
+		}
+		finally {
 			// do for sure before leaving
 		}
 	}
-
 	// $ANTLR end "PLUS"
 
 	// $ANTLR start "ID"
@@ -73,52 +70,48 @@ public class QueryLexer extends Lexer {
 			// Query.g:38:7: ( ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' )+ )
 			// Query.g:38:9: ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' )+
 			{
-				// Query.g:38:9: ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' )+
-				int cnt1 = 0;
-				loop1: while (true) {
-					int alt1 = 2;
-					int LA1_0 = input.LA(1);
-					if (((LA1_0 >= '0' && LA1_0 <= '9')
-							|| (LA1_0 >= 'A' && LA1_0 <= 'Z') || (LA1_0 >= 'a' && LA1_0 <= 'z'))) {
-						alt1 = 1;
-					}
+			// Query.g:38:9: ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' )+
+			int cnt1=0;
+			loop1:
+			while (true) {
+				int alt1=2;
+				int LA1_0 = input.LA(1);
+				if ( ((LA1_0 >= '0' && LA1_0 <= '9')||(LA1_0 >= 'A' && LA1_0 <= 'Z')||(LA1_0 >= 'a' && LA1_0 <= 'z')) ) {
+					alt1=1;
+				}
 
-					switch (alt1) {
-					case 1:
+				switch (alt1) {
+				case 1 :
 					// Query.g:
 					{
-						if ((input.LA(1) >= '0' && input.LA(1) <= '9')
-								|| (input.LA(1) >= 'A' && input.LA(1) <= 'Z')
-								|| (input.LA(1) >= 'a' && input.LA(1) <= 'z')) {
-							input.consume();
-						} else {
-							MismatchedSetException mse = new MismatchedSetException(
-									null, input);
-							recover(mse);
-							throw mse;
-						}
+					if ( (input.LA(1) >= '0' && input.LA(1) <= '9')||(input.LA(1) >= 'A' && input.LA(1) <= 'Z')||(input.LA(1) >= 'a' && input.LA(1) <= 'z') ) {
+						input.consume();
 					}
-						break;
+					else {
+						MismatchedSetException mse = new MismatchedSetException(null,input);
+						recover(mse);
+						throw mse;
+					}
+					}
+					break;
 
-					default:
-						if (cnt1 >= 1)
-							break loop1;
-						EarlyExitException eee = new EarlyExitException(1,
-								input);
-						throw eee;
-					}
-					cnt1++;
+				default :
+					if ( cnt1 >= 1 ) break loop1;
+					EarlyExitException eee = new EarlyExitException(1, input);
+					throw eee;
 				}
+				cnt1++;
+			}
 
 			}
 
 			state.type = _type;
 			state.channel = _channel;
-		} finally {
+		}
+		finally {
 			// do for sure before leaving
 		}
 	}
-
 	// $ANTLR end "ID"
 
 	// $ANTLR start "TIME"
@@ -129,16 +122,16 @@ public class QueryLexer extends Lexer {
 			// Query.g:39:10: ( '*' )
 			// Query.g:39:12: '*'
 			{
-				match('*');
+			match('*'); 
 			}
 
 			state.type = _type;
 			state.channel = _channel;
-		} finally {
+		}
+		finally {
 			// do for sure before leaving
 		}
 	}
-
 	// $ANTLR end "TIME"
 
 	// $ANTLR start "LPAREN"
@@ -149,16 +142,16 @@ public class QueryLexer extends Lexer {
 			// Query.g:40:9: ( '(' )
 			// Query.g:40:11: '('
 			{
-				match('(');
+			match('('); 
 			}
 
 			state.type = _type;
 			state.channel = _channel;
-		} finally {
+		}
+		finally {
 			// do for sure before leaving
 		}
 	}
-
 	// $ANTLR end "LPAREN"
 
 	// $ANTLR start "RPAREN"
@@ -169,16 +162,16 @@ public class QueryLexer extends Lexer {
 			// Query.g:41:9: ( ')' )
 			// Query.g:41:11: ')'
 			{
-				match(')');
+			match(')'); 
 			}
 
 			state.type = _type;
 			state.channel = _channel;
-		} finally {
+		}
+		finally {
 			// do for sure before leaving
 		}
 	}
-
 	// $ANTLR end "RPAREN"
 
 	// $ANTLR start "WS"
@@ -189,35 +182,35 @@ public class QueryLexer extends Lexer {
 			// Query.g:44:8: ( ( ' ' | '\\t' | '\\r' | '\\n' ) )
 			// Query.g:44:12: ( ' ' | '\\t' | '\\r' | '\\n' )
 			{
-				if ((input.LA(1) >= '\t' && input.LA(1) <= '\n')
-						|| input.LA(1) == '\r' || input.LA(1) == ' ') {
-					input.consume();
-				} else {
-					MismatchedSetException mse = new MismatchedSetException(
-							null, input);
-					recover(mse);
-					throw mse;
-				}
-				_channel = HIDDEN;
+			if ( (input.LA(1) >= '\t' && input.LA(1) <= '\n')||input.LA(1)=='\r'||input.LA(1)==' ' ) {
+				input.consume();
+			}
+			else {
+				MismatchedSetException mse = new MismatchedSetException(null,input);
+				recover(mse);
+				throw mse;
+			}
+			_channel=HIDDEN;
 			}
 
 			state.type = _type;
 			state.channel = _channel;
-		} finally {
+		}
+		finally {
 			// do for sure before leaving
 		}
 	}
-
 	// $ANTLR end "WS"
 
 	@Override
 	public void mTokens() throws RecognitionException {
 		// Query.g:1:8: ( PLUS | ID | TIME | LPAREN | RPAREN | WS )
-		int alt2 = 6;
-		switch (input.LA(1)) {
-		case '+': {
-			alt2 = 1;
-		}
+		int alt2=6;
+		switch ( input.LA(1) ) {
+		case '+':
+			{
+			alt2=1;
+			}
 			break;
 		case '0':
 		case '1':
@@ -280,79 +273,86 @@ public class QueryLexer extends Lexer {
 		case 'w':
 		case 'x':
 		case 'y':
-		case 'z': {
-			alt2 = 2;
-		}
+		case 'z':
+			{
+			alt2=2;
+			}
 			break;
-		case '*': {
-			alt2 = 3;
-		}
+		case '*':
+			{
+			alt2=3;
+			}
 			break;
-		case '(': {
-			alt2 = 4;
-		}
+		case '(':
+			{
+			alt2=4;
+			}
 			break;
-		case ')': {
-			alt2 = 5;
-		}
+		case ')':
+			{
+			alt2=5;
+			}
 			break;
 		case '\t':
 		case '\n':
 		case '\r':
-		case ' ': {
-			alt2 = 6;
-		}
+		case ' ':
+			{
+			alt2=6;
+			}
 			break;
 		default:
-			NoViableAltException nvae = new NoViableAltException("", 2, 0,
-					input);
+			NoViableAltException nvae =
+				new NoViableAltException("", 2, 0, input);
 			throw nvae;
 		}
 		switch (alt2) {
-		case 1:
-		// Query.g:1:10: PLUS
-		{
-			mPLUS();
+			case 1 :
+				// Query.g:1:10: PLUS
+				{
+				mPLUS(); 
 
-		}
-			break;
-		case 2:
-		// Query.g:1:15: ID
-		{
-			mID();
+				}
+				break;
+			case 2 :
+				// Query.g:1:15: ID
+				{
+				mID(); 
 
-		}
-			break;
-		case 3:
-		// Query.g:1:18: TIME
-		{
-			mTIME();
+				}
+				break;
+			case 3 :
+				// Query.g:1:18: TIME
+				{
+				mTIME(); 
 
-		}
-			break;
-		case 4:
-		// Query.g:1:23: LPAREN
-		{
-			mLPAREN();
+				}
+				break;
+			case 4 :
+				// Query.g:1:23: LPAREN
+				{
+				mLPAREN(); 
 
-		}
-			break;
-		case 5:
-		// Query.g:1:30: RPAREN
-		{
-			mRPAREN();
+				}
+				break;
+			case 5 :
+				// Query.g:1:30: RPAREN
+				{
+				mRPAREN(); 
 
-		}
-			break;
-		case 6:
-		// Query.g:1:37: WS
-		{
-			mWS();
+				}
+				break;
+			case 6 :
+				// Query.g:1:37: WS
+				{
+				mWS(); 
 
-		}
-			break;
+				}
+				break;
 
 		}
 	}
+
+
 
 }
