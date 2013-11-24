@@ -22,6 +22,7 @@ import epfl.sweng.testing.TestCoordinator.TTChecks;
  * 
  */
 public class SearchActivity extends Activity {
+	
 	private QuizQuery mQuery;
 	private Button mSubmitQuery;
 	private EditText mQueryField;
@@ -49,49 +50,9 @@ public class SearchActivity extends Activity {
 	}
 	
 	/**
-	 * Sets all the view in this activity, by disabling the button, filling the
-	 * <code>TextView</code>, setting the status of the mSubmitQuery Button
-	 * using a listener on Query Filed EditText.
-	 */
-	
-	public void setDisplayView() {
-
-		mSubmitQuery = (Button) findViewById(R.id.submit_query_button);
-		mQueryField = (EditText) findViewById(R.id.search_question_query);
-		mSubmitQuery.setEnabled(false);
-		mQueryFieldText = "";
-
-		mQueryField.addTextChangedListener(new TextWatcher() {
-
-			@Override
-			public void onTextChanged(CharSequence s, int start, int before,
-					int count) {
-				// Nothing to do
-
-			}
-
-			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count,
-					int after) {
-				// Nothing to do
-
-			}
-
-			@Override
-			public void afterTextChanged(Editable s) {
-				// Proceed only if there has been user changes.
-
-				if (!mQueryFieldText.equals(s.toString())) {
-					mQueryFieldText = s.toString();
-					updateSearchButton();
-					TestCoordinator.check(TTChecks.QUERY_EDITED);
-				}
-			}
-		});
-	}
-	
-	/**
-	 * Creates a query that will be sent to the server and process accordingly.
+	 * Creates a query that will be sent and processed by the server.
+	 * <p>
+	 * Used when the search button is clicked.
 	 */
 	
 	public void createQuery(View view) {
@@ -100,6 +61,47 @@ public class SearchActivity extends Activity {
 		sendToShowQuestionsActivity(quizQuery);
 	}
 	
+	/**
+	 * Sets all the views in this activity, by disabling the <code>Search
+	 * Button</code>, and setting a listener on the <code>Query Field</code>.
+	 */
+	
+	private void setDisplayView() {
+	
+		mSubmitQuery = (Button) findViewById(R.id.submit_query_button);
+		mQueryField = (EditText) findViewById(R.id.search_question_query);
+		mSubmitQuery.setEnabled(false);
+		mQueryFieldText = "";
+	
+		mQueryField.addTextChangedListener(new TextWatcher() {
+	
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before,
+					int count) {
+				// Nothing to do
+	
+			}
+	
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
+				// Nothing to do
+	
+			}
+	
+			@Override
+			public void afterTextChanged(Editable s) {
+				// Proceed only if there has been user changes.
+	
+				if (!mQueryFieldText.equals(s.toString())) {
+					mQueryFieldText = s.toString();
+					updateSearchButton();
+					TestCoordinator.check(TTChecks.QUERY_EDITED);
+				}
+			}
+		});
+	}
+
 	/**
 	 * Tries to update the status of the submit query button according to the
 	 * content of the queryField EditText.
@@ -115,14 +117,14 @@ public class SearchActivity extends Activity {
 	}
 	
 	private void sendToShowQuestionsActivity(QuizQuery quizQuery) {
-	    Intent displayActivityIntent = new Intent(this, ShowQuestionsActivity.class);	
-	    displayActivityIntent.putExtra("QuizQuery", quizQuery);
-	    startActivity(displayActivityIntent);
+		Intent displayActivityIntent = new Intent(this, ShowQuestionsActivity.class);	
+		displayActivityIntent.putExtra("QuizQuery", quizQuery);
+		startActivity(displayActivityIntent);
 	}
 	
 	/**
 	 * Resets the layout by emptying the queryField on the Activity, and by
-	 * disabling the sendQuery Button.
+	 * disabling the <code>Search Button</code>.
 	 */
 	
 	private void resetQuerySearchField() {

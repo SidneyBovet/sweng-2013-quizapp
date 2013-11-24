@@ -28,14 +28,13 @@ public class QuizQuery implements Parcelable {
 		this.mFrom = from;
 	}
 	
-	
 	/**
-	 * Verify that that the querry has a syntax that follow the correct Grammar
+	 * Verifies that that the query has a syntax that follows the correct Grammar
 	 * (i.e ")(banana++ fruit)" is not accepted). See Query.g for the grammar.
 	 * 
 	 * @param query
-	 *            to be verified.
-	 * @return true if it has a good Syntax, false otherwise.
+	 *            Query to be verified.
+	 * @return {@code true} if it has a good syntax, {@code false} otherwise.
 	 */
 	
 	public boolean hasGoodSyntax(String query) {
@@ -56,7 +55,7 @@ public class QuizQuery implements Parcelable {
 	/**
 	 * Returns a {@link JSONObject} representing the current query.
 	 * 
-	 * @return A JSONObject of the question.
+	 * @return A {@link JSONObject} of the query.
 	 */
 	
 	public JSONObject toJSON() throws JSONException {
@@ -67,6 +66,12 @@ public class QuizQuery implements Parcelable {
 		}
 		return jsonQuery;
 	}
+	
+	/**
+	 * Returns the string representation of the query.
+	 * 
+	 * @return The string representation of the query.
+	 */
 	
 	public String getQuery() {
 		return mQuery;

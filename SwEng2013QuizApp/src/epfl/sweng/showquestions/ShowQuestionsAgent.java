@@ -11,15 +11,40 @@ import epfl.sweng.backend.QuizQuery;
 import epfl.sweng.patterns.QuestionsProxy;
 import epfl.sweng.quizquestions.QuizQuestion;
 
+/**
+ * A {@code ShowQuestionsAgent} is responsible of the communication between
+ * the {@link ShowQuestionActivity} and the SwEng server.
+ * 
+ * @author Melody Lucid
+ *
+ */
 public class ShowQuestionsAgent {
 
 	private QuizQuery mQuizQuery;
 	private Queue<QuizQuestion> mQuestionQueue;
 	
+	/**
+	 * Creates a {@code ShowQuestionsAgent} that can ask a specific query to the
+	 * server.
+	 * <p>
+	 * If the query is set to {@code null}, the questions retrieved will be
+	 * random.
+	 * 
+	 * @param query The specific query.
+	 */
+	
 	public ShowQuestionsAgent(QuizQuery query) {
 		this.mQuizQuery = query;
 		this.mQuestionQueue = new ArrayDeque<QuizQuestion>();
 	}
+	
+	/**
+	 * Returns the next question to display that matches the query.
+	 * <p>
+	 * If there's no more question to display, returns a random question.
+	 * 
+	 * @return The next question to display, or a random question.
+	 */
 	
 	public QuizQuestion getNextQuestion() {
 		if (hasNext()) {
@@ -31,6 +56,12 @@ public class ShowQuestionsAgent {
 			return getNextQuestion();
 		}
 	}
+	
+	/**
+	 * Returns {@code true} if there is more questions that match the query.
+	 * 
+	 * @return {@code true} if there is more questions that match the query.
+	 */
 	
 	public boolean hasNext() {
 		return mQuestionQueue.size() != 0;

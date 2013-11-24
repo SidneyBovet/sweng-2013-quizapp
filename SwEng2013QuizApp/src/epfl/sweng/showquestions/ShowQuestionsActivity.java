@@ -24,7 +24,7 @@ import epfl.sweng.testing.TestCoordinator;
 import epfl.sweng.testing.TestCoordinator.TTChecks;
 
 /***
- * Activity used to display a random question to the user.
+ * Activity used to display a question to the user.
  * 
  * @author born4new
  * @author JoTearoom
@@ -32,23 +32,25 @@ import epfl.sweng.testing.TestCoordinator.TTChecks;
  */
 
 public class ShowQuestionsActivity extends Activity {
+	
 	private QuizQuestion mQuestion = null;
 	private ShowQuestionsAgent mAgent;
 	
 	@Override
 	protected void onCreate(final Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-	    // get Intent that started this Activity
-	    Intent startingIntent = getIntent();
-	    // get the value of the user string
-	    QuizQuery quizQuery = startingIntent.getParcelableExtra("QuizQuery");
-	    mAgent = new ShowQuestionsAgent(quizQuery);
+		// get Intent that started this Activity
+		Intent startingIntent = getIntent();
+		// get the value of the user parcelable
+		QuizQuery quizQuery = startingIntent.getParcelableExtra("QuizQuery");
+		mAgent = new ShowQuestionsAgent(quizQuery);
+		mQuestion = fetchQuestion();
 		setContentView(R.layout.activity_display_question);
 		setDisplayView();
 	}
 
 	public QuizQuestion fetchQuestion() {
-		AsyncRetrieveQuestion asyncFetchQuestion = new AsyncRetrieveQuestion();
+		AsyncFetchQuestion asyncFetchQuestion = new AsyncFetchQuestion();
 		asyncFetchQuestion.execute();
 		QuizQuestion randomQuestion = null;
 		try {
@@ -57,26 +59,22 @@ public class ShowQuestionsActivity extends Activity {
 			Log.wtf(this.getClass().getName(),
 					"AsyncFetchQuestion was interrupted");
 		} catch (ExecutionException e) {
-			// TestCoordinator.check(TTChecks.QUESTION_SHOWN);
 			Log.e(this.getClass().getName(), "Process crashed");
 			return null;
-		} finally {
-			if (null == randomQuestion) {
-				// TestCoordinator.check(TTChecks.QUESTION_SHOWN);
-				return null;
-			}
 		}
 		return randomQuestion;
 	}
 	/**
 	 * Goes back to the state when the current activity was started.
+	 * <p>
+	 * Used when the next button is clicked.
 	 * 
 	 * @param view
 	 *            Element that was clicked, which is the send button.
 	 */
 
 	public void displayAgainRandomQuestion(View view) {
-//		mAgent = new ShowQuestionsAgent(null);
+		mQuestion = fetchQuestion();
 		setDisplayView();
 	}
 
@@ -98,13 +96,12 @@ public class ShowQuestionsActivity extends Activity {
 		Button buttonNext = (Button) findViewById(R.id.buttonNext);
 		buttonNext.setEnabled(false);
 		
-		mQuestion = fetchQuestion();
-		
 		if (mQuestion != null) {
-			// setting tags
+			// setting statement
 			TextView textViewQuestion = (TextView) findViewById(R.id.displayQuestion);
 			textViewQuestion.setText("Question: " + mQuestion.getStatement());
 			
+			// setting tags
 			TextView textViewTag = (TextView) findViewById(R.id.displayTags);
 			textViewTag.setText(mQuestion.getTagsToString());
 			
@@ -122,16 +119,14 @@ public class ShowQuestionsActivity extends Activity {
 		}
 	}
 	
-	private final class AsyncRetrieveQuestion extends AsyncTask<Void, Void, QuizQuestion> {
+	private final class AsyncFetchQuestion extends AsyncTask<Void, Void, QuizQuestion> {
 
-		private boolean mWasDisconnectedBeforeRetrieving;
+		private ConnectivityState mStateBeforeRetrieving;
 		
 		@Override
 		protected QuizQuestion doInBackground(Void... params) {
-
-			mWasDisconnectedBeforeRetrieving = UserPreferences.getInstance(
-					ShowQuestionsActivity.this).getConnectivityState().
-					equals(ConnectivityState.OFFLINE);
+			mStateBeforeRetrieving = UserPreferences.getInstance(ShowQuestionsActivity.this)
+					.getConnectivityState();
 			return mAgent.getNextQuestion();
 		}
 
@@ -140,8 +135,8 @@ public class ShowQuestionsActivity extends Activity {
 			super.onPostExecute(question);
 			if (null == question) {
 				TextView textViewQuestion = (TextView) findViewById(R.id.displayQuestion);
-				if (QuestionsProxy.getInstance().getInboxSize()==0 &&
-						mWasDisconnectedBeforeRetrieving) {
+				if (QuestionsProxy.getInstance().getInboxSize() == 0
+						&& mStateBeforeRetrieving == ConnectivityState.OFFLINE) {
 					textViewQuestion.setText(R.string.error_cache_empty);
 				} else {
 					textViewQuestion.setText(R.string.error_fetching_question);
