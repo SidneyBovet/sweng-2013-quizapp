@@ -84,8 +84,8 @@ public class CacheContentProvider {
 		sanityDatabaseCheck();
 
 		ContentValues values = new ContentValues(QuizQuestion.FIELDS_COUNT);
-		// XXX Sidney possible to change behavior of getTagsToString()?
 		values.put("id", questionToAdd.getId());
+		// TODO /!\ Tags are currently dirtily put as a big string => to be changed 
 		values.put("tags", Arrays.toString(questionToAdd.getTags().toArray()));
 		values.put("statement", questionToAdd.getStatement());
 		values.put("answers", Arrays.toString(questionToAdd.getAnswers().toArray()));
@@ -99,12 +99,13 @@ public class CacheContentProvider {
 	/**
 	 * Cleans the database (cannot be undone!)
 	 */
-	public void cleanDatabase() {
-		//XXX does it work?
+	public void eraseDatabase() {
+		sanityDatabaseCheck();
 		if (mDatabase.isReadOnly()) {
 			throw new IllegalStateException("Cannot wipe read-only database.");
 		} else {
-			// clear DB
+			//XXX does this work?
+			mDatabase.delete(SQLiteCacheHelper.TABLE_QUESTIONS, "", null);
 		}
 	}
 	

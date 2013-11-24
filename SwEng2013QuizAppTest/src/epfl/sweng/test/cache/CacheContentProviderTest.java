@@ -28,7 +28,7 @@ public class CacheContentProviderTest extends GUITest<MainActivity> {
 	@Override
 	protected void tearDown() throws Exception {
 		//XXX how to clean? working?
-		mProvider.cleanDatabase();
+		mProvider.eraseDatabase();
 		mProvider.destroy();
 		super.tearDown();
 	}
