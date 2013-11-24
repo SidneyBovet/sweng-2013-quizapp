@@ -99,7 +99,7 @@ public class QuizQuestion {
 
 		String question = jsonParser.getString("question");
 		JSONArray answersJSON = jsonParser.getJSONArray("answers");
-		List<String> answers = Converter.jsonArrayToStringArray(answersJSON);
+		List<String> answers = Converter.jsonArrayToStringList(answersJSON);
 
 		int solutionIndex = jsonParser.getInt("solutionIndex");
 		JSONArray tagsJSON = jsonParser.getJSONArray("tags");

@@ -84,7 +84,7 @@ public class QuestionTest extends TestCase {
 		jsonArray.put("Answer1");
 		jsonArray.put("Answer2");
 		jsonArray.put("Answer3");
-		assertEquals(mQuestionAnswers, Converter.jsonArrayToStringArray(jsonArray));
+		assertEquals(mQuestionAnswers, Converter.jsonArrayToStringList(jsonArray));
 	}
 	
 	// Since the tags are in the set the order here can be changed

@@ -7,9 +7,12 @@ import java.util.Queue;
 import java.util.Random;
 
 import org.apache.http.HttpStatus;
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.util.Log;
+import epfl.sweng.backend.Converter;
 import epfl.sweng.backend.QuizQuery;
 import epfl.sweng.preferences.UserPreferences;
 import epfl.sweng.quizquestions.QuizQuestion;
@@ -106,9 +109,9 @@ public final class QuestionsProxy implements ConnectivityProxy,
 	}
 	
 	/**
-	 * Retrieve a {@link QuizQuestion} from the server and store it in the cache
-	 * before returning it if online. Choose a random {@link QuizQuestion} from
-	 * the cached content before returning it if offline.
+	 * Retrieves a {@link QuizQuestion} from the server and stores it in the 
+	 * cache before returning it if online. Choose a random {@link QuizQuestion}
+	 * from the cached content before returning it if offline.
 	 * 
 	 * @return {@link QuizQuestion} retrieve from the server
 	 */
@@ -133,8 +136,38 @@ public final class QuestionsProxy implements ConnectivityProxy,
 		return fetchedQuestion;
 	}
 	
+	/**
+	 * Retrieves a {@link QuizQuestion} from the server according to a specific
+	 * query, and stores it in the cache before returning the actual JSON
+	 * response.
+	 * 
+	 * @return {@link JSONObject} containing the list of {@link QuizQuestion}s
+	 *         and the next field, if there's any.
+	 */
+	
 	public JSONObject retrieveQuizQuestions(QuizQuery query) {
-		return mNetworkCommunication.retrieveQuizQuestions(query);
+		JSONObject jsonResponse = mNetworkCommunication.retrieveQuizQuestions(query);
+		
+		if (jsonResponse == null) {
+			return null;
+		}
+		
+		try {
+			JSONArray array = jsonResponse.getJSONArray("questions");
+			if (array != null) {
+				List<QuizQuestion> fetchedQuestions =
+						Converter.jsonArrayToQuizQuestionList(array);
+				
+				for (QuizQuestion question : fetchedQuestions) {
+					addInbox(question);
+				}
+			}
+		} catch (JSONException e) {
+			Log.e(this.getClass().getName(), "retrieveQuizQuestions(): could not "
+					+ "retrieve the \'questions\' field from the JSON response.");
+			return null;
+		}
+		return jsonResponse;
 	}
 	
 	public int getOutboxSize() {

@@ -7,6 +7,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.util.Log;
+import epfl.sweng.backend.Converter;
 import epfl.sweng.backend.QuizQuery;
 import epfl.sweng.patterns.QuestionsProxy;
 import epfl.sweng.quizquestions.QuizQuestion;
@@ -75,16 +77,14 @@ public class ShowQuestionsAgent {
 				JSONObject jsonResponse = QuestionsProxy.getInstance()
 						.retrieveQuizQuestions(mQuizQuery);
 				if (jsonResponse != null) {
+					
 					JSONArray array = jsonResponse.getJSONArray("questions");
 					if (array != null) {
-						for (int i = 0; i < array.length() && array.opt(i) != null; i++) {
-							QuizQuestion question = new QuizQuestion(array.opt(i)
-									.toString());
-							// TODO add a field in QuizQuery to store the expected tags?
-							// Joanna
-							// if(question.getTags().contains(query.getTag()))
-							fetchedQuestions.add(question);	//XXX couldn't call push. Aym
-						}
+						// TODO add a field in QuizQuery to store the expected tags?
+						// Joanna
+						// if(question.getTags().contains(query.getTag()))
+						fetchedQuestions = new ArrayDeque<QuizQuestion>(
+								Converter.jsonArrayToQuizQuestionList(array));
 					}
 					
 					if (jsonResponse.getBoolean("next")) {
@@ -92,7 +92,8 @@ public class ShowQuestionsAgent {
 					}
 				}
 			} catch (JSONException e) {
-				e.printStackTrace();
+				Log.e(this.getClass().getName(), "fetchMoreQuestions(): wrong " +
+						"structure of JSON response.", e);
 			}
 			
 			mQuestionQueue = fetchedQuestions;
