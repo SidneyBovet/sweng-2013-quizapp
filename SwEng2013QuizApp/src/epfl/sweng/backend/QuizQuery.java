@@ -37,16 +37,16 @@ public class QuizQuery implements Parcelable {
 	 * @return {@code true} if it has a good syntax, {@code false} otherwise.
 	 */
 	
-	public boolean hasGoodSyntax(String query) {
+	public boolean hasGoodSyntax() {
 		boolean ok = true;
-		ANTLRStringStream in = new ANTLRStringStream(query);
+		ANTLRStringStream in = new ANTLRStringStream(mQuery);
 		QueryLexer lexer = new QueryLexer(in);
 		CommonTokenStream tokens = new CommonTokenStream(lexer);
 		QueryParser parser = new QueryParser(tokens);
 		
 		try {
 			parser.eval();
-		} catch (RecognitionException e) {
+		} catch (Exception e) {
 			ok = false;
 		}
 		return ok;
@@ -75,6 +75,16 @@ public class QuizQuery implements Parcelable {
 	
 	public String getQuery() {
 		return mQuery;
+	}
+	
+	/**
+	 * Returns the string representation of the next hash.
+	 * 
+	 * @return The string representation of the next hash.
+	 */
+	
+	public String getFrom() {
+		return mFrom;
 	}
 	
 	@Override

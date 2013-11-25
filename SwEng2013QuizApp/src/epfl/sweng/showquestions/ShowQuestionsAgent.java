@@ -1,6 +1,7 @@
 package epfl.sweng.showquestions;
 
 import java.util.ArrayDeque;
+import java.util.List;
 import java.util.Queue;
 
 import org.json.JSONArray;
@@ -53,9 +54,12 @@ public class ShowQuestionsAgent {
 			return mQuestionQueue.poll();
 		} else if (mQuizQuery == null) {
 			return QuestionsProxy.getInstance().retrieveRandomQuizQuestion();
-		} else {
+		} else if (mQuizQuery.getFrom() != null) {
 			fetchMoreQuestions();
 			return getNextQuestion();
+		} else {
+			Log.e("aaa","AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+			return null;
 		}
 	}
 	
@@ -72,7 +76,7 @@ public class ShowQuestionsAgent {
 	private void fetchMoreQuestions() {
 		if (mQuizQuery != null) {
 			Queue<QuizQuestion> fetchedQuestions = new ArrayDeque<QuizQuestion>();
-			String from = null;
+			String next = null;
 			try {
 				JSONObject jsonResponse = QuestionsProxy.getInstance()
 						.retrieveQuizQuestions(mQuizQuery);
@@ -80,15 +84,14 @@ public class ShowQuestionsAgent {
 					
 					JSONArray array = jsonResponse.getJSONArray("questions");
 					if (array != null) {
-						// TODO add a field in QuizQuery to store the expected tags?
-						// Joanna
-						// if(question.getTags().contains(query.getTag()))
-						fetchedQuestions = new ArrayDeque<QuizQuestion>(
-								Converter.jsonArrayToQuizQuestionList(array));
+						List<QuizQuestion> list = Converter.jsonArrayToQuizQuestionList(array);
+						if (list != null) {
+							fetchedQuestions = new ArrayDeque<QuizQuestion>(list);
+						}
 					}
 					
 					if (jsonResponse.getBoolean("next")) {
-						from = jsonResponse.getString("next");
+						next = jsonResponse.getString("next");
 					}
 				}
 			} catch (JSONException e) {
@@ -97,11 +100,7 @@ public class ShowQuestionsAgent {
 			}
 			
 			mQuestionQueue = fetchedQuestions;
-			if (from != null) {
-				mQuizQuery = new QuizQuery(mQuizQuery.getQuery(), from);
-			} else {
-				mQuizQuery = null;
-			}
+			mQuizQuery = new QuizQuery(mQuizQuery.getQuery(), next);
 		}
 	}
 }

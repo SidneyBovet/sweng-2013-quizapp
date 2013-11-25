@@ -146,6 +146,10 @@ public final class QuestionsProxy implements ConnectivityProxy,
 	 */
 	
 	public JSONObject retrieveQuizQuestions(QuizQuery query) {
+		if (UserPreferences.getInstance().getConnectivityState()
+				== ConnectivityState.OFFLINE) {
+			return null;
+		}
 		JSONObject jsonResponse = mNetworkCommunication.retrieveQuizQuestions(query);
 		
 		if (jsonResponse == null) {

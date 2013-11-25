@@ -56,9 +56,8 @@ public class SearchActivity extends Activity {
 	 */
 	
 	public void createQuery(View view) {
-		QuizQuery quizQuery = new QuizQuery(mQueryFieldText, null);
+		switchToShowQuestionsActivity();
 		resetQuerySearchField();
-		sendToShowQuestionsActivity(quizQuery);
 	}
 	
 	/**
@@ -108,17 +107,16 @@ public class SearchActivity extends Activity {
 	 */
 	
 	private void updateSearchButton() {
-		mQuery = new QuizQuery(mQueryFieldText, null);
+		mQuery = new QuizQuery(mQueryFieldText, "");
 		// && QuizQuery.isQueryValid(mQueryFieldText));
 		mSubmitQuery.setEnabled(mQueryFieldText.length() != 0
 				&& mQueryFieldText.length() < QUERY_MAX_LENGTH
-				&& mQuery.hasGoodSyntax(mQueryFieldText));
-		mSubmitQuery.setEnabled(mQueryFieldText.length() != 0);
+				&& mQuery.hasGoodSyntax());
 	}
 	
-	private void sendToShowQuestionsActivity(QuizQuery quizQuery) {
+	private void switchToShowQuestionsActivity() {
 		Intent displayActivityIntent = new Intent(this, ShowQuestionsActivity.class);	
-		displayActivityIntent.putExtra("QuizQuery", quizQuery);
+		displayActivityIntent.putExtra("QuizQuery", mQuery);
 		startActivity(displayActivityIntent);
 	}
 	

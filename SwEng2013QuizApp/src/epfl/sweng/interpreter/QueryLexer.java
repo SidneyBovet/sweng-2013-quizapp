@@ -21,7 +21,7 @@ public class QueryLexer extends Lexer {
 	
 	@Override
 	public void reportError(RecognitionException e) {
-		throw new RuntimeException("PARSER FAIL"); 
+		throw new RuntimeException("LEXER FAIL"); 
 	}
 	
 	// delegates
