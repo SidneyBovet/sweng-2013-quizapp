@@ -10,6 +10,7 @@ import org.json.JSONObject;
 
 import android.util.Log;
 import epfl.sweng.backend.Converter;
+import epfl.sweng.backend.QuestionAgent;
 import epfl.sweng.backend.QuizQuery;
 import epfl.sweng.patterns.QuestionsProxy;
 import epfl.sweng.quizquestions.QuizQuestion;
@@ -21,7 +22,7 @@ import epfl.sweng.quizquestions.QuizQuestion;
  * @author Melody Lucid
  *
  */
-public class ShowQuestionsAgent {
+public class ShowQuestionsAgent extends QuestionAgent {
 
 	private QuizQuery mQuizQuery;
 	private Queue<QuizQuestion> mQuestionQueue;
@@ -48,7 +49,7 @@ public class ShowQuestionsAgent {
 	 * 
 	 * @return The next question to display, or a random question.
 	 */
-	
+	@Override
 	public QuizQuestion getNextQuestion() {
 		if (hasNext()) {
 			return mQuestionQueue.poll();
@@ -68,8 +69,7 @@ public class ShowQuestionsAgent {
 	 * 
 	 * @return {@code true} if there is more questions that match the query.
 	 */
-	
-	public boolean hasNext() {
+	private boolean hasNext() {
 		return mQuestionQueue.size() != 0;
 	}
 	
