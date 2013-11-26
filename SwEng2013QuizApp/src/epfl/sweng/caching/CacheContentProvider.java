@@ -136,7 +136,7 @@ public class CacheContentProvider {
 	/**
 	 * Closes this object (it cannot furthermore be used to access the DB).
 	 */
-	public void destroy() {
+	public void close() {
 		sanityDatabaseCheck();
 		mDatabase.close();
 	}

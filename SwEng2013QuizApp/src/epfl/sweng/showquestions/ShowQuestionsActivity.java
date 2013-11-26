@@ -58,7 +58,7 @@ public class ShowQuestionsActivity extends Activity {
 	@Override
 	protected void onStop() {
 		super.onStop();
-		mAgent.destroy();
+		mAgent.close();
 	}
 
 	public QuizQuestion fetchQuestion() {

@@ -29,7 +29,7 @@ public class CacheContentProviderTest extends GUITest<MainActivity> {
 	protected void tearDown() throws Exception {
 		//XXX how to clean? working?
 		mProvider.eraseDatabase();
-		mProvider.destroy();
+		mProvider.close();
 		super.tearDown();
 	}
 

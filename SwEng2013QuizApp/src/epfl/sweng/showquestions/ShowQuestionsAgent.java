@@ -70,7 +70,7 @@ public class ShowQuestionsAgent extends QuestionAgent {
 	}
 	
 	@Override
-	public void destroy() {
+	public void close() {
 		// TODO Cache the questions remaining in the queue.
 	}
 

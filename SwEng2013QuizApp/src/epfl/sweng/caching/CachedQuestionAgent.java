@@ -35,9 +35,9 @@ public class CachedQuestionAgent extends QuestionAgent {
 	}
 
 	@Override
-	public void destroy() {
+	public void close() {
 		mQuestionCursor.close();
-		mContentProvider.destroy();
+		mContentProvider.close();
 	}
 
 }
