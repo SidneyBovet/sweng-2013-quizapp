@@ -216,13 +216,13 @@ public class CacheContentProvider {
 		return questionId;
 	}
 
-	private Set<String> retrieveTags(long questionId) {
+	private Set<String> retrieveTags(int id) {
 
 		// Get ids of all the current question tags.
 		Cursor tagsIdCursor = mDatabase.query(
 				SQLiteCacheHelper.TABLE_QUESTIONS_TAGS,
-				new String[] { "tagId" }, "questionId = ?",
-				new String[] { String.valueOf(questionId) }, null, null,
+				new String[] {"tagId"}, "questionId = ?",
+				new String[] {String.valueOf(id)}, null, null,
 				"id ASC", null);
 
 		ArrayList<Integer> tagsId = new ArrayList<Integer>();
@@ -268,11 +268,11 @@ public class CacheContentProvider {
 		}
 	}
 
-	private List<String> retrieveAnswers(long questionId) {
+	private List<String> retrieveAnswers(int id) {
 
 		Cursor answersCursor = mDatabase.query(SQLiteCacheHelper.TABLE_ANSWERS,
-				new String[] { "content" }, "questionId = ?",
-				new String[] { String.valueOf(questionId) }, null, null,
+				new String[] {"content"}, "questionId = ?",
+				new String[] {String.valueOf(id)}, null, null,
 				"id ASC", null);
 
 		ArrayList<String> answers = new ArrayList<String>();
