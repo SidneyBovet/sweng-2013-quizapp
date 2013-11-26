@@ -22,11 +22,25 @@ public class QuizQuery implements Parcelable {
 	private String mQuery;
 	private String mFrom;
 
+	// TODO documenter svp...
+	/**
+	 * 
+	 * @param query
+	 * @param from
+	 */
 	public QuizQuery(String query, String from) {
 		this.mQuery = query;
 		this.mFrom = from;
 		
 		toNormalForm();
+	}
+	
+	/**
+	 * Constructor for random query
+	 * @param from 
+	 */
+	public QuizQuery(String from) {
+		mFrom = from;
 	}
 
 	/**
@@ -100,7 +114,7 @@ public class QuizQuery implements Parcelable {
 	}
 	
 	public boolean isRandom() {
-		return mQuery.replaceAll("\\ ", "").isEmpty();
+		return null == mQuery;
 	}
 	
 	@Override
