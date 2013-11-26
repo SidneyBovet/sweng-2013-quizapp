@@ -2,7 +2,6 @@ package epfl.sweng.backend;
 
 import org.antlr.runtime.ANTLRStringStream;
 import org.antlr.runtime.CommonTokenStream;
-import org.antlr.runtime.RecognitionException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -98,6 +97,10 @@ public class QuizQuery implements Parcelable {
 	
 	public String getFrom() {
 		return mFrom;
+	}
+	
+	public boolean isRandom() {
+		return mQuery.replaceAll("\\ ", "").isEmpty();
 	}
 	
 	@Override
