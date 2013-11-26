@@ -52,6 +52,7 @@ public class ShowQuestionsAgent extends QuestionAgent {
 	@Override
 	public QuizQuestion getNextQuestion() {
 		if (hasNext()) {
+			// TODO cache the question polled
 			return mQuestionQueue.poll();
 		} else if (mQuizQuery == null) {
 			return QuestionsProxy.getInstance().retrieveRandomQuizQuestion();
@@ -59,11 +60,16 @@ public class ShowQuestionsAgent extends QuestionAgent {
 			fetchMoreQuestions();
 			return getNextQuestion();
 		} else {
-			Log.e("aaa","AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+			Log.e("aaa", "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 			return null;
 		}
 	}
 	
+	@Override
+	public void destroy() {
+		// TODO Cache the questions remaining in the queue.
+	}
+
 	/**
 	 * Returns {@code true} if there is more questions that match the query.
 	 * 
