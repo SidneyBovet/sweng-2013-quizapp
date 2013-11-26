@@ -11,8 +11,7 @@ import epfl.sweng.quizquestions.QuizQuestion;
  */
 public class CachedQuestionAgent extends QuestionAgent {
 
-	private QuizQuery mQuery;
-	private Context mContext;
+	private CacheContentProvider mContentProvider;
 	private Cursor mQuestionCursor;
 	
 	/**
@@ -22,29 +21,23 @@ public class CachedQuestionAgent extends QuestionAgent {
 	 * @param context The {@link Context} of the activity using this object.
 	 */
 	public CachedQuestionAgent(QuizQuery query, Context context) {
-		mQuery = query;
-		mContext = context;
-		mQuestionCursor = null;
+		mContentProvider = new CacheContentProvider(context, false);
+		mQuestionCursor = mContentProvider.getQuestions(query);
 	}
 	
 	@Override
 	public QuizQuestion getNextQuestion() {
 		QuizQuestion retrievedQuestion = null;
-		CacheContentProvider contentProvider =
-				new CacheContentProvider(mContext, false);
 		
-		if (null == mQuery) {
-			
-			retrievedQuestion = contentProvider.getRandomQuestion();
-		} else {
-			if (null == mQuestionCursor) {
-				mQuestionCursor = contentProvider.getQuestions(mQuery);
-			}
-			// TODO extract a question from the cursor
-		}
+		// TODO extract a question from the cursor
 		
-		contentProvider.destroy();
 		return retrievedQuestion;
+	}
+
+	@Override
+	public void destroy() {
+		mQuestionCursor.close();
+		mContentProvider.destroy();
 	}
 
 }

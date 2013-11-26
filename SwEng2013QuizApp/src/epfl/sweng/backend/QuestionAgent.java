@@ -11,4 +11,6 @@ import epfl.sweng.quizquestions.QuizQuestion;
 public abstract class QuestionAgent {
 	// XXX Sidney better to use an interface huh?
 	public abstract QuizQuestion getNextQuestion();
+
+	public abstract void destroy();
 }
