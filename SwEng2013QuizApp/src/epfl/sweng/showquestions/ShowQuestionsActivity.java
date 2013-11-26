@@ -5,7 +5,6 @@ import java.util.concurrent.ExecutionException;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -39,8 +38,8 @@ public class ShowQuestionsActivity extends Activity {
 	private QuestionAgent mAgent;
 	
 	@Override
-	protected void onCreate(final Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+	protected void onStart() {
+		super.onStart();
 		// get Intent that started this Activity
 		Intent startingIntent = getIntent();
 		// get the value of the user parcelable
@@ -49,6 +48,12 @@ public class ShowQuestionsActivity extends Activity {
 		mQuestion = fetchQuestion();
 		setContentView(R.layout.activity_display_question);
 		setDisplayView();
+	}
+	
+	@Override
+	protected void onStop() {
+		super.onStop();
+		mAgent.destroy();
 	}
 
 	public QuizQuestion fetchQuestion() {
