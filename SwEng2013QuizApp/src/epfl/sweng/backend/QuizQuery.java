@@ -31,8 +31,6 @@ public class QuizQuery implements Parcelable {
 	public QuizQuery(String query, String from) {
 		this.mQuery = query;
 		this.mFrom = from;
-		
-		toNormalForm();
 	}
 	
 	/**
@@ -81,16 +79,6 @@ public class QuizQuery implements Parcelable {
 			jsonQuery.put("from", mFrom);
 		}
 		return jsonQuery;
-	}
-
-	/**
-	 * Replaces all the '+', the ' ' and '*' by, respectively, "OR" and "AND". 
-	 * @return the query in normal form.
-	 */
-	public void toNormalForm() {
-		mQuery.replaceAll("(?:\\ )*\\*(?:\\ )*", " AND ");
-		mQuery.replaceAll("\\ \\+\\ ", " OR ");
-		mQuery.replaceAll("\\ ", "AND");
 	}
 	
 	/**

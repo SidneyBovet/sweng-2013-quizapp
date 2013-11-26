@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -44,17 +46,30 @@ public class CacheContentProvider {
 			Log.e("DB", "Could not open the DB.");
 		}
 	}
-
+	
 	public Cursor getQuestions(QuizQuery query) {
 		sanityDatabaseCheck();
-
-		// TODO Refactor that part.
-
+		
 		String[] selection = new String[] {"id"};
+		String whereClause = query.toString();
+		ArrayList<String> whereArgsArray = new ArrayList<String>();
+		
+		// Finds all alphanumeric tokens...
+		Pattern pattern = Pattern.compile("\\w");
+		Matcher m = pattern.matcher(whereClause);
+		while (m.find()) {
+		    whereArgsArray.add(m.group());
+		}
 
-		// TODO use the query here.
-		String whereClause = null;
-		String[] whereArgs = null;
+		String[] whereArgs = (String[]) whereArgsArray.toArray();
+		
+		// ...normalizes the expression...
+		whereClause.replaceAll("(?:\\ )*\\*(?:\\ )*", " AND ");
+		whereClause.replaceAll("\\ \\+\\ ", " OR ");
+		whereClause.replaceAll("\\ ", "AND");
+		
+		// ... and replaces them with '?'
+		whereClause.replaceAll("\\w", "tags = ?");
 
 		String orderBy = null;
 
@@ -68,7 +83,6 @@ public class CacheContentProvider {
 				selection, whereClause, whereArgs, null, null, orderBy, null);
 
 		idCursor.moveToFirst();
-
 		return idCursor;
 	}
 
