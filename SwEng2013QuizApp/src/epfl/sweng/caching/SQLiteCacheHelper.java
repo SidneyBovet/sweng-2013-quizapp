@@ -6,9 +6,11 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 /**
- * Used to access the local SQLite DB that we use for data persistence in our app.
+ * Used to access the local SQLite DB that we use for data persistence in our
+ * app.
+ * 
  * @author born4new
- *
+ * 
  */
 public class SQLiteCacheHelper extends SQLiteOpenHelper {
 
@@ -20,26 +22,29 @@ public class SQLiteCacheHelper extends SQLiteOpenHelper {
 	public static final String TABLE_QUESTIONS = "questions";
 	public static final String TABLE_TAGS = "tags";
 	public static final String TABLE_ANSWERS = "answers";
-	public static final String TABLE_QUESTIONS_TAGS = "questions_tags";
+	public static final String TABLE_QUESTIONS_TAGS = "questionsTags";
 
 	// Id's + Foreign Keys
 	private static final String KEY_ID = "id";
-	private static final String KEY_QUESTION_ID = "question_id";
-	private static final String KEY_TAG_ID = "tag_id";
+	private static final String KEY_QUESTION_ID = "questionId";
+	private static final String KEY_TAG_ID = "tagId";
 
 	// QUESTIONS Table
 	private static final String KEY_STATEMENT = "statement";
+	private static final String KEY_SOLUTION_ID = "solutionId";
+	private static final String KEY_OWNER = "owner";
 
 	// TAGS Table
-	private static final String KEY_TAG = "tag";
+	private static final String KEY_TAG = "name";
 
 	// ANSWERS Table
-	private static final String KEY_ANSWER = "answer";
+	private static final String KEY_ANSWER = "content";
 
 	// Tables creation
 	private static final String CREATE_TABLE_QUESTIONS = "CREATE TABLE "
 			+ TABLE_QUESTIONS + " (" + KEY_ID + " integer primary key, "
-			+ KEY_QUESTION_ID + " integer," + KEY_STATEMENT + " varchar(300));";
+			+ KEY_QUESTION_ID + " integer," + KEY_STATEMENT + " varchar(500), "
+			+ KEY_SOLUTION_ID + " integer, " + KEY_OWNER + " varchar(500));";
 
 	private static final String CREATE_TABLE_TAGS = "CREATE TABLE "
 			+ TABLE_TAGS + " (" + KEY_ID + " integer primary key,  " + KEY_TAG
@@ -59,8 +64,11 @@ public class SQLiteCacheHelper extends SQLiteOpenHelper {
 			+ TABLE_QUESTIONS + "(" + KEY_QUESTION_ID + ");";
 
 	/**
-	 * Default constructor. We reinstantiate it so that we can pass the DB name to it.
-	 * @param context Application context.
+	 * Default constructor. We reinstantiate it so that we can pass the DB name
+	 * to it.
+	 * 
+	 * @param context
+	 *            Application context.
 	 */
 	public SQLiteCacheHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);

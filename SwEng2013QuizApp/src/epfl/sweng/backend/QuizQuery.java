@@ -22,15 +22,18 @@ public class QuizQuery implements Parcelable {
 
 	private String mQuery;
 	private String mFrom;
-	
+
 	public QuizQuery(String query, String from) {
 		this.mQuery = query;
 		this.mFrom = from;
+		
+		toNormalForm();
 	}
-	
+
 	/**
-	 * Verifies that that the query has a syntax that follows the correct Grammar
-	 * (i.e ")(banana++ fruit)" is not accepted). See Query.g for the grammar.
+	 * Verifies that that the query has a syntax that follows the correct
+	 * Grammar (i.e ")(banana++ fruit)" is not accepted). See Query.g for the
+	 * grammar.
 	 * 
 	 * @param query
 	 *            Query to be verified.
@@ -43,7 +46,7 @@ public class QuizQuery implements Parcelable {
 		QueryLexer lexer = new QueryLexer(in);
 		CommonTokenStream tokens = new CommonTokenStream(lexer);
 		QueryParser parser = new QueryParser(tokens);
-		
+
 		try {
 			parser.eval();
 		} catch (Exception e) {
@@ -51,13 +54,13 @@ public class QuizQuery implements Parcelable {
 		}
 		return ok;
 	}
-	
+
 	/**
 	 * Returns a {@link JSONObject} representing the current query.
 	 * 
 	 * @return A {@link JSONObject} of the query.
 	 */
-	
+
 	public JSONObject toJSON() throws JSONException {
 		JSONObject jsonQuery = new JSONObject();
 		jsonQuery.put("query", mQuery);
@@ -66,13 +69,23 @@ public class QuizQuery implements Parcelable {
 		}
 		return jsonQuery;
 	}
+
+	/**
+	 * Replaces all the '+', the ' ' and '*' by, respectively, "OR" and "AND". 
+	 * @return the query in normal form.
+	 */
+	public void toNormalForm() {
+		mQuery.replaceAll("(?:\\ )*\\*(?:\\ )*", " AND ");
+		mQuery.replaceAll("\\ \\+\\ ", " OR ");
+		mQuery.replaceAll("\\ ", "AND");
+	}
 	
 	/**
 	 * Returns the string representation of the query.
 	 * 
 	 * @return The string representation of the query.
 	 */
-	
+
 	public String getQuery() {
 		return mQuery;
 	}
@@ -91,24 +104,23 @@ public class QuizQuery implements Parcelable {
 	public int describeContents() {
 		return 0;
 	}
-	
+
 	@Override
 	public void writeToParcel(Parcel dest, int flags) {
 		dest.writeString(mQuery);
 		dest.writeString(mFrom);
 	}
-	
-	public static final Parcelable.Creator<QuizQuery> CREATOR = new 
-			Parcelable.Creator<QuizQuery>() {
+
+	public static final Parcelable.Creator<QuizQuery> CREATOR = new Parcelable.Creator<QuizQuery>() {
 		public QuizQuery createFromParcel(Parcel in) {
 			return new QuizQuery(in);
 		}
-		
+
 		public QuizQuery[] newArray(int size) {
 			return new QuizQuery[size];
 		}
 	};
-	
+
 	private QuizQuery(Parcel in) {
 		mQuery = in.readString();
 		mFrom = in.readString();
