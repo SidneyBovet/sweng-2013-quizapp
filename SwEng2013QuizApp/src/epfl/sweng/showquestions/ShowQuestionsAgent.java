@@ -38,7 +38,11 @@ public class ShowQuestionsAgent extends QuestionAgent {
 	 */
 	
 	public ShowQuestionsAgent(QuizQuery query) {
-		this.mQuizQuery = query;
+		if (null == query) {
+			this.mQuizQuery = new QuizQuery("Agent constructor");
+		} else {
+			this.mQuizQuery = query;
+		}
 		this.mQuestionQueue = new ArrayDeque<QuizQuestion>();
 	}
 	
@@ -54,7 +58,7 @@ public class ShowQuestionsAgent extends QuestionAgent {
 		if (hasNext()) {
 			// TODO cache the question polled
 			return mQuestionQueue.poll();
-		} else if (mQuizQuery == null) {
+		} else if (mQuizQuery.isRandom()) {
 			return QuestionsProxy.getInstance().retrieveRandomQuizQuestion();
 		} else if (mQuizQuery.getFrom() != null) {
 			fetchMoreQuestions();
