@@ -43,7 +43,12 @@ public class ShowQuestionsActivity extends Activity {
 		// get Intent that started this Activity
 		Intent startingIntent = getIntent();
 		// get the value of the user parcelable
+		
 		QuizQuery quizQuery = startingIntent.getParcelableExtra("QuizQuery");
+		if (null == quizQuery) {
+			// XXX Sidney from est ok?
+			quizQuery = new QuizQuery("ShowQuestionActivity");
+		}
 		mAgent = QuestionAgentFactory.getAgent(this, quizQuery);
 		mQuestion = fetchQuestion();
 		setContentView(R.layout.activity_display_question);
