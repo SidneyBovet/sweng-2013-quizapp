@@ -12,7 +12,7 @@ import epfl.sweng.quizquestions.QuizQuestion;
 public class CachedQuestionAgent extends QuestionAgent {
 
 	private CacheContentProvider mContentProvider;
-	private Cursor mQuestionCursor;
+	private Cursor mCursor;
 	
 	/**
 	 * 
@@ -22,21 +22,22 @@ public class CachedQuestionAgent extends QuestionAgent {
 	 */
 	public CachedQuestionAgent(QuizQuery query, Context context) {
 		mContentProvider = new CacheContentProvider(context, false);
-		mQuestionCursor = mContentProvider.getQuestions(query);
+		mCursor = mContentProvider.getQuestions(query);
 	}
 	
 	@Override
 	public QuizQuestion getNextQuestion() {
 		QuizQuestion retrievedQuestion = null;
-		
-		// TODO extract a question from the cursor
+
+		int questionPK = mCursor.getInt(mCursor.getColumnIndex("questionId"));
+		retrievedQuestion = mContentProvider.getQuestionFromPK(questionPK);
 		
 		return retrievedQuestion;
 	}
 
 	@Override
 	public void close() {
-		mQuestionCursor.close();
+		mCursor.close();
 		mContentProvider.close();
 	}
 
