@@ -45,36 +45,48 @@ public class CacheContentProvider {
 		}
 	}
 
-	/**
-	 * 
-	 * @return An unique and randomly retrieved question.
-	 */
-	public QuizQuestion getRandomQuestion() {
+	public Cursor getQuestions(QuizQuery query) {
 		sanityDatabaseCheck();
 
-		// Step 1 : Fetch a random questionId
-		Cursor randomQuestionIdCursor = mDatabase.query(
-				SQLiteCacheHelper.TABLE_QUESTIONS,
-				new String[] {"questionId"}, null, null, null, null,
-				"RANDOM()", "1");
+		// TODO Refactor that part.
 
-		randomQuestionIdCursor.moveToFirst();
-		int questionId = randomQuestionIdCursor.getInt(randomQuestionIdCursor
-				.getColumnIndex("questionId"));
-		randomQuestionIdCursor.close();
+		String[] selection = new String[] {"id"};
+
+		// TODO use the query here.
+		String whereClause = null;
+		String[] whereArgs = null;
+
+		String orderBy = null;
+
+		if (query.isRandom()) {
+			whereClause = null;
+			whereArgs = null;
+			orderBy = "RANDOM()";
+		}
+
+		Cursor idCursor = mDatabase.query(SQLiteCacheHelper.TABLE_QUESTIONS,
+				selection, whereClause, whereArgs, null, null, orderBy, null);
+
+		idCursor.moveToFirst();
+
+		return idCursor;
+	}
+
+	public QuizQuestion getQuestionFromPK(int id) {
 
 		// Step 2 : Get all the answers and tags for that question
-		List<String> answers = retrieveAnswers(questionId);
-		Set<String> tags = retrieveTags(questionId);
+		List<String> answers = retrieveAnswers(id);
+		Set<String> tags = retrieveTags(id);
 
 		// Step 3 : Store question content into variables.
 		Cursor questionCursor = mDatabase.query(
-				SQLiteCacheHelper.TABLE_QUESTIONS,
-				new String[] {"statement, solutionIndex, owner"},
-				"questionId = ?", new String[] {String.valueOf(questionId)},
-				null, null, "RANDOM()", "1");
+				SQLiteCacheHelper.TABLE_QUESTIONS, new String[] {"questionId",
+					"statement, solutionIndex, owner"}, "id = ?",
+				new String[] {String.valueOf(id)}, null, null, null, null);
 
 		questionCursor.moveToFirst();
+		int questionId = questionCursor.getInt(questionCursor
+				.getColumnIndex("questionId"));
 		String statement = questionCursor.getString(questionCursor
 				.getColumnIndex("statement"));
 		int solutionIndex = questionCursor.getInt(questionCursor
@@ -87,25 +99,6 @@ public class CacheContentProvider {
 		// Step 4 : Create the new question and return it
 		return new QuizQuestion(statement, answers, solutionIndex, tags,
 				questionId, owner);
-	}
-
-	/**
-	 * 
-	 * @param query
-	 *            The query describing the set of questions that will be
-	 *            returned.
-	 * @return A {@link Cursor} pointing to the set of queried questions.
-	 */
-	public Cursor getQuestions(QuizQuery query) {
-		sanityDatabaseCheck();
-		
-		// Step 1 : Fetch all questionId's that satisfies the query.
-//		Cursor questionsIdCursor = mDatabase.query(
-//				SQLiteCacheHelper.TABLE_QUESTIONS,
-//				new String[] {"questionId"}, query.toSQLWhereTagsCondition(), null, null, null,
-//				null, null);
-		
-		return null;
 	}
 
 	/**
@@ -228,8 +221,8 @@ public class CacheContentProvider {
 		// Get ids of all the current question tags.
 		Cursor tagsIdCursor = mDatabase.query(
 				SQLiteCacheHelper.TABLE_QUESTIONS_TAGS,
-				new String[] {"tagId"}, "questionId = ?",
-				new String[] {String.valueOf(questionId)}, null, null,
+				new String[] { "tagId" }, "questionId = ?",
+				new String[] { String.valueOf(questionId) }, null, null,
 				"id ASC", null);
 
 		ArrayList<Integer> tagsId = new ArrayList<Integer>();
@@ -278,8 +271,8 @@ public class CacheContentProvider {
 	private List<String> retrieveAnswers(long questionId) {
 
 		Cursor answersCursor = mDatabase.query(SQLiteCacheHelper.TABLE_ANSWERS,
-				new String[] {"content"}, "questionId = ?",
-				new String[] {String.valueOf(questionId)}, null, null,
+				new String[] { "content" }, "questionId = ?",
+				new String[] { String.valueOf(questionId) }, null, null,
 				"id ASC", null);
 
 		ArrayList<String> answers = new ArrayList<String>();
