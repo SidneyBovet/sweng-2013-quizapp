@@ -13,7 +13,7 @@ import epfl.sweng.test.MockJSON;
 
 import junit.framework.TestCase;
 
-public class ConvertTest extends TestCase {
+public class ConvertTestt extends TestCase {
 	private JSONArray jsonArray;
 	private MockJSON mockJson1;
 	private List<String> list = new ArrayList<String>();
@@ -21,7 +21,7 @@ public class ConvertTest extends TestCase {
 
 	@Override
 	protected void setUp() throws Exception {
-		super.setUp();
+		super.setUp(); 
 		list.add("Hello");
 		list.add("Lapin");
 		mockJson1 = new MockJSON(1, "Salut?", list, 1,
