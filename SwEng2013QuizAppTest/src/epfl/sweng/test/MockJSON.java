@@ -18,6 +18,7 @@ public class MockJSON extends JSONObject {
 	private int mSolutionIndex;
 	private Set<String> mTags = new TreeSet<String>();
 	private String mOwner;
+	private JSONObject mockJSON;
 
 	public MockJSON(int id, String question, List<String> answers,
 			int solutionIndex, Set<String> tags, String owner) {
@@ -35,7 +36,7 @@ public class MockJSON extends JSONObject {
 		for (String tgs : mTags) {
 			tagsJSONArray.put(tgs);
 		}
-		JSONObject mockJSON = new JSONObject();
+		mockJSON = new JSONObject();
 
 		try {
 			mockJSON.put("id", mId);
@@ -45,7 +46,13 @@ public class MockJSON extends JSONObject {
 			mockJSON.put("tags", tagsJSONArray);
 			mockJSON.put("owner", mOwner);
 		} catch (JSONException e) {
-			Log.e(this.getClass().getName(),"MockJSON(): could not parse JSON", e);
+			Log.e(this.getClass().getName(),
+					"MockJSON(): could not parse JSON", e);
 		}
+	}
+
+	public JSONObject getJson() {
+		return mockJSON;
+
 	}
 }

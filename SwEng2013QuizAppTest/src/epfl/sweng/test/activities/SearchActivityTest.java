@@ -77,7 +77,7 @@ public class SearchActivityTest extends GUITest<SearchActivity> {
 	}
 	
 	public void testSearchButtonIncorrectQueryOnlyWhitespaces() {
-		fillQueryAndTestButton("  \t n   \n\t ", false);
+		fillQueryAndTestButton("  \t\n   \n\t ", false);
 	}
 	
 	public void testSearchButtonIncorrectQueryBadOpenParenthesis() {
@@ -93,8 +93,10 @@ public class SearchActivityTest extends GUITest<SearchActivity> {
 	}
 	
 	public void testSearchButtonIncorrectQueryBadLetters() {
-		fillQueryAndTestButton("*ç§¦$|¢9#", false);
+		fillQueryAndTestButton(")-#", false);
 	}
+	
+	
 
 	private void fillQueryAndTestButton(String query, boolean enabled) {
 		String buttonDefaultText = context
@@ -106,6 +108,7 @@ public class SearchActivityTest extends GUITest<SearchActivity> {
 		EditText queryText = getSolo().getEditText(queryDefaultText);
 		
 		getSolo().enterText(queryText, query);
+		getSolo().sleep(1000);
 		assertTrue("Search Button is not " + (enabled ? "enabled":"disabled")
 				+ " if query = \"" + query + "\".",
 				queryButton.isEnabled() == enabled);
