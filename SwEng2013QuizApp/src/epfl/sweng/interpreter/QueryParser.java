@@ -15,10 +15,9 @@ import org.antlr.runtime.tree.TreeAdaptor;
 
 @SuppressWarnings("all")
 public class QueryParser extends Parser {
-	public static final String[] TOKEN_NAMES = new String[] {
-		"<invalid>", "<EOR>", "<DOWN>", "<UP>", "ID", "LPAREN", "PLUS", "RPAREN",
-		"TIME", "WS"
-	};
+	public static final String[] TOKEN_NAMES = new String[] { "<invalid>",
+			"<EOR>", "<DOWN>", "<UP>", "ID", "LPAREN", "PLUS", "RPAREN",
+			"TIME", "WS" };
 	public static final int EOF = -1;
 	public static final int ID = 4;
 	public static final int LPAREN = 5;
@@ -64,7 +63,7 @@ public class QueryParser extends Parser {
 
 	@Override
 	public void reportError(RecognitionException e) {
-		throw new RuntimeException("LEXER FAIL");
+		throw new RuntimeException("PARSER FAIL");
 	}
 
 	public static class EvalReturn extends ParserRuleReturnScope {
@@ -334,7 +333,8 @@ public class QueryParser extends Parser {
 
 	// $ANTLR start "factors"
 	// Query.g:33:1: factors : ( TIME factor factors | factor factors |);
-	public final QueryParser.FactorsReturn factors() throws RecognitionException {
+	public final QueryParser.FactorsReturn factors()
+			throws RecognitionException {
 		QueryParser.FactorsReturn retval = new QueryParser.FactorsReturn();
 		retval.start = input.LT(1);
 
@@ -544,71 +544,37 @@ public class QueryParser extends Parser {
 	// Delegated rules
 
 	public static final BitSet FOLLOW_EXPR_IN_EVAL61 = new BitSet(
-			new long[] {
-				0x0000000000000000L
-			});
+			new long[] { 0x0000000000000000L });
 	public static final BitSet FOLLOW_EOF_IN_EVAL63 = new BitSet(
-			new long[] {
-				0x0000000000000002L
-			});
+			new long[] { 0x0000000000000002L });
 	public static final BitSet FOLLOW_TERM_IN_EXPR74 = new BitSet(
-			new long[] {
-				0x0000000000000040L
-			});
+			new long[] { 0x0000000000000040L });
 	public static final BitSet FOLLOW_TERM_IN_EXPR76 = new BitSet(
-			new long[] {
-				0x0000000000000002L
-			});
+			new long[] { 0x0000000000000002L });
 	public static final BitSet FOLLOW_PLUS_IN_TERMS86 = new BitSet(
-			new long[] {
-				0x0000000000000030L
-			});
+			new long[] { 0x0000000000000030L });
 	public static final BitSet FOLLOW_EXPR_IN_TERMS88 = new BitSet(
-			new long[] {
-				0x0000000000000002L
-			});
+			new long[] { 0x0000000000000002L });
 	public static final BitSet FOLLOW_FACTOR_IN_TERM100 = new BitSet(
-			new long[] {
-				0x0000000000000130L
-			});
+			new long[] { 0x0000000000000130L });
 	public static final BitSet FOLLOW_FACTORS_IN_TERM102 = new BitSet(
-			new long[] {
-				0x0000000000000002L
-			});
+			new long[] { 0x0000000000000002L });
 	public static final BitSet FOLLOW_TIME_IN_FACTORS110 = new BitSet(
-			new long[] {
-				0x0000000000000030L
-			});
+			new long[] { 0x0000000000000030L });
 	public static final BitSet FOLLOW_FACTOR_IN_FACTORS112 = new BitSet(
-			new long[] {
-				0x0000000000000130L
-			});
+			new long[] { 0x0000000000000130L });
 	public static final BitSet FOLLOW_FACTORS_IN_FACTORS114 = new BitSet(
-			new long[] {
-				0x0000000000000002L
-			});
+			new long[] { 0x0000000000000002L });
 	public static final BitSet FOLLOW_FACTOR_IN_FACTORS116 = new BitSet(
-			new long[] {
-				0x0000000000000130L
-			});
+			new long[] { 0x0000000000000130L });
 	public static final BitSet FOLLOW_FACTORS_IN_FACTORS118 = new BitSet(
-			new long[] {
-				0x0000000000000002L
-			});
+			new long[] { 0x0000000000000002L });
 	public static final BitSet FOLLOW_ID_IN_FACTOR128 = new BitSet(
-			new long[] {
-				0x0000000000000002L
-			});
+			new long[] { 0x0000000000000002L });
 	public static final BitSet FOLLOW_LPAREN_IN_FACTOR131 = new BitSet(
-			new long[] {
-				0x0000000000000030L
-			});
+			new long[] { 0x0000000000000030L });
 	public static final BitSet FOLLOW_EXPR_IN_FACTOR133 = new BitSet(
-			new long[] {
-				0x0000000000000080L
-			});
+			new long[] { 0x0000000000000080L });
 	public static final BitSet FOLLOW_RPAREN_IN_FACTOR135 = new BitSet(
-			new long[] {
-				0x0000000000000002L
-			});
+			new long[] { 0x0000000000000002L });
 }

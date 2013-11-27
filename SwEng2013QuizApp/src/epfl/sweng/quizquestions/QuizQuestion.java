@@ -182,6 +182,15 @@ public class QuizQuestion {
 				+ mTags.toString() + ", owner=" + mOwner + "]";
 	}
 
+	public boolean equals(QuizQuestion quizz) {
+
+		return this.mAnswers == quizz.mAnswers && this.mId == quizz.mId
+				&& mOwner == quizz.mOwner
+				&& mQuestionStatement == quizz.mQuestionStatement
+				&& mSolutionIndex == quizz.mSolutionIndex
+				&& mTags == quizz.mTags;
+	}
+
 	/*
 	 * ***************************************************
 	 * ********************* Audit ***********************
@@ -303,7 +312,7 @@ public class QuizQuestion {
 	public long getId() {
 		return mId;
 	}
-	
+
 	/**
 	 * Returns the statement string.
 	 * 
