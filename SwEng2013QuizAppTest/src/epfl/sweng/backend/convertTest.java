@@ -2,7 +2,6 @@ package epfl.sweng.backend;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import java.util.TreeSet;
 
 import org.json.JSONArray;
@@ -23,7 +22,6 @@ public class ConvertTest extends TestCase {
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
-
 		list.add("Hello");
 		list.add("Lapin");
 		mockJson1 = new MockJSON(1, "Salut?", list, 1,
@@ -51,16 +49,6 @@ public class ConvertTest extends TestCase {
 
 		assertTrue("method is not working",
 				verifyListsAreEquals(listQuizQuestion, listGenerated));
-	}
-
-	public void testJsonArrayToStringSet() {
-		Set<String> tagsToVerify = new TreeSet<String>();
-
-		tagsToVerify.add("Hello");
-		tagsToVerify.add("Lapin");
-		assertTrue("method does not work",
-				Converter.jsonArrayToStringSet(jsonArray).equals(tagsToVerify));
-
 	}
 
 	private boolean verifyListsAreEquals(List<QuizQuestion> list1,

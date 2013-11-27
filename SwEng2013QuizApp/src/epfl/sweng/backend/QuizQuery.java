@@ -22,20 +22,23 @@ public class QuizQuery implements Parcelable {
 	private String mQuery;
 	private String mFrom;
 
-	// TODO documenter svp...
 	/**
+	 * Constructor for search query
 	 * 
 	 * @param query
+	 *            The search query.
 	 * @param from
+	 *            Indicator used to pursue the search of a query.
 	 */
 	public QuizQuery(String query, String from) {
 		this.mQuery = query;
 		this.mFrom = from;
 	}
-	
+
 	/**
 	 * Constructor for random query
-	 * @param from 
+	 * 
+	 * @param from
 	 */
 	public QuizQuery(String from) {
 		mFrom = from;
@@ -50,7 +53,7 @@ public class QuizQuery implements Parcelable {
 	 *            Query to be verified.
 	 * @return {@code true} if it has a good syntax, {@code false} otherwise.
 	 */
-	
+
 	public boolean hasGoodSyntax() {
 		boolean ok = true;
 		ANTLRStringStream in = new ANTLRStringStream(mQuery);
@@ -60,7 +63,7 @@ public class QuizQuery implements Parcelable {
 
 		try {
 			parser.eval();
-		} catch (Exception e) {
+		} catch (Throwable e) {
 			ok = false;
 		}
 		return ok;
@@ -80,7 +83,7 @@ public class QuizQuery implements Parcelable {
 		}
 		return jsonQuery;
 	}
-	
+
 	/**
 	 * Returns the string representation of the query.
 	 * 
@@ -90,21 +93,21 @@ public class QuizQuery implements Parcelable {
 	public String getQuery() {
 		return mQuery;
 	}
-	
+
 	/**
 	 * Returns the string representation of the next hash.
 	 * 
 	 * @return The string representation of the next hash.
 	 */
-	
+
 	public String getFrom() {
 		return mFrom;
 	}
-	
+
 	public boolean isRandom() {
 		return null == mQuery;
 	}
-	
+
 	@Override
 	public int describeContents() {
 		return 0;
