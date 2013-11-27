@@ -29,7 +29,7 @@ public class ServerQueryTest extends TestCase {
 	
 	public void testQuerySuccesful() throws JSONException {
 		mMockClient.pushCannedResponse(
-                ".+",
+				"POST (?:https?://[^/]+|[^/]+)?/+search\\b",
                 HttpStatus.SC_OK,
                 "{\"questions\": [ {\"question\": \"q1\","
                 + " \"answers\": [\"a1\", \"b1\"], \"owner\": \"o1\","
