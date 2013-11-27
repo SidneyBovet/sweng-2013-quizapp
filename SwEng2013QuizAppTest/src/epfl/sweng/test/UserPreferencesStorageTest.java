@@ -6,13 +6,13 @@ import epfl.sweng.entry.MainActivity;
 import epfl.sweng.patterns.ConnectivityState;
 import epfl.sweng.preferences.UserPreferences;
 
-public class UserCreditentialsStorageTest extends
+public class UserPreferencesStorageTest extends
 		ActivityInstrumentationTestCase2<MainActivity> {
 
 	private Context contextOfMainActivity;
 	private UserPreferences persistentStorage;
 	
-	public UserCreditentialsStorageTest() {
+	public UserPreferencesStorageTest() {
 		super(MainActivity.class);
 	}
 	
