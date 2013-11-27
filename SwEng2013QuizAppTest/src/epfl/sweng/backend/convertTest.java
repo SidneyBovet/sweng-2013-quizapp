@@ -13,7 +13,7 @@ import epfl.sweng.test.MockJSON;
 
 import junit.framework.TestCase;
 
-public class convertTest extends TestCase {
+public class ConvertTest extends TestCase {
 	private JSONArray jsonArray;
 	private MockJSON mockJson1;
 	private List<String> list = new ArrayList<String>();
@@ -57,7 +57,7 @@ public class convertTest extends TestCase {
 			return false;
 		} else {
 			for (int i = 0; i < list1.size(); ++i) {
-				if (list1.get(i).equals(list2.get(i))) {
+				if (list1.get(i).equalAs(list2.get(i))) {
 					return false;
 				}
 			}

@@ -182,7 +182,13 @@ public class QuizQuestion {
 				+ mTags.toString() + ", owner=" + mOwner + "]";
 	}
 
-	public boolean equals(QuizQuestion quizz) {
+	/**
+	 * This method verify if two QuizzQuestions are equal.
+	 * 
+	 * @param quizz
+	 * @return true if equals false otherwise
+	 */
+	public boolean equalAs(QuizQuestion quizz) {
 
 		return this.mAnswers == quizz.mAnswers && this.mId == quizz.mId
 				&& mOwner == quizz.mOwner
