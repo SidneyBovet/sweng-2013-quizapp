@@ -14,6 +14,7 @@ import epfl.sweng.backend.QuestionAgent;
 import epfl.sweng.backend.QuizQuery;
 import epfl.sweng.patterns.QuestionsProxy;
 import epfl.sweng.quizquestions.QuizQuestion;
+import epfl.sweng.servercomm.INetworkCommunication;
 
 /**
  * A {@code ShowQuestionsAgent} is responsible of the communication between
@@ -26,6 +27,7 @@ public class ShowQuestionsAgent extends QuestionAgent {
 
 	private QuizQuery mQuizQuery;
 	private Queue<QuizQuestion> mQuestionQueue;
+	private INetworkCommunication mNetworkComm;
 	
 	/**
 	 * Creates a {@code ShowQuestionsAgent} that can ask a specific query to the
@@ -44,27 +46,29 @@ public class ShowQuestionsAgent extends QuestionAgent {
 			this.mQuizQuery = query;
 		}
 		this.mQuestionQueue = new ArrayDeque<QuizQuestion>();
+		this.mNetworkComm = QuestionsProxy.getInstance();
 	}
 	
 	/**
 	 * Returns the next question to display that matches the query.
 	 * <p>
-	 * If there's no more question to display, returns a random question.
+	 * Returns a random question if there's no query to post, and
+	 * <code>null</code> if there's no more question to display.
 	 * 
 	 * @return The next question to display, or a random question.
 	 */
+	
 	@Override
 	public QuizQuestion getNextQuestion() {
 		if (hasNext()) {
 			// TODO cache the question polled
 			return mQuestionQueue.poll();
 		} else if (mQuizQuery.isRandom()) {
-			return QuestionsProxy.getInstance().retrieveRandomQuizQuestion();
+			return mNetworkComm.retrieveRandomQuizQuestion();
 		} else if (mQuizQuery.getFrom() != null) {
 			fetchMoreQuestions();
 			return getNextQuestion();
 		} else {
-			Log.e("aaa", "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 			return null;
 		}
 	}
@@ -73,12 +77,24 @@ public class ShowQuestionsAgent extends QuestionAgent {
 	public void close() {
 		// TODO Cache the questions remaining in the queue.
 	}
+	
+	/**
+	 * Sets a new instance of {@link INetworkCommunication}, which describes a
+	 * new way to communicate with the server.
+	 * 
+	 * @param networkComm new instance of {@link INetworkCommunication}.
+	 */
+	
+	public void setNetworkCommunication(INetworkCommunication networkComm) {
+		this.mNetworkComm = networkComm;
+	}
 
 	/**
 	 * Returns {@code true} if there is more questions that match the query.
 	 * 
 	 * @return {@code true} if there is more questions that match the query.
 	 */
+	
 	private boolean hasNext() {
 		return mQuestionQueue.size() != 0;
 	}
@@ -88,7 +104,7 @@ public class ShowQuestionsAgent extends QuestionAgent {
 			Queue<QuizQuestion> fetchedQuestions = new ArrayDeque<QuizQuestion>();
 			String next = null;
 			try {
-				JSONObject jsonResponse = QuestionsProxy.getInstance()
+				JSONObject jsonResponse = mNetworkComm
 						.retrieveQuizQuestions(mQuizQuery);
 				if (jsonResponse != null) {
 					
@@ -100,9 +116,7 @@ public class ShowQuestionsAgent extends QuestionAgent {
 						}
 					}
 					
-					if (jsonResponse.getBoolean("next")) {
-						next = jsonResponse.getString("next");
-					}
+					next = jsonResponse.optString("next", null);
 				}
 			} catch (JSONException e) {
 				Log.e(this.getClass().getName(), "fetchMoreQuestions(): wrong " +
