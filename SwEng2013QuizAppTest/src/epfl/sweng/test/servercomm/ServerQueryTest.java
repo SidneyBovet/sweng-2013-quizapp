@@ -27,7 +27,7 @@ public class ServerQueryTest extends TestCase {
 
 	}
 	
-	public void testQuerySuccesful() throws JSONException{
+	public void testQuerySuccesful() throws JSONException {
 		mMockClient.pushCannedResponse(
                 ".+",
                 HttpStatus.SC_OK,
@@ -47,7 +47,6 @@ public class ServerQueryTest extends TestCase {
 			queryJSON = query.toJSON();
 			assertEquals("fruit", queryJSON.get("query"));
 		} catch (JSONException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
