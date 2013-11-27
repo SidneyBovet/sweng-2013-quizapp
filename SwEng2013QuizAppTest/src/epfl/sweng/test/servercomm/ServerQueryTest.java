@@ -1,11 +1,5 @@
 package epfl.sweng.test.servercomm;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
-
 import junit.framework.TestCase;
 
 import org.apache.http.HttpStatus;
@@ -14,11 +8,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.util.Log;
-
 import epfl.sweng.backend.QuizQuery;
 import epfl.sweng.servercomm.NetworkCommunication;
 import epfl.sweng.servercomm.SwengHttpClientFactory;
-import epfl.sweng.test.MockJSON;
 import epfl.sweng.test.minimalmock.MockHttpClient;
 
 public class ServerQueryTest extends TestCase {
@@ -70,4 +62,4 @@ public class ServerQueryTest extends TestCase {
 		}
 	}
 	
-	}
+}
