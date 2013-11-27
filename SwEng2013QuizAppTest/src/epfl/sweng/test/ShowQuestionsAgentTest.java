@@ -89,6 +89,28 @@ public class ShowQuestionsAgentTest extends TestCase {
 
 	}
 
+	public void testAgentNextQuery() {
+		mAgent = new ShowQuestionsAgent(new QuizQuery("randomquery", ""));
+		mAgent.setNetworkCommunication(mNetworkComm);
+	
+		QuizQuestion quizQuestion = mAgent.getNextQuestion();
+	
+		assertTrue(quizQuestion.getOwner().equals("fruitninja"));
+	
+		quizQuestion = mAgent.getNextQuestion();
+	
+		assertTrue(quizQuestion.getOwner().equals("alice"));
+	}
+
+	public void testAgentNullQuery() {
+		mAgent = new ShowQuestionsAgent(null);
+		mAgent.setNetworkCommunication(mNetworkComm);
+	
+		QuizQuestion quizQuestion = mAgent.getNextQuestion();
+	
+		assertTrue(quizQuestion.getOwner().equals("sweng"));
+	}
+
 	public void testAgentQueryEmptyFrom() {
 		mAgent = new ShowQuestionsAgent(new QuizQuery("randomquery", ""));
 		mAgent.setNetworkCommunication(mNetworkComm);
@@ -107,25 +129,34 @@ public class ShowQuestionsAgentTest extends TestCase {
 		assertTrue(quizQuestion == null);
 	}
 
-	public void testAgentNullQuery() {
-		mAgent = new ShowQuestionsAgent(null);
-		mAgent.setNetworkCommunication(mNetworkComm);
-
-		QuizQuestion quizQuestion = mAgent.getNextQuestion();
-
-		assertTrue(quizQuestion.getOwner().equals("sweng"));
-	}
-
-	public void testAgentNextQuery() {
+	public void testAgentWrongJSONStructure() {
 		mAgent = new ShowQuestionsAgent(new QuizQuery("randomquery", ""));
+		mNetworkComm = new INetworkCommunication() {
+			
+			@Override
+			public int sendQuizQuestion(QuizQuestion question) {
+				return 0;
+			}
+			
+			@Override
+			public QuizQuestion retrieveRandomQuizQuestion() {
+				return null;
+			}
+			
+			@Override
+			public JSONObject retrieveQuizQuestions(QuizQuery query) {
+				JSONObject jsonResponse = null;
+				try {
+					jsonResponse = new JSONObject("{\"abcdefg\": \"0123456\"}");
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
+				return jsonResponse;
+			}
+		};
 		mAgent.setNetworkCommunication(mNetworkComm);
-
-		QuizQuestion quizQuestion = mAgent.getNextQuestion();
-
-		assertTrue(quizQuestion.getOwner().equals("fruitninja"));
-
-		quizQuestion = mAgent.getNextQuestion();
-
-		assertTrue(quizQuestion.getOwner().equals("alice"));
+		QuizQuestion question = mAgent.getNextQuestion();
+		
+		assertTrue(question == null);
 	}
 }
