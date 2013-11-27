@@ -61,21 +61,6 @@ public class ShowQuestionsActivity extends Activity {
 		mAgent.close();
 	}
 
-	public QuizQuestion fetchQuestion() {
-		AsyncFetchQuestion asyncFetchQuestion = new AsyncFetchQuestion();
-		asyncFetchQuestion.execute();
-		QuizQuestion randomQuestion = null;
-		try {
-			randomQuestion = asyncFetchQuestion.get();
-		} catch (InterruptedException e) {
-			Log.wtf(this.getClass().getName(),
-					"AsyncFetchQuestion was interrupted");
-		} catch (ExecutionException e) {
-			Log.e(this.getClass().getName(), "Process crashed");
-			return null;
-		}
-		return randomQuestion;
-	}
 	/**
 	 * Goes back to the state when the current activity was started.
 	 * <p>
@@ -131,6 +116,22 @@ public class ShowQuestionsActivity extends Activity {
 		}
 	}
 	
+	private QuizQuestion fetchQuestion() {
+		AsyncFetchQuestion asyncFetchQuestion = new AsyncFetchQuestion();
+		asyncFetchQuestion.execute();
+		QuizQuestion randomQuestion = null;
+		try {
+			randomQuestion = asyncFetchQuestion.get();
+		} catch (InterruptedException e) {
+			Log.wtf(this.getClass().getName(),
+					"AsyncFetchQuestion was interrupted");
+		} catch (ExecutionException e) {
+			Log.e(this.getClass().getName(), "Process crashed");
+			return null;
+		}
+		return randomQuestion;
+	}
+
 	private final class AsyncFetchQuestion extends AsyncTask<Void, Void, QuizQuestion> {
 
 		private ConnectivityState mStateBeforeRetrieving;
