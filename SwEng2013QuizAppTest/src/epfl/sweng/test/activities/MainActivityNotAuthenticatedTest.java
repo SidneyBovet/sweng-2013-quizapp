@@ -61,15 +61,20 @@ public class MainActivityNotAuthenticatedTest extends GUITest<MainActivity> {
 				getSolo().searchButton("Submit a quiz question."));
 		assertTrue("Check Box should be present", 
 				getSolo().searchText("Offline mode"));
+		assertTrue("Search Button should be present", 
+				getSolo().searchButton("Search"));
 	}
 	
 	public void testQuestionButtonsAreDisabledAtBeggining() {
-		Button logButton = getSolo().getButton("Log in using Tequila");
-		Button showButton = getSolo().getButton("Show a random question.");
-		Button submitButton = getSolo().getButton("Submit a quiz question.");
+		Button logButton = getSolo().getButton("Log\\ in\\ using\\ Tequila");
+		Button showButton = getSolo().getButton("Show\\ a\\ random\\ question.");
+		Button submitButton = getSolo().getButton("Submit\\ a\\ quiz\\ question.");
+		Button searchButton = getSolo().getButton("Search");
 		assertTrue(logButton.isEnabled());
 		assertFalse(showButton.isEnabled());
 		assertFalse(submitButton.isEnabled());
+		assertFalse(submitButton.isEnabled());
+		assertFalse(searchButton.isEnabled());
 	}
 	
 	public void testLogInButton() {

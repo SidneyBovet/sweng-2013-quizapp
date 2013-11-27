@@ -48,7 +48,18 @@ public class MainActivityAuthenticatedTest extends GUITest<MainActivity> {
 		assertFalse(submitButton.isEnabled());
 	}
 	
+	public void testSearch() {
+		getSolo().clickOnButton("Search");
+		getActivityAndWaitFor(TTChecks.SEARCH_ACTIVITY_SHOWN);
+		assertTrue("Search Button should be present",
+				getSolo().searchButton("Search"));
+		Button searchButton = getSolo().getButton("Search");
+		assertFalse(searchButton.isEnabled());
+		getSolo().goBack();
+	}
+	
 	public void testShowAllButtons() {
+		getSolo().sleep(500);
 		assertTrue("Logout Button should be present",
 				getSolo().searchButton("Log\\ out"));
 		assertTrue("Show Random Question Button should be present",
@@ -57,13 +68,20 @@ public class MainActivityAuthenticatedTest extends GUITest<MainActivity> {
 				getSolo().searchButton("Submit\\ a\\ quiz\\ question."));
 		assertTrue("Check Box should be present", 
 				getSolo().searchText("Offline\\ mode"));
+		assertTrue("Search Button should be present", 
+				getSolo().searchButton("Search"));
 	}
 	
 	public void testQuestionButtonsAreEnabledAtBeggining() {
+		Button logButton = getSolo().getButton("Log\\ out");
 		Button showButton = getSolo().getButton("Show\\ a\\ random\\ question.");
 		Button submitButton = getSolo().getButton("Submit\\ a\\ quiz\\ question.");
+		Button searchButton = getSolo().getButton("Search");
+		assertTrue(logButton.isEnabled());
 		assertTrue(showButton.isEnabled());
 		assertTrue(submitButton.isEnabled());
+		assertTrue(submitButton.isEnabled());
+		assertTrue(searchButton.isEnabled());
 	}
 	
 	public void testCheckBoxVisible() {
