@@ -45,8 +45,7 @@ public class QuestionTest extends TestCase {
 	
 	public void testQuestionCreation() {
 		assertEquals(mQuestion.getId(), mQuestionID);
-		assertEquals(mQuestion.getStatement(), 
-				"Question: " + mQuestionContent);
+		assertEquals(mQuestion.getStatement(), mQuestionContent);
 		assertEquals(mQuestion.getAnswers().get(0), mQuestionAnswers.get(0));
 		assertEquals(mQuestion.getSolutionIndex(), mQuestionSolutionIndex);
 	}
