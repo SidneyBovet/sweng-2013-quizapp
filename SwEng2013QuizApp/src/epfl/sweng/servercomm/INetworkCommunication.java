@@ -13,7 +13,7 @@ import epfl.sweng.quizquestions.QuizQuestion;
 public interface INetworkCommunication {
 	
 	/**
-	 * Sends a quizz question to the server. 
+	 * Sends a quiz question to the server. 
 	 * @param question Question to be sent.
 	 * @return The response status from the server.
 	 */

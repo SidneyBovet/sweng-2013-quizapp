@@ -40,8 +40,9 @@ public class QuizQuery implements Parcelable {
 	 * 
 	 * @param from
 	 */
-	public QuizQuery(String from) {
-		mFrom = from;
+	public QuizQuery() {
+		mQuery = null;
+		mFrom = null;
 	}
 
 	/**
