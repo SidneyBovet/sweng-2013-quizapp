@@ -301,4 +301,8 @@ public class CacheContentProvider {
 
 		return answers;
 	}
+
+	public boolean isClosed() {
+		return !mDatabase.isOpen();
+	}
 }
