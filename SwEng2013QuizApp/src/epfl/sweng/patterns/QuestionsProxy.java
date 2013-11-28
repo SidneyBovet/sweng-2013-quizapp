@@ -1,19 +1,21 @@
 package epfl.sweng.patterns;
 
 import java.util.ArrayDeque;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
-import java.util.Random;
 
 import org.apache.http.HttpStatus;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.content.Context;
 import android.util.Log;
+import epfl.sweng.agents.QuestionAgent;
+import epfl.sweng.agents.QuestionAgentFactory;
 import epfl.sweng.backend.Converter;
 import epfl.sweng.backend.QuizQuery;
+import epfl.sweng.caching.CacheContentProvider;
 import epfl.sweng.preferences.UserPreferences;
 import epfl.sweng.quizquestions.QuizQuestion;
 import epfl.sweng.servercomm.INetworkCommunication;
@@ -31,28 +33,38 @@ public final class QuestionsProxy implements ConnectivityProxy,
 		INetworkCommunication {
 
 	private static QuestionsProxy sQuestionProxy;
+	private QuestionAgent mAgent;
 	// question to be sent
 	private Queue<QuizQuestion> mQuizQuestionsOutbox;
-	// question to be retrieve
-	private List<QuizQuestion> mQuizQuestionsInbox;
 
 	private INetworkCommunication mNetworkCommunication;
+
+	private Context mContext;
+	private CacheContentProvider mContentProvider;
+	
+	/**
+	 * Singleton getter.
+	 * 
+	 * @return The singleton instance of this object.
+	 */
+	public static QuestionsProxy getInstance(Context context) {
+		// double-checked singleton: avoids calling costly synchronized if unnecessary
+		if (null == sQuestionProxy) {
+			synchronized (QuestionsProxy.class) {
+				if (null == sQuestionProxy) {
+					sQuestionProxy = new QuestionsProxy(context);
+				}
+			}
+		}
+		return sQuestionProxy;
+	}
 	
 	/**
 	 * Singleton getter when no context is available.
 	 * 
 	 * @return The singleton instance of this object (may be null!)
 	 */
-
 	public static QuestionsProxy getInstance() {
-		// double-checked singleton: avoids calling costly synchronized if unnecessary
-		if (null == sQuestionProxy) {
-			synchronized (QuestionsProxy.class) {
-				if (null == sQuestionProxy) {
-					sQuestionProxy = new QuestionsProxy();
-				}
-			}
-		}
 		return sQuestionProxy;
 	}
 	
@@ -61,14 +73,26 @@ public final class QuestionsProxy implements ConnectivityProxy,
 	 * question
 	 * 
 	 * @param question
-	 *            The {@link QuizQuestion} to be verify
+	 *            The {@link QuizQuestion} to be verified
 	 */
-	
 	public void addInbox(QuizQuestion question) {
 		if (null != question && question.auditErrors() == 0) {
-			mQuizQuestionsInbox.add(question);
+			openContentProvider();
+			mContentProvider.addQuizQuestion(question);
+			closeContentProvider();
 		}
 	}
+	
+//	Utility function to send a batch of questions to the cache
+//	public void addInbox(Iterable<QuizQuestion> questionBatch) {
+//		openContentProvider();
+//		
+//		for (QuizQuestion quizQuestion : questionBatch) {
+//			mContentProvider.addQuizQuestion(quizQuestion);
+//		}
+//		
+//		closeContentProvider();
+//	}
 	
 	/**
 	 * Add a {@link QuizQuestion} to the Outbox only if it is a well formed
@@ -77,7 +101,6 @@ public final class QuestionsProxy implements ConnectivityProxy,
 	 * @param question
 	 *            The {@link QuizQuestion} to be verify
 	 */
-	
 	public void addOutbox(QuizQuestion question) {
 		if (null != question && question.auditErrors() == 0) {
 			mQuizQuestionsOutbox.add(question);
@@ -120,17 +143,13 @@ public final class QuestionsProxy implements ConnectivityProxy,
 		QuizQuestion fetchedQuestion = null;
 		
 		if (UserPreferences.getInstance().isConnected()) {
-			fetchedQuestion = mNetworkCommunication
-					.retrieveRandomQuizQuestion();
+			fetchedQuestion = mNetworkCommunication.retrieveRandomQuizQuestion();
 			if (null != fetchedQuestion) {
 				addInbox(fetchedQuestion);
-			} else {
-				// UserPreferences.getInstance()
-				// .setConnectivityState(ConnectivityState.OFFLINE);
-				fetchedQuestion = extractQuizQuestionFromInbox();
 			}
 		} else {
-			fetchedQuestion = extractQuizQuestionFromInbox();
+			throw new IllegalStateException("retrieveRandomQuizQuestion() " +
+					"was called while in offline state");
 		}
 		
 		return fetchedQuestion;
@@ -144,7 +163,6 @@ public final class QuestionsProxy implements ConnectivityProxy,
 	 * @return {@link JSONObject} containing the list of {@link QuizQuestion}s
 	 *         and the next field, if there's any.
 	 */
-	
 	public JSONObject retrieveQuizQuestions(QuizQuery query) {
 		if (UserPreferences.getInstance().getConnectivityState()
 				== ConnectivityState.OFFLINE) {
@@ -177,10 +195,6 @@ public final class QuestionsProxy implements ConnectivityProxy,
 	public int getOutboxSize() {
 		return mQuizQuestionsOutbox.size();
 	}
-	
-	public int getInboxSize() {
-		return mQuizQuestionsInbox.size();
-	}
 
 	/**
 	 * Notifies the proxy of a new connectivity state. The proxy will change to
@@ -189,7 +203,6 @@ public final class QuestionsProxy implements ConnectivityProxy,
 	 * 
 	 * @return The HTTP response code of the last proxy request.
 	 */
-	
 	@Override
 	public int notifyConnectivityChange(ConnectivityState newState) {
 		int proxyResponse = -1;
@@ -206,36 +219,81 @@ public final class QuestionsProxy implements ConnectivityProxy,
 
 		return proxyResponse;
 	}
+
+	////////////////////////////////////////////////////////////////////////////
+	//////////////// Methods to be used by ShowQuestionActivity ////////////////
+	////////////////////////////////////////////////////////////////////////////
+	/**
+	 * Opens a stream of questions by specifying a query.
+	 * @param query
+	 */
+	public void setStream(QuizQuery query) {
+		mAgent = QuestionAgentFactory.getAgent(mContext, query);
+	}
 	
 	/**
-	 * Extracts a {@link QuizQuestion} from the Inbox, returning null if empty
-	 * 
-	 * @return The extracted question, null if empty.
+	 * @return The next question in the stream defined by the query.
 	 */
-	
-	private QuizQuestion extractQuizQuestionFromInbox() {
-		QuizQuestion extractedQuestion = null;
-
-		if (mQuizQuestionsInbox.size() > 0) {
-			int questionIDCache = new Random().nextInt(mQuizQuestionsInbox
-					.size());
-			extractedQuestion = mQuizQuestionsInbox.get(questionIDCache);
-		} else {
-			Log.i("QuestionProxy", "Inbox empty!");
-			extractedQuestion = null;
+	// sorry for re-stating what the code does, but its a quite complicated part to me
+	public QuizQuestion getNextQuestion() {
+		if (null == mAgent || mAgent.isClosed()) {
+			throw new IllegalStateException("cannot get next question from " +
+					"closed stream (in QuestionProxy).");
 		}
-		return extractedQuestion;
+		boolean wasConnectedBeforeRetrieving =
+				UserPreferences.getInstance(mContext).isConnected();
+		
+		QuizQuestion fetchedQuestion = mAgent.getNextQuestion();
+		
+		// if something wrong happened and we were connected
+		if (null == fetchedQuestion && wasConnectedBeforeRetrieving) {
+			// then if we're still connected: wtf
+			if (UserPreferences.getInstance(mContext).isConnected()) {
+				Log.wtf(this.getClass().getName(),
+						"Server error and not in offline mode?!");
+				return null;
+			// otherwise
+			} else {
+				// re-load the agent
+				QuizQuery query = mAgent.getQuery();
+				mAgent = QuestionAgentFactory.getAgent(mContext, query);
+				// re-fetch the question with the new agent
+				return getNextQuestion();
+			}
+		}
+		
+		return fetchedQuestion;
+	}
+
+	/**
+	 * Closes the opened stream.
+	 */
+	public void closeStream() {
+		mAgent.close();
+		mAgent = null;
+	}
+	////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////
+	
+	private void openContentProvider() {
+		mContentProvider = new CacheContentProvider(mContext, true);
+	}
+	
+	private void closeContentProvider() {
+		mContentProvider.close();
+		mContentProvider = null;
 	}
 	
 	/**
 	 * Private constructor of the singleton.
 	 * 
 	 */
-	
-	private QuestionsProxy() {
+	private QuestionsProxy(Context ctx) {
 		mQuizQuestionsOutbox = new ArrayDeque<QuizQuestion>();
-		mQuizQuestionsInbox = new ArrayList<QuizQuestion>();
 		mNetworkCommunication = new NetworkCommunication();
+		mContext = ctx;
+		mAgent = null;
 	}
 
 	private synchronized int sendCachedQuestions() {

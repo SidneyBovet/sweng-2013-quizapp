@@ -14,12 +14,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import epfl.sweng.R;
-import epfl.sweng.backend.QuestionAgent;
 import epfl.sweng.backend.QuizQuery;
-import epfl.sweng.patterns.ConnectivityState;
-import epfl.sweng.patterns.QuestionAgentFactory;
 import epfl.sweng.patterns.QuestionsProxy;
-import epfl.sweng.preferences.UserPreferences;
 import epfl.sweng.quizquestions.QuizQuestion;
 import epfl.sweng.testing.TestCoordinator;
 import epfl.sweng.testing.TestCoordinator.TTChecks;
@@ -35,7 +31,6 @@ import epfl.sweng.testing.TestCoordinator.TTChecks;
 public class ShowQuestionsActivity extends Activity {
 	
 	private QuizQuestion mQuestion = null;
-	private QuestionAgent mAgent;
 	
 	@Override
 	protected void onStart() {
@@ -46,10 +41,9 @@ public class ShowQuestionsActivity extends Activity {
 		
 		QuizQuery quizQuery = startingIntent.getParcelableExtra("QuizQuery");
 		if (null == quizQuery) {
-			// XXX Sidney from est ok?
-			quizQuery = new QuizQuery("ShowQuestionActivity");
+			quizQuery = new QuizQuery();
 		}
-		mAgent = QuestionAgentFactory.getAgent(this, quizQuery);
+		QuestionsProxy.getInstance(this).setStream(quizQuery);
 		mQuestion = fetchQuestion();
 		setContentView(R.layout.activity_display_question);
 		setDisplayView();
@@ -58,7 +52,7 @@ public class ShowQuestionsActivity extends Activity {
 	@Override
 	protected void onStop() {
 		super.onStop();
-		mAgent.close();
+		QuestionsProxy.getInstance(this).closeStream();
 	}
 
 	/**
@@ -134,13 +128,10 @@ public class ShowQuestionsActivity extends Activity {
 
 	private final class AsyncFetchQuestion extends AsyncTask<Void, Void, QuizQuestion> {
 
-		private ConnectivityState mStateBeforeRetrieving;
-		
 		@Override
 		protected QuizQuestion doInBackground(Void... params) {
-			mStateBeforeRetrieving = UserPreferences.getInstance(ShowQuestionsActivity.this)
-					.getConnectivityState();
-			return mAgent.getNextQuestion();
+			return QuestionsProxy.getInstance(ShowQuestionsActivity.this).
+					getNextQuestion();
 		}
 
 		@Override
@@ -148,12 +139,7 @@ public class ShowQuestionsActivity extends Activity {
 			super.onPostExecute(question);
 			if (null == question) {
 				TextView textViewQuestion = (TextView) findViewById(R.id.displayQuestion);
-				if (QuestionsProxy.getInstance().getInboxSize() == 0
-						&& mStateBeforeRetrieving == ConnectivityState.OFFLINE) {
-					textViewQuestion.setText(R.string.error_cache_empty);
-				} else {
-					textViewQuestion.setText(R.string.error_fetching_question);
-				}
+				textViewQuestion.setText(R.string.error_fetching_question);
 				Toast.makeText(
 						ShowQuestionsActivity.this,
 						getResources().getString(
