@@ -30,7 +30,7 @@ public class CachedQuestionAgent extends QuestionAgent {
 	public QuizQuestion getNextQuestion() {
 		QuizQuestion retrievedQuestion = null;
 
-		int questionPK = mCursor.getInt(mCursor.getColumnIndex("questionId"));
+		int questionPK = mCursor.getInt(mCursor.getColumnIndex("id"));
 		retrievedQuestion = mContentProvider.getQuestionFromPK(questionPK);
 		
 		return retrievedQuestion;

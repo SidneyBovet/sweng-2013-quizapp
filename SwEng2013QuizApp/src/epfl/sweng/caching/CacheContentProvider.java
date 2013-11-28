@@ -71,7 +71,7 @@ public class CacheContentProvider {
 		    whereArgsArray.add(m.group());
 		}
 
-		String[] whereArgs = (String[]) whereArgsArray.toArray();
+		String[] whereArgs = (String[]) whereArgsArray.toArray(new String[whereArgsArray.size()]);
 		
 		// ...normalizes the expression...
 		whereClause.replaceAll("(?:\\ )*\\*(?:\\ )*", " AND ");
@@ -198,7 +198,7 @@ public class CacheContentProvider {
 			tagQuestionValues.put("tagId", tagId);
 			tagQuestionValues.put("questionId", questionId);
 			mDatabase.insert(SQLiteCacheHelper.TABLE_QUESTIONS_TAGS, null,
-					tagValues);
+					tagQuestionValues);
 		}
 	}
 
@@ -251,7 +251,7 @@ public class CacheContentProvider {
 				SQLiteCacheHelper.TABLE_QUESTIONS_TAGS,
 				new String[] {"tagId"}, "questionId = ?",
 				new String[] {String.valueOf(id)}, null, null,
-				"id ASC", null);
+				"questionId ASC", null);
 
 		ArrayList<Integer> tagsId = new ArrayList<Integer>();
 		if (tagsIdCursor.moveToFirst()) {

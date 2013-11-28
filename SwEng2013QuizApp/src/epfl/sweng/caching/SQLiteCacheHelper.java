@@ -53,7 +53,7 @@ public class SQLiteCacheHelper extends SQLiteOpenHelper {
 	private static final String CREATE_TABLE_QUESTIONS_TAGS = "CREATE TABLE "
 			+ TABLE_QUESTIONS_TAGS + "(" + KEY_QUESTION_ID + " integer, "
 			+ KEY_TAG_ID + " integer,FOREIGN KEY(" + KEY_QUESTION_ID
-			+ ") REFERENCES " + TABLE_QUESTIONS + "(" + KEY_QUESTION_ID
+			+ ") REFERENCES " + TABLE_QUESTIONS + "(" + KEY_ID
 			+ "),FOREIGN KEY(" + KEY_TAG_ID + ") REFERENCES " + TABLE_TAGS
 			+ "(" + KEY_ID + "));";
 
@@ -61,7 +61,7 @@ public class SQLiteCacheHelper extends SQLiteOpenHelper {
 			+ TABLE_ANSWERS + " (" + KEY_ID + " integer primary key," + ""
 			+ KEY_ANSWER + " varchar(300), " + KEY_QUESTION_ID
 			+ " integer, FOREIGN KEY(" + KEY_QUESTION_ID + ") REFERENCES "
-			+ TABLE_QUESTIONS + "(" + KEY_QUESTION_ID + ");";
+			+ TABLE_QUESTIONS + "(" + KEY_QUESTION_ID + "));";
 
 	/**
 	 * Default constructor. We reinstantiate it so that we can pass the DB name
@@ -76,6 +76,7 @@ public class SQLiteCacheHelper extends SQLiteOpenHelper {
 
 	@Override
 	public void onCreate(SQLiteDatabase database) {
+		
 		database.execSQL(CREATE_TABLE_QUESTIONS);
 		database.execSQL(CREATE_TABLE_TAGS);
 		database.execSQL(CREATE_TABLE_QUESTIONS_TAGS);
