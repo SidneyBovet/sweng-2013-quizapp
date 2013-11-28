@@ -1,5 +1,7 @@
 package epfl.sweng.agents;
 
+import java.util.Random;
+
 import android.content.Context;
 import android.database.Cursor;
 import epfl.sweng.backend.QuizQuery;
@@ -30,6 +32,8 @@ public class CachedQuestionAgent extends QuestionAgent {
 	public QuizQuestion getNextQuestion() {
 		QuizQuestion retrievedQuestion = null;
 
+		int position = new Random().nextInt(mCursor.getCount());
+		mCursor.moveToPosition(position);
 		int questionPK = mCursor.getInt(mCursor.getColumnIndex("id"));
 		retrievedQuestion = mContentProvider.getQuestionFromPK(questionPK);
 		
