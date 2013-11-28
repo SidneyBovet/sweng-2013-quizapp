@@ -47,6 +47,16 @@ public class CacheContentProvider {
 		}
 	}
 	
+	public int getQuestionCount() {
+		sanityDatabaseCheck();
+		Cursor rowCounter = mDatabase.query(
+				SQLiteCacheHelper.TABLE_QUESTIONS, new String[] {"id"},
+				null, null, null, null, null, null);
+		int count = rowCounter.getCount();
+		rowCounter.close();
+		return count;
+	}
+	
 	public Cursor getQuestions(QuizQuery query) {
 		sanityDatabaseCheck();
 		
@@ -153,6 +163,10 @@ public class CacheContentProvider {
 	public void close() {
 		sanityDatabaseCheck();
 		mDatabase.close();
+	}
+
+	public boolean isClosed() {
+		return !mDatabase.isOpen();
 	}
 
 	/*********************** Private methods ***********************/
@@ -300,9 +314,5 @@ public class CacheContentProvider {
 		answersCursor.close();
 
 		return answers;
-	}
-
-	public boolean isClosed() {
-		return !mDatabase.isOpen();
 	}
 }
