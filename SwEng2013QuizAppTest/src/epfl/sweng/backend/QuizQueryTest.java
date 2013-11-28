@@ -3,6 +3,9 @@ package epfl.sweng.backend;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.os.Bundle;
+import android.os.Parcel;
+
 import junit.framework.TestCase;
 
 public class QuizQueryTest extends TestCase {
@@ -72,5 +75,20 @@ public class QuizQueryTest extends TestCase {
 		assertTrue("json objects must have same \"from\"",
 				fromJsonQuery.equals(fromJsonFromMethod));
 
+	}
+	
+	public void testParcelable(){
+	    // Obtain a Parcel object and write the parcelable object to it:
+		mQuizQuery = new QuizQuery("adibou", "xxxxx");
+	    Parcel parcel = Parcel.obtain();
+	    mQuizQuery.writeToParcel(parcel, 0);
+
+	    // After you're done with writing, you need to reset the parcel for reading:
+	    parcel.setDataPosition(0);
+
+	    // Reconstruct object from parcel and asserts:
+	    QuizQuery createdFromParcel = QuizQuery.CREATOR.createFromParcel(parcel);
+	    assertEquals(mQuizQuery.getQuery(), createdFromParcel.getQuery());
+	    assertEquals(mQuizQuery.getFrom(), createdFromParcel.getFrom());
 	}
 }
