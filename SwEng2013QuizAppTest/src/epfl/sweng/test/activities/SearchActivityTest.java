@@ -62,7 +62,7 @@ public class SearchActivityTest extends GUITest<SearchActivity> {
 	public void testSearchButtonCorrectQueryMultipleTags() {
 		fillQueryAndTestButton("banana apple orange", true);
 	}
-	
+
 	public void testSearchButtonCorrectParentheses() {
 		fillQueryAndTestButton("(banana apple orange)", true);
 	}
@@ -78,33 +78,34 @@ public class SearchActivityTest extends GUITest<SearchActivity> {
 	public void testSearchButtonCorrectQueryMultipleTagsWithPlusOperator() {
 		fillQueryAndTestButton("banana (stawberry + raspberry) apple", true);
 	}
-	
+
 	public void testSearchButtonCorrectQueryStarOperator() {
 		fillQueryAndTestButton("strawberry * raspberry", true);
 	}
-	
+
 	public void testSearchButtonCorrectQueryTagWithStarOperator() {
 		fillQueryAndTestButton("(strawberry * raspberry) banana", true);
 	}
-	
+
 	public void testSearchButtonCorrectQueryMultipleTagsWithStarOperator() {
 		fillQueryAndTestButton("banana (strawberry * raspberry) apple", true);
 	}
-	
+
 	public void testSearchButtonCorrectQueryCombinationPlusAndStar() {
 		fillQueryAndTestButton("(strawberry + raspberry) * banana", true);
 	}
-	
+
 	public void testSearchButtonCorrectQueryCombinationStarAndPlus() {
 		fillQueryAndTestButton("(strawberry * raspberry) + banana", true);
 	}
-	
+
 	public void testSearchButtonCorrectQueryCombinationTagWithStarAndPlus() {
 		fillQueryAndTestButton("banana (strawberry * raspberry) + apple", true);
 	}
-	
+
 	public void testSearchButtonCorrectQueryCombinationMultipleTagsWithStarAndPlus() {
-		fillQueryAndTestButton("banana (strawberry * raspberry) + apple orange", true);
+		fillQueryAndTestButton(
+				"banana (strawberry * raspberry) + apple orange", true);
 	}
 
 	public void testSearchButtonIncorrectQueryOnlyWhitespaces() {
@@ -147,19 +148,49 @@ public class SearchActivityTest extends GUITest<SearchActivity> {
 								+ "],"
 								+ "\"next\": \"YG9HB8)H9*-BYb88fdsfsyb(08bfsdybfdsoi4\""
 								+ "}", "application/json");
-		
+
 		SwengHttpClientFactory.setInstance(mockClient);
 		fillQueryAndTestButton("(strawberry + raspberry) * banana", true);
 		getSolo().clickOnButton(context.getString(R.string.SearchQueryButton));
 		getActivityAndWaitFor(TTChecks.QUESTION_SHOWN);
-		
+
 		assertTrue(getSolo().searchText("How many calories are in a banana?"));
-		
+
 		getSolo().goBack();
 
-		getSolo().sleep(500);	// TODO can we wait for another TTChecks? Aymeric
-		
+		getSolo().sleep(500); // TODO can we wait for another TTChecks? Aymeric
+
 		testBasicElementsPresent();
+	}
+
+	public void testResetQuerySearchField() {
+		AdvancedMockHttpClient mockClient = new AdvancedMockHttpClient();
+		SwengHttpClientFactory.setInstance(mockClient);
+
+		mockClient.pushCannedResponse(".+", HttpStatus.SC_OK, "{"
+				+ "\"questions\": [" + "{" + "\"id\": \"7654765\","
+				+ "\"owner\": \"fruitninja\","
+				+ "\"question\": \"How many calories are in a banana?\","
+				+ "\"answers\": [ \"Just enough\", \"Too many\" ],"
+				+ "\"solutionIndex\": 0,"
+				+ "\"tags\": [ \"fruit\", \"banana\", \"trivia\" ]" + "},"
+				+ "]," + "\"next\": \"YG9HB8)H9*-BYb88fdsfsyb(08bfsdybfdsoi4\""
+				+ "}", "application/json");
+
+		String buttonDefaultText = context
+				.getString(R.string.SearchQueryButton);
+
+		String queryDefaultText = context
+				.getString(R.string.search_question_query);
+		EditText queryText = getSolo().getEditText(queryDefaultText);
+
+		getSolo().enterText(queryText, "lapin");
+		getSolo().clickOnButton(buttonDefaultText);
+		getSolo().sleep(3000);
+		getSolo().goBack();
+		getSolo().sleep(3000);
+		assertTrue("Query EditText must be empty.",
+				getSolo().searchText(queryDefaultText));
 	}
 
 	private void fillQueryAndTestButton(String query, boolean enabled) {
