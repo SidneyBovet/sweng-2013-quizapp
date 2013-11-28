@@ -6,14 +6,14 @@ import org.apache.http.HttpStatus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import epfl.sweng.agents.OnlineQuestionsAgent;
 import epfl.sweng.backend.QuizQuery;
 import epfl.sweng.quizquestions.QuizQuestion;
 import epfl.sweng.servercomm.INetworkCommunication;
-import epfl.sweng.showquestions.ShowQuestionsAgent;
 
 public class ShowQuestionsAgentTest extends TestCase {
 
-	private ShowQuestionsAgent mAgent;
+	private OnlineQuestionsAgent mAgent;
 	private INetworkCommunication mNetworkComm;
 
 	public void setUp() {
@@ -90,7 +90,7 @@ public class ShowQuestionsAgentTest extends TestCase {
 	}
 
 	public void testAgentNextQuery() {
-		mAgent = new ShowQuestionsAgent(new QuizQuery("randomquery", ""));
+		mAgent = new OnlineQuestionsAgent(new QuizQuery("randomquery", ""));
 		mAgent.setNetworkCommunication(mNetworkComm);
 	
 		QuizQuestion quizQuestion = mAgent.getNextQuestion();
@@ -103,7 +103,7 @@ public class ShowQuestionsAgentTest extends TestCase {
 	}
 
 	public void testAgentNullQuery() {
-		mAgent = new ShowQuestionsAgent(null);
+		mAgent = new OnlineQuestionsAgent(null);
 		mAgent.setNetworkCommunication(mNetworkComm);
 	
 		QuizQuestion quizQuestion = mAgent.getNextQuestion();
@@ -112,7 +112,7 @@ public class ShowQuestionsAgentTest extends TestCase {
 	}
 
 	public void testAgentQueryEmptyFrom() {
-		mAgent = new ShowQuestionsAgent(new QuizQuery("randomquery", ""));
+		mAgent = new OnlineQuestionsAgent(new QuizQuery("randomquery", ""));
 		mAgent.setNetworkCommunication(mNetworkComm);
 
 		QuizQuestion quizQuestion = mAgent.getNextQuestion();
@@ -121,7 +121,7 @@ public class ShowQuestionsAgentTest extends TestCase {
 	}
 
 	public void testAgentQueryNullFrom() {
-		mAgent = new ShowQuestionsAgent(new QuizQuery("randomquery", null));
+		mAgent = new OnlineQuestionsAgent(new QuizQuery("randomquery", null));
 		mAgent.setNetworkCommunication(mNetworkComm);
 
 		QuizQuestion quizQuestion = mAgent.getNextQuestion();
@@ -130,7 +130,7 @@ public class ShowQuestionsAgentTest extends TestCase {
 	}
 
 	public void testAgentWrongJSONStructure() {
-		mAgent = new ShowQuestionsAgent(new QuizQuery("randomquery", ""));
+		mAgent = new OnlineQuestionsAgent(new QuizQuery("randomquery", ""));
 		mNetworkComm = new INetworkCommunication() {
 			
 			@Override

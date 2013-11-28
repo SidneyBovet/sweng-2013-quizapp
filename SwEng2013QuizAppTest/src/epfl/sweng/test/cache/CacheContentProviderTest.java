@@ -42,6 +42,12 @@ public class CacheContentProviderTest extends GUITest<MainActivity> {
 		assertEquals("Statement should be the same.",
 				"lolilol", question.getStatement());*/
 	}
+	
+	public void testgetCountIsIncremented() {
+		int expectedCount = mProvider.getQuestionCount()+1;
+		mProvider.addQuizQuestion(createFakeQuestion("lolilol"));
+		assertEquals(expectedCount, mProvider.getQuestionCount());
+	}
 
 	private QuizQuestion createFakeQuestion(String questionStatement) {
 		List<String> answers = new ArrayList<String>();
