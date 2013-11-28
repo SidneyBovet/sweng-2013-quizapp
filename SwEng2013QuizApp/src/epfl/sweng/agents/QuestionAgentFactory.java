@@ -1,11 +1,8 @@
-package epfl.sweng.patterns;
+package epfl.sweng.agents;
 
 import android.content.Context;
-import epfl.sweng.backend.QuestionAgent;
 import epfl.sweng.backend.QuizQuery;
-import epfl.sweng.caching.CachedQuestionAgent;
 import epfl.sweng.preferences.UserPreferences;
-import epfl.sweng.showquestions.ShowQuestionsAgent;
 
 public class QuestionAgentFactory {
 	
@@ -24,7 +21,7 @@ public class QuestionAgentFactory {
 		if (!isFreeToCreate) {
 			return instanceSet;
 		} else if (UserPreferences.getInstance(ctx).isConnected()) {
-			return new ShowQuestionsAgent(query);
+			return new OnlineQuestionsAgent(query);
 		} else {
 			return new CachedQuestionAgent(query, ctx);
 		}

@@ -1,4 +1,4 @@
-package epfl.sweng.showquestions;
+package epfl.sweng.agents;
 
 import java.util.ArrayDeque;
 import java.util.List;
@@ -10,7 +10,6 @@ import org.json.JSONObject;
 
 import android.util.Log;
 import epfl.sweng.backend.Converter;
-import epfl.sweng.backend.QuestionAgent;
 import epfl.sweng.backend.QuizQuery;
 import epfl.sweng.patterns.QuestionsProxy;
 import epfl.sweng.quizquestions.QuizQuestion;
@@ -23,7 +22,7 @@ import epfl.sweng.servercomm.INetworkCommunication;
  * @author Melody Lucid
  *
  */
-public class ShowQuestionsAgent extends QuestionAgent {
+public class OnlineQuestionsAgent extends QuestionAgent {
 
 	private QuizQuery mQuizQuery;
 	private Queue<QuizQuestion> mQuestionQueue;
@@ -39,9 +38,10 @@ public class ShowQuestionsAgent extends QuestionAgent {
 	 * @param query The specific query.
 	 */
 	
-	public ShowQuestionsAgent(QuizQuery query) {
+	public OnlineQuestionsAgent(QuizQuery query) {
+		super(query);
 		if (null == query) {
-			this.mQuizQuery = new QuizQuery("Agent constructor");
+			this.mQuizQuery = new QuizQuery();
 		} else {
 			this.mQuizQuery = query;
 		}
@@ -74,8 +74,11 @@ public class ShowQuestionsAgent extends QuestionAgent {
 	}
 	
 	@Override
-	public void close() {
-		// TODO Cache the questions remaining in the queue.
+	public void close() { }
+
+	@Override
+	public boolean isClosed() {
+		return false;
 	}
 	
 	/**

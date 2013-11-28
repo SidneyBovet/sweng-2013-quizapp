@@ -1,9 +1,9 @@
-package epfl.sweng.caching;
+package epfl.sweng.agents;
 
 import android.content.Context;
 import android.database.Cursor;
-import epfl.sweng.backend.QuestionAgent;
 import epfl.sweng.backend.QuizQuery;
+import epfl.sweng.caching.CacheContentProvider;
 import epfl.sweng.quizquestions.QuizQuestion;
 
 /**
@@ -21,6 +21,7 @@ public class CachedQuestionAgent extends QuestionAgent {
 	 * @param context The {@link Context} of the activity using this object.
 	 */
 	public CachedQuestionAgent(QuizQuery query, Context context) {
+		super(query);
 		mContentProvider = new CacheContentProvider(context, false);
 		mCursor = mContentProvider.getQuestions(query);
 	}
@@ -39,6 +40,11 @@ public class CachedQuestionAgent extends QuestionAgent {
 	public void close() {
 		mCursor.close();
 		mContentProvider.close();
+	}
+
+	@Override
+	public boolean isClosed() {
+		return mCursor.isClosed() || mContentProvider.isClosed();
 	}
 
 }

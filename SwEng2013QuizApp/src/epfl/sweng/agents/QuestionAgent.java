@@ -1,5 +1,6 @@
-package epfl.sweng.backend;
+package epfl.sweng.agents;
 
+import epfl.sweng.backend.QuizQuery;
 import epfl.sweng.quizquestions.QuizQuestion;
 
 /**
@@ -9,8 +10,19 @@ import epfl.sweng.quizquestions.QuizQuestion;
  * @author Sidney
  */
 public abstract class QuestionAgent {
-	// XXX Sidney better to use an interface huh?
+	private QuizQuery mQuery;
+	
+	public QuestionAgent(QuizQuery query) {
+		mQuery = query;
+	}
+	
 	public abstract QuizQuestion getNextQuestion();
 
 	public abstract void close();
+
+	public QuizQuery getQuery() {
+		return mQuery;
+	}
+
+	public abstract boolean isClosed();
 }
