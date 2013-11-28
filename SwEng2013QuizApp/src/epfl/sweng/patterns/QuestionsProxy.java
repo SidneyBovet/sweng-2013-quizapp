@@ -316,4 +316,15 @@ public final class QuestionsProxy implements ConnectivityProxy,
 		}
 		return httpCodeResponse;
 	}
+
+	/**
+	 * Has to be refactored, <b>always returns -1!</b>
+	 * <br/>
+	 * Deprecated since moving to persistent caching
+	 * @return -1
+	 */
+	@Deprecated
+	public int getInboxSize() {
+		return -1;
+	}
 }
