@@ -41,7 +41,7 @@ public class ServerQueryTest extends TestCase {
                 "application/json");
 		
 		NetworkCommunication mNetworkCommunication = new NetworkCommunication();
-		QuizQuery query = new QuizQuery("fruit");
+		QuizQuery query = new QuizQuery("fruit", "no fromm string... whaaaat?");
 		JSONObject queryJSON;
 		try {
 			queryJSON = query.toJSON();
