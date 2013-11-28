@@ -105,7 +105,7 @@ public class CacheContentProvider {
 		// Step 3 : Store question content into variables.
 		Cursor questionCursor = mDatabase.query(
 				SQLiteCacheHelper.TABLE_QUESTIONS, new String[] {"questionId",
-					"statement, solutionIndex, owner"}, "id = ?",
+					"statement, solutionId, owner"}, "id = ?",
 				new String[] {String.valueOf(id)}, null, null, null, null);
 
 		questionCursor.moveToFirst();
@@ -114,7 +114,7 @@ public class CacheContentProvider {
 		String statement = questionCursor.getString(questionCursor
 				.getColumnIndex("statement"));
 		int solutionIndex = questionCursor.getInt(questionCursor
-				.getColumnIndex("solutionIndex"));
+				.getColumnIndex("solutionId"));
 		String owner = questionCursor.getString(questionCursor
 				.getColumnIndex("owner"));
 
@@ -134,11 +134,11 @@ public class CacheContentProvider {
 	public void addQuizQuestion(QuizQuestion question) {
 
 		sanityDatabaseCheck();
-		long questionId = insertSimplifiedQuestion(question.getId(),
+		long id = insertSimplifiedQuestion(question.getId(),
 				question.getOwner(), question.getStatement(),
 				question.getSolutionIndex());
-		insertQuestionAnswers(questionId, question.getAnswers());
-		insertQuestionTags(questionId, question.getTags());
+		insertQuestionAnswers(id, question.getAnswers());
+		insertQuestionTags(id, question.getTags());
 	}
 
 	/**
@@ -180,7 +180,7 @@ public class CacheContentProvider {
 		}
 	}
 
-	private void insertQuestionTags(long questionId, Set<String> tags) {
+	private void insertQuestionTags(long id, Set<String> tags) {
 		for (String tag : tags) {
 			/*
 			 * XXX Note that I did not want to expose fields of the DB in the
@@ -196,13 +196,13 @@ public class CacheContentProvider {
 			// Updates linking table between tags and questions tables.
 			ContentValues tagQuestionValues = new ContentValues(2);
 			tagQuestionValues.put("tagId", tagId);
-			tagQuestionValues.put("questionId", questionId);
+			tagQuestionValues.put("questionId", id);
 			mDatabase.insert(SQLiteCacheHelper.TABLE_QUESTIONS_TAGS, null,
 					tagQuestionValues);
 		}
 	}
 
-	private void insertQuestionAnswers(long questionId, List<String> answers) {
+	private void insertQuestionAnswers(long id, List<String> answers) {
 		for (String answer : answers) {
 			ContentValues values = new ContentValues(2);
 			/*
@@ -211,7 +211,7 @@ public class CacheContentProvider {
 			 * idea to change that later.
 			 */
 			values.put("content", answer);
-			values.put("questionId", questionId);
+			values.put("questionId", id);
 			mDatabase.insert(SQLiteCacheHelper.TABLE_ANSWERS, null, values);
 		}
 	}
@@ -235,13 +235,13 @@ public class CacheContentProvider {
 		 */
 		ContentValues values = new ContentValues(4);
 		values.put("questionId", questionId);
-		values.put("owner", questionId);
-		values.put("statement", questionId);
-		values.put("solutionId", questionId);
+		values.put("owner", owner);
+		values.put("statement", statement);
+		values.put("solutionId", solutionId);
 
-		mDatabase.insert(SQLiteCacheHelper.TABLE_QUESTIONS, null, values);
+		long id = mDatabase.insert(SQLiteCacheHelper.TABLE_QUESTIONS, null, values);
 
-		return questionId;
+		return id;
 	}
 
 	private Set<String> retrieveTags(int id) {
@@ -253,11 +253,11 @@ public class CacheContentProvider {
 				new String[] {String.valueOf(id)}, null, null,
 				"questionId ASC", null);
 
-		ArrayList<Integer> tagsId = new ArrayList<Integer>();
+		ArrayList<String> tagsId = new ArrayList<String>();
 		if (tagsIdCursor.moveToFirst()) {
 			do {
-				tagsId.add(tagsIdCursor.getInt(tagsIdCursor
-						.getColumnIndex("tagId")));
+				tagsId.add(String.valueOf(tagsIdCursor.getInt(tagsIdCursor
+						.getColumnIndex("tagId"))));
 			} while (tagsIdCursor.moveToNext());
 		}
 
@@ -265,7 +265,7 @@ public class CacheContentProvider {
 		String query = "SELECT name FROM " + SQLiteCacheHelper.TABLE_TAGS
 				+ " WHERE id IN (" + makePlaceholders(tagsId.size()) + ");";
 		Cursor tagsCursor = mDatabase.rawQuery(query,
-				(String[]) tagsId.toArray());
+				(String[]) tagsId.toArray(new String[tagsId.size()]));
 
 		HashSet<String> tags = new HashSet<String>();
 		if (tagsCursor.moveToFirst()) {
