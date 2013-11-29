@@ -24,44 +24,58 @@ public class SQLiteCacheHelper extends SQLiteOpenHelper {
 	public static final String TABLE_ANSWERS = "answers";
 	public static final String TABLE_QUESTIONS_TAGS = "questionsTags";
 
-	// Id's + Foreign Keys
-	private static final String KEY_ID = "id";
-	private static final String KEY_QUESTION_ID = "questionId";
-	private static final String KEY_TAG_ID = "tagId";
-
 	// QUESTIONS Table
-	private static final String KEY_STATEMENT = "statement";
-	private static final String KEY_SOLUTION_ID = "solutionId";
-	private static final String KEY_OWNER = "owner";
+	public static final String FIELD_QUESTIONS_PK = "id";
+	public static final String FIELD_QUESTIONS_SWENG_ID = "swengId";
+	public static final String FIELD_QUESTIONS_STATEMENT = "statement";
+	public static final String FIELD_QUESTIONS_SOLUTION_INDEX = "solutionIndex";
+	public static final String FIELD_QUESTIONS_OWNER = "owner";
+	public static final String FIELD_QUESTIONS_IS_QUEUED = "isQueued";
+	public static final int QUESTIONS_NB_FIELDS = 6;
 
-	// TAGS Table
-	private static final String KEY_TAG = "name";
+	// QUESTIONS Tags
+	public static final String FIELD_TAGS_PK = "id";
+	public static final String FIELD_TAGS_NAME = "name";
+	public static final int TAGS_NB_FIELDS = 2;
 
-	// ANSWERS Table
-	private static final String KEY_ANSWER = "content";
+	// QUESTIONS Answers
+	public static final String FIELD_ANSWERS_PK = "id";
+	public static final String FIELD_ANSWERS_ANSWER_VALUE = "answerValue";
+	public static final String FIELD_ANSWERS_QUESTION_FK = "questionId";
+	public static final int ANSWERS_NB_FIELDS = 3;
+
+	// QUESTIONS questionTags
+	public static final String FIELD_QUESTIONS_TAGS_TAG_FK = "tagId";
+	public static final String FIELD_QUESTIONS_TAGS_QUESTION_FK = "questionId";
+	public static final int QUESTIONS_TAGS_NB_FIELDS = 2;
 
 	// Tables creation
 	private static final String CREATE_TABLE_QUESTIONS = "CREATE TABLE "
-			+ TABLE_QUESTIONS + " (" + KEY_ID + " integer primary key, "
-			+ KEY_QUESTION_ID + " integer," + KEY_STATEMENT + " varchar(500), "
-			+ KEY_SOLUTION_ID + " integer, " + KEY_OWNER + " varchar(500));";
+			+ TABLE_QUESTIONS + " (" + FIELD_QUESTIONS_PK
+			+ " integer primary key, " + FIELD_QUESTIONS_SWENG_ID + " integer,"
+			+ FIELD_QUESTIONS_STATEMENT + " varchar(500), "
+			+ FIELD_QUESTIONS_SOLUTION_INDEX + " integer, "
+			+ FIELD_QUESTIONS_OWNER + " varchar(500), "
+			+ FIELD_QUESTIONS_IS_QUEUED + " integer(1));";
 
 	private static final String CREATE_TABLE_TAGS = "CREATE TABLE "
-			+ TABLE_TAGS + " (" + KEY_ID + " integer primary key,  " + KEY_TAG
-			+ " varchar(500));";
+			+ TABLE_TAGS + " (" + FIELD_TAGS_PK + " integer primary key,  "
+			+ FIELD_TAGS_NAME + " varchar(500));";
 
 	private static final String CREATE_TABLE_QUESTIONS_TAGS = "CREATE TABLE "
-			+ TABLE_QUESTIONS_TAGS + "(" + KEY_QUESTION_ID + " integer, "
-			+ KEY_TAG_ID + " integer,FOREIGN KEY(" + KEY_QUESTION_ID
-			+ ") REFERENCES " + TABLE_QUESTIONS + "(" + KEY_ID
-			+ "),FOREIGN KEY(" + KEY_TAG_ID + ") REFERENCES " + TABLE_TAGS
-			+ "(" + KEY_ID + "));";
+			+ TABLE_QUESTIONS_TAGS + "(" + FIELD_QUESTIONS_TAGS_QUESTION_FK
+			+ " integer, " + FIELD_QUESTIONS_TAGS_TAG_FK
+			+ " integer, FOREIGN KEY(" + FIELD_QUESTIONS_TAGS_QUESTION_FK
+			+ ") REFERENCES " + TABLE_QUESTIONS + "(" + FIELD_QUESTIONS_PK
+			+ "),FOREIGN KEY(" + FIELD_QUESTIONS_TAGS_TAG_FK + ") REFERENCES "
+			+ TABLE_TAGS + "(" + FIELD_TAGS_PK + "));";
 
 	private static final String CREATE_TABLE_ANSWERS = "CREATE TABLE "
-			+ TABLE_ANSWERS + " (" + KEY_ID + " integer primary key," + ""
-			+ KEY_ANSWER + " varchar(300), " + KEY_QUESTION_ID
-			+ " integer, FOREIGN KEY(" + KEY_QUESTION_ID + ") REFERENCES "
-			+ TABLE_QUESTIONS + "(" + KEY_QUESTION_ID + "));";
+			+ TABLE_ANSWERS + " (" + FIELD_ANSWERS_PK + " integer primary key,"
+			+ FIELD_ANSWERS_ANSWER_VALUE + " varchar(300), "
+			+ FIELD_ANSWERS_QUESTION_FK + " integer, FOREIGN KEY("
+			+ FIELD_ANSWERS_QUESTION_FK + ") REFERENCES " + TABLE_QUESTIONS
+			+ "(" + FIELD_QUESTIONS_PK + "));";
 
 	/**
 	 * Default constructor. We reinstantiate it so that we can pass the DB name
@@ -76,7 +90,7 @@ public class SQLiteCacheHelper extends SQLiteOpenHelper {
 
 	@Override
 	public void onCreate(SQLiteDatabase database) {
-		
+
 		database.execSQL(CREATE_TABLE_QUESTIONS);
 		database.execSQL(CREATE_TABLE_TAGS);
 		database.execSQL(CREATE_TABLE_QUESTIONS_TAGS);
