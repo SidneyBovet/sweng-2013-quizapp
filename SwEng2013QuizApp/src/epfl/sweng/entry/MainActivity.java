@@ -146,6 +146,7 @@ public class MainActivity extends Activity {
 	        	Log.v(this.getClass().getName(), "No settings options for now.");
 	            return true;
 	        case R.id.erase_database:
+	        	Log.v(this.getClass().getName(), "Wiping whole database!");
 	        	CacheContentProvider prov = new CacheContentProvider(this, true);
 	        	prov.eraseDatabase();
 	        	prov.close();

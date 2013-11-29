@@ -192,8 +192,14 @@ public class CacheContentProvider {
 		if (mDatabase.isReadOnly()) {
 			throw new IllegalStateException("Cannot wipe read-only database.");
 		} else {
-			// TODO clean correctly
-			mDatabase.delete(SQLiteCacheHelper.TABLE_QUESTIONS, "", null);
+			mDatabase.execSQL("DROP TABLE IF EXISTS " +
+					SQLiteCacheHelper.TABLE_ANSWERS);
+			mDatabase.execSQL("DROP TABLE IF EXISTS " +
+					SQLiteCacheHelper.TABLE_QUESTIONS_TAGS);
+			mDatabase.execSQL("DROP TABLE IF EXISTS " +
+					SQLiteCacheHelper.TABLE_TAGS);
+			mDatabase.execSQL("DROP TABLE IF EXISTS " +
+					SQLiteCacheHelper.TABLE_QUESTIONS);
 		}
 	}
 
