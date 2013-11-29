@@ -25,6 +25,7 @@ import epfl.sweng.quizquestions.QuizQuestion;
  */
 public class CacheContentProvider {
 
+	private static final int QUESTIONS_NB_FIELDS_FETCHED = 4;
 	private SQLiteDatabase mDatabase = null;
 
 	/**
@@ -67,31 +68,61 @@ public class CacheContentProvider {
 
 		// We select all question ids...
 		String[] selection = new String[] {SQLiteCacheHelper.FIELD_QUESTIONS_PK};
-		String[] whereArgs = extractParameters(queryStr);
-		String whereClause = filterQuery(queryStr);
+		String whereClause = null;
+		String[] whereArgs = null;
 		String orderBy = null;
 
 		if (query.isRandom()) {
-			whereClause = null;
-			whereArgs = null;
 			orderBy = "RANDOM()";
+			Cursor idCursor = mDatabase.query(
+					SQLiteCacheHelper.TABLE_QUESTIONS, selection, whereClause,
+					whereArgs, null, null, orderBy, null);
+			idCursor.moveToFirst();
+			return idCursor;
+		} else {
+			whereArgs = extractParameters(queryStr);
+			whereClause = filterQuery(queryStr);
+
+			// Gets all the tags id that matches the query.
+			Cursor tagsCursor = mDatabase.query(SQLiteCacheHelper.TABLE_TAGS,
+					new String[] {SQLiteCacheHelper.FIELD_TAGS_PK},
+					whereClause, whereArgs, null, null, orderBy, null);
+
+			if (tagsCursor.moveToFirst()) {
+				List<String> tagsId = new ArrayList<String>();
+				// Get all the tagsId from the cursor
+				do {
+					tagsId.add(String.valueOf(tagsCursor.getInt(tagsCursor
+							.getColumnIndex(SQLiteCacheHelper.FIELD_TAGS_PK))));
+				} while (tagsCursor.moveToNext());
+
+				// Get all the questions that have tags fetched above.
+				String questionsIdQuery = "SELECT "
+						+ SQLiteCacheHelper.FIELD_QUESTIONS_TAGS_QUESTION_FK
+						+ " FROM " + SQLiteCacheHelper.TABLE_QUESTIONS_TAGS
+						+ " WHERE "
+						+ SQLiteCacheHelper.FIELD_QUESTIONS_TAGS_TAG_FK
+						+ " IN (" + makePlaceholders(tagsCursor.getCount())
+						+ ");";
+
+				Cursor questionsIdCursor = mDatabase.rawQuery(questionsIdQuery,
+						(String[]) tagsId.toArray(new String[tagsId.size()]));
+
+				questionsIdCursor.moveToFirst();
+
+				return questionsIdCursor;
+			}
+
+			// No tags match the query.
+			return null;
 		}
-
-		// TODO Query the Tags table first to get all the ids that matches the
-		// query,
-		// then get all the questionsId's related to it (contained in the
-		// linking table).
-
-		Cursor idCursor = mDatabase.query(SQLiteCacheHelper.TABLE_QUESTIONS,
-				selection, whereClause, whereArgs, null, null, orderBy, null);
-
-		idCursor.moveToFirst();
-		return idCursor;
 	}
 
 	/**
-	 * Normalizes the query: - We change the '*' by a logical AND. - We change
-	 * the '+' by a logical OR. - We change the ' ' by a logical AND.
+	 * Normalizes the query: 
+	 * - We change the '*' by a logical AND. 
+	 * - We change the '+' by a logical OR. 
+	 * - We change the ' ' by a logical AND.
 	 * 
 	 * @param query
 	 *            Query to be changed.
@@ -103,9 +134,7 @@ public class CacheContentProvider {
 		query.replaceAll("\\ \\+\\ ", " OR ");
 		query.replaceAll("\\ ", "AND");
 
-		// TODO CHANGE THAT! A QUERY SHOULD BE MADE TO THE
-		// TAGS TABLE (or the linking table).
-		query.replaceAll("\\w", "tags = ?");
+		query.replaceAll("\\w", SQLiteCacheHelper.FIELD_TAGS_NAME + "=?");
 
 		return query;
 	}
@@ -149,33 +178,38 @@ public class CacheContentProvider {
 				SQLiteCacheHelper.FIELD_QUESTIONS_PK + " = ?",
 				new String[] {String.valueOf(id)}, null, null, null, null);
 
-		questionCursor.moveToFirst();
+		if (questionCursor.moveToFirst()) {
+			int questionId = questionCursor
+					.getInt(questionCursor
+							.getColumnIndex(SQLiteCacheHelper.FIELD_QUESTIONS_SWENG_ID));
+			String statement = questionCursor
+					.getString(questionCursor
+							.getColumnIndex(SQLiteCacheHelper.FIELD_QUESTIONS_STATEMENT));
+			int solutionIndex = questionCursor
+					.getInt(questionCursor
+							.getColumnIndex(SQLiteCacheHelper.FIELD_QUESTIONS_SOLUTION_INDEX));
+			String owner = questionCursor.getString(questionCursor
+					.getColumnIndex(SQLiteCacheHelper.FIELD_QUESTIONS_OWNER));
 
-		int questionId = questionCursor.getInt(questionCursor
-				.getColumnIndex(SQLiteCacheHelper.FIELD_QUESTIONS_SWENG_ID));
-		String statement = questionCursor.getString(questionCursor
-				.getColumnIndex(SQLiteCacheHelper.FIELD_QUESTIONS_STATEMENT));
-		int solutionIndex = questionCursor
-				.getInt(questionCursor
-						.getColumnIndex(SQLiteCacheHelper.FIELD_QUESTIONS_SOLUTION_INDEX));
-		String owner = questionCursor.getString(questionCursor
-				.getColumnIndex(SQLiteCacheHelper.FIELD_QUESTIONS_OWNER));
+			questionCursor.close();
 
-		questionCursor.close();
+			// Step 4 : Create the new question and return it
+			return new QuizQuestion(statement, answers, solutionIndex, tags,
+					questionId, owner);
+		}
 
-		// Step 4 : Create the new question and return it
-		return new QuizQuestion(statement, answers, solutionIndex, tags,
-				questionId, owner);
+		return null;
 	}
 
 	/**
 	 * 
-	 * @param question Question to be stored in cache (not in outbox).
+	 * @param question
+	 *            Question to be stored in cache (not in outbox).
 	 */
 	public void addQuizQuestion(QuizQuestion question) {
 		addQuizQuestion(question, false);
 	}
-	
+
 	/**
 	 * Adds a {@link QuizQuestion}to the persistent cache.
 	 * 
@@ -190,20 +224,58 @@ public class CacheContentProvider {
 		insertQuestionAnswers(id, question.getAnswers());
 		insertQuestionTags(id, question.getTags());
 	}
-	
+
+	/**
+	 * Simulates a FIFO Outbox.
+	 * 
+	 * @return the first question in the outbox.
+	 */
 	public QuizQuestion getFirstQuestionFromOutbox() {
-		
-		// TODO IMPLEMENT IT.
-		
-		return null;
+
+		int id = -1;
+
+		// Get the first question in the outbox stack.
+		Cursor questionOutboxIdCursor = mDatabase.query(
+				SQLiteCacheHelper.TABLE_QUESTIONS,
+				new String[] {SQLiteCacheHelper.FIELD_QUESTIONS_PK},
+				SQLiteCacheHelper.FIELD_QUESTIONS_IS_QUEUED + "=1", null, null,
+				null, SQLiteCacheHelper.FIELD_QUESTIONS_PK + " ASC", "1");
+
+		if (questionOutboxIdCursor.moveToFirst()) {
+			id = questionOutboxIdCursor.getInt(questionOutboxIdCursor
+					.getColumnIndex(SQLiteCacheHelper.FIELD_QUESTIONS_PK));
+		}
+
+		return getQuestionFromPK(id);
 	}
-	
+
 	/**
 	 * 
-	 * @param question question to be taken out of the outbox.
+	 * @param question
+	 *            question to be taken out of the outbox.
 	 */
 	public void takeQuestionOutOfOutbox(QuizQuestion question) {
-		// TODO IMPLEMENT IT.
+
+		// Get the id of the first question in the outbox stack.
+		Cursor questionIdCursor = mDatabase.query(
+				SQLiteCacheHelper.TABLE_QUESTIONS,
+				new String[] {SQLiteCacheHelper.FIELD_QUESTIONS_PK},
+				SQLiteCacheHelper.FIELD_QUESTIONS_SWENG_ID + "=?",
+				new String[] {String.valueOf(question.getId())}, null, null,
+				null, "1");
+
+		int id = -1;
+		if (questionIdCursor.moveToFirst()) {
+			id = questionIdCursor.getInt(questionIdCursor
+					.getColumnIndex(SQLiteCacheHelper.FIELD_QUESTIONS_PK));
+
+			// Takes the question out of the outbox.
+			ContentValues isQueuedValue = new ContentValues(1);
+			isQueuedValue.put(SQLiteCacheHelper.FIELD_QUESTIONS_IS_QUEUED, 0);
+			mDatabase.update(SQLiteCacheHelper.TABLE_QUESTIONS, isQueuedValue,
+					SQLiteCacheHelper.FIELD_QUESTIONS_PK + "=?",
+					new String[] {String.valueOf(id)});
+		}
 	}
 
 	/**
@@ -292,7 +364,7 @@ public class CacheContentProvider {
 	 */
 	private long insertSimplifiedQuestion(long questionId, String owner,
 			String statement, int solutionIndex) {
-		ContentValues values = new ContentValues(4);
+		ContentValues values = new ContentValues(QUESTIONS_NB_FIELDS_FETCHED);
 		values.put(SQLiteCacheHelper.FIELD_QUESTIONS_SWENG_ID, questionId);
 		values.put(SQLiteCacheHelper.FIELD_QUESTIONS_OWNER, owner);
 		values.put(SQLiteCacheHelper.FIELD_QUESTIONS_STATEMENT, statement);
@@ -326,7 +398,8 @@ public class CacheContentProvider {
 
 		// Get all the tags related to questionId given in parameter.
 		String query = "SELECT " + SQLiteCacheHelper.FIELD_TAGS_NAME + " FROM "
-				+ SQLiteCacheHelper.TABLE_TAGS + " WHERE id IN ("
+				+ SQLiteCacheHelper.TABLE_TAGS + " WHERE "
+				+ SQLiteCacheHelper.FIELD_TAGS_PK + " IN ("
 				+ makePlaceholders(tagsId.size()) + ");";
 		Cursor tagsCursor = mDatabase.rawQuery(query,
 				(String[]) tagsId.toArray(new String[tagsId.size()]));
