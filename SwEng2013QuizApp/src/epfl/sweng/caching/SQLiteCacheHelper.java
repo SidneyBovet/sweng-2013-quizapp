@@ -46,7 +46,7 @@ public class SQLiteCacheHelper extends SQLiteOpenHelper {
 	public static final String FIELD_QUESTIONS_TAGS_QUESTION_FK = "questionId";
 
 	// Tables creation
-	private static final String CREATE_TABLE_QUESTIONS = "CREATE TABLE "
+	public static final String CREATE_TABLE_QUESTIONS = "CREATE TABLE "
 			+ TABLE_QUESTIONS + " (" + FIELD_QUESTIONS_PK
 			+ " integer primary key, " + FIELD_QUESTIONS_SWENG_ID + " integer,"
 			+ FIELD_QUESTIONS_STATEMENT + " varchar(500), "
@@ -54,11 +54,11 @@ public class SQLiteCacheHelper extends SQLiteOpenHelper {
 			+ FIELD_QUESTIONS_OWNER + " varchar(500), "
 			+ FIELD_QUESTIONS_IS_QUEUED + " integer(1));";
 
-	private static final String CREATE_TABLE_TAGS = "CREATE TABLE "
+	public static final String CREATE_TABLE_TAGS = "CREATE TABLE "
 			+ TABLE_TAGS + " (" + FIELD_TAGS_PK + " integer primary key,  "
 			+ FIELD_TAGS_NAME + " varchar(500));";
 
-	private static final String CREATE_TABLE_QUESTIONS_TAGS = "CREATE TABLE "
+	public static final String CREATE_TABLE_QUESTIONS_TAGS = "CREATE TABLE "
 			+ TABLE_QUESTIONS_TAGS + "(" + FIELD_QUESTIONS_TAGS_QUESTION_FK
 			+ " integer, " + FIELD_QUESTIONS_TAGS_TAG_FK
 			+ " integer, FOREIGN KEY(" + FIELD_QUESTIONS_TAGS_QUESTION_FK
@@ -66,7 +66,7 @@ public class SQLiteCacheHelper extends SQLiteOpenHelper {
 			+ "),FOREIGN KEY(" + FIELD_QUESTIONS_TAGS_TAG_FK + ") REFERENCES "
 			+ TABLE_TAGS + "(" + FIELD_TAGS_PK + "));";
 
-	private static final String CREATE_TABLE_ANSWERS = "CREATE TABLE "
+	public static final String CREATE_TABLE_ANSWERS = "CREATE TABLE "
 			+ TABLE_ANSWERS + " (" + FIELD_ANSWERS_PK + " integer primary key,"
 			+ FIELD_ANSWERS_ANSWER_VALUE + " varchar(300), "
 			+ FIELD_ANSWERS_QUESTION_FK + " integer, FOREIGN KEY("
