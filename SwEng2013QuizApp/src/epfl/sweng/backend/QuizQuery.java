@@ -5,10 +5,12 @@ import org.antlr.runtime.CommonTokenStream;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import epfl.sweng.generated.QueryLexer;
+import epfl.sweng.generated.QueryParser;
+
 import android.os.Parcel;
 import android.os.Parcelable;
-import epfl.sweng.interpreter.QueryLexer;
-import epfl.sweng.interpreter.QueryParser;
+
 
 /**
  * Used to filter data from the SwEng server.
