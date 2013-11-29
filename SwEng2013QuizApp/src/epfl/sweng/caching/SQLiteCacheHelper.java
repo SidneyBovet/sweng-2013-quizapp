@@ -31,23 +31,19 @@ public class SQLiteCacheHelper extends SQLiteOpenHelper {
 	public static final String FIELD_QUESTIONS_SOLUTION_INDEX = "solutionIndex";
 	public static final String FIELD_QUESTIONS_OWNER = "owner";
 	public static final String FIELD_QUESTIONS_IS_QUEUED = "isQueued";
-	public static final int QUESTIONS_NB_FIELDS = 6;
 
 	// QUESTIONS Tags
 	public static final String FIELD_TAGS_PK = "id";
 	public static final String FIELD_TAGS_NAME = "name";
-	public static final int TAGS_NB_FIELDS = 2;
 
 	// QUESTIONS Answers
 	public static final String FIELD_ANSWERS_PK = "id";
 	public static final String FIELD_ANSWERS_ANSWER_VALUE = "answerValue";
 	public static final String FIELD_ANSWERS_QUESTION_FK = "questionId";
-	public static final int ANSWERS_NB_FIELDS = 3;
 
 	// QUESTIONS questionTags
 	public static final String FIELD_QUESTIONS_TAGS_TAG_FK = "tagId";
 	public static final String FIELD_QUESTIONS_TAGS_QUESTION_FK = "questionId";
-	public static final int QUESTIONS_TAGS_NB_FIELDS = 2;
 
 	// Tables creation
 	private static final String CREATE_TABLE_QUESTIONS = "CREATE TABLE "

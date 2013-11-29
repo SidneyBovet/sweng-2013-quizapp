@@ -10,6 +10,7 @@ import java.util.regex.Pattern;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.util.Log;
@@ -46,41 +47,28 @@ public class CacheContentProvider {
 			Log.e("DB", "Could not open the DB.");
 		}
 	}
-	
-	public int getQuestionCount() {
+
+	/**
+	 * 
+	 * @return the number of questions currently in the outbox cache.
+	 */
+	public int getOutboxCount() {
 		sanityDatabaseCheck();
-		Cursor rowCounter = mDatabase.query(
-				SQLiteCacheHelper.TABLE_QUESTIONS, new String[] {"id"},
-				null, null, null, null, null, null);
-		int count = rowCounter.getCount();
-		rowCounter.close();
-		return count;
+
+		return (int) DatabaseUtils.queryNumEntries(mDatabase,
+				SQLiteCacheHelper.TABLE_QUESTIONS,
+				SQLiteCacheHelper.FIELD_QUESTIONS_IS_QUEUED + "=1");
 	}
-	
+
 	public Cursor getQuestions(QuizQuery query) {
 		sanityDatabaseCheck();
-		
-		String[] selection = new String[] {"id"};
-		String whereClause = query.toString();
-		ArrayList<String> whereArgsArray = new ArrayList<String>();
-		
-		// Finds all alphanumeric tokens...
-		Pattern pattern = Pattern.compile("\\w");
-		Matcher m = pattern.matcher(whereClause);
-		while (m.find()) {
-		    whereArgsArray.add(m.group());
-		}
 
-		String[] whereArgs = (String[]) whereArgsArray.toArray(new String[whereArgsArray.size()]);
-		
-		// ...normalizes the expression...
-		whereClause.replaceAll("(?:\\ )*\\*(?:\\ )*", " AND ");
-		whereClause.replaceAll("\\ \\+\\ ", " OR ");
-		whereClause.replaceAll("\\ ", "AND");
-		
-		// ... and replaces them with '?'
-		whereClause.replaceAll("\\w", "tags = ?");
+		String queryStr = query.toString();
 
+		// We select all question ids...
+		String[] selection = new String[] {SQLiteCacheHelper.FIELD_QUESTIONS_PK};
+		String[] whereArgs = extractParameters(queryStr);
+		String whereClause = filterQuery(queryStr);
 		String orderBy = null;
 
 		if (query.isRandom()) {
@@ -89,11 +77,60 @@ public class CacheContentProvider {
 			orderBy = "RANDOM()";
 		}
 
+		// TODO Query the Tags table first to get all the ids that matches the
+		// query,
+		// then get all the questionsId's related to it (contained in the
+		// linking table).
+
 		Cursor idCursor = mDatabase.query(SQLiteCacheHelper.TABLE_QUESTIONS,
 				selection, whereClause, whereArgs, null, null, orderBy, null);
 
 		idCursor.moveToFirst();
 		return idCursor;
+	}
+
+	/**
+	 * Normalizes the query: - We change the '*' by a logical AND. - We change
+	 * the '+' by a logical OR. - We change the ' ' by a logical AND.
+	 * 
+	 * @param query
+	 *            Query to be changed.
+	 * @return the new SQL-compatible query.
+	 */
+	private String filterQuery(String query) {
+
+		query.replaceAll("(?:\\ )*\\*(?:\\ )*", " AND ");
+		query.replaceAll("\\ \\+\\ ", " OR ");
+		query.replaceAll("\\ ", "AND");
+
+		// TODO CHANGE THAT! A QUERY SHOULD BE MADE TO THE
+		// TAGS TABLE (or the linking table).
+		query.replaceAll("\\w", "tags = ?");
+
+		return query;
+	}
+
+	/**
+	 * Will get all the words contained in the query given in parameters.
+	 * 
+	 * @param query
+	 *            Query from where we need to extract the data.
+	 * @return All the words contained in the query.
+	 */
+	private String[] extractParameters(String query) {
+
+		List<String> whereArgsArray = new ArrayList<String>();
+
+		// Finds all alphanumeric tokens in the query
+		Pattern pattern = Pattern.compile("\\w");
+		Matcher m = pattern.matcher(query);
+		while (m.find()) {
+			whereArgsArray.add(m.group());
+		}
+
+		// We convert the List to an array of String.
+		return (String[]) whereArgsArray.toArray(new String[whereArgsArray
+				.size()]);
 	}
 
 	public QuizQuestion getQuestionFromPK(int id) {
@@ -104,19 +141,25 @@ public class CacheContentProvider {
 
 		// Step 3 : Store question content into variables.
 		Cursor questionCursor = mDatabase.query(
-				SQLiteCacheHelper.TABLE_QUESTIONS, new String[] {"questionId",
-					"statement, solutionId, owner"}, "id = ?",
+				SQLiteCacheHelper.TABLE_QUESTIONS, new String[] {
+					SQLiteCacheHelper.FIELD_QUESTIONS_SWENG_ID,
+					SQLiteCacheHelper.FIELD_QUESTIONS_STATEMENT,
+					SQLiteCacheHelper.FIELD_QUESTIONS_SOLUTION_INDEX,
+					SQLiteCacheHelper.FIELD_QUESTIONS_OWNER },
+				SQLiteCacheHelper.FIELD_QUESTIONS_PK + " = ?",
 				new String[] {String.valueOf(id)}, null, null, null, null);
 
 		questionCursor.moveToFirst();
+
 		int questionId = questionCursor.getInt(questionCursor
-				.getColumnIndex("questionId"));
+				.getColumnIndex(SQLiteCacheHelper.FIELD_QUESTIONS_SWENG_ID));
 		String statement = questionCursor.getString(questionCursor
-				.getColumnIndex("statement"));
-		int solutionIndex = questionCursor.getInt(questionCursor
-				.getColumnIndex("solutionId"));
+				.getColumnIndex(SQLiteCacheHelper.FIELD_QUESTIONS_STATEMENT));
+		int solutionIndex = questionCursor
+				.getInt(questionCursor
+						.getColumnIndex(SQLiteCacheHelper.FIELD_QUESTIONS_SOLUTION_INDEX));
 		String owner = questionCursor.getString(questionCursor
-				.getColumnIndex("owner"));
+				.getColumnIndex(SQLiteCacheHelper.FIELD_QUESTIONS_OWNER));
 
 		questionCursor.close();
 
@@ -179,21 +222,18 @@ public class CacheContentProvider {
 
 	private void insertQuestionTags(long id, Set<String> tags) {
 		for (String tag : tags) {
-			/*
-			 * XXX Note that I did not want to expose fields of the DB in the
-			 * SQLiteCacheHelper so I hardcoded them here. It might be a good
-			 * idea to change that later.
-			 */
-			// Updates tags table.
+
 			ContentValues tagValues = new ContentValues(1);
-			tagValues.put("name", tag);
+			tagValues.put(SQLiteCacheHelper.FIELD_TAGS_NAME, tag);
 			long tagId = mDatabase.insert(SQLiteCacheHelper.TABLE_TAGS, null,
 					tagValues);
 
 			// Updates linking table between tags and questions tables.
 			ContentValues tagQuestionValues = new ContentValues(2);
-			tagQuestionValues.put("tagId", tagId);
-			tagQuestionValues.put("questionId", id);
+			tagQuestionValues.put(
+					SQLiteCacheHelper.FIELD_QUESTIONS_TAGS_TAG_FK, tagId);
+			tagQuestionValues.put(
+					SQLiteCacheHelper.FIELD_QUESTIONS_TAGS_QUESTION_FK, id);
 			mDatabase.insert(SQLiteCacheHelper.TABLE_QUESTIONS_TAGS, null,
 					tagQuestionValues);
 		}
@@ -202,13 +242,8 @@ public class CacheContentProvider {
 	private void insertQuestionAnswers(long id, List<String> answers) {
 		for (String answer : answers) {
 			ContentValues values = new ContentValues(2);
-			/*
-			 * XXX Note that I did not want to expose fields of the DB in the
-			 * SQLiteCacheHelper so I hardcoded them here. It might be a good
-			 * idea to change that later.
-			 */
-			values.put("content", answer);
-			values.put("questionId", id);
+			values.put(SQLiteCacheHelper.FIELD_ANSWERS_ANSWER_VALUE, answer);
+			values.put(SQLiteCacheHelper.FIELD_ANSWERS_QUESTION_FK, id);
 			mDatabase.insert(SQLiteCacheHelper.TABLE_ANSWERS, null, values);
 		}
 	}
@@ -219,24 +254,20 @@ public class CacheContentProvider {
 	 * @param questionId
 	 * @param owner
 	 * @param statement
-	 * @param solutionId
+	 * @param solutionIndex
 	 * @return
 	 */
 	private long insertSimplifiedQuestion(long questionId, String owner,
-			String statement, int solutionId) {
-
-		/*
-		 * XXX Note that I did not want to expose fields of the DB in the
-		 * SQLiteCacheHelper so I hardcoded them here. It might be a good idea
-		 * to change that later. (Note the checkstyle issue aswell).
-		 */
+			String statement, int solutionIndex) {
 		ContentValues values = new ContentValues(4);
-		values.put("questionId", questionId);
-		values.put("owner", owner);
-		values.put("statement", statement);
-		values.put("solutionId", solutionId);
+		values.put(SQLiteCacheHelper.FIELD_QUESTIONS_SWENG_ID, questionId);
+		values.put(SQLiteCacheHelper.FIELD_QUESTIONS_OWNER, owner);
+		values.put(SQLiteCacheHelper.FIELD_QUESTIONS_STATEMENT, statement);
+		values.put(SQLiteCacheHelper.FIELD_QUESTIONS_SOLUTION_INDEX,
+				solutionIndex);
 
-		long id = mDatabase.insert(SQLiteCacheHelper.TABLE_QUESTIONS, null, values);
+		long id = mDatabase.insert(SQLiteCacheHelper.TABLE_QUESTIONS, null,
+				values);
 
 		return id;
 	}
@@ -246,28 +277,32 @@ public class CacheContentProvider {
 		// Get ids of all the current question tags.
 		Cursor tagsIdCursor = mDatabase.query(
 				SQLiteCacheHelper.TABLE_QUESTIONS_TAGS,
-				new String[] {"tagId"}, "questionId = ?",
+				new String[] {SQLiteCacheHelper.FIELD_QUESTIONS_TAGS_TAG_FK},
+				SQLiteCacheHelper.FIELD_QUESTIONS_TAGS_QUESTION_FK + " = ?",
 				new String[] {String.valueOf(id)}, null, null,
-				"questionId ASC", null);
+				SQLiteCacheHelper.FIELD_QUESTIONS_TAGS_QUESTION_FK + " ASC",
+				null);
 
 		ArrayList<String> tagsId = new ArrayList<String>();
 		if (tagsIdCursor.moveToFirst()) {
 			do {
 				tagsId.add(String.valueOf(tagsIdCursor.getInt(tagsIdCursor
-						.getColumnIndex("tagId"))));
+						.getColumnIndex(SQLiteCacheHelper.FIELD_QUESTIONS_TAGS_TAG_FK))));
 			} while (tagsIdCursor.moveToNext());
 		}
 
 		// Get all the tags related to questionId given in parameter.
-		String query = "SELECT name FROM " + SQLiteCacheHelper.TABLE_TAGS
-				+ " WHERE id IN (" + makePlaceholders(tagsId.size()) + ");";
+		String query = "SELECT " + SQLiteCacheHelper.FIELD_TAGS_NAME + " FROM "
+				+ SQLiteCacheHelper.TABLE_TAGS + " WHERE id IN ("
+				+ makePlaceholders(tagsId.size()) + ");";
 		Cursor tagsCursor = mDatabase.rawQuery(query,
 				(String[]) tagsId.toArray(new String[tagsId.size()]));
 
 		HashSet<String> tags = new HashSet<String>();
 		if (tagsCursor.moveToFirst()) {
 			do {
-				tags.add(tagsCursor.getString(tagsCursor.getColumnIndex("name")));
+				tags.add(tagsCursor.getString(tagsCursor
+						.getColumnIndex(SQLiteCacheHelper.FIELD_TAGS_NAME)));
 			} while (tagsCursor.moveToNext());
 		}
 
@@ -296,15 +331,16 @@ public class CacheContentProvider {
 	private List<String> retrieveAnswers(int id) {
 
 		Cursor answersCursor = mDatabase.query(SQLiteCacheHelper.TABLE_ANSWERS,
-				new String[] {"content"}, "questionId = ?",
+				new String[] {SQLiteCacheHelper.FIELD_ANSWERS_ANSWER_VALUE},
+				SQLiteCacheHelper.FIELD_ANSWERS_QUESTION_FK + " = ?",
 				new String[] {String.valueOf(id)}, null, null,
-				"id ASC", null);
+				SQLiteCacheHelper.FIELD_ANSWERS_PK + " ASC", null);
 
 		ArrayList<String> answers = new ArrayList<String>();
 		if (answersCursor.moveToFirst()) {
 			do {
 				answers.add(answersCursor.getString(answersCursor
-						.getColumnIndex("content")));
+						.getColumnIndex(SQLiteCacheHelper.FIELD_ANSWERS_ANSWER_VALUE)));
 			} while (answersCursor.moveToNext());
 		}
 
