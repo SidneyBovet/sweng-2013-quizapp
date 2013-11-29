@@ -6,16 +6,19 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.Toast;
 import epfl.sweng.R;
 import epfl.sweng.authentication.AuthenticationActivity;
+import epfl.sweng.caching.CacheContentProvider;
 import epfl.sweng.editquestions.EditQuestionActivity;
-import epfl.sweng.patterns.ConnectivityState;
 import epfl.sweng.patterns.ConnectivityProxy;
+import epfl.sweng.patterns.ConnectivityState;
 import epfl.sweng.patterns.QuestionsProxy;
 import epfl.sweng.preferences.UserPreferences;
 import epfl.sweng.searchquestions.SearchActivity;
@@ -133,6 +136,23 @@ public class MainActivity extends Activity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+	    // Handle item selection
+	    switch (item.getItemId()) {
+	        case R.id.action_settings:
+	        	Log.v(this.getClass().getName(), "No settings options for now.");
+	            return true;
+	        case R.id.erase_database:
+	        	CacheContentProvider prov = new CacheContentProvider(this, true);
+	        	prov.eraseDatabase();
+	        	prov.close();
+	        	return true;
+	        default:
+	            return super.onOptionsItemSelected(item);
+	    }
 	}
 
 	public int auditErrors() {
