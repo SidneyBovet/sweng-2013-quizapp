@@ -33,6 +33,12 @@ public class AuthenticationActivityTest extends GUITest<AuthenticationActivity> 
 		getActivityAndWaitFor(TTChecks.AUTHENTICATION_ACTIVITY_SHOWN);
 		getSolo().sleep(500);
 	}
+	
+	@Override
+	protected void tearDown() throws Exception {
+		super.tearDown();
+		SwengHttpClientFactory.setInstance(null);
+	}
 
 	public void testShowEditTextAndLoginButton() {
 		assertTrue("Username asked", getSolo().searchText("GASPAR\\ Username"));

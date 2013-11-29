@@ -39,6 +39,7 @@ public class AdvancedMockHttpClientTest extends TestCase{
 		while (!mockClient.responsesIsEmpty()) {
 			mockClient.popCannedResponse();
 		}
+		SwengHttpClientFactory.setInstance(null);
 		
 		super.tearDown();
 	}

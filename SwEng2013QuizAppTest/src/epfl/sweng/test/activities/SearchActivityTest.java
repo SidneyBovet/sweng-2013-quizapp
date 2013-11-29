@@ -161,6 +161,8 @@ public class SearchActivityTest extends GUITest<SearchActivity> {
 		getSolo().sleep(500); // TODO can we wait for another TTChecks? Aymeric
 
 		testBasicElementsPresent();
+		
+		SwengHttpClientFactory.setInstance(null);
 	}
 
 	public void testResetQuerySearchField() {
