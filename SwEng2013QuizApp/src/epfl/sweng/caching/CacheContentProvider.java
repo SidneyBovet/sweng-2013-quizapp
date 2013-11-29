@@ -169,19 +169,41 @@ public class CacheContentProvider {
 	}
 
 	/**
+	 * 
+	 * @param question Question to be stored in cache (not in outbox).
+	 */
+	public void addQuizQuestion(QuizQuestion question) {
+		addQuizQuestion(question, false);
+	}
+	
+	/**
 	 * Adds a {@link QuizQuestion}to the persistent cache.
 	 * 
 	 * @param question
 	 *            The question to be added to the cache
 	 */
-	public void addQuizQuestion(QuizQuestion question) {
-
+	public void addQuizQuestion(QuizQuestion question, boolean inOutbox) {
 		sanityDatabaseCheck();
 		long id = insertSimplifiedQuestion(question.getId(),
 				question.getOwner(), question.getStatement(),
 				question.getSolutionIndex());
 		insertQuestionAnswers(id, question.getAnswers());
 		insertQuestionTags(id, question.getTags());
+	}
+	
+	public QuizQuestion getFirstQuestionFromOutbox() {
+		
+		// TODO IMPLEMENT IT.
+		
+		return null;
+	}
+	
+	/**
+	 * 
+	 * @param question question to be taken out of the outbox.
+	 */
+	public void takeQuestionOutOfOutbox(QuizQuestion question) {
+		// TODO IMPLEMENT IT.
 	}
 
 	/**
