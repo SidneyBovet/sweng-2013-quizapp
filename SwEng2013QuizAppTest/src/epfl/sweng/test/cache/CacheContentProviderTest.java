@@ -36,9 +36,10 @@ public class CacheContentProviderTest extends GUITest<MainActivity> {
 		super.tearDown();
 	}
 	
+	
 	public void testEraseDatabaseActuallyErasesIt() {
 		mProvider.eraseDatabase();
-		assertEquals(0, mProvider.getQuestionCount());
+		assertEquals(0, mProvider.getOutboxCount());
 	}
 
 	public void testCanAddQuestion() {
@@ -54,9 +55,9 @@ public class CacheContentProviderTest extends GUITest<MainActivity> {
 	}
 	
 	public void testgetCountIsIncremented() {
-		int expectedCount = mProvider.getQuestionCount()+1;
+		int expectedCount = mProvider.getOutboxCount()+1;
 		mProvider.addQuizQuestion(createFakeQuestion("lolilol"));
-		assertEquals(expectedCount, mProvider.getQuestionCount());
+		assertEquals(expectedCount, mProvider.getOutboxCount());
 	}
 
 	private QuizQuestion createFakeQuestion(String questionStatement) {
