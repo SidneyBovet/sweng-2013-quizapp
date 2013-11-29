@@ -119,9 +119,9 @@ public class MainActivityConnectionState extends GUITest<MainActivity> {
 		SwengHttpClientFactory.setInstance(client);
 		
 		// filling the outbox
-		QuestionsProxy.getInstance().addOutbox(createFakeQuestion(
+		QuestionsProxy.getInstance().addOutAndInbox(createFakeQuestion(
 				"Statement 1"));
-		QuestionsProxy.getInstance().addOutbox(createFakeQuestion(
+		QuestionsProxy.getInstance().addOutAndInbox(createFakeQuestion(
 				"Statement 2"));
 		
 		// let the test begin...
@@ -152,7 +152,7 @@ public class MainActivityConnectionState extends GUITest<MainActivity> {
 		
 		// 2. adding stuff to the outbox
 		QuestionsProxy.getInstance().
-				addOutbox(createFakeQuestion("Robotium?"));
+				addOutAndInbox(createFakeQuestion("Robotium?"));
 		
 		// 3. let's test 
 		getSolo().clickOnView(connectivityState);
