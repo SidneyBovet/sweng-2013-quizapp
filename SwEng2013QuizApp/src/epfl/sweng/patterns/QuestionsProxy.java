@@ -101,8 +101,12 @@ public final class QuestionsProxy implements ConnectivityProxy,
 	 * @param question
 	 *            The {@link QuizQuestion} to be verify
 	 */
-	public void addOutbox(QuizQuestion question) {
+	public void addOutAndInbox(QuizQuestion question) {
 		if (null != question && question.auditErrors() == 0) {
+			openContentProvider();
+			mContentProvider.addQuizQuestion(question, true);
+			closeContentProvider();
+			
 			mQuizQuestionsOutbox.add(question);
 		}
 	}
@@ -116,12 +120,9 @@ public final class QuestionsProxy implements ConnectivityProxy,
 	 *            {@link QuizQuestion} that we want to send
 	 */
 	public int sendQuizQuestion(QuizQuestion question) {
-		
-		// We add in the inbox to make this question accessible in offline mode.
-		addInbox(question);
 		// We add the current question to the outbox by default to send it
 		// independently of the state we are in (online or offline).
-		addOutbox(question);
+		addOutAndInbox(question);
 		
 		int httpCodeResponse = -1;
 		if (UserPreferences.getInstance().isConnected()) {
@@ -193,7 +194,15 @@ public final class QuestionsProxy implements ConnectivityProxy,
 	}
 	
 	public int getOutboxSize() {
-		return mQuizQuestionsOutbox.size();
+		int count = -1;
+		if (mContentProvider.isClosed()) {
+			openContentProvider();
+			count = mContentProvider.getOutboxCount();
+			closeContentProvider();
+		} else {
+			count = mContentProvider.getOutboxCount();
+		}
+		return count;
 	}
 
 	/**
@@ -210,7 +219,7 @@ public final class QuestionsProxy implements ConnectivityProxy,
 		if (newState == ConnectivityState.OFFLINE) {
 			proxyResponse = HttpStatus.SC_OK; // Nothing to do
 		} else if (newState == ConnectivityState.ONLINE) {
-			if (mQuizQuestionsOutbox.size() > 0) {
+			if (getOutboxSize() > 0) {
 				proxyResponse = sendCachedQuestions();
 			} else {
 				proxyResponse = HttpStatus.SC_CREATED;
@@ -297,12 +306,12 @@ public final class QuestionsProxy implements ConnectivityProxy,
 	}
 
 	private synchronized int sendCachedQuestions() {
+		openContentProvider();
 		int httpCodeResponse = -1;
 		// We first send all the questions that we stored when in
 		// offline mode.
-		while (mQuizQuestionsOutbox.size() > 0) {
-
-			QuizQuestion questionOut = mQuizQuestionsOutbox.peek();
+		while (getOutboxSize() > 0) {
+			QuizQuestion questionOut = mContentProvider.getFistQuestionFromOutbox();
 
 			httpCodeResponse = mNetworkCommunication
 					.sendQuizQuestion(questionOut);
@@ -314,6 +323,7 @@ public final class QuestionsProxy implements ConnectivityProxy,
 				return httpCodeResponse;
 			}
 		}
+		closeContentProvider();
 		return httpCodeResponse;
 	}
 
