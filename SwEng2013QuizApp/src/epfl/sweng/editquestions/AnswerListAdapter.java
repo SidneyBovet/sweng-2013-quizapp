@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ListAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
@@ -25,7 +26,7 @@ import epfl.sweng.testing.TestCoordinator.TTChecks;
  * 
  */
 
-class AnswerListAdapter extends BaseAdapter {
+public class AnswerListAdapter extends BaseAdapter implements ListAdapter {
 	
 	private EditQuestionActivity mEditQuestionActivity;
 	private LayoutInflater mInflater;
