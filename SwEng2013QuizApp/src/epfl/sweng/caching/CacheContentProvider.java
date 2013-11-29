@@ -143,16 +143,13 @@ public class CacheContentProvider {
 
 	/**
 	 * Cleans the database (cannot be undone!)
-	 * 
-	 * XXX I'm seriously wondering if this method should be public or existing
-	 * at all...
 	 */
 	public void eraseDatabase() {
 		sanityDatabaseCheck();
 		if (mDatabase.isReadOnly()) {
 			throw new IllegalStateException("Cannot wipe read-only database.");
 		} else {
-			// XXX does this work?
+			// TODO clean correctly
 			mDatabase.delete(SQLiteCacheHelper.TABLE_QUESTIONS, "", null);
 		}
 	}

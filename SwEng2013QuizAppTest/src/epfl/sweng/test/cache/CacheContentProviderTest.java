@@ -5,6 +5,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import android.database.Cursor;
+
+import epfl.sweng.backend.QuizQuery;
 import epfl.sweng.caching.CacheContentProvider;
 import epfl.sweng.entry.MainActivity;
 import epfl.sweng.quizquestions.QuizQuestion;
@@ -32,15 +35,22 @@ public class CacheContentProviderTest extends GUITest<MainActivity> {
 		mProvider.close();
 		super.tearDown();
 	}
+	
+	public void testEraseDatabaseActuallyErasesIt() {
+		mProvider.eraseDatabase();
+		assertEquals(0, mProvider.getQuestionCount());
+	}
 
 	public void testCanAddQuestion() {
-		/*mProvider.addQuizQuestion(createFakeQuestion("lolilol"));
+		mProvider.addQuizQuestion(createFakeQuestion("lolilol"));
 		
-		QuizQuestion question = mProvider.getRandomQuestion();
+		Cursor cursor = mProvider.getQuestions(new QuizQuery());
+		int id = cursor.getInt(0);
+		QuizQuestion question = mProvider.getQuestionFromPK(id);
 		
 		getSolo().sleep(500);
 		assertEquals("Statement should be the same.",
-				"lolilol", question.getStatement());*/
+				"lolilol", question.getStatement());
 	}
 	
 	public void testgetCountIsIncremented() {
