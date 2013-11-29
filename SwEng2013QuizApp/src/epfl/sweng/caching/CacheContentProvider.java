@@ -222,6 +222,11 @@ public class CacheContentProvider {
 					SQLiteCacheHelper.TABLE_TAGS);
 			mDatabase.execSQL("DROP TABLE IF EXISTS " +
 					SQLiteCacheHelper.TABLE_QUESTIONS);
+
+			mDatabase.execSQL(SQLiteCacheHelper.CREATE_TABLE_QUESTIONS);
+			mDatabase.execSQL(SQLiteCacheHelper.CREATE_TABLE_TAGS);
+			mDatabase.execSQL(SQLiteCacheHelper.CREATE_TABLE_QUESTIONS_TAGS);
+			mDatabase.execSQL(SQLiteCacheHelper.CREATE_TABLE_ANSWERS);
 		}
 	}
 
