@@ -63,15 +63,15 @@ public class SQLiteCacheHelper extends SQLiteOpenHelper {
 			+ " integer, " + FIELD_QUESTIONS_TAGS_TAG_FK
 			+ " integer, FOREIGN KEY(" + FIELD_QUESTIONS_TAGS_QUESTION_FK
 			+ ") REFERENCES " + TABLE_QUESTIONS + "(" + FIELD_QUESTIONS_PK
-			+ "),FOREIGN KEY(" + FIELD_QUESTIONS_TAGS_TAG_FK + ") REFERENCES "
-			+ TABLE_TAGS + "(" + FIELD_TAGS_PK + "));";
+			+ " ON DELETE CASCADE),FOREIGN KEY(" + FIELD_QUESTIONS_TAGS_TAG_FK + ") REFERENCES "
+			+ TABLE_TAGS + "(" + FIELD_TAGS_PK + ") ON DELETE CASCADE);";
 
 	public static final String CREATE_TABLE_ANSWERS = "CREATE TABLE "
 			+ TABLE_ANSWERS + " (" + FIELD_ANSWERS_PK + " integer primary key,"
 			+ FIELD_ANSWERS_ANSWER_VALUE + " varchar(300), "
 			+ FIELD_ANSWERS_QUESTION_FK + " integer, FOREIGN KEY("
 			+ FIELD_ANSWERS_QUESTION_FK + ") REFERENCES " + TABLE_QUESTIONS
-			+ "(" + FIELD_QUESTIONS_PK + "));";
+			+ "(" + FIELD_QUESTIONS_PK + ") ON DELETE CASCADE);";
 
 	/**
 	 * Default constructor. We reinstantiate it so that we can pass the DB name
