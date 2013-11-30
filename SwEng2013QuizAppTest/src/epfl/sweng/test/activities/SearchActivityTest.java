@@ -27,9 +27,9 @@ public class SearchActivityTest extends GUITest<SearchActivity> {
 		getSolo().sleep(1000);
 	}
 
-	@Override
-	public void tearDown() throws Exception {
+	protected void tearDown() throws Exception {
 		super.tearDown();
+		SwengHttpClientFactory.setInstance(null);
 	}
 
 	/*
@@ -130,6 +130,7 @@ public class SearchActivityTest extends GUITest<SearchActivity> {
 
 	public void testCreateQuery() {
 		AdvancedMockHttpClient mockClient = new AdvancedMockHttpClient();
+		SwengHttpClientFactory.setInstance(mockClient);
 
 		mockClient
 				.pushCannedResponse(
@@ -149,7 +150,6 @@ public class SearchActivityTest extends GUITest<SearchActivity> {
 								+ "\"next\": \"YG9HB8)H9*-BYb88fdsfsyb(08bfsdybfdsoi4\""
 								+ "}", "application/json");
 
-		SwengHttpClientFactory.setInstance(mockClient);
 		fillQueryAndTestButton("(strawberry + raspberry) * banana", true);
 		getSolo().clickOnButton(context.getString(R.string.SearchQueryButton));
 		getActivityAndWaitFor(TTChecks.QUESTION_SHOWN);
@@ -161,11 +161,11 @@ public class SearchActivityTest extends GUITest<SearchActivity> {
 		getSolo().sleep(500); // TODO can we wait for another TTChecks? Aymeric
 
 		testBasicElementsPresent();
-		
+
 		SwengHttpClientFactory.setInstance(null);
 	}
 
-	public void testResetQuerySearchField() {
+	public void testSendAndResetQuerySearchField() {
 		AdvancedMockHttpClient mockClient = new AdvancedMockHttpClient();
 		SwengHttpClientFactory.setInstance(mockClient);
 

@@ -21,6 +21,7 @@ public class AuthenticationActivityTest extends GUITest<AuthenticationActivity> 
 		super(AuthenticationActivity.class);
 	}
 
+
 	@Override
 	protected void setUp() {
 		super.setUp();
@@ -33,7 +34,7 @@ public class AuthenticationActivityTest extends GUITest<AuthenticationActivity> 
 		getActivityAndWaitFor(TTChecks.AUTHENTICATION_ACTIVITY_SHOWN);
 		getSolo().sleep(500);
 	}
-	
+
 	@Override
 	protected void tearDown() throws Exception {
 		super.tearDown();
@@ -95,10 +96,10 @@ public class AuthenticationActivityTest extends GUITest<AuthenticationActivity> 
 		// MainActivity.class);
 
 	}
-	
+
 	public void testGoBackToMainActivity() {
-		//TODO same things as in the test testAuthenticationActivityWorks but
-		//then test that you are in the MainActivity
+		// TODO same things as in the test testAuthenticationActivityWorks but
+		// then test that you are in the MainActivity
 	}
 
 }
