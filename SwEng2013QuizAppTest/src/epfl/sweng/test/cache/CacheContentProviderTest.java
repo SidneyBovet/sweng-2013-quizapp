@@ -61,12 +61,51 @@ public class CacheContentProviderTest extends AndroidTestCase {
 		assertEquals(expectedCount, mProvider.getOutboxCount());
 	}
 
-	public void testWeDoNotRemoveTheQuestionFromTheOutboxWhenGettingIt() {
+	public void testWeDoNotTakeTheQuestionFromTheOutboxWhenPeeking() {
 		assertEquals(0, mProvider.getOutboxCount());
 		mProvider.addQuizQuestion(createFakeQuestion("MyNewQuestion"), true);
 		assertEquals(1, mProvider.getOutboxCount());
-		mProvider.getFirstQuestionFromOutbox();
+		mProvider.peekFirstQuestionFromOutbox();
 		assertEquals(1, mProvider.getOutboxCount());
+	}
+
+	public void addingQuizQuestionDoesNotInfluenceTheOutbox() {
+		assertEquals(0, mProvider.getOutboxCount());
+		mProvider.addQuizQuestion(createFakeQuestion("MyNewQuestion"), true);
+		assertEquals(0, mProvider.getOutboxCount());
+	}
+
+	public void testFullQuestionInCache() {
+
+		String statement = "What's the answer?";
+		
+		List<String> answers = new ArrayList<String>();
+		answers.add("Answer1");
+		answers.add("Answer2");
+		answers.add("Answer3");
+		answers.add("Obiwan Kenobi");
+		
+		int solutionIndex = 2;
+		
+		Set<String> tags = new HashSet<String>();
+		tags.add("Millionaire");
+		tags.add("Funny");
+		
+		int questionId = 25;
+		String owner = "David";
+		
+		QuizQuestion expectedquestion = new QuizQuestion(statement, answers,
+			solutionIndex , tags, questionId, owner);
+
+		mProvider.addQuizQuestion(expectedquestion, true);
+		QuizQuestion cachedQuestion = mProvider.peekFirstQuestionFromOutbox();
+
+		assertEquals(expectedquestion.getId(), cachedQuestion.getId());
+		assertEquals(expectedquestion.getOwner(), cachedQuestion.getOwner());
+		assertEquals(expectedquestion.getSolutionIndex(), cachedQuestion.getSolutionIndex());
+		assertEquals(expectedquestion.getStatement(), cachedQuestion.getStatement());
+		assertEquals(expectedquestion.getTagsToString(), cachedQuestion.getTagsToString());
+		assertEquals(expectedquestion.getAnswers(), cachedQuestion.getAnswers());
 	}
 
 	public void testOutboxWorksFIFO() {
@@ -80,7 +119,7 @@ public class CacheContentProviderTest extends AndroidTestCase {
 
 		for (int i = 1; i <= nbQuestions; i++) {
 			assertEquals("questionStatement" + i, mProvider
-					.getFirstQuestionFromOutbox().getStatement());
+					.peekFirstQuestionFromOutbox().getStatement());
 
 			mProvider.takeFirstQuestionFromOutbox();
 		}
@@ -90,7 +129,7 @@ public class CacheContentProviderTest extends AndroidTestCase {
 
 	private QuizQuestion createFakeQuestion(String questionStatement) {
 		List<String> answers = new ArrayList<String>();
-		answers.add("100% accurate");
+		answers.add("100 on 100 accurate");
 		answers.add("Fully voodoo and could generate non-pseudorandom numbers");
 
 		Set<String> tags = new HashSet<String>();

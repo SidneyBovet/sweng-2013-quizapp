@@ -190,7 +190,7 @@ public class CacheContentProvider {
 	 * 
 	 * @return the first question in the outbox.
 	 */
-	public QuizQuestion getFirstQuestionFromOutbox() {
+	public QuizQuestion peekFirstQuestionFromOutbox() {
 		return getQuestionFromPK(getIdOfFirstQuestionInOutbox());
 	}
 

@@ -311,7 +311,7 @@ public final class QuestionsProxy implements ConnectivityProxy,
 		// We first send all the questions that we stored when in
 		// offline mode.
 		while (getOutboxSize() > 0) {
-			QuizQuestion questionOut = mContentProvider.getFirstQuestionFromOutbox();
+			QuizQuestion questionOut = mContentProvider.peekFirstQuestionFromOutbox();
 
 			httpCodeResponse = mNetworkCommunication
 					.sendQuizQuestion(questionOut);
