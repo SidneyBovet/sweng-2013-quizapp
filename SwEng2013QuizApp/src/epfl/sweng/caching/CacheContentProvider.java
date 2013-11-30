@@ -118,57 +118,7 @@ public class CacheContentProvider {
 		}
 	}
 
-	/**
-	 * Normalizes the query: - We change the '*' by a logical AND. - We change
-	 * the '+' by a logical OR. - We change the ' ' by a logical AND.
-	 * 
-	 * @param query
-	 *            Query to be changed.
-	 * @return the new SQL-compatible query.
-	 */
-	private String filterQuery(String query) {
-
-		// Only one space max. between words.
-		query = query.replaceAll("(\\ )+", " ");
-
-		// Replaces all the names by name=? for the SQL query.
-		query = query.replaceAll("\\w+", SQLiteCacheHelper.FIELD_TAGS_NAME
-				+ "=?");
-
-		query = query.replaceAll("(?:\\ )?\\*(?:\\ )?", "*");
-		query = query.replaceAll("(?:\\ )?\\+(?:\\ )?", "+");
-		query = query.replaceAll("\\(\\ ", "(");
-		query = query.replaceAll("\\ \\)", ")");
-		query = query.replaceAll("\\ ", " AND ");
-		
-		query = query.replaceAll("(?:\\ )?\\*(?:\\ )?", " AND ");
-		query = query.replaceAll("(?:\\ )?\\+(?:\\ )?", " OR ");
-
-		return query;
-	}
-
-	/**
-	 * Will get all the words contained in the query given in parameters.
-	 * 
-	 * @param query
-	 *            Query from where we need to extract the data.
-	 * @return All the words contained in the query.
-	 */
-	private String[] extractParameters(String query) {
-
-		List<String> whereArgsArray = new ArrayList<String>();
-
-		// Finds all alphanumeric tokens in the query
-		Pattern pattern = Pattern.compile("\\w+");
-		Matcher m = pattern.matcher(query);
-		while (m.find()) {
-			whereArgsArray.add(m.group());
-		}
-
-		// We convert the List to an array of String.
-		return (String[]) whereArgsArray.toArray(new String[whereArgsArray
-				.size()]);
-	}
+	
 
 	public QuizQuestion getQuestionFromPK(int id) {
 
@@ -324,15 +274,67 @@ public class CacheContentProvider {
 
 	/*********************** Private methods ***********************/
 
-	private void sanityDatabaseCheck() {
-		// note that use of isDatabaseIntegrityOk() may take a long time,
-		// it is therefore avoided here.
-		if (null == mDatabase || !mDatabase.isOpen()) {
-			throw new IllegalStateException(
-					"The database object is either null or closed");
-		}
-	}
+	private List<String> retrieveAnswers(int id) {
 
+		Cursor answersCursor = mDatabase.query(SQLiteCacheHelper.TABLE_ANSWERS,
+				new String[] {SQLiteCacheHelper.FIELD_ANSWERS_ANSWER_VALUE},
+				SQLiteCacheHelper.FIELD_ANSWERS_QUESTION_FK + " = ?",
+				new String[] {String.valueOf(id)}, null, null,
+				SQLiteCacheHelper.FIELD_ANSWERS_PK + " ASC", null);
+
+		ArrayList<String> answers = new ArrayList<String>();
+		if (answersCursor.moveToFirst()) {
+			do {
+				answers.add(answersCursor.getString(answersCursor
+						.getColumnIndex(SQLiteCacheHelper.FIELD_ANSWERS_ANSWER_VALUE)));
+			} while (answersCursor.moveToNext());
+		}
+
+		answersCursor.close();
+
+		return answers;
+	}
+	
+	private Set<String> retrieveTags(int id) {
+
+		// Get ids of all the current question tags.
+		Cursor tagsIdCursor = mDatabase.query(
+				SQLiteCacheHelper.TABLE_QUESTIONS_TAGS,
+				new String[] {SQLiteCacheHelper.FIELD_QUESTIONS_TAGS_TAG_FK},
+				SQLiteCacheHelper.FIELD_QUESTIONS_TAGS_QUESTION_FK + " = ?",
+				new String[] {String.valueOf(id)}, null, null,
+				SQLiteCacheHelper.FIELD_QUESTIONS_TAGS_QUESTION_FK + " ASC",
+				null);
+
+		ArrayList<String> tagsId = new ArrayList<String>();
+		if (tagsIdCursor.moveToFirst()) {
+			do {
+				tagsId.add(String.valueOf(tagsIdCursor.getInt(tagsIdCursor
+						.getColumnIndex(SQLiteCacheHelper.FIELD_QUESTIONS_TAGS_TAG_FK))));
+			} while (tagsIdCursor.moveToNext());
+		}
+
+		// Get all the tags related to questionId given in parameter.
+		String query = "SELECT " + SQLiteCacheHelper.FIELD_TAGS_NAME + " FROM "
+				+ SQLiteCacheHelper.TABLE_TAGS + " WHERE "
+				+ SQLiteCacheHelper.FIELD_TAGS_PK + " IN ("
+				+ makePlaceholders(tagsId.size()) + ");";
+		Cursor tagsCursor = mDatabase.rawQuery(query,
+				(String[]) tagsId.toArray(new String[tagsId.size()]));
+
+		HashSet<String> tags = new HashSet<String>();
+		if (tagsCursor.moveToFirst()) {
+			do {
+				tags.add(tagsCursor.getString(tagsCursor
+						.getColumnIndex(SQLiteCacheHelper.FIELD_TAGS_NAME)));
+			} while (tagsCursor.moveToNext());
+		}
+
+		tagsCursor.close();
+
+		return tags;
+	}
+	
 	private void insertQuestionTags(long id, Set<String> tags) {
 		for (String tag : tags) {
 
@@ -385,49 +387,22 @@ public class CacheContentProvider {
 		return id;
 	}
 
-	private Set<String> retrieveTags(int id) {
-
-		// Get ids of all the current question tags.
-		Cursor tagsIdCursor = mDatabase.query(
-				SQLiteCacheHelper.TABLE_QUESTIONS_TAGS,
-				new String[] {SQLiteCacheHelper.FIELD_QUESTIONS_TAGS_TAG_FK},
-				SQLiteCacheHelper.FIELD_QUESTIONS_TAGS_QUESTION_FK + " = ?",
-				new String[] {String.valueOf(id)}, null, null,
-				SQLiteCacheHelper.FIELD_QUESTIONS_TAGS_QUESTION_FK + " ASC",
-				null);
-
-		ArrayList<String> tagsId = new ArrayList<String>();
-		if (tagsIdCursor.moveToFirst()) {
-			do {
-				tagsId.add(String.valueOf(tagsIdCursor.getInt(tagsIdCursor
-						.getColumnIndex(SQLiteCacheHelper.FIELD_QUESTIONS_TAGS_TAG_FK))));
-			} while (tagsIdCursor.moveToNext());
+	private void sanityDatabaseCheck() {
+		// note that use of isDatabaseIntegrityOk() may take a long time,
+		// it is therefore avoided here.
+		if (null == mDatabase || !mDatabase.isOpen()) {
+			throw new IllegalStateException(
+					"The database object is either null or closed");
 		}
-
-		// Get all the tags related to questionId given in parameter.
-		String query = "SELECT " + SQLiteCacheHelper.FIELD_TAGS_NAME + " FROM "
-				+ SQLiteCacheHelper.TABLE_TAGS + " WHERE "
-				+ SQLiteCacheHelper.FIELD_TAGS_PK + " IN ("
-				+ makePlaceholders(tagsId.size()) + ");";
-		Cursor tagsCursor = mDatabase.rawQuery(query,
-				(String[]) tagsId.toArray(new String[tagsId.size()]));
-
-		HashSet<String> tags = new HashSet<String>();
-		if (tagsCursor.moveToFirst()) {
-			do {
-				tags.add(tagsCursor.getString(tagsCursor
-						.getColumnIndex(SQLiteCacheHelper.FIELD_TAGS_NAME)));
-			} while (tagsCursor.moveToNext());
-		}
-
-		tagsCursor.close();
-
-		return tags;
 	}
 
-	// I got that function from
-	// http://stackoverflow.com/questions/7418849/android-sqlite-in-clause-and-placeholders
-	// even though it's not a complex piece of code.
+	/**
+	 *  I got that function from
+	 *  http://stackoverflow.com/questions/7418849/android-sqlite-in-clause-and-placeholders
+	 *  even though it's not a complex piece of code.
+	 * @param len
+	 * @return
+	 */
 	private String makePlaceholders(int len) {
 		if (len < 1) {
 			// It will lead to an invalid query anyway ..
@@ -442,24 +417,62 @@ public class CacheContentProvider {
 		}
 	}
 
-	private List<String> retrieveAnswers(int id) {
+	/**
+	 * Normalizes the query: - We change the '*' by a logical AND. - We change
+	 * the '+' by a logical OR. - We change the ' ' by a logical AND.
+	 * 
+	 * @param query
+	 *            Query to be changed.
+	 * @return the new SQL-compatible query.
+	 */
+	private String filterQuery(String query) {
 
-		Cursor answersCursor = mDatabase.query(SQLiteCacheHelper.TABLE_ANSWERS,
-				new String[] {SQLiteCacheHelper.FIELD_ANSWERS_ANSWER_VALUE},
-				SQLiteCacheHelper.FIELD_ANSWERS_QUESTION_FK + " = ?",
-				new String[] {String.valueOf(id)}, null, null,
-				SQLiteCacheHelper.FIELD_ANSWERS_PK + " ASC", null);
+		// Only one space max. between words.
+		query = query.replaceAll("(\\ )+", " ");
 
-		ArrayList<String> answers = new ArrayList<String>();
-		if (answersCursor.moveToFirst()) {
-			do {
-				answers.add(answersCursor.getString(answersCursor
-						.getColumnIndex(SQLiteCacheHelper.FIELD_ANSWERS_ANSWER_VALUE)));
-			} while (answersCursor.moveToNext());
+		// Replaces all the names by name=? for the SQL query.
+		query = query.replaceAll("\\w+", SQLiteCacheHelper.FIELD_TAGS_NAME
+				+ "=?");
+
+		// Makes the " * " or " + " look like "*" or "+"
+		query = query.replaceAll("(?:\\ )?\\*(?:\\ )?", "*");
+		query = query.replaceAll("(?:\\ )?\\+(?:\\ )?", "+");
+		
+		// Removes the spaces after '(' and/or before ')'
+		query = query.replaceAll("\\(\\ ", "(");
+		query = query.replaceAll("\\ \\)", ")");
+		
+		// Replaces all the spaces by ANDs (the order 
+		// is important, do not move it without a valid reason).
+		query = query.replaceAll("\\ ", " AND ");
+		
+		// Replaces all the '*' and '+' by, respectively, " AND " and " OR "
+		query = query.replaceAll("(?:\\ )?\\*(?:\\ )?", " AND ");
+		query = query.replaceAll("(?:\\ )?\\+(?:\\ )?", " OR ");
+
+		return query;
+	}
+
+	/**
+	 * Will get all the words contained in the query given in parameters.
+	 * 
+	 * @param query
+	 *            Query from where we need to extract the data.
+	 * @return All the words contained in the query.
+	 */
+	private String[] extractParameters(String query) {
+
+		List<String> whereArgsArray = new ArrayList<String>();
+
+		// Finds all alphanumeric tokens in the query
+		Pattern pattern = Pattern.compile("\\w+");
+		Matcher m = pattern.matcher(query);
+		while (m.find()) {
+			whereArgsArray.add(m.group());
 		}
 
-		answersCursor.close();
-
-		return answers;
+		// We convert the List to an array of String.
+		return (String[]) whereArgsArray.toArray(new String[whereArgsArray
+				.size()]);
 	}
 }
