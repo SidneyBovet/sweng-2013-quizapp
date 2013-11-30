@@ -6,26 +6,30 @@ import java.util.List;
 import java.util.Set;
 
 import android.database.Cursor;
-
+import android.test.AndroidTestCase;
+import android.test.RenamingDelegatingContext;
 import epfl.sweng.backend.QuizQuery;
 import epfl.sweng.caching.CacheContentProvider;
 import epfl.sweng.caching.SQLiteCacheHelper;
-import epfl.sweng.entry.MainActivity;
 import epfl.sweng.quizquestions.QuizQuestion;
-import epfl.sweng.test.activities.GUITest;
 
-public class CacheContentProviderTest extends GUITest<MainActivity> {
+public class CacheContentProviderTest extends AndroidTestCase {
+	
 	private CacheContentProvider mProvider;
-
-	public CacheContentProviderTest() {
-		super(MainActivity.class);
-	}
 
 	@Override
 	protected void setUp() {
-		mProvider = new CacheContentProvider(getInstrumentation()
-				.getTargetContext(), true);
-		super.setUp();
+		
+		// We work on a test DB.
+		RenamingDelegatingContext context 
+        = new RenamingDelegatingContext(getContext(), "test_");
+		mProvider = new CacheContentProvider(context, true);
+		
+		try {
+			super.setUp();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -47,7 +51,6 @@ public class CacheContentProviderTest extends GUITest<MainActivity> {
 				.getColumnIndex(SQLiteCacheHelper.FIELD_QUESTIONS_PK));
 		QuizQuestion question = mProvider.getQuestionFromPK(id);
 
-		getSolo().sleep(500);
 		assertEquals("Statement should be the same.", "lolilol",
 				question.getStatement());
 	}
@@ -57,6 +60,34 @@ public class CacheContentProviderTest extends GUITest<MainActivity> {
 		mProvider.addQuizQuestion(createFakeQuestion("lolilol"), true);
 		assertEquals(expectedCount, mProvider.getOutboxCount());
 	}
+
+	public void testWeDoNotRemoveTheQuestionFromTheOutboxWhenGettingIt() {
+		assertEquals(0, mProvider.getOutboxCount());
+		mProvider.addQuizQuestion(createFakeQuestion("MyNewQuestion"), true);
+		assertEquals(1, mProvider.getOutboxCount());
+		mProvider.getFirstQuestionFromOutbox();
+		assertEquals(1, mProvider.getOutboxCount());
+	}
+
+	// public void testOutboxWorksFIFO() {
+	//
+	// final int nbQuestions = 10;
+	//
+	// for (int i = 1; i <= nbQuestions; i++) {
+	// mProvider.addQuizQuestion(createFakeQuestion("questionStatement"
+	// + i), true);
+	// }
+	//
+	// for (int i = 1; i <= nbQuestions; i++) {
+	// assertEquals("questionStatement" + i, mProvider
+	// .getFirstQuestionFromOutbox().getStatement());
+	//
+	// mProvider.takeQuestionOutOfOutbox(mProvider
+	// .getFirstQuestionFromOutbox());
+	// }
+	// }
+
+	/*********************** Private methods ***********************/
 
 	private QuizQuestion createFakeQuestion(String questionStatement) {
 		List<String> answers = new ArrayList<String>();
