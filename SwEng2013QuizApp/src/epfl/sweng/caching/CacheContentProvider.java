@@ -186,51 +186,28 @@ public class CacheContentProvider {
 	}
 
 	/**
-	 * Simulates a FIFO Outbox.
+	 * Returns a copy of the first question in the outbox.
 	 * 
 	 * @return the first question in the outbox.
 	 */
 	public QuizQuestion getFirstQuestionFromOutbox() {
-
-		int id = -1;
-
-		// Get the first question in the outbox stack.
-		Cursor questionOutboxIdCursor = mDatabase.query(
-				SQLiteCacheHelper.TABLE_QUESTIONS,
-				new String[] { SQLiteCacheHelper.FIELD_QUESTIONS_PK },
-				SQLiteCacheHelper.FIELD_QUESTIONS_IS_QUEUED + "=1", null, null,
-				null, SQLiteCacheHelper.FIELD_QUESTIONS_PK + " ASC", "1");
-
-		if (questionOutboxIdCursor.moveToFirst()) {
-			id = questionOutboxIdCursor.getInt(questionOutboxIdCursor
-					.getColumnIndex(SQLiteCacheHelper.FIELD_QUESTIONS_PK));
-		}
-
-		return getQuestionFromPK(id);
+		return getQuestionFromPK(getIdOfFirstQuestionInOutbox());
 	}
 
 	/**
-	 * 
-	 * @param question
-	 *            question to be taken out of the outbox.
+	 * Removes and returns the first question in the outbox.
+	 * @return First question in the outbox.
 	 */
-	public void takeQuestionOutOfOutbox(QuizQuestion question) {
+	public QuizQuestion takeFirstQuestionFromOutbox() {
 
-		// Get the id of the first question in the outbox stack.
-		Cursor questionIdCursor = mDatabase.query(
-				SQLiteCacheHelper.TABLE_QUESTIONS,
-				new String[] {SQLiteCacheHelper.FIELD_QUESTIONS_PK},
-				SQLiteCacheHelper.FIELD_QUESTIONS_SWENG_ID + "=?",
-				new String[] {String.valueOf(question.getId())}, null, null,
-				null, "1");
-
-		int id = -1;
-		if (questionIdCursor.moveToFirst()) {
-			id = questionIdCursor.getInt(questionIdCursor
-					.getColumnIndex(SQLiteCacheHelper.FIELD_QUESTIONS_PK));
-
+		int id = getIdOfFirstQuestionInOutbox();
+		
+		if (-1 != id) {
 			takeQuestionOutOfOutbox(id);
+			return getQuestionFromPK(id);
 		}
+		
+		return null;
 	}
 
 	/**
@@ -271,6 +248,27 @@ public class CacheContentProvider {
 
 	/*********************** Private methods ***********************/
 
+	private int getIdOfFirstQuestionInOutbox() {
+		
+		int id = -1;
+		
+		// Get the first question in the outbox stack.
+		Cursor questionOutboxIdCursor = mDatabase.query(
+				SQLiteCacheHelper.TABLE_QUESTIONS,
+				new String[] {SQLiteCacheHelper.FIELD_QUESTIONS_PK},
+				SQLiteCacheHelper.FIELD_QUESTIONS_IS_QUEUED + "=1", null, null,
+				null, SQLiteCacheHelper.FIELD_QUESTIONS_PK + " ASC", "1");
+
+		if (questionOutboxIdCursor.moveToFirst()) {
+			id = questionOutboxIdCursor.getInt(questionOutboxIdCursor
+					.getColumnIndex(SQLiteCacheHelper.FIELD_QUESTIONS_PK));
+
+			questionOutboxIdCursor.close();
+		}
+		
+		return id;
+	}
+	
 	private List<String> retrieveAnswers(int id) {
 
 		Cursor answersCursor = mDatabase.query(SQLiteCacheHelper.TABLE_ANSWERS,
@@ -391,14 +389,14 @@ public class CacheContentProvider {
 	private void takeQuestionOutOfOutbox(long id) {
 		changeQuestionOutboxStatus(id, false);
 	}
-	
+
 	private void changeQuestionOutboxStatus(long id, boolean questionInOutbox) {
 		ContentValues isQueuedValue = new ContentValues(1);
 		isQueuedValue.put(SQLiteCacheHelper.FIELD_QUESTIONS_IS_QUEUED,
 				questionInOutbox ? 1 : 0);
 		mDatabase.update(SQLiteCacheHelper.TABLE_QUESTIONS, isQueuedValue,
 				SQLiteCacheHelper.FIELD_QUESTIONS_PK + "=?",
-				new String[] {String.valueOf(id)});
+				new String[] { String.valueOf(id) });
 	}
 
 	private void sanityDatabaseCheck() {

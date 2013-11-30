@@ -14,17 +14,17 @@ import epfl.sweng.caching.SQLiteCacheHelper;
 import epfl.sweng.quizquestions.QuizQuestion;
 
 public class CacheContentProviderTest extends AndroidTestCase {
-	
+
 	private CacheContentProvider mProvider;
 
 	@Override
 	protected void setUp() {
-		
+
 		// We work on a test DB.
-		RenamingDelegatingContext context 
-        = new RenamingDelegatingContext(getContext(), "test_");
+		RenamingDelegatingContext context = new RenamingDelegatingContext(
+				getContext(), "test_");
 		mProvider = new CacheContentProvider(context, true);
-		
+
 		try {
 			super.setUp();
 		} catch (Exception e) {
@@ -69,23 +69,22 @@ public class CacheContentProviderTest extends AndroidTestCase {
 		assertEquals(1, mProvider.getOutboxCount());
 	}
 
-	// public void testOutboxWorksFIFO() {
-	//
-	// final int nbQuestions = 10;
-	//
-	// for (int i = 1; i <= nbQuestions; i++) {
-	// mProvider.addQuizQuestion(createFakeQuestion("questionStatement"
-	// + i), true);
-	// }
-	//
-	// for (int i = 1; i <= nbQuestions; i++) {
-	// assertEquals("questionStatement" + i, mProvider
-	// .getFirstQuestionFromOutbox().getStatement());
-	//
-	// mProvider.takeQuestionOutOfOutbox(mProvider
-	// .getFirstQuestionFromOutbox());
-	// }
-	// }
+	public void testOutboxWorksFIFO() {
+
+		final int nbQuestions = 10;
+
+		for (int i = 1; i <= nbQuestions; i++) {
+			mProvider.addQuizQuestion(createFakeQuestion("questionStatement"
+					+ i), true);
+		}
+
+		for (int i = 1; i <= nbQuestions; i++) {
+			assertEquals("questionStatement" + i, mProvider
+					.getFirstQuestionFromOutbox().getStatement());
+
+			mProvider.takeFirstQuestionFromOutbox();
+		}
+	}
 
 	/*********************** Private methods ***********************/
 
