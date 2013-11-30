@@ -118,7 +118,7 @@ public class CacheContentProvider {
 		}
 	}
 
-	public QuizQuestion getQuestionFromPK(int id) {
+	public QuizQuestion getQuestionFromPK(long id) {
 
 		// Step 2 : Get all the answers and tags for that question
 		List<String> answers = retrieveAnswers(id);
@@ -161,9 +161,10 @@ public class CacheContentProvider {
 	 * 
 	 * @param question
 	 *            Question to be stored in cache (not in outbox).
+	 * @return the PK of the newly added question.
 	 */
-	public void addQuizQuestion(QuizQuestion question) {
-		addQuizQuestion(question, false);
+	public long addQuizQuestion(QuizQuestion question) {
+		return addQuizQuestion(question, false);
 	}
 
 	/**
@@ -171,8 +172,9 @@ public class CacheContentProvider {
 	 * 
 	 * @param question
 	 *            The question to be added to the cache
+	 * @return the PK of the newly added question.
 	 */
-	public void addQuizQuestion(QuizQuestion question, boolean wantInOutbox) {
+	public long addQuizQuestion(QuizQuestion question, boolean wantInOutbox) {
 		sanityDatabaseCheck();
 		long id = insertSimplifiedQuestion(question.getId(),
 				question.getOwner(), question.getStatement(),
@@ -183,6 +185,8 @@ public class CacheContentProvider {
 		if (wantInOutbox) {
 			putQuestionInOutbox(id);
 		}
+
+		return id;
 	}
 
 	/**
@@ -196,17 +200,18 @@ public class CacheContentProvider {
 
 	/**
 	 * Removes and returns the first question in the outbox.
+	 * 
 	 * @return First question in the outbox.
 	 */
 	public QuizQuestion takeFirstQuestionFromOutbox() {
 
 		int id = getIdOfFirstQuestionInOutbox();
-		
+
 		if (-1 != id) {
 			takeQuestionOutOfOutbox(id);
 			return getQuestionFromPK(id);
 		}
-		
+
 		return null;
 	}
 
@@ -249,13 +254,13 @@ public class CacheContentProvider {
 	/*********************** Private methods ***********************/
 
 	private int getIdOfFirstQuestionInOutbox() {
-		
+
 		int id = -1;
-		
+
 		// Get the first question in the outbox stack.
 		Cursor questionOutboxIdCursor = mDatabase.query(
 				SQLiteCacheHelper.TABLE_QUESTIONS,
-				new String[] {SQLiteCacheHelper.FIELD_QUESTIONS_PK},
+				new String[] { SQLiteCacheHelper.FIELD_QUESTIONS_PK },
 				SQLiteCacheHelper.FIELD_QUESTIONS_IS_QUEUED + "=1", null, null,
 				null, SQLiteCacheHelper.FIELD_QUESTIONS_PK + " ASC", "1");
 
@@ -265,11 +270,16 @@ public class CacheContentProvider {
 
 			questionOutboxIdCursor.close();
 		}
-		
+
 		return id;
 	}
-	
-	private List<String> retrieveAnswers(int id) {
+
+	/**
+	 * 
+	 * @param id id of the question in the cache.
+	 * @return A list of answers if they exist, null otherwise.
+	 */
+	private List<String> retrieveAnswers(long id) {
 
 		Cursor answersCursor = mDatabase.query(SQLiteCacheHelper.TABLE_ANSWERS,
 				new String[] { SQLiteCacheHelper.FIELD_ANSWERS_ANSWER_VALUE },
@@ -283,6 +293,8 @@ public class CacheContentProvider {
 				answers.add(answersCursor.getString(answersCursor
 						.getColumnIndex(SQLiteCacheHelper.FIELD_ANSWERS_ANSWER_VALUE)));
 			} while (answersCursor.moveToNext());
+		} else {
+			// No answers found.
 		}
 
 		answersCursor.close();
@@ -290,7 +302,12 @@ public class CacheContentProvider {
 		return answers;
 	}
 
-	private Set<String> retrieveTags(int id) {
+	/**
+	 * 
+	 * @param id id of the question in the cache.
+	 * @return A list of tags if they exist, null otherwise.
+	 */
+	private Set<String> retrieveTags(long id) {
 
 		// Get ids of all the current question tags.
 		Cursor tagsIdCursor = mDatabase.query(
@@ -307,8 +324,13 @@ public class CacheContentProvider {
 				tagsId.add(String.valueOf(tagsIdCursor.getInt(tagsIdCursor
 						.getColumnIndex(SQLiteCacheHelper.FIELD_QUESTIONS_TAGS_TAG_FK))));
 			} while (tagsIdCursor.moveToNext());
+		} else {
+			tagsIdCursor.close();
+			return null;
 		}
 
+		tagsIdCursor.close();
+		
 		// Get all the tags related to questionId given in parameter.
 		String query = "SELECT " + SQLiteCacheHelper.FIELD_TAGS_NAME + " FROM "
 				+ SQLiteCacheHelper.TABLE_TAGS + " WHERE "
@@ -338,14 +360,23 @@ public class CacheContentProvider {
 			long tagId = mDatabase.insert(SQLiteCacheHelper.TABLE_TAGS, null,
 					tagValues);
 
+			if (tagId == -1) {
+				throw new SQLiteException("Cannot insert question in table "
+						+ SQLiteCacheHelper.TABLE_TAGS);
+			}
+			
 			// Updates linking table between tags and questions tables.
 			ContentValues tagQuestionValues = new ContentValues(2);
 			tagQuestionValues.put(
 					SQLiteCacheHelper.FIELD_QUESTIONS_TAGS_TAG_FK, tagId);
 			tagQuestionValues.put(
 					SQLiteCacheHelper.FIELD_QUESTIONS_TAGS_QUESTION_FK, id);
-			mDatabase.insert(SQLiteCacheHelper.TABLE_QUESTIONS_TAGS, null,
-					tagQuestionValues);
+			if (mDatabase.insert(SQLiteCacheHelper.TABLE_QUESTIONS_TAGS, null,
+					tagQuestionValues) == -1) {
+				throw new SQLiteException("Cannot insert question in table "
+						+ SQLiteCacheHelper.TABLE_QUESTIONS_TAGS);
+			}
+
 		}
 	}
 
@@ -354,7 +385,10 @@ public class CacheContentProvider {
 			ContentValues values = new ContentValues(2);
 			values.put(SQLiteCacheHelper.FIELD_ANSWERS_ANSWER_VALUE, answer);
 			values.put(SQLiteCacheHelper.FIELD_ANSWERS_QUESTION_FK, id);
-			mDatabase.insert(SQLiteCacheHelper.TABLE_ANSWERS, null, values);
+			if (mDatabase.insert(SQLiteCacheHelper.TABLE_ANSWERS, null, values) == -1) {
+				throw new SQLiteException("Cannot insert question in table "
+						+ SQLiteCacheHelper.TABLE_ANSWERS);
+			}
 		}
 	}
 
@@ -376,9 +410,13 @@ public class CacheContentProvider {
 		values.put(SQLiteCacheHelper.FIELD_QUESTIONS_SOLUTION_INDEX,
 				solutionIndex);
 
-		long id = mDatabase.insert(SQLiteCacheHelper.TABLE_QUESTIONS, null,
-				values);
-
+		long id = mDatabase.insert(SQLiteCacheHelper.TABLE_QUESTIONS, null, values);
+		
+		if (id == -1) {
+			throw new SQLiteException("Cannot insert question in table "
+					+ SQLiteCacheHelper.TABLE_QUESTIONS);
+		}
+		
 		return id;
 	}
 
