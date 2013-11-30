@@ -195,7 +195,7 @@ public final class QuestionsProxy implements ConnectivityProxy,
 	
 	public int getOutboxSize() {
 		int count = -1;
-		if (mContentProvider.isClosed()) {
+		if (null == mContentProvider || mContentProvider.isClosed()) {
 			openContentProvider();
 			count = mContentProvider.getOutboxCount();
 			closeContentProvider();
