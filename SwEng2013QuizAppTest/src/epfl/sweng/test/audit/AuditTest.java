@@ -243,7 +243,7 @@ public class AuditTest extends GUITest<EditQuestionActivity> {
 		try {
 			semaphore.acquire();
 			getSolo().sleep(500);
-			assertEquals("Question: my question1",
+			assertEquals("my question1",
 					question.getStatement());
 			assertTrue("Audit questions != 1", question.auditErrors() == 1);
 			assertTrue("Number of audit errors = "
@@ -285,7 +285,7 @@ public class AuditTest extends GUITest<EditQuestionActivity> {
 		try {
 			semaphore.acquire();
 			getSolo().sleep(500);
-			assertEquals("Question: my question1",
+			assertEquals("my question1",
 					question.getStatement());
 			assertTrue("Audit questions != 2", question.auditErrors() == 2);
 			assertTrue("Number of audit errors = "
@@ -331,7 +331,7 @@ public class AuditTest extends GUITest<EditQuestionActivity> {
 		try {
 			semaphore.acquire();
 			getSolo().sleep(500);
-			assertEquals("Question: my question1",
+			assertEquals("my question1",
 					question.getStatement());
 			assertTrue("Size of Tag Set != 21", question.getTags().size() == 21);
 			assertTrue("Audit questions != 1", question.auditErrors() == 1);
@@ -371,7 +371,7 @@ public class AuditTest extends GUITest<EditQuestionActivity> {
 		try {
 			semaphore.acquire();
 			getSolo().sleep(500);
-			assertEquals("Question: my question1",
+			assertEquals("my question1",
 					question.getStatement());
 			assertTrue("Audit questions != 3", question.auditErrors() == 3);
 			assertTrue("Number of audit errors = "
@@ -382,6 +382,7 @@ public class AuditTest extends GUITest<EditQuestionActivity> {
 		}
 	}
 
+	// XXX IL EST NORMAL QUE CE TEST PLANTE A CAUSE DE NOTRE ADAPTER.
 	public void testAuditButtonWithLabelError() {
 		// question sentence
 		getSolo().enterText(
