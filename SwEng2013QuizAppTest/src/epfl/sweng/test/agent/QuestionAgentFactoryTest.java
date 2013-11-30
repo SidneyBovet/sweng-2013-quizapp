@@ -27,23 +27,23 @@ public class QuestionAgentFactoryTest extends GUITest<ShowQuestionsActivity> {
 	@Override
 	protected void setUp() {
 		super.setUp();
+		contextShowQuestionActivity = getInstrumentation()
+				.getTargetContext();
 		mContentProvider = new CacheContentProvider(
-				contextShowQuestionActivity, false);
+				contextShowQuestionActivity, true);
 		mContentProvider.eraseDatabase();
 		fakeQueryOnline = new QuizQuery("queryOnline", "from");
 		fakeQueryCache = new QuizQuery("queryOffline", "from");
 		fakeCachedAgent = new CachedQuestionAgent(fakeQueryCache, 
 				contextShowQuestionActivity);
-		contextShowQuestionActivity = getInstrumentation()
-				.getTargetContext();
-		//TODO get a context for the cached question agent test
+
 	}
 	
 	@Override
 	protected void tearDown() throws Exception {
 		super.tearDown();
-		fakeCachedAgent.close();
 		mContentProvider.close();
+		fakeCachedAgent.close();
 	}
 	
 	public void testInstance() {
