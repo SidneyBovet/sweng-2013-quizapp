@@ -15,19 +15,21 @@ public class CachedQuestionAgent extends QuestionAgent {
 
 	private CacheContentProvider mContentProvider;
 	private Cursor mCursor;
-	
+
 	/**
 	 * 
-	 * @param query The {@link QuizQuery} defining this stream of questions,
-	 * <code>null</code> if those are random questions.
-	 * @param context The {@link Context} of the activity using this object.
+	 * @param query
+	 *            The {@link QuizQuery} defining this stream of questions,
+	 *            <code>null</code> if those are random questions.
+	 * @param context
+	 *            The {@link Context} of the activity using this object.
 	 */
 	public CachedQuestionAgent(QuizQuery query, Context context) {
 		super(query);
 		mContentProvider = new CacheContentProvider(context, false);
 		mCursor = mContentProvider.getQuestions(query);
 	}
-	
+
 	@Override
 	public QuizQuestion getNextQuestion() {
 		QuizQuestion retrievedQuestion = null;
@@ -36,7 +38,7 @@ public class CachedQuestionAgent extends QuestionAgent {
 		mCursor.moveToPosition(position);
 		int questionPK = mCursor.getInt(mCursor.getColumnIndex("id"));
 		retrievedQuestion = mContentProvider.getQuestionFromPK(questionPK);
-		
+
 		return retrievedQuestion;
 	}
 
@@ -48,7 +50,8 @@ public class CachedQuestionAgent extends QuestionAgent {
 
 	@Override
 	public boolean isClosed() {
-		return mCursor.isClosed() || mContentProvider.isClosed();
+		return null == mCursor || null == mContentProvider
+				|| mCursor.isClosed() || mContentProvider.isClosed();
 	}
 
 }

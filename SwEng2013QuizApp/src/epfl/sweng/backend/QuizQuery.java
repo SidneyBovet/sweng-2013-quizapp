@@ -72,6 +72,13 @@ public class QuizQuery implements Parcelable {
 		return ok;
 	}
 
+	
+	
+	@Override
+	public String toString() {
+		return mQuery;
+	}
+
 	/**
 	 * Returns a {@link JSONObject} representing the current query.
 	 * 

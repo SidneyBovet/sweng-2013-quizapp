@@ -119,10 +119,8 @@ public class CacheContentProvider {
 	}
 
 	/**
-	 * Normalizes the query: 
-	 * - We change the '*' by a logical AND. 
-	 * - We change the '+' by a logical OR. 
-	 * - We change the ' ' by a logical AND.
+	 * Normalizes the query: - We change the '*' by a logical AND. - We change
+	 * the '+' by a logical OR. - We change the ' ' by a logical AND.
 	 * 
 	 * @param query
 	 *            Query to be changed.
@@ -130,11 +128,21 @@ public class CacheContentProvider {
 	 */
 	private String filterQuery(String query) {
 
-		query.replaceAll("(?:\\ )*\\*(?:\\ )*", " AND ");
-		query.replaceAll("\\ \\+\\ ", " OR ");
-		query.replaceAll("\\ ", "AND");
+		// Only one space max. between words.
+		query = query.replaceAll("(\\ )+", " ");
 
-		query.replaceAll("\\w", SQLiteCacheHelper.FIELD_TAGS_NAME + "=?");
+		// Replaces all the names by name=? for the SQL query.
+		query = query.replaceAll("\\w+", SQLiteCacheHelper.FIELD_TAGS_NAME
+				+ "=?");
+
+		query = query.replaceAll("(?:\\ )?\\*(?:\\ )?", "*");
+		query = query.replaceAll("(?:\\ )?\\+(?:\\ )?", "+");
+		query = query.replaceAll("\\(\\ ", "(");
+		query = query.replaceAll("\\ \\)", ")");
+		query = query.replaceAll("\\ ", " AND ");
+		
+		query = query.replaceAll("(?:\\ )?\\*(?:\\ )?", " AND ");
+		query = query.replaceAll("(?:\\ )?\\+(?:\\ )?", " OR ");
 
 		return query;
 	}
@@ -151,7 +159,7 @@ public class CacheContentProvider {
 		List<String> whereArgsArray = new ArrayList<String>();
 
 		// Finds all alphanumeric tokens in the query
-		Pattern pattern = Pattern.compile("\\w");
+		Pattern pattern = Pattern.compile("\\w+");
 		Matcher m = pattern.matcher(query);
 		while (m.find()) {
 			whereArgsArray.add(m.group());
@@ -286,14 +294,14 @@ public class CacheContentProvider {
 		if (mDatabase.isReadOnly()) {
 			throw new IllegalStateException("Cannot wipe read-only database.");
 		} else {
-			mDatabase.execSQL("DROP TABLE IF EXISTS " +
-					SQLiteCacheHelper.TABLE_ANSWERS);
-			mDatabase.execSQL("DROP TABLE IF EXISTS " +
-					SQLiteCacheHelper.TABLE_QUESTIONS_TAGS);
-			mDatabase.execSQL("DROP TABLE IF EXISTS " +
-					SQLiteCacheHelper.TABLE_TAGS);
-			mDatabase.execSQL("DROP TABLE IF EXISTS " +
-					SQLiteCacheHelper.TABLE_QUESTIONS);
+			mDatabase.execSQL("DROP TABLE IF EXISTS "
+					+ SQLiteCacheHelper.TABLE_ANSWERS);
+			mDatabase.execSQL("DROP TABLE IF EXISTS "
+					+ SQLiteCacheHelper.TABLE_QUESTIONS_TAGS);
+			mDatabase.execSQL("DROP TABLE IF EXISTS "
+					+ SQLiteCacheHelper.TABLE_TAGS);
+			mDatabase.execSQL("DROP TABLE IF EXISTS "
+					+ SQLiteCacheHelper.TABLE_QUESTIONS);
 
 			mDatabase.execSQL(SQLiteCacheHelper.CREATE_TABLE_QUESTIONS);
 			mDatabase.execSQL(SQLiteCacheHelper.CREATE_TABLE_TAGS);
