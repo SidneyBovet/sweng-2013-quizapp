@@ -67,7 +67,7 @@ public class CacheContentProvider {
 		String queryStr = query.toString();
 
 		// We select all question ids...
-		String[] selection = new String[] {SQLiteCacheHelper.FIELD_QUESTIONS_PK};
+		String[] selection = new String[] { SQLiteCacheHelper.FIELD_QUESTIONS_PK };
 		String whereClause = null;
 		String[] whereArgs = null;
 		String orderBy = null;
@@ -85,7 +85,7 @@ public class CacheContentProvider {
 
 			// Gets all the tags id that matches the query.
 			Cursor tagsCursor = mDatabase.query(SQLiteCacheHelper.TABLE_TAGS,
-					new String[] {SQLiteCacheHelper.FIELD_TAGS_PK},
+					new String[] { SQLiteCacheHelper.FIELD_TAGS_PK },
 					whereClause, whereArgs, null, null, orderBy, null);
 
 			if (tagsCursor.moveToFirst()) {
@@ -118,8 +118,6 @@ public class CacheContentProvider {
 		}
 	}
 
-	
-
 	public QuizQuestion getQuestionFromPK(int id) {
 
 		// Step 2 : Get all the answers and tags for that question
@@ -129,12 +127,12 @@ public class CacheContentProvider {
 		// Step 3 : Store question content into variables.
 		Cursor questionCursor = mDatabase.query(
 				SQLiteCacheHelper.TABLE_QUESTIONS, new String[] {
-					SQLiteCacheHelper.FIELD_QUESTIONS_SWENG_ID,
-					SQLiteCacheHelper.FIELD_QUESTIONS_STATEMENT,
-					SQLiteCacheHelper.FIELD_QUESTIONS_SOLUTION_INDEX,
-					SQLiteCacheHelper.FIELD_QUESTIONS_OWNER },
+						SQLiteCacheHelper.FIELD_QUESTIONS_SWENG_ID,
+						SQLiteCacheHelper.FIELD_QUESTIONS_STATEMENT,
+						SQLiteCacheHelper.FIELD_QUESTIONS_SOLUTION_INDEX,
+						SQLiteCacheHelper.FIELD_QUESTIONS_OWNER },
 				SQLiteCacheHelper.FIELD_QUESTIONS_PK + " = ?",
-				new String[] {String.valueOf(id)}, null, null, null, null);
+				new String[] { String.valueOf(id) }, null, null, null, null);
 
 		if (questionCursor.moveToFirst()) {
 			int questionId = questionCursor
@@ -174,13 +172,17 @@ public class CacheContentProvider {
 	 * @param question
 	 *            The question to be added to the cache
 	 */
-	public void addQuizQuestion(QuizQuestion question, boolean inOutbox) {
+	public void addQuizQuestion(QuizQuestion question, boolean wantInOutbox) {
 		sanityDatabaseCheck();
 		long id = insertSimplifiedQuestion(question.getId(),
 				question.getOwner(), question.getStatement(),
 				question.getSolutionIndex());
 		insertQuestionAnswers(id, question.getAnswers());
 		insertQuestionTags(id, question.getTags());
+
+		if (wantInOutbox) {
+			putQuestionInOutbox(id);
+		}
 	}
 
 	/**
@@ -195,7 +197,7 @@ public class CacheContentProvider {
 		// Get the first question in the outbox stack.
 		Cursor questionOutboxIdCursor = mDatabase.query(
 				SQLiteCacheHelper.TABLE_QUESTIONS,
-				new String[] {SQLiteCacheHelper.FIELD_QUESTIONS_PK},
+				new String[] { SQLiteCacheHelper.FIELD_QUESTIONS_PK },
 				SQLiteCacheHelper.FIELD_QUESTIONS_IS_QUEUED + "=1", null, null,
 				null, SQLiteCacheHelper.FIELD_QUESTIONS_PK + " ASC", "1");
 
@@ -227,12 +229,7 @@ public class CacheContentProvider {
 			id = questionIdCursor.getInt(questionIdCursor
 					.getColumnIndex(SQLiteCacheHelper.FIELD_QUESTIONS_PK));
 
-			// Takes the question out of the outbox.
-			ContentValues isQueuedValue = new ContentValues(1);
-			isQueuedValue.put(SQLiteCacheHelper.FIELD_QUESTIONS_IS_QUEUED, 0);
-			mDatabase.update(SQLiteCacheHelper.TABLE_QUESTIONS, isQueuedValue,
-					SQLiteCacheHelper.FIELD_QUESTIONS_PK + "=?",
-					new String[] {String.valueOf(id)});
+			takeQuestionOutOfOutbox(id);
 		}
 	}
 
@@ -277,9 +274,9 @@ public class CacheContentProvider {
 	private List<String> retrieveAnswers(int id) {
 
 		Cursor answersCursor = mDatabase.query(SQLiteCacheHelper.TABLE_ANSWERS,
-				new String[] {SQLiteCacheHelper.FIELD_ANSWERS_ANSWER_VALUE},
+				new String[] { SQLiteCacheHelper.FIELD_ANSWERS_ANSWER_VALUE },
 				SQLiteCacheHelper.FIELD_ANSWERS_QUESTION_FK + " = ?",
-				new String[] {String.valueOf(id)}, null, null,
+				new String[] { String.valueOf(id) }, null, null,
 				SQLiteCacheHelper.FIELD_ANSWERS_PK + " ASC", null);
 
 		ArrayList<String> answers = new ArrayList<String>();
@@ -294,15 +291,15 @@ public class CacheContentProvider {
 
 		return answers;
 	}
-	
+
 	private Set<String> retrieveTags(int id) {
 
 		// Get ids of all the current question tags.
 		Cursor tagsIdCursor = mDatabase.query(
 				SQLiteCacheHelper.TABLE_QUESTIONS_TAGS,
-				new String[] {SQLiteCacheHelper.FIELD_QUESTIONS_TAGS_TAG_FK},
+				new String[] { SQLiteCacheHelper.FIELD_QUESTIONS_TAGS_TAG_FK },
 				SQLiteCacheHelper.FIELD_QUESTIONS_TAGS_QUESTION_FK + " = ?",
-				new String[] {String.valueOf(id)}, null, null,
+				new String[] { String.valueOf(id) }, null, null,
 				SQLiteCacheHelper.FIELD_QUESTIONS_TAGS_QUESTION_FK + " ASC",
 				null);
 
@@ -334,7 +331,7 @@ public class CacheContentProvider {
 
 		return tags;
 	}
-	
+
 	private void insertQuestionTags(long id, Set<String> tags) {
 		for (String tag : tags) {
 
@@ -387,6 +384,23 @@ public class CacheContentProvider {
 		return id;
 	}
 
+	private void putQuestionInOutbox(long id) {
+		changeQuestionOutboxStatus(id, true);
+	}
+
+	private void takeQuestionOutOfOutbox(long id) {
+		changeQuestionOutboxStatus(id, false);
+	}
+	
+	private void changeQuestionOutboxStatus(long id, boolean questionInOutbox) {
+		ContentValues isQueuedValue = new ContentValues(1);
+		isQueuedValue.put(SQLiteCacheHelper.FIELD_QUESTIONS_IS_QUEUED,
+				questionInOutbox ? 1 : 0);
+		mDatabase.update(SQLiteCacheHelper.TABLE_QUESTIONS, isQueuedValue,
+				SQLiteCacheHelper.FIELD_QUESTIONS_PK + "=?",
+				new String[] {String.valueOf(id)});
+	}
+
 	private void sanityDatabaseCheck() {
 		// note that use of isDatabaseIntegrityOk() may take a long time,
 		// it is therefore avoided here.
@@ -397,9 +411,11 @@ public class CacheContentProvider {
 	}
 
 	/**
-	 *  I got that function from
-	 *  http://stackoverflow.com/questions/7418849/android-sqlite-in-clause-and-placeholders
-	 *  even though it's not a complex piece of code.
+	 * I got that function from
+	 * http://stackoverflow.com/questions/7418849/android
+	 * -sqlite-in-clause-and-placeholders even though it's not a complex piece
+	 * of code.
+	 * 
 	 * @param len
 	 * @return
 	 */
@@ -437,15 +453,15 @@ public class CacheContentProvider {
 		// Makes the " * " or " + " look like "*" or "+"
 		query = query.replaceAll("(?:\\ )?\\*(?:\\ )?", "*");
 		query = query.replaceAll("(?:\\ )?\\+(?:\\ )?", "+");
-		
+
 		// Removes the spaces after '(' and/or before ')'
 		query = query.replaceAll("\\(\\ ", "(");
 		query = query.replaceAll("\\ \\)", ")");
-		
-		// Replaces all the spaces by ANDs (the order 
+
+		// Replaces all the spaces by ANDs (the order
 		// is important, do not move it without a valid reason).
 		query = query.replaceAll("\\ ", " AND ");
-		
+
 		// Replaces all the '*' and '+' by, respectively, " AND " and " OR "
 		query = query.replaceAll("(?:\\ )?\\*(?:\\ )?", " AND ");
 		query = query.replaceAll("(?:\\ )?\\+(?:\\ )?", " OR ");
