@@ -126,8 +126,9 @@ public final class QuestionsProxy implements ConnectivityProxy,
 		int httpCodeResponse = -1;
 		if (UserPreferences.getInstance().isConnected()) {
 			httpCodeResponse = sendCachedQuestions();
+		} else {
+			httpCodeResponse = HttpStatus.SC_CREATED;
 		}
-		httpCodeResponse = HttpStatus.SC_CREATED;
 		return httpCodeResponse;
 	}
 
@@ -284,6 +285,10 @@ public final class QuestionsProxy implements ConnectivityProxy,
 			mAgent.close();
 			mAgent = null;
 		}
+	}
+	
+	public static void resetQuestionsProxy() {
+		sQuestionProxy = null;
 	}
 
 	// //////////////////////////////////////////////////////////////////////////
