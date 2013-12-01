@@ -74,17 +74,11 @@ public class CacheContentProvider {
 
 		if (query.isRandom()) {
 			orderBy = "RANDOM()";
-			Cursor idCursor = mDatabase.query(
+			Cursor randomQuestionIdCursor = mDatabase.query(
 					SQLiteCacheHelper.TABLE_QUESTIONS, selection, whereClause,
 					whereArgs, null, null, orderBy, null);
-
-			if (idCursor.moveToFirst()) {
-				return idCursor;
-			} else {
-				// No questions in the DB.
-				idCursor.close();
-				return null;
-			}
+			randomQuestionIdCursor.moveToFirst();
+			return randomQuestionIdCursor;
 
 		} else {
 			whereArgs = extractParameters(queryStr);
@@ -105,12 +99,12 @@ public class CacheContentProvider {
 		// Step 3 : Store question content into variables.
 		Cursor questionCursor = mDatabase.query(
 				SQLiteCacheHelper.TABLE_QUESTIONS, new String[] {
-						SQLiteCacheHelper.FIELD_QUESTIONS_SWENG_ID,
-						SQLiteCacheHelper.FIELD_QUESTIONS_STATEMENT,
-						SQLiteCacheHelper.FIELD_QUESTIONS_SOLUTION_INDEX,
-						SQLiteCacheHelper.FIELD_QUESTIONS_OWNER },
+					SQLiteCacheHelper.FIELD_QUESTIONS_SWENG_ID,
+					SQLiteCacheHelper.FIELD_QUESTIONS_STATEMENT,
+					SQLiteCacheHelper.FIELD_QUESTIONS_SOLUTION_INDEX,
+					SQLiteCacheHelper.FIELD_QUESTIONS_OWNER },
 				SQLiteCacheHelper.FIELD_QUESTIONS_PK + " = ?",
-				new String[] { String.valueOf(id) }, null, null, null, null);
+				new String[] {String.valueOf(id)}, null, null, null, null);
 
 		if (questionCursor.moveToFirst()) {
 			int questionId = questionCursor

@@ -1,8 +1,6 @@
 package epfl.sweng.patterns;
 
-import java.util.ArrayDeque;
 import java.util.List;
-import java.util.Queue;
 
 import org.apache.http.HttpStatus;
 import org.json.JSONArray;
