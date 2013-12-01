@@ -1,10 +1,16 @@
 package epfl.sweng.test.activities;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import org.apache.http.HttpStatus;
 
 import android.widget.Button;
 import epfl.sweng.patterns.ConnectivityState;
 import epfl.sweng.preferences.UserPreferences;
+import epfl.sweng.quizquestions.QuizQuestion;
 import epfl.sweng.servercomm.SwengHttpClientFactory;
 import epfl.sweng.showquestions.ShowQuestionsActivity;
 import epfl.sweng.test.minimalmock.AdvancedMockHttpClient;
@@ -62,29 +68,36 @@ public class ShowQuestionsActivityTest extends GUITest<ShowQuestionsActivity> {
 	}
 
 	public void testCorrectQuestionSelected() {
-		mockClient
-				.pushCannedResponse(
-						"GET (?:https?://[^/]+|[^/]+)?/+quizquestions/random\\b",
-						HttpStatus.SC_OK,
-						"{\"question\": \"What is the answer to life, the universe, and everything?\","
-								+ " \"answers\": [\"Forty-two\", \"Twenty-seven\"], \"owner\": \"sweng\","
-								+ " \"solutionIndex\": 0, \"tags\": [\"h2g2\", \"trivia\"], \"id\": \"1\" }",
-						"application/json");
-		mockClient
-				.pushCannedResponse(
-						"POST (?:https?://[^/]+|[^/]+)?/+quizquestions/random\\b",
-						HttpStatus.SC_OK,
-						"{\"question\": \"What is the answer to life, the universe, and everything?\","
-								+ " \"answers\": [\"Forty-two\", \"Twenty-seven\"], \"owner\": \"sweng\","
-								+ " \"solutionIndex\": 0, \"tags\": [\"h2g2\", \"trivia\"], \"id\": \"1\" }",
-						"application/json");
+		
+		String statement = "What is the answer to life, the universe, and everything?";
+
+		List<String> answers = new ArrayList<String>();
+		answers.add("Forty-two");
+		answers.add("Twenty-seven");
+
+		int solutionIndex = 0;
+
+		Set<String> tags = new HashSet<String>();
+		tags.add("h2g2");
+		tags.add("trivial");
+
+		int id = 1;
+		String owner = "sweng";
+
+		QuizQuestion question = new QuizQuestion(statement, answers,
+				solutionIndex, tags, id, owner);
+
+		mockClient.pushCannedResponse(
+				"GET (?:https?://[^/]+|[^/]+)?/+quizquestions/random\\b",
+				HttpStatus.SC_OK, question.toJSON().toString(),
+				"application/json");
 
 		getActivityAndWaitFor(TTChecks.QUESTION_SHOWN);
-		getSolo().sleep(2000);
+		
 		assertTrue("Correct answer must be displayed",
-				getSolo().searchText("Forty-two"));
+				getSolo().searchText("Forty\\-two"));
 
-		getSolo().clickOnText("Forty-two");
+		getSolo().clickOnText("Forty\\-two");
 
 		getActivityAndWaitFor(TTChecks.ANSWER_SELECTED);
 		assertTrue("Couldn't find the correct answer",

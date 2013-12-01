@@ -53,8 +53,13 @@ public final class UserPreferences {
 	
 	public static UserPreferences getInstance() {
 		if (null == sSingletonStorage) {
-			Log.e(UserPreferences.class.getName(), "getInstance()"
-					+ "without context was used before the one with a Context!");
+			synchronized (UserPreferences.class) {
+				if (null == sSingletonStorage) {
+					Log.e(UserPreferences.class.getName(), "getInstance(): "
+							+ "was used before the one with a Context");
+					sSingletonStorage = new UserPreferences();
+				}
+			}
 		}
 		return sSingletonStorage;
 	}
@@ -119,6 +124,9 @@ public final class UserPreferences {
 	 */
 	
 	public String getSessionId() {
+		if (mUserCredentialsPrefs == null) {
+			return "";
+		}
 		return mUserCredentialsPrefs.getString(mKeySessionIDName, "NOT LOGGED IN!");
 	}
 
@@ -145,6 +153,16 @@ public final class UserPreferences {
 		this.mUserCredentialsPrefs = context.getSharedPreferences(
 				mSharedPreferencesName, Context.MODE_PRIVATE);
 		this.mEditor = mUserCredentialsPrefs.edit();
+		this.mCurrentConnectivityState = ConnectivityState.ONLINE;
+	}
+	
+	/**
+	 * Private constructor of the singleton, without context.
+	 */
+	
+	private UserPreferences() {
+		this.mUserCredentialsPrefs = null;
+		this.mEditor = null;
 		this.mCurrentConnectivityState = ConnectivityState.ONLINE;
 	}
 }
