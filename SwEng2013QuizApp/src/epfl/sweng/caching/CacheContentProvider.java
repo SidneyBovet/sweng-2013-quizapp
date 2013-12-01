@@ -571,21 +571,51 @@ public class CacheContentProvider {
 	
 	//pre-condition: # of '?' in normalizedTagList == questionSetList.size()
 	public Set<Long> evaluate(List<String> normalizedTagList, List<Set<Long>> questionsSetList) {
+		List<String> originalNormalizedTagList = new ArrayList<String>(normalizedTagList);
 		while (normalizedTagList.contains(")")) {
 			int firstClosingParenthesisIndex = normalizedTagList.indexOf(")");
 			int correspondingOpeningParenthesisIndex = 0;
-			for (int i = firstClosingParenthesisIndex; i < 0; i--) {
+			
+			List<String> expressionParenthesized = new ArrayList<String>();
+			normalizedTagList.remove(firstClosingParenthesisIndex);
+			for (int i = firstClosingParenthesisIndex-1; i > 0; i--) {
 				if (normalizedTagList.get(i).equals("(")) {
+					normalizedTagList.remove(i);
 					correspondingOpeningParenthesisIndex = i;
 					break;
+				} else {
+					expressionParenthesized.add(normalizedTagList.get(i));
+					normalizedTagList.remove(i);
 				}
 			}
 			// we now work to suppress the group between those two indexes
 			
+			List<Set<Long>> setListedParenthesized = getSubListedSet(originalNormalizedTagList, questionsSetList,
+					correspondingOpeningParenthesisIndex,firstClosingParenthesisIndex);
 			
+			Set<Long> reducedSet = reduceGroup(expressionParenthesized, setListedParenthesized);
+			
+			normalizedTagList.add(correspondingOpeningParenthesisIndex, "?");
+			questionsSetList.add(correspondingOpeningParenthesisIndex, reducedSet);
 		}
 		
 		return questionsSetList.get(0);
+	}
+	
+	public List<Set<Long>> getSubListedSet(List<String> normalizedTagList, List<Set<Long>> questionsSetList, int a, int b) {
+		int firstElementsCount = 0;
+		int parenthesizedCount = 0;
+		for (int i = 0; i < b; i++) {
+			if (normalizedTagList.get(i).equals("?")) {
+				if (i < a) {
+					firstElementsCount++;
+				} else {
+					parenthesizedCount++;
+				}
+			}
+		}
+		
+		return questionsSetList.subList(firstElementsCount, parenthesizedCount);
 	}
 	
 	// pre-condition: tagList does not contain parenthesis and is well-formed
