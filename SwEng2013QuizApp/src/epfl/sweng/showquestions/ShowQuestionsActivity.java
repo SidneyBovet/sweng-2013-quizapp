@@ -148,6 +148,8 @@ public class ShowQuestionsActivity extends Activity {
 							getResources().getString(
 									R.string.error_fetching_query_question),
 							Toast.LENGTH_LONG).show();
+					// NOT SUR ABOUT THE TTCHECKS HERE 
+					TestCoordinator.check(TTChecks.QUESTION_SHOWN);
 					finish();
 					return;
 				} else {
@@ -158,9 +160,14 @@ public class ShowQuestionsActivity extends Activity {
 							getResources().getString(
 									R.string.error_fetching_question),
 							Toast.LENGTH_LONG).show();
+					// NOT SUR ABOUT THE TTCHECKS HERE
+					TestCoordinator.check(TTChecks.QUESTION_SHOWN);
+					finish();
+					return;
 				}
 			}
-			TestCoordinator.check(TTChecks.QUESTION_SHOWN);
+			
+			
 		}
 	}
 }
