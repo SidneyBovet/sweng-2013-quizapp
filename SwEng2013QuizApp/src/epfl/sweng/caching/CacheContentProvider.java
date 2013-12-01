@@ -570,7 +570,7 @@ public class CacheContentProvider {
 	}
 	
 	//pre-condition: # of '?' in normalizedTagList == questionSetList.size()
-	private Set<Long> evaluate(List<String> normalizedTagList, List<Set<Long>> questionsSetList) {
+	public Set<Long> evaluate(List<String> normalizedTagList, List<Set<Long>> questionsSetList) {
 		while (normalizedTagList.contains(")")) {
 			int firstClosingParenthesisIndex = normalizedTagList.indexOf(")");
 			int correspondingOpeningParenthesisIndex = 0;
@@ -589,11 +589,47 @@ public class CacheContentProvider {
 	}
 	
 	// pre-condition: tagList does not contain parenthesis and is well-formed
-	private List<Set<Long>> reduceGroup(List<String> tagList, List<Set<Long>> questionsSetList) {
+	public Set<Long> reduceGroup(List<String> tagList, List<Set<Long>> questionsSetList) {
 		while (tagList.contains("*")) {
 			int firstANDIndex = tagList.indexOf("*");
 			
+			int leftOperandIndex = 0;
+			for (int i = 0; i < firstANDIndex; i++) {
+				if (tagList.get(i).equals("?")) {
+					leftOperandIndex++;
+				}
+			}
+
+			// compute the INTERSECTION of the two operands
+			Set<Long> leftOperand = questionsSetList.get(leftOperandIndex);
+			Set<Long> rightOperand = questionsSetList.remove(leftOperandIndex+1);
+			leftOperand.retainAll(rightOperand);
+			
+			// update the tagList
+			tagList.remove(firstANDIndex);
+			tagList.remove(firstANDIndex); // this will remove the right-hand operand
 		}
-		return null;
+		
+
+		while (tagList.contains("+")) {
+			int firstANDIndex = tagList.indexOf("+");
+			
+			int leftOperandIndex = 0;
+			for (int i = 0; i < firstANDIndex; i++) {
+				if (tagList.get(i).equals("?")) {
+					leftOperandIndex++;
+				}
+			}
+
+			// compute the UNION of the two operands
+			Set<Long> leftOperand = questionsSetList.get(leftOperandIndex);
+			Set<Long> rightOperand = questionsSetList.remove(leftOperandIndex+1);
+			leftOperand.addAll(rightOperand);
+			
+			// update the tagList
+			tagList.remove(firstANDIndex);
+			tagList.remove(firstANDIndex); // this will remove the right-hand operand
+		}
+		return questionsSetList.get(0);
 	}
 }
