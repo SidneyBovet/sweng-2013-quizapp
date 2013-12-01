@@ -218,7 +218,7 @@ public class ShowQuestionsActivityTest extends GUITest<ShowQuestionsActivity> {
 		mockClient.pushCannedResponse(
 				"GET (?:https?://[^/]+|[^/]+)?/+quizquestions/random\\b",
 				AdvancedMockHttpClient.IOEXCEPTION_ERROR_CODE, "", "");
-		getActivityAndWaitFor(TTChecks.OFFLINE_CHECKBOX_ENABLED);
+		getActivityAndWaitFor(TTChecks.QUESTION_SHOWN);
 		assert true;
 	}
 
@@ -226,7 +226,7 @@ public class ShowQuestionsActivityTest extends GUITest<ShowQuestionsActivity> {
 		mockClient.pushCannedResponse(
 				"GET (?:https?://[^/]+|[^/]+)?/+quizquestions/random\\b",
 				HttpStatus.SC_SERVICE_UNAVAILABLE, "", "");
-		getActivityAndWaitFor(TTChecks.OFFLINE_CHECKBOX_ENABLED);
+		getActivityAndWaitFor(TTChecks.QUESTION_SHOWN);
 		getSolo().searchText("There was an error retrieving the question");
 	}
 
@@ -234,7 +234,7 @@ public class ShowQuestionsActivityTest extends GUITest<ShowQuestionsActivity> {
 		mockClient.pushCannedResponse(
 				"GET (?:https?://[^/]+|[^/]+)?/+quizquestions/random\\b",
 				AdvancedMockHttpClient.IOEXCEPTION_ERROR_CODE, "", "");
-		getActivityAndWaitFor(TTChecks.OFFLINE_CHECKBOX_ENABLED);
+		getActivityAndWaitFor(TTChecks.QUESTION_SHOWN);
 		getSolo().searchText("There was an error retrieving the question");
 	}
 
@@ -244,7 +244,7 @@ public class ShowQuestionsActivityTest extends GUITest<ShowQuestionsActivity> {
 		mockClient.pushCannedResponse(
 				"GET (?:https?://[^/]+|[^/]+)?/+quizquestions/random\\b",
 				AdvancedMockHttpClient.FORBIDDEN_ERROR_CODE, "", "");
-		getActivityAndWaitFor(TTChecks.OFFLINE_CHECKBOX_ENABLED);
+		getActivityAndWaitFor(TTChecks.QUESTION_SHOWN);
 		getSolo().searchText(
 				"There\\ was\\ an\\ error\\ retrieving\\ the\\ question");
 		// TODO Shouldn't we do an assert of some sort here?
