@@ -8,7 +8,9 @@ import java.util.Set;
 import org.apache.http.HttpStatus;
 
 import android.widget.Button;
+import epfl.sweng.agents.QuestionAgentFactory;
 import epfl.sweng.patterns.ConnectivityState;
+import epfl.sweng.patterns.QuestionsProxy;
 import epfl.sweng.preferences.UserPreferences;
 import epfl.sweng.quizquestions.QuizQuestion;
 import epfl.sweng.servercomm.SwengHttpClientFactory;
@@ -33,6 +35,9 @@ public class ShowQuestionsActivityTest extends GUITest<ShowQuestionsActivity> {
 	protected void tearDown() throws Exception {
 		super.tearDown();
 		SwengHttpClientFactory.setInstance(null);
+		QuestionAgentFactory.releaseInstance();
+		QuestionsProxy.getInstance(getInstrumentation().getContext()).closeStream();
+		QuestionsProxy.resetQuestionsProxy();
 	}
 
 	@Override
