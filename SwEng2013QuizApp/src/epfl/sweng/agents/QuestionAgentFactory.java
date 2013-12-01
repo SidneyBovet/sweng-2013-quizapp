@@ -4,7 +4,7 @@ import android.content.Context;
 import epfl.sweng.backend.QuizQuery;
 import epfl.sweng.preferences.UserPreferences;
 
-public class QuestionAgentFactory {
+public abstract class QuestionAgentFactory {
 	
 	private static boolean isFreeToCreate = true;
 	private static QuestionAgent instanceSet = null;
