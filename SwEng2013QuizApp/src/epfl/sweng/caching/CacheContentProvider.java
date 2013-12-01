@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -64,7 +62,7 @@ public class CacheContentProvider {
 	public Cursor getQuestions(QuizQuery query) {
 		sanityDatabaseCheck();
 
-		String queryStr = query.toString();
+
 
 		// We select all question ids...
 		String[] selection = new String[] {SQLiteCacheHelper.FIELD_QUESTIONS_PK};
@@ -462,33 +460,33 @@ public class CacheContentProvider {
 	 *            Query to be changed.
 	 * @return the new SQL-compatible query.
 	 */
-	private String filterQuery(String query) {
-
-		// Only one space max. between words.
-		query = query.replaceAll("(\\ )+", " ");
-
-		// Replaces all the names by id=? for the SQL query.
-		query = query.replaceAll("\\w+", SQLiteCacheHelper.TABLE_TAGS + "."
-				+ SQLiteCacheHelper.FIELD_TAGS_NAME + "=?");
-
-		// Makes the " * " or " + " look like "*" or "+"
-		query = query.replaceAll("(?:\\ )?\\*(?:\\ )?", "*");
-		query = query.replaceAll("(?:\\ )?\\+(?:\\ )?", "+");
-
-		// Removes the spaces after '(' and/or before ')'
-		query = query.replaceAll("\\(\\ ", "(");
-		query = query.replaceAll("\\ \\)", ")");
-
-		// Replaces all the spaces by ANDs (the order
-		// is important, do not move it without a valid reason).
-		query = query.replaceAll("\\ ", " AND ");
-
-		// Replaces all the '*' and '+' by, respectively, " AND " and " OR "
-		query = query.replaceAll("(?:\\ )?\\*(?:\\ )?", " AND ");
-		query = query.replaceAll("(?:\\ )?\\+(?:\\ )?", " OR ");
-
-		return query;
-	}
+//	private String filterQuery(String query) {
+//
+//		// Only one space max. between words.
+//		query = query.replaceAll("(\\ )+", " ");
+//
+//		// Replaces all the names by id=? for the SQL query.
+//		query = query.replaceAll("\\w+", SQLiteCacheHelper.TABLE_TAGS + "."
+//				+ SQLiteCacheHelper.FIELD_TAGS_NAME + "=?");
+//
+//		// Makes the " * " or " + " look like "*" or "+"
+//		query = query.replaceAll("(?:\\ )?\\*(?:\\ )?", "*");
+//		query = query.replaceAll("(?:\\ )?\\+(?:\\ )?", "+");
+//
+//		// Removes the spaces after '(' and/or before ')'
+//		query = query.replaceAll("\\(\\ ", "(");
+//		query = query.replaceAll("\\ \\)", ")");
+//
+//		// Replaces all the spaces by ANDs (the order
+//		// is important, do not move it without a valid reason).
+//		query = query.replaceAll("\\ ", " AND ");
+//
+//		// Replaces all the '*' and '+' by, respectively, " AND " and " OR "
+//		query = query.replaceAll("(?:\\ )?\\*(?:\\ )?", " AND ");
+//		query = query.replaceAll("(?:\\ )?\\+(?:\\ )?", " OR ");
+//
+//		return query;
+//	}
 
 	/**
 	 * Will get all the words contained in the query given in parameters.
@@ -497,19 +495,19 @@ public class CacheContentProvider {
 	 *            Query from where we need to extract the data.
 	 * @return All the words contained in the query.
 	 */
-	private String[] extractParameters(String query) {
-
-		List<String> whereArgsArray = new ArrayList<String>();
-
-		// Finds all alphanumeric tokens in the query
-		Pattern pattern = Pattern.compile("\\w+");
-		Matcher m = pattern.matcher(query);
-		while (m.find()) {
-			whereArgsArray.add(m.group());
-		}
-
-		// We convert the List to an array of String.
-		return (String[]) whereArgsArray.toArray(new String[whereArgsArray
-				.size()]);
-	}
+//	private String[] extractParameters(String query) {
+//
+//		List<String> whereArgsArray = new ArrayList<String>();
+//
+//		// Finds all alphanumeric tokens in the query
+//		Pattern pattern = Pattern.compile("\\w+");
+//		Matcher m = pattern.matcher(query);
+//		while (m.find()) {
+//			whereArgsArray.add(m.group());
+//		}
+//
+//		// We convert the List to an array of String.
+//		return (String[]) whereArgsArray.toArray(new String[whereArgsArray
+//				.size()]);
+//	}
 }
