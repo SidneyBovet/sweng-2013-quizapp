@@ -592,8 +592,8 @@ public class CacheContentProvider {
 	
 	//pre-condition: # of '?' in normalizedTagList == questionSetList.size()
 	public Set<Long> evaluate(List<String> normalizedTagList, List<Set<Long>> questionsSetList) {
-		List<String> originalNormalizedTagList = new ArrayList<String>(normalizedTagList);
 		while (normalizedTagList.contains(")")) {
+			List<String> originalNormalizedTagList = new ArrayList<String>(normalizedTagList);
 			int firstClosingParenthesisIndex = normalizedTagList.indexOf(")");
 			int correspondingOpeningParenthesisIndex = 0;
 			
