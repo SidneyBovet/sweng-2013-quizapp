@@ -131,27 +131,6 @@ public class CacheContentProviderTest extends AndroidTestCase {
 		}
 	}
 
-	public void testFetchRandomQuestionInCache() {
-		// TODO Implement it
-	}
-
-	public void testQuestionQueryFailure() {
-
-		// QuizQuestion expectedQuestion =
-		// createFakeFullQuestion("Question statement");
-		//
-		// mProvider.addQuizQuestion(expectedQuestion);
-		// Cursor fetchedQuestionsCursor = mProvider.getQuestions(new QuizQuery(
-		// "Milionaire Funny NONEXISTINGTAG", ""));
-		//
-		// assert (null != fetchedQuestionsCursor && !fetchedQuestionsCursor
-		// .moveToFirst());
-	}
-
-	public void testQuestionQueryInCache() {
-
-	}
-
 	public void testOutboxWorksFIFO() {
 
 		final int nbQuestions = 10;
