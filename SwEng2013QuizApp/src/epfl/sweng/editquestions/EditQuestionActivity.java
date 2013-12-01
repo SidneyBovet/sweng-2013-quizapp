@@ -109,7 +109,10 @@ public class EditQuestionActivity extends Activity {
 	 */
 	
 	public void sendEditedQuestion(View view) {
-		new AsyncPostQuestion().execute(createQuestionFromGui());
+		QuizQuestion question = createQuestionFromGui();
+		if (null != question) {
+			new AsyncPostQuestion().execute(createQuestionFromGui());
+		}
 		
 		resetEditQuestionLayout();
 	}

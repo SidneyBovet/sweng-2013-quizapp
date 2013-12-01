@@ -84,6 +84,7 @@ public class NetworkCommunication implements INetworkCommunication {
 			if (Math.floor(httpCodeResponse/ONE_HUNDRED) == BASE_SERVER_ERRORS) {
 				UserPreferences.getInstance()
 					.setConnectivityState(ConnectivityState.OFFLINE);
+				return null;
 			} else if (httpCodeResponse == HttpStatus.SC_OK) {
 				String jsonQuestion = new BasicResponseHandler()
 					.handleResponse(response);
