@@ -112,7 +112,7 @@ public class CacheContentProvider {
 		// Step 1: Remove all unused spaces
 		queryStr = filterQuery(queryStr);
 
-		// Give lots of calls to get all the questions ids.
+		// Get all the '*', the '+' and the '(', ')'
 		
 		
 		return null;
