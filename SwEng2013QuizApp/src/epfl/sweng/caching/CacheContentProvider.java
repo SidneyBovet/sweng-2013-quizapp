@@ -593,7 +593,7 @@ public class CacheContentProvider {
 		while (tagList.contains("*")) {
 			int firstANDIndex = tagList.indexOf("*");
 			
-			int leftOperandIndex = 0;
+			int leftOperandIndex = -1;
 			for (int i = 0; i < firstANDIndex; i++) {
 				if (tagList.get(i).equals("?")) {
 					leftOperandIndex++;
@@ -614,7 +614,7 @@ public class CacheContentProvider {
 		while (tagList.contains("+")) {
 			int firstANDIndex = tagList.indexOf("+");
 			
-			int leftOperandIndex = 0;
+			int leftOperandIndex = -1;
 			for (int i = 0; i < firstANDIndex; i++) {
 				if (tagList.get(i).equals("?")) {
 					leftOperandIndex++;

@@ -154,16 +154,16 @@ public class CacheContentProviderTest extends AndroidTestCase {
 	
 	public void testReduceGroupWorks() {
 		String[] tagArray = {"?","+","?","*","?"};
-		List<String> tagList = Arrays.asList(tagArray);
+		List<String> tagList = new ArrayList<String>(Arrays.asList(tagArray));
 
 		Long[] group1 = {Long.valueOf(1),Long.valueOf(2)};
-		List<Long> group1List = Arrays.asList(group1);
+		List<Long> group1List = new ArrayList<Long>(Arrays.asList(group1));
 		Set<Long> group1Set = new HashSet<Long>(group1List);
 		Long[] group2 = {Long.valueOf(3),Long.valueOf(4)};
-		List<Long> group2List = Arrays.asList(group2);
+		List<Long> group2List = new ArrayList<Long>(Arrays.asList(group2));
 		Set<Long> group2Set = new HashSet<Long>(group2List);
 		Long[] group3 = {Long.valueOf(3),Long.valueOf(5)};
-		List<Long> group3List = Arrays.asList(group3);
+		List<Long> group3List = new ArrayList<Long>(Arrays.asList(group3));
 		Set<Long> group3Set = new HashSet<Long>(group3List);
 		List<Set<Long>> questionsSetList = new ArrayList<Set<Long>>();
 		questionsSetList.add(group1Set);
