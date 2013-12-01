@@ -89,12 +89,12 @@ public class CacheContentProvider {
 	}
 
 	private List<Long> unionOfQuestionsList(List<Long> A, List<Long> B) {
-		
+
 		return null;
 	}
 
 	private List<Long> intersectionOfQuestionsList(List<Long> A, List<Long> B) {
-
+		
 		return null;
 	}
 
@@ -108,13 +108,12 @@ public class CacheContentProvider {
 
 		// e.g. "A * B    + C (D + E * F)" or st else.
 		String queryStr = query.toString();
-		
+
 		// Step 1: Remove all unused spaces
 		queryStr = filterQuery(queryStr);
 
 		// Get all the '*', the '+' and the '(', ')'
-		
-		
+
 		return null;
 	}
 
@@ -140,15 +139,13 @@ public class CacheContentProvider {
 
 		} else {
 
-			System.out.println(queryStr);
-
 			/* fake cursor to avoid NPE */
-			// orderBy = "RANDOM()";
-			// Cursor randomQuestionIdCursor = mDatabase.query(
-			// SQLiteCacheHelper.TABLE_QUESTIONS, selection, whereClause,
-			// whereArgs, null, null, orderBy, null);
-			// randomQuestionIdCursor.moveToFirst();
-			// return randomQuestionIdCursor;
+			 orderBy = "RANDOM()";
+			 Cursor randomQuestionIdCursor = mDatabase.query(
+			 SQLiteCacheHelper.TABLE_QUESTIONS, selection, whereClause,
+			 whereArgs, null, null, orderBy, null);
+			 randomQuestionIdCursor.moveToFirst();
+			 return randomQuestionIdCursor;
 			/* end of fake cursor to avoid NPE */
 
 			// whereArgs = extractParameters(queryStr);
@@ -159,8 +156,6 @@ public class CacheContentProvider {
 			// return null;
 
 		}
-
-		return null;
 	}
 
 	public QuizQuestion getQuestionFromPK(long id) {
@@ -516,7 +511,7 @@ public class CacheContentProvider {
 			return sb.toString();
 		}
 	}
-	
+
 	/**
 	 * Normalizes the query: - We change the '*' by a logical AND. - We change
 	 * the '+' by a logical OR. - We change the ' ' by a logical AND.
@@ -529,7 +524,7 @@ public class CacheContentProvider {
 
 		// Only one space max. between words.
 		query = query.replaceAll("(\\ )+", " ");
-		
+
 		// Removes the spaces after '(' and/or before ')'
 		query = query.replaceAll("\\(\\ ", "(");
 		query = query.replaceAll("\\ \\)", ")");
@@ -537,30 +532,29 @@ public class CacheContentProvider {
 		// Removes beginning and end spaces.
 		query = query.replaceAll("^\\ ", "");
 		query = query.replaceAll("\\ $", "");
-		
-		
-//		// Only one space max. between words.
-//		query = query.replaceAll("(\\ )+", " ");
-//
-//		// Replaces all the names by id=? for the SQL query.
-//		query = query.replaceAll("\\w+", SQLiteCacheHelper.TABLE_TAGS + "."
-//				+ SQLiteCacheHelper.FIELD_TAGS_NAME + "=?");
-//
-//		// Makes the " * " or " + " look like "*" or "+"
-//		query = query.replaceAll("(?:\\ )?\\*(?:\\ )?", "*");
-//		query = query.replaceAll("(?:\\ )?\\+(?:\\ )?", "+");
-//
-//		// Removes the spaces after '(' and/or before ')'
-//		query = query.replaceAll("\\(\\ ", "(");
-//		query = query.replaceAll("\\ \\)", ")");
-//
-//		// Replaces all the spaces by ANDs (the order
-//		// is important, do not move it without a valid reason).
-//		query = query.replaceAll("\\ ", " AND ");
-//
-//		// Replaces all the '*' and '+' by, respectively, " AND " and " OR "
-//		query = query.replaceAll("(?:\\ )?\\*(?:\\ )?", " AND ");
-//		query = query.replaceAll("(?:\\ )?\\+(?:\\ )?", " OR ");
+
+		// // Only one space max. between words.
+		// query = query.replaceAll("(\\ )+", " ");
+		//
+		// // Replaces all the names by id=? for the SQL query.
+		// query = query.replaceAll("\\w+", SQLiteCacheHelper.TABLE_TAGS + "."
+		// + SQLiteCacheHelper.FIELD_TAGS_NAME + "=?");
+		//
+		// // Makes the " * " or " + " look like "*" or "+"
+		// query = query.replaceAll("(?:\\ )?\\*(?:\\ )?", "*");
+		// query = query.replaceAll("(?:\\ )?\\+(?:\\ )?", "+");
+		//
+		// // Removes the spaces after '(' and/or before ')'
+		// query = query.replaceAll("\\(\\ ", "(");
+		// query = query.replaceAll("\\ \\)", ")");
+		//
+		// // Replaces all the spaces by ANDs (the order
+		// // is important, do not move it without a valid reason).
+		// query = query.replaceAll("\\ ", " AND ");
+		//
+		// // Replaces all the '*' and '+' by, respectively, " AND " and " OR "
+		// query = query.replaceAll("(?:\\ )?\\*(?:\\ )?", " AND ");
+		// query = query.replaceAll("(?:\\ )?\\+(?:\\ )?", " OR ");
 
 		return query;
 	}
@@ -572,19 +566,19 @@ public class CacheContentProvider {
 	 *            Query from where we need to extract the data.
 	 * @return All the words contained in the query.
 	 */
-//	private String[] extractParameters(String query) {
-//
-//		List<String> whereArgsArray = new ArrayList<String>();
-//
-//		// Finds all alphanumeric tokens in the query
-//		Pattern pattern = Pattern.compile("\\w+");
-//		Matcher m = pattern.matcher(query);
-//		while (m.find()) {
-//			whereArgsArray.add(m.group());
-//		}
-//
-//		// We convert the List to an array of String.
-//		return (String[]) whereArgsArray.toArray(new String[whereArgsArray
-//				.size()]);
-//	}
+	// private String[] extractParameters(String query) {
+	//
+	// List<String> whereArgsArray = new ArrayList<String>();
+	//
+	// // Finds all alphanumeric tokens in the query
+	// Pattern pattern = Pattern.compile("\\w+");
+	// Matcher m = pattern.matcher(query);
+	// while (m.find()) {
+	// whereArgsArray.add(m.group());
+	// }
+	//
+	// // We convert the List to an array of String.
+	// return (String[]) whereArgsArray.toArray(new String[whereArgsArray
+	// .size()]);
+	// }
 }
