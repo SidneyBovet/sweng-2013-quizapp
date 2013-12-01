@@ -63,6 +63,7 @@ public class QuestionAgentFactoryTest extends AndroidTestCase {
 				.setConnectivityState(ConnectivityState.ONLINE);
 		QuestionAgent agentOnlineToTest = QuestionAgentFactory.getAgent(
 				contextShowQuestionActivity, fakeQueryOnline);
+		assertTrue(fakeQueryOnline.equals(agentOnlineToTest.getQuery()));
 		assertTrue(agentOnlineToTest instanceof OnlineQuestionsAgent);
 		QuestionAgentFactory.releaseInstance();
 
@@ -71,4 +72,6 @@ public class QuestionAgentFactoryTest extends AndroidTestCase {
 				contextShowQuestionActivity, fakeQueryCache);
 		assertTrue(agentToTest instanceof CachedQuestionAgent);
 	}
+	
+	
 }
