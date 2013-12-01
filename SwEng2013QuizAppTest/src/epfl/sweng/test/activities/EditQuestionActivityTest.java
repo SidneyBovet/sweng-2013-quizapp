@@ -37,10 +37,16 @@ public class EditQuestionActivityTest extends GUITest<EditQuestionActivity> {
 		
 		adapter.add("Test");
 		List<String> answers = adapter.getAnswerList();
+		assertEquals(answers.get(1), "Test");
 		int correct = adapter.getCorrectIndex();
+		assertEquals(correct, -1);
 		String answer = (String) adapter.getItem(0);
+		assertEquals(answer, "");
 		long id = adapter.getItemId(0);
+		assertEquals(id, 0);
 		int errors = adapter.auditErrors();
+		assertEquals(errors, 2);
+		
 		adapter.notifyDataSetChanged();
 		adapter.resetAnswerList();
 	}
