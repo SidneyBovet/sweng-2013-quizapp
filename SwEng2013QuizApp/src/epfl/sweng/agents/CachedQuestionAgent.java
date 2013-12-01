@@ -34,14 +34,14 @@ public class CachedQuestionAgent extends QuestionAgent {
 	public QuizQuestion getNextQuestion() {
 		QuizQuestion retrievedQuestion = null;
 		
-		if (null == mCursor || mCursor.isClosed()) {
+		if (isClosed() || mCursor.getCount() == 0 || mCursor.isAfterLast()) {
 			return null;
 		}
-
-		int position = new Random().nextInt(mCursor.getCount());
-		mCursor.moveToPosition(position);
+		
 		int questionPK = mCursor.getInt(mCursor.getColumnIndex("id"));
 		retrievedQuestion = mContentProvider.getQuestionFromPK(questionPK);
+		
+		mCursor.moveToNext();
 
 		return retrievedQuestion;
 	}
