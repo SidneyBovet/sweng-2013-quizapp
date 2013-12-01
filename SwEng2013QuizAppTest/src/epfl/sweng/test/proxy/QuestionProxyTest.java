@@ -5,10 +5,13 @@ import java.util.Arrays;
 import java.util.TreeSet;
 
 import org.apache.http.HttpStatus;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.content.Context;
 import android.database.Cursor;
-import epfl.sweng.agents.OnlineQuestionsAgent;
+import android.util.Log;
 import epfl.sweng.backend.QuizQuery;
 import epfl.sweng.caching.CacheContentProvider;
 import epfl.sweng.caching.SQLiteCacheHelper;
@@ -19,6 +22,7 @@ import epfl.sweng.preferences.UserPreferences;
 import epfl.sweng.quizquestions.QuizQuestion;
 import epfl.sweng.servercomm.SwengHttpClientFactory;
 import epfl.sweng.test.activities.GUITest;
+import epfl.sweng.test.minimalmock.AdvancedMockHttpClient;
 import epfl.sweng.test.minimalmock.MockHttpClient;
 
 public class QuestionProxyTest extends GUITest<MainActivity>{	
@@ -32,7 +36,7 @@ public class QuestionProxyTest extends GUITest<MainActivity>{
 	private Context contextOfMainActivity;
 	private CacheContentProvider mContentProvider;
 	private MockHttpClient mMockClient;
-	
+	private QuizQuery mfakeQuery;
 	@Override
 	protected void setUp() {
 		super.setUp();
@@ -47,6 +51,7 @@ public class QuestionProxyTest extends GUITest<MainActivity>{
 		mQuestion = new QuizQuestion("q", 
 				new ArrayList<String>(Arrays.asList("a1", "a2", "a3")), 
 				0, new TreeSet<String>(Arrays.asList("t1", "t2")), 1, "o");
+		mfakeQuery = new QuizQuery("queryOnline", "from");
 	}
 	
 	@Override
@@ -87,10 +92,10 @@ public class QuestionProxyTest extends GUITest<MainActivity>{
 	}
 	
 	public void testSendQuizQuestion() {
-		UserPreferences.getInstance().setConnectivityState(ConnectivityState.OFFLINE);
+		/*UserPreferences.getInstance().setConnectivityState(ConnectivityState.OFFLINE);
 		assertEquals(HttpStatus.SC_CREATED, proxy.sendQuizQuestion(mQuestion));
 		//XXX to decomment when issue #118 will be resolved
-		/*UserPreferences.getInstance().setConnectivityState(ConnectivityState.ONLINE);
+		UserPreferences.getInstance().setConnectivityState(ConnectivityState.ONLINE);
 		assertEquals(HttpStatus.SC_CREATED, proxy.notifyConnectivityChange(ConnectivityState.ONLINE));
 		mMockClient.pushCannedResponse(
 				"(POST|GET) https://sweng-quiz.appspot.com/quizquestions/",
@@ -113,19 +118,61 @@ public class QuestionProxyTest extends GUITest<MainActivity>{
 		assertEquals(HttpStatus.SC_OK, proxy.notifyConnectivityChange(ConnectivityState.OFFLINE));
 		assertEquals(HttpStatus.SC_CREATED, proxy.notifyConnectivityChange(ConnectivityState.ONLINE));
 		//XXX to decomment when issue #118 will be resolved
-		/*mMockClient.pushCannedResponse(
+		mMockClient.pushCannedResponse(
 				"(POST|GET) https://sweng-quiz.appspot.com/quizquestions/",
 				200, "", "HttpResponse");
 		proxy.addOutAndInbox(mQuestion);
 		assertTrue("Outbox doesn't contain one element", proxy.getOutboxSize()==1);
-		assertEquals("The sending of cached question was not successful",200, proxy.notifyConnectivityChange(ConnectivityState.ONLINE));*/
+		assertEquals("The sending of cached question was not successful",200, proxy.notifyConnectivityChange(ConnectivityState.ONLINE));
 	}
 	
-	public void testSetStream(){
+	public void testRetrieveQuizQuestionsOffline() {
+		UserPreferences.getInstance().setConnectivityState(ConnectivityState.OFFLINE);
+		assertEquals(null, proxy.retrieveQuizQuestions(mfakeQuery));
 		UserPreferences.getInstance().setConnectivityState(ConnectivityState.ONLINE);
-		OnlineQuestionsAgent agent = new OnlineQuestionsAgent(null);
-		proxy.setStream(null);
-		
 	}
-
+	
+	public void testRetrieveQuizQuestionJSONResponseOK(){
+		mMockClient.pushCannedResponse(
+				"POST (?:https?://[^/]+|[^/]+)?/+search\\b",
+                HttpStatus.SC_OK,
+                "{\"questions\": [ {\"question\": \"q1\","
+                + " \"answers\": [\"a1\", \"b1\"], \"owner\": \"o1\","
+                + " \"solutionIndex\": 0, \"tags\": [\"fruit\", \"t1\"], \"id\": \"1\" }, " +
+                "{\"question\": \"q2\","
+                + " \"answers\": [\"a2\", \"b2\", \"c2\"], \"owner\": \"o2\","
+                + " \"solutionIndex\": 0, \"tags\": [\"fruit\"], \"id\": \"2\" }]," +
+                "\"next\": null }",
+                "application/json");
+		QuizQuery query = new QuizQuery("fruit", "no fromm string... whaaaat?");
+		JSONObject result = proxy.retrieveQuizQuestions(query);
+		try {
+			JSONArray array = result.getJSONArray("questions");
+			JSONObject question1 = array.getJSONObject(0);
+			assertEquals("q1", question1.get("question"));
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void testRetrieveQuizQuestionsJSONResponseNULL() {
+		UserPreferences.getInstance().setConnectivityState(ConnectivityState.ONLINE);
+		mMockClient.pushCannedResponse(
+				"POST (?:https?://[^/]+|[^/]+)?/+search\\b",
+				AdvancedMockHttpClient.IOEXCEPTION_ERROR_CODE, "", "");
+		QuizQuery query = new QuizQuery("fruit", "no fromm string... whaaaat?");
+		assertEquals(null, proxy.retrieveQuizQuestions(query));
+	}
+	
+	public void testRetrieveQuizQuestionsJSONArrayNULL(){
+		UserPreferences.getInstance().setConnectivityState(ConnectivityState.ONLINE);
+		mMockClient.pushCannedResponse(
+				"POST (?:https?://[^/]+|[^/]+)?/+search\\b",
+                HttpStatus.SC_OK,
+                "{\"questions\": null ," +
+                "\"next\": null }",
+                "application/json");
+		QuizQuery query = new QuizQuery("fruit", "no fromm string... whaaaat?");
+		assertEquals(null, proxy.retrieveQuizQuestions(query));
+	}
 }
