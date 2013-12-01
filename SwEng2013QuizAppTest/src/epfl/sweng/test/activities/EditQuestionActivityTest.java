@@ -2,6 +2,8 @@ package epfl.sweng.test.activities;
 
 import java.util.List;
 
+import org.apache.http.HttpStatus;
+
 import android.test.UiThreadTest;
 import android.widget.Button;
 import android.widget.EditText;
@@ -9,6 +11,8 @@ import android.widget.ListView;
 import epfl.sweng.R;
 import epfl.sweng.editquestions.AnswerListAdapter;
 import epfl.sweng.editquestions.EditQuestionActivity;
+import epfl.sweng.servercomm.SwengHttpClientFactory;
+import epfl.sweng.test.minimalmock.AdvancedMockHttpClient;
 import epfl.sweng.testing.TestCoordinator.TTChecks;
 
 public class EditQuestionActivityTest extends GUITest<EditQuestionActivity> {
@@ -39,6 +43,21 @@ public class EditQuestionActivityTest extends GUITest<EditQuestionActivity> {
 		int errors = adapter.auditErrors();
 		adapter.notifyDataSetChanged();
 		adapter.resetAnswerList();
+	}
+	
+	public void testSubmitQuestion() {
+		AdvancedMockHttpClient client = new AdvancedMockHttpClient();
+		client.pushCannedResponse("POST https://sweng-quiz.appspot.com",
+				HttpStatus.SC_CREATED, "", "application/json");
+		SwengHttpClientFactory.setInstance(client);
+		
+		testCanSubmitWhenEveryThingIsCorrectlyField();
+		
+		getSolo().clickOnButton("Submit");
+		
+		getActivityAndWaitFor(TTChecks.NEW_QUESTION_SUBMITTED);
+		
+		testBasicsElementsAreHere();
 	}
 
 	public void testBasicsElementsAreHere() {
