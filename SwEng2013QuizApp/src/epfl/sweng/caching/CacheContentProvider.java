@@ -140,6 +140,7 @@ public class CacheContentProvider {
 					correspondingSQLiteArray + ";";
 			
 			Cursor questionsCursor = mDatabase.rawQuery(rawQuery, null);
+			questionsCursor.moveToFirst();
 			return questionsCursor;
 			
 			// What to use for the next step?
@@ -582,11 +583,12 @@ public class CacheContentProvider {
 	}
 	
 	private String setToSQLiteQueryArray(Set<Long> set) {
-		String statement = "(";
+		String statement = "";
 		for (Object object : set) {
 			statement = statement + "," + object.toString();
 		}
 		statement = statement + ")";
+		statement = "(" + statement.substring(1);
 		return statement;
 	}
 	
