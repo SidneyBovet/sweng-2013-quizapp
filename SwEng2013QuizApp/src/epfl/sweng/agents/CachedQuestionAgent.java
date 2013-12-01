@@ -41,7 +41,9 @@ public class CachedQuestionAgent extends QuestionAgent {
 		int questionPK = mCursor.getInt(mCursor.getColumnIndex("id"));
 		retrievedQuestion = mContentProvider.getQuestionFromPK(questionPK);
 		
-		mCursor.moveToNext();
+		if (mCursor.moveToNext()) {
+			mCursor.moveToFirst();
+		}
 
 		return retrievedQuestion;
 	}
