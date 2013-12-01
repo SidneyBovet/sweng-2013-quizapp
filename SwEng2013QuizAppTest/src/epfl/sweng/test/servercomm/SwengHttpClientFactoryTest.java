@@ -11,5 +11,7 @@ public class SwengHttpClientFactoryTest extends TestCase {
 		AbstractHttpClient client = SwengHttpClientFactory.getInstance();
 		
 		assertNotNull("Client retrieved should not be null", client);
+		
+		SwengHttpClientFactory.setInstance(null);
 	}
 }
