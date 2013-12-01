@@ -81,12 +81,22 @@ public class CacheContentProvider {
 			return randomQuestionIdCursor;
 
 		} else {
-			whereArgs = extractParameters(queryStr);
-			whereClause = filterQuery(queryStr);
+			/* fake cursor to avoid NPE */
+			orderBy = "RANDOM()";
+			Cursor randomQuestionIdCursor = mDatabase.query(
+					SQLiteCacheHelper.TABLE_QUESTIONS, selection, whereClause,
+					whereArgs, null, null, orderBy, null);
+			randomQuestionIdCursor.moveToFirst();
+			return randomQuestionIdCursor;
+			/* end of fake cursor to avoid NPE */
+			
+//			whereArgs = extractParameters(queryStr);
+//			whereClause = filterQuery(queryStr);
 
 			// TODO Do NP-Complete algorithm.
 			// No tags match the query.
-			return null;
+//			return null;
+			
 		}
 	}
 
