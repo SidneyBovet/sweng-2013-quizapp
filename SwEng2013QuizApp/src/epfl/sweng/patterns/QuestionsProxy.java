@@ -280,8 +280,10 @@ public final class QuestionsProxy implements ConnectivityProxy,
 	 * Closes the opened stream.
 	 */
 	public void closeStream() {
-		mAgent.close();
-		mAgent = null;
+		if (mAgent != null) {
+			mAgent.close();
+			mAgent = null;
+		}
 	}
 
 	// //////////////////////////////////////////////////////////////////////////
