@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -59,9 +61,9 @@ public class CacheContentProvider {
 				SQLiteCacheHelper.FIELD_QUESTIONS_IS_QUEUED + "=1");
 	}
 
-	public List<Long> getQuestionsIdsWithTag(String tag) {
+	public Set<Long> getQuestionsIdsWithTag(String tag) {
 
-		List<Long> questionsIds = new ArrayList<Long>();
+		Set<Long> questionsIds = new HashSet<Long>();
 
 		String query = "SELECT "
 				+ SQLiteCacheHelper.FIELD_QUESTIONS_TAGS_QUESTION_FK + " FROM "
@@ -88,40 +90,10 @@ public class CacheContentProvider {
 		return questionsIds;
 	}
 
-//	private List<Long> unionOfQuestionsList(List<Long> A, List<Long> B) {
-//
-//		return null;
-//	}
-
-//	private List<Long> intersectionOfQuestionsList(List<Long> A, List<Long> B) {
-//
-//		return null;
-//	}
-
-//	private List<Long> proceedParenthesis() {
-//
-//		return null;
-//	}
-
-	public Cursor getQuestionsRecursive(QuizQuery query) {
-		sanityDatabaseCheck();
-
-		// e.g. "A * B    + C (D + E * F)" or st else.
-		String queryStr = query.toString();
-
-		// Step 1: Remove all unused spaces
-		queryStr = filterQuery(queryStr);
-
-		// Get all the '*', the '+' and the '(', ')'
-
-		return null;
-	}
-
 	public Cursor getQuestions(QuizQuery query) {
 		sanityDatabaseCheck();
 
-		// e.g. "A * B    + C (D + E * F)" or st else.
-//		String queryStr = query.toString();
+		String queryStr = query.toString();
 
 		// We select all question ids...
 		String[] selection = new String[] {SQLiteCacheHelper.FIELD_QUESTIONS_PK};
@@ -141,17 +113,38 @@ public class CacheContentProvider {
 			orderBy = "RANDOM()";
 			Cursor randomQuestionIdCursor = mDatabase.query(
 					SQLiteCacheHelper.TABLE_QUESTIONS, selection, whereClause,
-					whereArgs, null, null, orderBy, null);
+						whereArgs, null, null, orderBy, null);
 			randomQuestionIdCursor.moveToFirst();
 			return randomQuestionIdCursor;
 			/* end of fake cursor to avoid NPE */
 
-			// whereArgs = extractParameters(queryStr);
-			// whereClause = filterQuery(queryStr);
+/************************* TO UNCOMMENT ********************************
+			String[] tagsArray = extractParameters(queryStr);
 
-			// TODO Do NP-Complete algorithm.
-			// No tags match the query.
-			// return null;
+			List<Set<Long>> questionsIdsList = new ArrayList<Set<Long>>();
+			for (String tag : tagsArray) {
+				questionsIdsList.add(getQuestionsIdsWithTag(tag));
+			}
+
+			queryStr = filterQuery(queryStr);
+			String[] tokens = queryStr.split("");
+
+			// What to use for the next step?
+			// - String[] tokens
+			// - List<Set<Long>> questionsIdsList
+
+			// What to do?
+			// 1 - Find the deeply-nested block, then evaluate it with
+			// evaluateBlock
+			// with the following rules:
+			// a) Multiplication first, addition afterwards
+			// b) Do it until the block contains one element
+			// 2 - Repeat step 1 until questionsIdsList.size() == 1
+			
+			// Last but not least, when finished please do the following:
+			// 		1 - Return something
+			// 		2 - Remove the block above: /* fake cursor to avoid NPE */
+/************************ TO UNCOMMENT *********************************/
 		}
 	}
 
@@ -519,39 +512,35 @@ public class CacheContentProvider {
 	 */
 	private String filterQuery(String query) {
 
+		// We start with "  (  A * B C + D (  E + F ))  "
+
 		// Only one space max. between words.
+		// " ( A * B C + D ( E + F )) "
 		query = query.replaceAll("(\\ )+", " ");
 
 		// Removes the spaces after '(' and/or before ')'
+		// " (A * B C + D (E + F)) "
 		query = query.replaceAll("\\(\\ ", "(");
 		query = query.replaceAll("\\ \\)", ")");
 
 		// Removes beginning and end spaces.
+		// "(A * B C + D (E + F))"
 		query = query.replaceAll("^\\ ", "");
 		query = query.replaceAll("\\ $", "");
 
-		// // Only one space max. between words.
-		// query = query.replaceAll("(\\ )+", " ");
-		//
-		// // Replaces all the names by id=? for the SQL query.
-		// query = query.replaceAll("\\w+", SQLiteCacheHelper.TABLE_TAGS + "."
-		// + SQLiteCacheHelper.FIELD_TAGS_NAME + "=?");
-		//
-		// // Makes the " * " or " + " look like "*" or "+"
-		// query = query.replaceAll("(?:\\ )?\\*(?:\\ )?", "*");
-		// query = query.replaceAll("(?:\\ )?\\+(?:\\ )?", "+");
-		//
-		// // Removes the spaces after '(' and/or before ')'
-		// query = query.replaceAll("\\(\\ ", "(");
-		// query = query.replaceAll("\\ \\)", ")");
-		//
-		// // Replaces all the spaces by ANDs (the order
-		// // is important, do not move it without a valid reason).
-		// query = query.replaceAll("\\ ", " AND ");
-		//
-		// // Replaces all the '*' and '+' by, respectively, " AND " and " OR "
-		// query = query.replaceAll("(?:\\ )?\\*(?:\\ )?", " AND ");
-		// query = query.replaceAll("(?:\\ )?\\+(?:\\ )?", " OR ");
+		// Replaces all the names by ? for the SQL query.
+		// "(? * ? ? + ? (? + ?))"
+		query = query.replaceAll("\\w+", "?");
+
+		// Makes the " * " or " + " look like "*" or "+"
+		// "(?*? ?+? (?+?))"
+		query = query.replaceAll("(?:\\ )?\\*(?:\\ )?", "*");
+		query = query.replaceAll("(?:\\ )?\\+(?:\\ )?", "+");
+
+		// Replaces all the spaces by ANDs (the order
+		// is important, do not move it without a valid reason).
+		// "(?*?*?+?*(?+?))"
+		query = query.replaceAll("\\ ", "*");
 
 		return query;
 	}
@@ -563,19 +552,19 @@ public class CacheContentProvider {
 	 *            Query from where we need to extract the data.
 	 * @return All the words contained in the query.
 	 */
-	// private String[] extractParameters(String query) {
-	//
-	// List<String> whereArgsArray = new ArrayList<String>();
-	//
-	// // Finds all alphanumeric tokens in the query
-	// Pattern pattern = Pattern.compile("\\w+");
-	// Matcher m = pattern.matcher(query);
-	// while (m.find()) {
-	// whereArgsArray.add(m.group());
-	// }
-	//
-	// // We convert the List to an array of String.
-	// return (String[]) whereArgsArray.toArray(new String[whereArgsArray
-	// .size()]);
-	// }
+	private String[] extractParameters(String query) {
+
+		List<String> whereArgsArray = new ArrayList<String>();
+
+		// Finds all alphanumeric tokens in the query
+		Pattern pattern = Pattern.compile("\\w+");
+		Matcher m = pattern.matcher(query);
+		while (m.find()) {
+			whereArgsArray.add(m.group());
+		}
+
+		// We convert the List to an array of String.
+		return (String[]) whereArgsArray.toArray(new String[whereArgsArray
+				.size()]);
+	}
 }
