@@ -69,6 +69,7 @@ public class QuizQuery implements Parcelable {
 		} catch (Throwable e) {
 			ok = false;
 		}
+		
 		return ok;
 	}
 

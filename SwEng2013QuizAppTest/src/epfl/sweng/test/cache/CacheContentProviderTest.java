@@ -131,27 +131,6 @@ public class CacheContentProviderTest extends AndroidTestCase {
 		}
 	}
 
-	public void testFetchRandomQuestionInCache() {
-		// TODO Implement it
-	}
-
-	public void testQuestionQueryFailure() {
-
-		// QuizQuestion expectedQuestion =
-		// createFakeFullQuestion("Question statement");
-		//
-		// mProvider.addQuizQuestion(expectedQuestion);
-		// Cursor fetchedQuestionsCursor = mProvider.getQuestions(new QuizQuery(
-		// "Milionaire Funny NONEXISTINGTAG", ""));
-		//
-		// assert (null != fetchedQuestionsCursor && !fetchedQuestionsCursor
-		// .moveToFirst());
-	}
-
-	public void testQuestionQueryInCache() {
-
-	}
-
 	public void testOutboxWorksFIFO() {
 
 		final int nbQuestions = 10;
@@ -169,33 +148,6 @@ public class CacheContentProviderTest extends AndroidTestCase {
 		}
 		
 		assertEquals(0, mProvider.getOutboxCount());
-	}
-
-	public void testQueryInCache() {
-		
-//		final int nbQuestions = 3;
-//
-//		List<Long> expectedQuestionsIds = new ArrayList<Long>();
-//		List<Long> receivedQuestionsIds = null;
-//		
-//		for (int i = 1; i <= nbQuestions; i++) {
-//			expectedQuestionsIds.add(mProvider.addQuizQuestion(createFakeFullQuestion("questionStatement"
-//					+ i)));
-//		}
-//		
-//		receivedQuestionsIds = mProvider.getQuestionsIdsWithTag("Milionaire");
-//		
-//		if (expectedQuestionsIds.size() != receivedQuestionsIds.size()) {
-//			assertTrue(false);
-//		}
-//		
-//		for (int i = 0; i < expectedQuestionsIds.size(); i++) {
-//			long id = expectedQuestionsIds.get(i);
-//			long receivedId = receivedQuestionsIds.get(i);
-//			assertEquals(id, receivedId);
-//		}
-		
-		mProvider.getQuestionsRecursive(new QuizQuery("    A +       B     (  A B  )  ", "")  );
 	}
 	
 	/*********************** Private methods ***********************/
