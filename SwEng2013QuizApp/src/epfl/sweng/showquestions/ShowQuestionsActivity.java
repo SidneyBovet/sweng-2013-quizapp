@@ -161,8 +161,8 @@ public class ShowQuestionsActivity extends Activity {
 							Toast.LENGTH_LONG).show();
 
 				}
-				TestCoordinator.check(TTChecks.QUESTION_SHOWN);
 			}
+			TestCoordinator.check(TTChecks.QUESTION_SHOWN);
 
 		}
 	}
