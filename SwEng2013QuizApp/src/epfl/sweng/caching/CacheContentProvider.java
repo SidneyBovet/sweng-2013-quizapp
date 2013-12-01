@@ -581,7 +581,7 @@ public class CacheContentProvider {
 				.size()]);
 	}
 	
-	private String setToSQLiteQueryArray(Set set) {
+	private String setToSQLiteQueryArray(Set<Long> set) {
 		String statement = "(";
 		for (Object object : set) {
 			statement = statement + "," + object.toString();
