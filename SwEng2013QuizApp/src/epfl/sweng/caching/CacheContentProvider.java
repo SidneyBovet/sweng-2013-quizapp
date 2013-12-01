@@ -88,20 +88,20 @@ public class CacheContentProvider {
 		return questionsIds;
 	}
 
-	private List<Long> unionOfQuestionsList(List<Long> A, List<Long> B) {
+//	private List<Long> unionOfQuestionsList(List<Long> A, List<Long> B) {
+//
+//		return null;
+//	}
 
-		return null;
-	}
+//	private List<Long> intersectionOfQuestionsList(List<Long> A, List<Long> B) {
+//
+//		return null;
+//	}
 
-	private List<Long> intersectionOfQuestionsList(List<Long> A, List<Long> B) {
-		
-		return null;
-	}
-
-	private List<Long> proceedParenthesis() {
-
-		return null;
-	}
+//	private List<Long> proceedParenthesis() {
+//
+//		return null;
+//	}
 
 	public Cursor getQuestionsRecursive(QuizQuery query) {
 		sanityDatabaseCheck();
@@ -121,10 +121,10 @@ public class CacheContentProvider {
 		sanityDatabaseCheck();
 
 		// e.g. "A * B    + C (D + E * F)" or st else.
-		String queryStr = query.toString();
+//		String queryStr = query.toString();
 
 		// We select all question ids...
-		String[] selection = new String[] { SQLiteCacheHelper.FIELD_QUESTIONS_PK };
+		String[] selection = new String[] {SQLiteCacheHelper.FIELD_QUESTIONS_PK};
 		String whereClause = null;
 		String[] whereArgs = null;
 		String orderBy = null;
@@ -136,16 +136,14 @@ public class CacheContentProvider {
 					whereArgs, null, null, orderBy, null);
 			randomQuestionIdCursor.moveToFirst();
 			return randomQuestionIdCursor;
-
 		} else {
-
 			/* fake cursor to avoid NPE */
-			 orderBy = "RANDOM()";
-			 Cursor randomQuestionIdCursor = mDatabase.query(
-			 SQLiteCacheHelper.TABLE_QUESTIONS, selection, whereClause,
-			 whereArgs, null, null, orderBy, null);
-			 randomQuestionIdCursor.moveToFirst();
-			 return randomQuestionIdCursor;
+			orderBy = "RANDOM()";
+			Cursor randomQuestionIdCursor = mDatabase.query(
+					SQLiteCacheHelper.TABLE_QUESTIONS, selection, whereClause,
+					whereArgs, null, null, orderBy, null);
+			randomQuestionIdCursor.moveToFirst();
+			return randomQuestionIdCursor;
 			/* end of fake cursor to avoid NPE */
 
 			// whereArgs = extractParameters(queryStr);
@@ -154,7 +152,6 @@ public class CacheContentProvider {
 			// TODO Do NP-Complete algorithm.
 			// No tags match the query.
 			// return null;
-
 		}
 	}
 
@@ -167,12 +164,12 @@ public class CacheContentProvider {
 		// Step 3 : Store question content into variables.
 		Cursor questionCursor = mDatabase.query(
 				SQLiteCacheHelper.TABLE_QUESTIONS, new String[] {
-						SQLiteCacheHelper.FIELD_QUESTIONS_SWENG_ID,
-						SQLiteCacheHelper.FIELD_QUESTIONS_STATEMENT,
-						SQLiteCacheHelper.FIELD_QUESTIONS_SOLUTION_INDEX,
-						SQLiteCacheHelper.FIELD_QUESTIONS_OWNER },
+					SQLiteCacheHelper.FIELD_QUESTIONS_SWENG_ID,
+					SQLiteCacheHelper.FIELD_QUESTIONS_STATEMENT,
+					SQLiteCacheHelper.FIELD_QUESTIONS_SOLUTION_INDEX,
+					SQLiteCacheHelper.FIELD_QUESTIONS_OWNER },
 				SQLiteCacheHelper.FIELD_QUESTIONS_PK + " = ?",
-				new String[] { String.valueOf(id) }, null, null, null, null);
+				new String[] {String.valueOf(id)}, null, null, null, null);
 
 		if (questionCursor.moveToFirst()) {
 			int questionId = questionCursor
@@ -300,7 +297,7 @@ public class CacheContentProvider {
 		// Get the first question in the outbox stack.
 		Cursor questionOutboxIdCursor = mDatabase.query(
 				SQLiteCacheHelper.TABLE_QUESTIONS,
-				new String[] { SQLiteCacheHelper.FIELD_QUESTIONS_PK },
+				new String[] {SQLiteCacheHelper.FIELD_QUESTIONS_PK},
 				SQLiteCacheHelper.FIELD_QUESTIONS_IS_QUEUED + "=1", null, null,
 				null, SQLiteCacheHelper.FIELD_QUESTIONS_PK + " ASC", "1");
 
@@ -323,9 +320,9 @@ public class CacheContentProvider {
 	private List<String> retrieveAnswers(long id) {
 
 		Cursor answersCursor = mDatabase.query(SQLiteCacheHelper.TABLE_ANSWERS,
-				new String[] { SQLiteCacheHelper.FIELD_ANSWERS_ANSWER_VALUE },
+				new String[] {SQLiteCacheHelper.FIELD_ANSWERS_ANSWER_VALUE},
 				SQLiteCacheHelper.FIELD_ANSWERS_QUESTION_FK + " = ?",
-				new String[] { String.valueOf(id) }, null, null,
+				new String[] {String.valueOf(id)}, null, null,
 				SQLiteCacheHelper.FIELD_ANSWERS_PK + " ASC", null);
 
 		ArrayList<String> answers = new ArrayList<String>();
@@ -354,9 +351,9 @@ public class CacheContentProvider {
 		// Get ids of all the current question tags.
 		Cursor tagsIdCursor = mDatabase.query(
 				SQLiteCacheHelper.TABLE_QUESTIONS_TAGS,
-				new String[] { SQLiteCacheHelper.FIELD_QUESTIONS_TAGS_TAG_FK },
+				new String[] {SQLiteCacheHelper.FIELD_QUESTIONS_TAGS_TAG_FK},
 				SQLiteCacheHelper.FIELD_QUESTIONS_TAGS_QUESTION_FK + " = ?",
-				new String[] { String.valueOf(id) }, null, null,
+				new String[] {String.valueOf(id)}, null, null,
 				SQLiteCacheHelper.FIELD_QUESTIONS_TAGS_QUESTION_FK + " ASC",
 				null);
 
@@ -477,7 +474,7 @@ public class CacheContentProvider {
 				questionInOutbox ? 1 : 0);
 		mDatabase.update(SQLiteCacheHelper.TABLE_QUESTIONS, isQueuedValue,
 				SQLiteCacheHelper.FIELD_QUESTIONS_PK + "=?",
-				new String[] { String.valueOf(id) });
+				new String[] {String.valueOf(id)});
 	}
 
 	private void sanityDatabaseCheck() {
