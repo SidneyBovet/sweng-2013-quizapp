@@ -153,6 +153,8 @@ public class CacheContentProviderTest extends AndroidTestCase {
 	}
 	
 	public void testReduceGroupWorks() {
+		// tests "?+?*?" and {[1,2],[3,4],[3,5]}
+		// (should return [1,2,3])
 		String[] tagArray = {"?","+","?","*","?"};
 		List<String> tagList = new ArrayList<String>(Arrays.asList(tagArray));
 
@@ -174,7 +176,6 @@ public class CacheContentProviderTest extends AndroidTestCase {
 		Long[] groupExpected = {Long.valueOf(1),Long.valueOf(2),Long.valueOf(3)};
 		Set<Long> expected = new HashSet<Long>(Arrays.asList(groupExpected));
 		assertEquals(expected, mProvider.reduceGroup(tagList, questionsSetList));
-		
 	}
 	
 	/*********************** Private methods ***********************/
