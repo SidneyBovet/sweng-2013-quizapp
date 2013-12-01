@@ -33,6 +33,10 @@ public class CachedQuestionAgent extends QuestionAgent {
 	@Override
 	public QuizQuestion getNextQuestion() {
 		QuizQuestion retrievedQuestion = null;
+		
+		if (null == mCursor || mCursor.isClosed()) {
+			return null;
+		}
 
 		int position = new Random().nextInt(mCursor.getCount());
 		mCursor.moveToPosition(position);
