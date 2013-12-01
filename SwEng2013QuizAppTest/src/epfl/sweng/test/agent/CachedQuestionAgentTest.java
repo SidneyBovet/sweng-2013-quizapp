@@ -13,7 +13,7 @@ public class CachedQuestionAgentTest extends AndroidTestCase {
 	private CachedQuestionAgent fakeCachedAgent;
 	private QuizQuery fakeQueryCache;
 	private Context contextShowQuestionActivity;
-	private QuizQuestion mQuestion; 
+	private QuizQuestion mQuestion;
 
 	@Override
 	protected void setUp() {
