@@ -42,20 +42,20 @@ public class EditQuestionActivityOfflineTest extends GUITest<EditQuestionActivit
 		}
 	}
 
-//	public void testSubmittedQuestionIsInProxyOutbox() {
-//		UserPreferences.getInstance(getInstrumentation().getTargetContext()).
-//			setConnectivityState(ConnectivityState.OFFLINE);
-//		
-//		SwengHttpClientFactory.setInstance(mUnconnectedClient);
-//		
-//		int expectedOutboxSize = QuestionsProxy.getInstance(getInstrumentation().getTargetContext()).getOutboxSize() + 1;
-//		
-//		fillFormWithCorrectQuestion();
-//		getSolo().clickOnButton("Submit");
-//		getActivityAndWaitFor(TTChecks.NEW_QUESTION_SUBMITTED);
-//		
-//		assertEquals(expectedOutboxSize, QuestionsProxy.getInstance().getOutboxSize());
-//	}
+	public void testSubmittedQuestionIsInProxyOutbox() {
+		UserPreferences.getInstance(getInstrumentation().getTargetContext()).
+			setConnectivityState(ConnectivityState.OFFLINE);
+		
+		SwengHttpClientFactory.setInstance(mUnconnectedClient);
+		
+		int expectedOutboxSize = QuestionsProxy.getInstance(getInstrumentation().getTargetContext()).getOutboxSize() + 1;
+		
+		fillFormWithCorrectQuestion();
+		getSolo().clickOnButton("Submit");
+		getActivityAndWaitFor(TTChecks.NEW_QUESTION_SUBMITTED);
+		
+		assertEquals(expectedOutboxSize, QuestionsProxy.getInstance().getOutboxSize());
+	}
 
 	private void fillFormWithCorrectQuestion() {
 		getSolo().sleep(100);

@@ -204,6 +204,7 @@ public class SearchActivityTest extends GUITest<SearchActivity> {
 	}
 
 	private void fillQueryAndTestButton(String query, boolean enabled) {
+		getSolo().sleep(500);
 		String buttonDefaultText = context
 				.getString(R.string.SearchQueryButton);
 		Button queryButton = getSolo().getButton(buttonDefaultText);

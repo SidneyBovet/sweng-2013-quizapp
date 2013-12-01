@@ -15,6 +15,7 @@ public class AdvancedMockHttpClientTest extends TestCase{
 	public void setUp() {
 		mockClient = new AdvancedMockHttpClient();
 		SwengHttpClientFactory.setInstance(mockClient);
+		
 	}
 	
 	public void testThrowsAnException() {
