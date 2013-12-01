@@ -67,7 +67,7 @@ public class CacheContentProvider {
 		String queryStr = query.toString();
 
 		// We select all question ids...
-		String[] selection = new String[] { SQLiteCacheHelper.FIELD_QUESTIONS_PK };
+		String[] selection = new String[] {SQLiteCacheHelper.FIELD_QUESTIONS_PK};
 		String whereClause = null;
 		String[] whereArgs = null;
 		String orderBy = null;
@@ -77,42 +77,20 @@ public class CacheContentProvider {
 			Cursor idCursor = mDatabase.query(
 					SQLiteCacheHelper.TABLE_QUESTIONS, selection, whereClause,
 					whereArgs, null, null, orderBy, null);
-			idCursor.moveToFirst();
-			return idCursor;
+
+			if (idCursor.moveToFirst()) {
+				return idCursor;
+			} else {
+				// No questions in the DB.
+				idCursor.close();
+				return null;
+			}
+
 		} else {
 			whereArgs = extractParameters(queryStr);
 			whereClause = filterQuery(queryStr);
 
-			// Gets all the tags id that matches the query.
-			Cursor tagsCursor = mDatabase.query(SQLiteCacheHelper.TABLE_TAGS,
-					new String[] { SQLiteCacheHelper.FIELD_TAGS_PK },
-					whereClause, whereArgs, null, null, orderBy, null);
-
-			if (tagsCursor.moveToFirst()) {
-				List<String> tagsId = new ArrayList<String>();
-				// Get all the tagsId from the cursor
-				do {
-					tagsId.add(String.valueOf(tagsCursor.getInt(tagsCursor
-							.getColumnIndex(SQLiteCacheHelper.FIELD_TAGS_PK))));
-				} while (tagsCursor.moveToNext());
-
-				// Get all the questions that have tags fetched above.
-				String questionsIdQuery = "SELECT "
-						+ SQLiteCacheHelper.FIELD_QUESTIONS_TAGS_QUESTION_FK
-						+ " FROM " + SQLiteCacheHelper.TABLE_QUESTIONS_TAGS
-						+ " WHERE "
-						+ SQLiteCacheHelper.FIELD_QUESTIONS_TAGS_TAG_FK
-						+ " IN (" + makePlaceholders(tagsCursor.getCount())
-						+ ");";
-
-				Cursor questionsIdCursor = mDatabase.rawQuery(questionsIdQuery,
-						(String[]) tagsId.toArray(new String[tagsId.size()]));
-
-				questionsIdCursor.moveToFirst();
-
-				return questionsIdCursor;
-			}
-
+			// TODO Do NP-Complete algorithm.
 			// No tags match the query.
 			return null;
 		}
@@ -276,7 +254,8 @@ public class CacheContentProvider {
 
 	/**
 	 * 
-	 * @param id id of the question in the cache.
+	 * @param id
+	 *            id of the question in the cache.
 	 * @return A list of answers if they exist, null otherwise.
 	 */
 	private List<String> retrieveAnswers(long id) {
@@ -304,7 +283,8 @@ public class CacheContentProvider {
 
 	/**
 	 * 
-	 * @param id id of the question in the cache.
+	 * @param id
+	 *            id of the question in the cache.
 	 * @return A list of tags if they exist, null otherwise.
 	 */
 	private Set<String> retrieveTags(long id) {
@@ -330,7 +310,7 @@ public class CacheContentProvider {
 		}
 
 		tagsIdCursor.close();
-		
+
 		// Get all the tags related to questionId given in parameter.
 		String query = "SELECT " + SQLiteCacheHelper.FIELD_TAGS_NAME + " FROM "
 				+ SQLiteCacheHelper.TABLE_TAGS + " WHERE "
@@ -364,7 +344,7 @@ public class CacheContentProvider {
 				throw new SQLiteException("Cannot insert question in table "
 						+ SQLiteCacheHelper.TABLE_TAGS);
 			}
-			
+
 			// Updates linking table between tags and questions tables.
 			ContentValues tagQuestionValues = new ContentValues(2);
 			tagQuestionValues.put(
@@ -410,13 +390,14 @@ public class CacheContentProvider {
 		values.put(SQLiteCacheHelper.FIELD_QUESTIONS_SOLUTION_INDEX,
 				solutionIndex);
 
-		long id = mDatabase.insert(SQLiteCacheHelper.TABLE_QUESTIONS, null, values);
-		
+		long id = mDatabase.insert(SQLiteCacheHelper.TABLE_QUESTIONS, null,
+				values);
+
 		if (id == -1) {
 			throw new SQLiteException("Cannot insert question in table "
 					+ SQLiteCacheHelper.TABLE_QUESTIONS);
 		}
-		
+
 		return id;
 	}
 
@@ -482,9 +463,9 @@ public class CacheContentProvider {
 		// Only one space max. between words.
 		query = query.replaceAll("(\\ )+", " ");
 
-		// Replaces all the names by name=? for the SQL query.
-		query = query.replaceAll("\\w+", SQLiteCacheHelper.FIELD_TAGS_NAME
-				+ "=?");
+		// Replaces all the names by id=? for the SQL query.
+		query = query.replaceAll("\\w+", SQLiteCacheHelper.TABLE_TAGS + "."
+				+ SQLiteCacheHelper.FIELD_TAGS_NAME + "=?");
 
 		// Makes the " * " or " + " look like "*" or "+"
 		query = query.replaceAll("(?:\\ )?\\*(?:\\ )?", "*");
