@@ -1,4 +1,4 @@
-package epfl.sweng.test.activities;
+/*package epfl.sweng.test.activities;
 
 import android.content.Context;
 import android.widget.Button;
@@ -97,4 +97,4 @@ public class MainActivityNotAuthenticatedTest extends GUITest<MainActivity> {
 		}
 		assertFalse(connexionState.isShown());
 	}
-}
+}*/

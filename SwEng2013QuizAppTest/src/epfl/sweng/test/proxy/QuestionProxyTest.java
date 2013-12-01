@@ -8,6 +8,7 @@ import org.apache.http.HttpStatus;
 
 import android.content.Context;
 import android.database.Cursor;
+import epfl.sweng.agents.OnlineQuestionsAgent;
 import epfl.sweng.backend.QuizQuery;
 import epfl.sweng.caching.CacheContentProvider;
 import epfl.sweng.caching.SQLiteCacheHelper;
@@ -118,6 +119,13 @@ public class QuestionProxyTest extends GUITest<MainActivity>{
 		proxy.addOutAndInbox(mQuestion);
 		assertTrue("Outbox doesn't contain one element", proxy.getOutboxSize()==1);
 		assertEquals("The sending of cached question was not successful",200, proxy.notifyConnectivityChange(ConnectivityState.ONLINE));*/
+	}
+	
+	public void testSetStream(){
+		UserPreferences.getInstance().setConnectivityState(ConnectivityState.ONLINE);
+		OnlineQuestionsAgent agent = new OnlineQuestionsAgent(null);
+		proxy.setStream(null);
+		
 	}
 
 }

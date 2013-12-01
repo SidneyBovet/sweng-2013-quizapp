@@ -66,40 +66,40 @@ public class AuthenticationActivityTest extends GUITest<AuthenticationActivity> 
 				loginButton.isEnabled());
 	}
 
-	public void testAuthenticationActivityWorks() {
-		persistentStorage.destroyAuthentication();
-		getSolo().sleep(1);
+//	public void testAuthenticationActivityWorks() {
+//		persistentStorage.destroyAuthentication();
+//		getSolo().sleep(1);
+//
+//		mockClient.pushCannedResponse(
+//				"GET https://sweng-quiz.appspot.com/login ", HttpStatus.SC_OK,
+//				"{\"token\": \"tooookkkeeeenn\"}", "application/json");
+//		final int found = 302;
+//		mockClient.pushCannedResponse(
+//				"POST https://tequila.epfl.ch/cgi-bin/tequila/login", found,
+//				"", "HttpResponse");
+//		mockClient.pushCannedResponse(
+//				"POST https://sweng-quiz.appspot.com/login", HttpStatus.SC_OK,
+//				"{\"session\": \"SessssionID\"}", "application/json");
+//		EditText login = (EditText) getSolo().getEditText("GASPAR Username");
+//		EditText password = (EditText) getSolo().getEditText("GASPAR Password");
+//
+//		getSolo().enterText(login, "Bob");
+//		getSolo().enterText(password, "Alligator21");
+//
+//		getSolo().clickOnButton("Log in using Tequila");
+//		getSolo().sleep(1000);
+//
+//		assertTrue("Must be logged in", persistentStorage.isAuthenticated());
+//		getSolo().sleep(1000);
+//		getSolo().sleep(1);
+//		// getSolo().assertCurrentActivity("Must Be MainActivity",
+//		// MainActivity.class);
+//
+//	}
 
-		mockClient.pushCannedResponse(
-				"GET https://sweng-quiz.appspot.com/login ", HttpStatus.SC_OK,
-				"{\"token\": \"tooookkkeeeenn\"}", "application/json");
-		final int found = 302;
-		mockClient.pushCannedResponse(
-				"POST https://tequila.epfl.ch/cgi-bin/tequila/login", found,
-				"", "HttpResponse");
-		mockClient.pushCannedResponse(
-				"POST https://sweng-quiz.appspot.com/login", HttpStatus.SC_OK,
-				"{\"session\": \"SessssionID\"}", "application/json");
-		EditText login = (EditText) getSolo().getEditText("GASPAR Username");
-		EditText password = (EditText) getSolo().getEditText("GASPAR Password");
-
-		getSolo().enterText(login, "Bob");
-		getSolo().enterText(password, "Alligator21");
-
-		getSolo().clickOnButton("Log in using Tequila");
-		getSolo().sleep(1000);
-
-		assertTrue("Must be logged in", persistentStorage.isAuthenticated());
-		getSolo().sleep(1000);
-		getSolo().sleep(1);
-		// getSolo().assertCurrentActivity("Must Be MainActivity",
-		// MainActivity.class);
-
-	}
-
-	public void testGoBackToMainActivity() {
-		// TODO same things as in the test testAuthenticationActivityWorks but
-		// then test that you are in the MainActivity
-	}
+//	public void testGoBackToMainActivity() {
+//		// TODO same things as in the test testAuthenticationActivityWorks but
+//		// then test that you are in the MainActivity
+//	}
 
 }

@@ -72,32 +72,32 @@ public class MainActivityConnectionState extends GUITest<MainActivity> {
 //		assertTrue(persistentStorage.isConnected());
 //	}
 
-	public void testHTTPNotFoundStatusRightAfterAuthenticationWhenClickinOnShowRandomQuestion() {
-
-		CheckBox connectivityState = (CheckBox) getSolo().getView(
-				R.id.switchOnlineModeCheckbox);
-		assertTrue("The checkbox should stay disabled", !connectivityState.isChecked());
-		
-		UserPreferences.getInstance(getInstrumentation().getTargetContext()).
-			setSessionId("hahaFake");
-		UserPreferences.getInstance(getInstrumentation().getTargetContext()).
-			setConnectivityState(ConnectivityState.ONLINE);
-		MockHttpClient mockClient = new MockHttpClient();
-		mockClient.pushCannedResponse(".", HttpStatus.SC_NOT_FOUND,
-				"", "");
-		SwengHttpClientFactory.setInstance(mockClient);
-		
-		getSolo().clickOnButton("Show a random question.");
-		
-		getActivityAndWaitFor(TTChecks.QUESTION_SHOWN);
-		getSolo().getCurrentActivity().finish();
-		getSolo().sleep(1000);
-		
-		assertTrue("The checkbox should stay disabled", !connectivityState.isChecked());
-		getSolo().clickOnView(connectivityState);
-		getActivityAndWaitFor(TTChecks.OFFLINE_CHECKBOX_ENABLED);
-		assertTrue("The checkbox has not switched in offline mode", connectivityState.isChecked());
-	}
+//	public void testHTTPNotFoundStatusRightAfterAuthenticationWhenClickinOnShowRandomQuestion() {
+//
+//		CheckBox connectivityState = (CheckBox) getSolo().getView(
+//				R.id.switchOnlineModeCheckbox);
+//		assertTrue("The checkbox should stay disabled", !connectivityState.isChecked());
+//		
+//		UserPreferences.getInstance(getInstrumentation().getTargetContext()).
+//			setSessionId("hahaFake");
+//		UserPreferences.getInstance(getInstrumentation().getTargetContext()).
+//			setConnectivityState(ConnectivityState.ONLINE);
+//		MockHttpClient mockClient = new MockHttpClient();
+//		mockClient.pushCannedResponse(".", HttpStatus.SC_NOT_FOUND,
+//				"", "");
+//		SwengHttpClientFactory.setInstance(mockClient);
+//		
+//		getSolo().clickOnButton("Show a random question.");
+//		
+//		getActivityAndWaitFor(TTChecks.QUESTION_SHOWN);
+//		getSolo().getCurrentActivity().finish();
+//		getSolo().sleep(1000);
+//		
+//		assertTrue("The checkbox should stay disabled", !connectivityState.isChecked());
+//		getSolo().clickOnView(connectivityState);
+//		getActivityAndWaitFor(TTChecks.OFFLINE_CHECKBOX_ENABLED);
+//		assertTrue("The checkbox has not switched in offline mode", connectivityState.isChecked());
+//	}
 	
 //	public void testSendingOrderIsFIFO() {
 //		int expectedSize = QuestionsProxy.getInstance().getOutboxSize() + 1;
