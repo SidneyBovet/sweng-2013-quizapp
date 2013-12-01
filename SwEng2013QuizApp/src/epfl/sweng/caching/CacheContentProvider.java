@@ -59,13 +59,73 @@ public class CacheContentProvider {
 				SQLiteCacheHelper.FIELD_QUESTIONS_IS_QUEUED + "=1");
 	}
 
+	public List<Long> getQuestionsIdsWithTag(String tag) {
+
+		List<Long> questionsIds = new ArrayList<Long>();
+
+		String query = "SELECT "
+				+ SQLiteCacheHelper.FIELD_QUESTIONS_TAGS_QUESTION_FK + " FROM "
+				+ SQLiteCacheHelper.TABLE_QUESTIONS_TAGS + " INNER JOIN "
+				+ SQLiteCacheHelper.TABLE_TAGS + " ON "
+				+ SQLiteCacheHelper.TABLE_QUESTIONS_TAGS + "."
+				+ SQLiteCacheHelper.FIELD_QUESTIONS_TAGS_TAG_FK + "="
+				+ SQLiteCacheHelper.TABLE_TAGS + "."
+				+ SQLiteCacheHelper.FIELD_TAGS_PK + " WHERE "
+				+ SQLiteCacheHelper.TABLE_TAGS + "."
+				+ SQLiteCacheHelper.FIELD_TAGS_NAME + "=?";
+
+		Cursor questionsIdsCursor = mDatabase.rawQuery(query,
+				new String[] {tag});
+
+		if (questionsIdsCursor.moveToFirst()) {
+			do {
+				questionsIds
+						.add(questionsIdsCursor.getLong(questionsIdsCursor
+								.getColumnIndex(SQLiteCacheHelper.FIELD_QUESTIONS_TAGS_QUESTION_FK)));
+			} while (questionsIdsCursor.moveToNext());
+		}
+
+		return questionsIds;
+	}
+
+	private List<Long> unionOfQuestionsList(List<Long> A, List<Long> B) {
+		
+		return null;
+	}
+
+	private List<Long> intersectionOfQuestionsList(List<Long> A, List<Long> B) {
+
+		return null;
+	}
+
+	private List<Long> proceedParenthesis() {
+
+		return null;
+	}
+
+	public Cursor getQuestionsRecursive(QuizQuery query) {
+		sanityDatabaseCheck();
+
+		// e.g. "A * B    + C (D + E * F)" or st else.
+		String queryStr = query.toString();
+		
+		// Step 1: Remove all unused spaces
+		queryStr = filterQuery(queryStr);
+
+		// Give lots of calls to get all the questions ids.
+		
+		
+		return null;
+	}
+
 	public Cursor getQuestions(QuizQuery query) {
 		sanityDatabaseCheck();
 
-
+		// e.g. "A * B    + C (D + E * F)" or st else.
+		String queryStr = query.toString();
 
 		// We select all question ids...
-		String[] selection = new String[] {SQLiteCacheHelper.FIELD_QUESTIONS_PK};
+		String[] selection = new String[] { SQLiteCacheHelper.FIELD_QUESTIONS_PK };
 		String whereClause = null;
 		String[] whereArgs = null;
 		String orderBy = null;
@@ -79,23 +139,28 @@ public class CacheContentProvider {
 			return randomQuestionIdCursor;
 
 		} else {
+
+			System.out.println(queryStr);
+
 			/* fake cursor to avoid NPE */
-			orderBy = "RANDOM()";
-			Cursor randomQuestionIdCursor = mDatabase.query(
-					SQLiteCacheHelper.TABLE_QUESTIONS, selection, whereClause,
-					whereArgs, null, null, orderBy, null);
-			randomQuestionIdCursor.moveToFirst();
-			return randomQuestionIdCursor;
+			// orderBy = "RANDOM()";
+			// Cursor randomQuestionIdCursor = mDatabase.query(
+			// SQLiteCacheHelper.TABLE_QUESTIONS, selection, whereClause,
+			// whereArgs, null, null, orderBy, null);
+			// randomQuestionIdCursor.moveToFirst();
+			// return randomQuestionIdCursor;
 			/* end of fake cursor to avoid NPE */
-			
-//			whereArgs = extractParameters(queryStr);
-//			whereClause = filterQuery(queryStr);
+
+			// whereArgs = extractParameters(queryStr);
+			// whereClause = filterQuery(queryStr);
 
 			// TODO Do NP-Complete algorithm.
 			// No tags match the query.
-//			return null;
-			
+			// return null;
+
 		}
+
+		return null;
 	}
 
 	public QuizQuestion getQuestionFromPK(long id) {
@@ -107,12 +172,12 @@ public class CacheContentProvider {
 		// Step 3 : Store question content into variables.
 		Cursor questionCursor = mDatabase.query(
 				SQLiteCacheHelper.TABLE_QUESTIONS, new String[] {
-					SQLiteCacheHelper.FIELD_QUESTIONS_SWENG_ID,
-					SQLiteCacheHelper.FIELD_QUESTIONS_STATEMENT,
-					SQLiteCacheHelper.FIELD_QUESTIONS_SOLUTION_INDEX,
-					SQLiteCacheHelper.FIELD_QUESTIONS_OWNER },
+						SQLiteCacheHelper.FIELD_QUESTIONS_SWENG_ID,
+						SQLiteCacheHelper.FIELD_QUESTIONS_STATEMENT,
+						SQLiteCacheHelper.FIELD_QUESTIONS_SOLUTION_INDEX,
+						SQLiteCacheHelper.FIELD_QUESTIONS_OWNER },
 				SQLiteCacheHelper.FIELD_QUESTIONS_PK + " = ?",
-				new String[] {String.valueOf(id)}, null, null, null, null);
+				new String[] { String.valueOf(id) }, null, null, null, null);
 
 		if (questionCursor.moveToFirst()) {
 			int questionId = questionCursor
@@ -240,7 +305,7 @@ public class CacheContentProvider {
 		// Get the first question in the outbox stack.
 		Cursor questionOutboxIdCursor = mDatabase.query(
 				SQLiteCacheHelper.TABLE_QUESTIONS,
-				new String[] {SQLiteCacheHelper.FIELD_QUESTIONS_PK},
+				new String[] { SQLiteCacheHelper.FIELD_QUESTIONS_PK },
 				SQLiteCacheHelper.FIELD_QUESTIONS_IS_QUEUED + "=1", null, null,
 				null, SQLiteCacheHelper.FIELD_QUESTIONS_PK + " ASC", "1");
 
@@ -263,9 +328,9 @@ public class CacheContentProvider {
 	private List<String> retrieveAnswers(long id) {
 
 		Cursor answersCursor = mDatabase.query(SQLiteCacheHelper.TABLE_ANSWERS,
-				new String[] {SQLiteCacheHelper.FIELD_ANSWERS_ANSWER_VALUE},
+				new String[] { SQLiteCacheHelper.FIELD_ANSWERS_ANSWER_VALUE },
 				SQLiteCacheHelper.FIELD_ANSWERS_QUESTION_FK + " = ?",
-				new String[] {String.valueOf(id)}, null, null,
+				new String[] { String.valueOf(id) }, null, null,
 				SQLiteCacheHelper.FIELD_ANSWERS_PK + " ASC", null);
 
 		ArrayList<String> answers = new ArrayList<String>();
@@ -294,9 +359,9 @@ public class CacheContentProvider {
 		// Get ids of all the current question tags.
 		Cursor tagsIdCursor = mDatabase.query(
 				SQLiteCacheHelper.TABLE_QUESTIONS_TAGS,
-				new String[] {SQLiteCacheHelper.FIELD_QUESTIONS_TAGS_TAG_FK },
+				new String[] { SQLiteCacheHelper.FIELD_QUESTIONS_TAGS_TAG_FK },
 				SQLiteCacheHelper.FIELD_QUESTIONS_TAGS_QUESTION_FK + " = ?",
-				new String[] {String.valueOf(id) }, null, null,
+				new String[] { String.valueOf(id) }, null, null,
 				SQLiteCacheHelper.FIELD_QUESTIONS_TAGS_QUESTION_FK + " ASC",
 				null);
 
@@ -417,7 +482,7 @@ public class CacheContentProvider {
 				questionInOutbox ? 1 : 0);
 		mDatabase.update(SQLiteCacheHelper.TABLE_QUESTIONS, isQueuedValue,
 				SQLiteCacheHelper.FIELD_QUESTIONS_PK + "=?",
-				new String[] {String.valueOf(id) });
+				new String[] { String.valueOf(id) });
 	}
 
 	private void sanityDatabaseCheck() {
@@ -451,7 +516,7 @@ public class CacheContentProvider {
 			return sb.toString();
 		}
 	}
-
+	
 	/**
 	 * Normalizes the query: - We change the '*' by a logical AND. - We change
 	 * the '+' by a logical OR. - We change the ' ' by a logical AND.
@@ -460,8 +525,20 @@ public class CacheContentProvider {
 	 *            Query to be changed.
 	 * @return the new SQL-compatible query.
 	 */
-//	private String filterQuery(String query) {
-//
+	private String filterQuery(String query) {
+
+		// Only one space max. between words.
+		query = query.replaceAll("(\\ )+", " ");
+		
+		// Removes the spaces after '(' and/or before ')'
+		query = query.replaceAll("\\(\\ ", "(");
+		query = query.replaceAll("\\ \\)", ")");
+
+		// Removes beginning and end spaces.
+		query = query.replaceAll("^\\ ", "");
+		query = query.replaceAll("\\ $", "");
+		
+		
 //		// Only one space max. between words.
 //		query = query.replaceAll("(\\ )+", " ");
 //
@@ -484,9 +561,9 @@ public class CacheContentProvider {
 //		// Replaces all the '*' and '+' by, respectively, " AND " and " OR "
 //		query = query.replaceAll("(?:\\ )?\\*(?:\\ )?", " AND ");
 //		query = query.replaceAll("(?:\\ )?\\+(?:\\ )?", " OR ");
-//
-//		return query;
-//	}
+
+		return query;
+	}
 
 	/**
 	 * Will get all the words contained in the query given in parameters.

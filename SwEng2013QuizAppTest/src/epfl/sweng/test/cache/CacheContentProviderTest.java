@@ -167,8 +167,37 @@ public class CacheContentProviderTest extends AndroidTestCase {
 
 			mProvider.takeFirstQuestionFromOutbox();
 		}
+		
+		assertEquals(0, mProvider.getOutboxCount());
 	}
 
+	public void testQueryInCache() {
+		
+//		final int nbQuestions = 3;
+//
+//		List<Long> expectedQuestionsIds = new ArrayList<Long>();
+//		List<Long> receivedQuestionsIds = null;
+//		
+//		for (int i = 1; i <= nbQuestions; i++) {
+//			expectedQuestionsIds.add(mProvider.addQuizQuestion(createFakeFullQuestion("questionStatement"
+//					+ i)));
+//		}
+//		
+//		receivedQuestionsIds = mProvider.getQuestionsIdsWithTag("Milionaire");
+//		
+//		if (expectedQuestionsIds.size() != receivedQuestionsIds.size()) {
+//			assertTrue(false);
+//		}
+//		
+//		for (int i = 0; i < expectedQuestionsIds.size(); i++) {
+//			long id = expectedQuestionsIds.get(i);
+//			long receivedId = receivedQuestionsIds.get(i);
+//			assertEquals(id, receivedId);
+//		}
+		
+		mProvider.getQuestionsRecursive(new QuizQuery("    A +       B     (  A B  )  ", "")  );
+	}
+	
 	/*********************** Private methods ***********************/
 
 	private QuizQuestion createFakeQuestion(String questionStatement) {
@@ -179,7 +208,7 @@ public class CacheContentProviderTest extends AndroidTestCase {
 		answers.add("Obiwan Kenobi");
 
 		Set<String> tags = new HashSet<String>();
-		tags.add("Millionaire");
+		tags.add("Milionaire");
 		tags.add("Funny");
 
 		return new QuizQuestion(questionStatement, answers, 1, tags);
