@@ -93,6 +93,7 @@ public class CacheContentProvider {
 	public Cursor getQuestions(QuizQuery query) {
 		sanityDatabaseCheck();
 
+		// e.g. "A * B    + C (D + E * F)" or st else.
 		String queryStr = query.toString();
 
 		// We select all question ids...
@@ -566,5 +567,33 @@ public class CacheContentProvider {
 		// We convert the List to an array of String.
 		return (String[]) whereArgsArray.toArray(new String[whereArgsArray
 				.size()]);
+	}
+	
+	//pre-condition: # of '?' in normalizedTagList == questionSetList.size()
+	private Set<Long> evaluate(List<String> normalizedTagList, List<Set<Long>> questionsSetList) {
+		while (normalizedTagList.contains(")")) {
+			int firstClosingParenthesisIndex = normalizedTagList.indexOf(")");
+			int correspondingOpeningParenthesisIndex = 0;
+			for (int i = firstClosingParenthesisIndex; i < 0; i--) {
+				if (normalizedTagList.get(i).equals("(")) {
+					correspondingOpeningParenthesisIndex = i;
+					break;
+				}
+			}
+			// we now work to suppress the group between those two indexes
+			
+			
+		}
+		
+		return questionsSetList.get(0);
+	}
+	
+	// pre-condition: tagList does not contain parenthesis and is well-formed
+	private List<Set<Long>> reduceGroup(List<String> tagList, List<Set<Long>> questionsSetList) {
+		while (tagList.contains("*")) {
+			int firstANDIndex = tagList.indexOf("*");
+			
+		}
+		return null;
 	}
 }
