@@ -41,5 +41,6 @@
     <string name="submit_query_button">Search</string>
     <string name="title_activity_search">SearchActivity</string>
     <string name="SearchQueryButton">Search</string>
+    <string name="error_fetching_query_question">Server could not found any questions form this query</string>
 
 </resources>

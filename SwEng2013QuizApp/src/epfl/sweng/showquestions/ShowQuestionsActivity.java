@@ -16,6 +16,7 @@ import android.widget.Toast;
 import epfl.sweng.R;
 import epfl.sweng.backend.QuizQuery;
 import epfl.sweng.patterns.QuestionsProxy;
+import epfl.sweng.preferences.UserPreferences;
 import epfl.sweng.quizquestions.QuizQuestion;
 import epfl.sweng.testing.TestCoordinator;
 import epfl.sweng.testing.TestCoordinator.TTChecks;
@@ -29,16 +30,16 @@ import epfl.sweng.testing.TestCoordinator.TTChecks;
  */
 
 public class ShowQuestionsActivity extends Activity {
-	
+
 	private QuizQuestion mQuestion = null;
-	
+
 	@Override
 	protected void onStart() {
 		super.onStart();
 		// get Intent that started this Activity
 		Intent startingIntent = getIntent();
 		// get the value of the user parcelable
-		
+
 		QuizQuery quizQuery = startingIntent.getParcelableExtra("QuizQuery");
 		if (null == quizQuery) {
 			quizQuery = new QuizQuery();
@@ -48,7 +49,7 @@ public class ShowQuestionsActivity extends Activity {
 		setContentView(R.layout.activity_display_question);
 		setDisplayView();
 	}
-	
+
 	@Override
 	protected void onStop() {
 		super.onStop();
@@ -81,35 +82,34 @@ public class ShowQuestionsActivity extends Activity {
 	 * <code>TextView</code>, initializing the <code>ListView</code> bounded
 	 * with its adapter and putting it under a listener.
 	 */
-	
+
 	private void setDisplayView() {
 		// setting button look
 		Button buttonNext = (Button) findViewById(R.id.buttonNext);
 		buttonNext.setEnabled(false);
-		
+
 		if (mQuestion != null) {
 			// setting statement
 			TextView textViewQuestion = (TextView) findViewById(R.id.displayQuestion);
 			textViewQuestion.setText("Question: " + mQuestion.getStatement());
-			
+
 			// setting tags
 			TextView textViewTag = (TextView) findViewById(R.id.displayTags);
 			textViewTag.setText(mQuestion.getTagsToString());
-			
+
 			// setting answer list
 			ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-					android.R.layout.simple_list_item_1,
-					mQuestion.getAnswers());
+					android.R.layout.simple_list_item_1, mQuestion.getAnswers());
 			ListView displayAnswers = (ListView) findViewById(R.id.displayAnswers);
 			displayAnswers.setAdapter(adapter);
-			
+
 			// put answer list under listening
 			AnswerSelectionListener listener = new AnswerSelectionListener(
 					buttonNext, mQuestion);
 			displayAnswers.setOnItemClickListener(listener);
 		}
 	}
-	
+
 	private QuizQuestion fetchQuestion() {
 		AsyncFetchQuestion asyncFetchQuestion = new AsyncFetchQuestion();
 		asyncFetchQuestion.execute();
@@ -126,25 +126,39 @@ public class ShowQuestionsActivity extends Activity {
 		return randomQuestion;
 	}
 
-	private final class AsyncFetchQuestion extends AsyncTask<Void, Void, QuizQuestion> {
+	private final class AsyncFetchQuestion extends
+			AsyncTask<Void, Void, QuizQuestion> {
 
 		@Override
 		protected QuizQuestion doInBackground(Void... params) {
-			return QuestionsProxy.getInstance(ShowQuestionsActivity.this).
-					getNextQuestion();
+			return QuestionsProxy.getInstance(ShowQuestionsActivity.this)
+					.getNextQuestion();
 		}
 
 		@Override
 		protected void onPostExecute(QuizQuestion question) {
 			super.onPostExecute(question);
 			if (null == question) {
-				TextView textViewQuestion = (TextView) findViewById(R.id.displayQuestion);
-				textViewQuestion.setText(R.string.error_fetching_question);
-				Toast.makeText(
-						ShowQuestionsActivity.this,
-						getResources().getString(
-								R.string.error_fetching_question),
-								Toast.LENGTH_LONG).show();
+				// if server has send nothing from the given query we go back to
+				// SearchQueryActivity
+				if (UserPreferences.getInstance(ShowQuestionsActivity.this)
+						.isConnected()) {
+					Toast.makeText(
+							ShowQuestionsActivity.this,
+							getResources().getString(
+									R.string.error_fetching_query_question),
+							Toast.LENGTH_LONG).show();
+					finish();
+					return;
+				} else {
+					TextView textViewQuestion = (TextView) findViewById(R.id.displayQuestion);
+					textViewQuestion.setText(R.string.error_fetching_question);
+					Toast.makeText(
+							ShowQuestionsActivity.this,
+							getResources().getString(
+									R.string.error_fetching_question),
+							Toast.LENGTH_LONG).show();
+				}
 			}
 			TestCoordinator.check(TTChecks.QUESTION_SHOWN);
 		}

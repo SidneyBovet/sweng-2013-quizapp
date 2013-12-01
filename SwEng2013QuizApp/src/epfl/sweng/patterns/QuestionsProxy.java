@@ -37,14 +37,15 @@ public final class QuestionsProxy implements ConnectivityProxy,
 
 	private Context mContext;
 	private CacheContentProvider mContentProvider;
-	
+
 	/**
 	 * Singleton getter.
 	 * 
 	 * @return The singleton instance of this object.
 	 */
 	public static QuestionsProxy getInstance(Context context) {
-		// double-checked singleton: avoids calling costly synchronized if unnecessary
+		// double-checked singleton: avoids calling costly synchronized if
+		// unnecessary
 		if (null == sQuestionProxy) {
 			synchronized (QuestionsProxy.class) {
 				if (null == sQuestionProxy) {
@@ -54,7 +55,7 @@ public final class QuestionsProxy implements ConnectivityProxy,
 		}
 		return sQuestionProxy;
 	}
-	
+
 	/**
 	 * Singleton getter when no context is available.
 	 * 
@@ -63,7 +64,7 @@ public final class QuestionsProxy implements ConnectivityProxy,
 	public static QuestionsProxy getInstance() {
 		return sQuestionProxy;
 	}
-	
+
 	/**
 	 * Add a {@link QuizQuestion} to the Inbox only if it is a well formed
 	 * question
@@ -78,18 +79,18 @@ public final class QuestionsProxy implements ConnectivityProxy,
 			closeContentProvider();
 		}
 	}
-	
-//	Utility function to send a batch of questions to the cache
-//	public void addInbox(Iterable<QuizQuestion> questionBatch) {
-//		openContentProvider();
-//		
-//		for (QuizQuestion quizQuestion : questionBatch) {
-//			mContentProvider.addQuizQuestion(quizQuestion);
-//		}
-//		
-//		closeContentProvider();
-//	}
-	
+
+	// Utility function to send a batch of questions to the cache
+	// public void addInbox(Iterable<QuizQuestion> questionBatch) {
+	// openContentProvider();
+	//
+	// for (QuizQuestion quizQuestion : questionBatch) {
+	// mContentProvider.addQuizQuestion(quizQuestion);
+	// }
+	//
+	// closeContentProvider();
+	// }
+
 	/**
 	 * Add a {@link QuizQuestion} to the Outbox only if it is a well formed
 	 * question
@@ -108,7 +109,7 @@ public final class QuestionsProxy implements ConnectivityProxy,
 			}
 		}
 	}
-	
+
 	/**
 	 * Send a {@link QuizQuestion} to the server after having stored it in the
 	 * cache and send the cached questions to be sent if online. Store the
@@ -121,7 +122,7 @@ public final class QuestionsProxy implements ConnectivityProxy,
 		// We add the current question to the outbox by default to send it
 		// independently of the state we are in (online or offline).
 		addOutAndInbox(question);
-		
+
 		int httpCodeResponse = -1;
 		if (UserPreferences.getInstance().isConnected()) {
 			httpCodeResponse = sendCachedQuestions();
@@ -129,9 +130,9 @@ public final class QuestionsProxy implements ConnectivityProxy,
 		httpCodeResponse = HttpStatus.SC_CREATED;
 		return httpCodeResponse;
 	}
-	
+
 	/**
-	 * Retrieves a {@link QuizQuestion} from the server and stores it in the 
+	 * Retrieves a {@link QuizQuestion} from the server and stores it in the
 	 * cache before returning it if online. Choose a random {@link QuizQuestion}
 	 * from the cached content before returning it if offline.
 	 * 
@@ -140,20 +141,21 @@ public final class QuestionsProxy implements ConnectivityProxy,
 	@Override
 	public QuizQuestion retrieveRandomQuizQuestion() {
 		QuizQuestion fetchedQuestion = null;
-		
+
 		if (UserPreferences.getInstance().isConnected()) {
-			fetchedQuestion = mNetworkCommunication.retrieveRandomQuizQuestion();
+			fetchedQuestion = mNetworkCommunication
+					.retrieveRandomQuizQuestion();
 			if (null != fetchedQuestion) {
 				addInbox(fetchedQuestion);
 			}
 		} else {
-			throw new IllegalStateException("retrieveRandomQuizQuestion() " +
-					"was called while in offline state");
+			throw new IllegalStateException("retrieveRandomQuizQuestion() "
+					+ "was called while in offline state");
 		}
-		
+
 		return fetchedQuestion;
 	}
-	
+
 	/**
 	 * Retrieves a {@link QuizQuestion} from the server according to a specific
 	 * query, and stores it in the cache before returning the actual JSON
@@ -163,34 +165,35 @@ public final class QuestionsProxy implements ConnectivityProxy,
 	 *         and the next field, if there's any.
 	 */
 	public JSONObject retrieveQuizQuestions(QuizQuery query) {
-		if (UserPreferences.getInstance().getConnectivityState()
-				== ConnectivityState.OFFLINE) {
+		if (UserPreferences.getInstance().getConnectivityState() == ConnectivityState.OFFLINE) {
 			return null;
 		}
-		JSONObject jsonResponse = mNetworkCommunication.retrieveQuizQuestions(query);
-		
+		JSONObject jsonResponse = mNetworkCommunication
+				.retrieveQuizQuestions(query);
+
 		if (jsonResponse == null) {
 			return null;
 		}
-		
+
 		try {
 			JSONArray array = jsonResponse.getJSONArray("questions");
 			if (array != null) {
-				List<QuizQuestion> fetchedQuestions =
-						Converter.jsonArrayToQuizQuestionList(array);
-				
+				List<QuizQuestion> fetchedQuestions = Converter
+						.jsonArrayToQuizQuestionList(array);
+
 				for (QuizQuestion question : fetchedQuestions) {
 					addInbox(question);
 				}
 			}
 		} catch (JSONException e) {
-			Log.e(this.getClass().getName(), "retrieveQuizQuestions(): could not "
-					+ "retrieve the \'questions\' field from the JSON response.");
+			Log.e(this.getClass().getName(),
+					"retrieveQuizQuestions(): could not "
+							+ "retrieve the \'questions\' field from the JSON response.");
 			return null;
 		}
 		return jsonResponse;
 	}
-	
+
 	public int getOutboxSize() {
 		int count = -1;
 		if (null == mContentProvider || mContentProvider.isClosed()) {
@@ -227,39 +230,44 @@ public final class QuestionsProxy implements ConnectivityProxy,
 		return proxyResponse;
 	}
 
-	////////////////////////////////////////////////////////////////////////////
-	//////////////// Methods to be used by ShowQuestionActivity ////////////////
-	////////////////////////////////////////////////////////////////////////////
+	// //////////////////////////////////////////////////////////////////////////
+	// ////////////// Methods to be used by ShowQuestionActivity
+	// ////////////////
+	// //////////////////////////////////////////////////////////////////////////
 	/**
 	 * Opens a stream of questions by specifying a query.
+	 * 
 	 * @param query
 	 */
 	public void setStream(QuizQuery query) {
 		mAgent = QuestionAgentFactory.getAgent(mContext, query);
 	}
-	
+
 	/**
 	 * @return The next question in the stream defined by the query.
 	 */
-	// sorry for re-stating what the code does, but its a quite complicated part to me
+	// sorry for re-stating what the code does, but its a quite complicated part
+	// to me
 	public QuizQuestion getNextQuestion() {
 		if (null == mAgent || mAgent.isClosed()) {
-			throw new IllegalStateException("cannot get next question from " +
-					"closed stream (in QuestionProxy).");
+			throw new IllegalStateException("cannot get next question from "
+					+ "closed stream (in QuestionProxy).");
 		}
-		boolean wasConnectedBeforeRetrieving =
-				UserPreferences.getInstance(mContext).isConnected();
-		
+		boolean wasConnectedBeforeRetrieving = UserPreferences.getInstance(
+				mContext).isConnected();
+
 		QuizQuestion fetchedQuestion = mAgent.getNextQuestion();
-		
+
 		// if something wrong happened and we were connected
 		if (null == fetchedQuestion && wasConnectedBeforeRetrieving) {
 			// then if we're still connected: wtf
 			if (UserPreferences.getInstance(mContext).isConnected()) {
+				// XXX ISN'T THAT NORMAL WHEN SERVER HAS NOTHING TO SEND BACK
+				// FROM A GIVEN QUERY ? - John
 				Log.wtf(this.getClass().getName(),
 						"Server error and not in offline mode?!");
 				return null;
-			// otherwise
+				// otherwise
 			} else {
 				// re-load the agent
 				QuizQuery query = mAgent.getQuery();
@@ -268,7 +276,7 @@ public final class QuestionsProxy implements ConnectivityProxy,
 				return getNextQuestion();
 			}
 		}
-		
+
 		return fetchedQuestion;
 	}
 
@@ -279,19 +287,20 @@ public final class QuestionsProxy implements ConnectivityProxy,
 		mAgent.close();
 		mAgent = null;
 	}
-	////////////////////////////////////////////////////////////////////////////
-	////////////////////////////////////////////////////////////////////////////
-	////////////////////////////////////////////////////////////////////////////
-	
+
+	// //////////////////////////////////////////////////////////////////////////
+	// //////////////////////////////////////////////////////////////////////////
+	// //////////////////////////////////////////////////////////////////////////
+
 	private void openContentProvider() {
 		mContentProvider = new CacheContentProvider(mContext, true);
 	}
-	
+
 	private void closeContentProvider() {
 		mContentProvider.close();
 		mContentProvider = null;
 	}
-	
+
 	/**
 	 * Private constructor of the singleton.
 	 * 
@@ -308,7 +317,8 @@ public final class QuestionsProxy implements ConnectivityProxy,
 		// We first send all the questions that we stored when in
 		// offline mode.
 		while (getOutboxSize() > 0) {
-			QuizQuestion questionOut = mContentProvider.peekFirstQuestionFromOutbox();
+			QuizQuestion questionOut = mContentProvider
+					.peekFirstQuestionFromOutbox();
 
 			httpCodeResponse = mNetworkCommunication
 					.sendQuizQuestion(questionOut);
@@ -325,9 +335,9 @@ public final class QuestionsProxy implements ConnectivityProxy,
 	}
 
 	/**
-	 * Has to be refactored, <b>always returns -1!</b>
-	 * <br/>
+	 * Has to be refactored, <b>always returns -1!</b> <br/>
 	 * Deprecated since moving to persistent caching
+	 * 
 	 * @return -1
 	 */
 	@Deprecated
