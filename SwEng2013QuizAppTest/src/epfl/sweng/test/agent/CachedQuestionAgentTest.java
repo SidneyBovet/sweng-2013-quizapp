@@ -1,37 +1,27 @@
-/*package epfl.sweng.test.agent;
+package epfl.sweng.test.agent;
 
 import org.json.JSONException;
 
 import android.content.Context;
+import android.test.AndroidTestCase;
+import android.test.RenamingDelegatingContext;
 import epfl.sweng.agents.CachedQuestionAgent;
 import epfl.sweng.backend.QuizQuery;
-import epfl.sweng.caching.CacheContentProvider;
-import epfl.sweng.entry.MainActivity;
 import epfl.sweng.quizquestions.QuizQuestion;
-import epfl.sweng.test.activities.GUITest;
-import epfl.sweng.testing.TestCoordinator.TTChecks;
 
-public class CachedQuestionAgentTest extends GUITest<MainActivity> {
+public class CachedQuestionAgentTest extends AndroidTestCase {
 	private CachedQuestionAgent fakeCachedAgent;
 	private QuizQuery fakeQueryCache;
 	private Context contextShowQuestionActivity;
-	private CacheContentProvider mContentProvider;
-	private QuizQuestion mQuestion;
-	
-	public CachedQuestionAgentTest() {
-		super(MainActivity.class);
-	}
+	private QuizQuestion mQuestion; 
+
 	@Override
 	protected void setUp() {
-		//TODO clean DB
-		contextShowQuestionActivity = getInstrumentation()
-				.getTargetContext();
+		contextShowQuestionActivity = new RenamingDelegatingContext(
+				getContext(), "test_");
 		fakeQueryCache = new QuizQuery("queryOffline", "from");
 		fakeCachedAgent = new CachedQuestionAgent(fakeQueryCache, 
 				contextShowQuestionActivity);
-		mContentProvider = new CacheContentProvider(
-				contextShowQuestionActivity, false);
-		mContentProvider.eraseDatabase();
 		try {
 			mQuestion = new QuizQuestion(
 					"{"
@@ -45,15 +35,17 @@ public class CachedQuestionAgentTest extends GUITest<MainActivity> {
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-		mContentProvider.addQuizQuestion(mQuestion);
-		super.setUp();
+		try {
+			super.setUp();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	@Override
 	protected void tearDown() throws Exception {
 		super.tearDown();
 		fakeCachedAgent.close();
-		mContentProvider.close();
 	}
 
 	public void testClose() {
@@ -62,8 +54,6 @@ public class CachedQuestionAgentTest extends GUITest<MainActivity> {
 	}
 	
 	public void testGetNextQuestion() {
-		getActivityAndWaitFor(TTChecks.MAIN_ACTIVITY_SHOWN);
-		getSolo().clickOnMenuItem("Erase database"); 
 		assertEquals(mQuestion, fakeCachedAgent.getNextQuestion());
 	}
-}*/
+}
