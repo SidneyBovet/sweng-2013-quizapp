@@ -18,11 +18,8 @@ import epfl.sweng.quizquestions.QuizQuestion;
  * @author born4new
  */
 
-public final class Converter {
+public abstract class Converter {
 
-	private Converter() {
-		// Nothing to do here
-	}
 	
 	/**
 	 * Converts a {@link JSONArray} into a list of String.
