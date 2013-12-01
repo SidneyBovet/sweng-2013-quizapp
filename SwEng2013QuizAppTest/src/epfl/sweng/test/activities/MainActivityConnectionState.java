@@ -50,18 +50,18 @@ public class MainActivityConnectionState extends GUITest<MainActivity> {
 		assertFalse(persistentStorage.isConnected());
 	}
 	
-//	public void testCheckBoxCheckConnected() {
-//		CheckBox connectivityState = (CheckBox) getSolo().getView(
-//				R.id.switchOnlineModeCheckbox);
-//		
-//		getSolo().clickOnView(connectivityState);
-//		getActivityAndWaitFor(TTChecks.OFFLINE_CHECKBOX_ENABLED);
-//		getSolo().sleep(2000);
-//		getSolo().clickOnView(connectivityState);
-//		getActivityAndWaitFor(TTChecks.OFFLINE_CHECKBOX_DISABLED);
-//		getSolo().sleep(2000);
-//		assertTrue(persistentStorage.isConnected());
-//	}
+	public void testCheckBoxCheckConnected() {
+		CheckBox connectivityState = (CheckBox) getSolo().getView(
+				R.id.switchOnlineModeCheckbox);
+		
+		getSolo().clickOnView(connectivityState);
+		getActivityAndWaitFor(TTChecks.OFFLINE_CHECKBOX_ENABLED);
+		getSolo().sleep(2000);
+		getSolo().clickOnView(connectivityState);
+		getActivityAndWaitFor(TTChecks.OFFLINE_CHECKBOX_DISABLED);
+		getSolo().sleep(2000);
+		assertTrue(persistentStorage.isConnected());
+	}
 
 //	public void testHTTPNotFoundStatusRightAfterAuthenticationWhenClickinOnShowRandomQuestion() {
 //
@@ -90,70 +90,71 @@ public class MainActivityConnectionState extends GUITest<MainActivity> {
 //		assertTrue("The checkbox has not switched in offline mode", connectivityState.isChecked());
 //	}
 	
-//	public void testSendingOrderIsFIFO() {
-//		int expectedSize = QuestionsProxy.getInstance().getOutboxSize() + 1;
-//		CheckBox connectivityState = (CheckBox) getSolo().getView(
-//				R.id.switchOnlineModeCheckbox);
-//		
-//		// manually switch to offline mode
-//		getSolo().clickOnView(connectivityState);
-//		getActivityAndWaitFor(TTChecks.OFFLINE_CHECKBOX_ENABLED);
-//		getSolo().sleep(300);
-//		
-//		// preparing the responses scenario
-//		AdvancedMockHttpClient client = new AdvancedMockHttpClient();
-//		client.pushCannedResponse(
-//				".", HttpStatus.SC_CREATED, "", "");
-//		client.pushCannedResponse(
-//				".", AdvancedMockHttpClient.IOEXCEPTION_ERROR_CODE,"", "", true);
-//		client.pushCannedResponse(
-//				".", HttpStatus.SC_CREATED, "", "", true);
-//		SwengHttpClientFactory.setInstance(client);
-//		
-//		// filling the outbox
-//		QuestionsProxy.getInstance().addOutAndInbox(createFakeQuestion(
-//				"Statement 1"));
-//		QuestionsProxy.getInstance().addOutAndInbox(createFakeQuestion(
-//				"Statement 2"));
-//		
-//		// let the test begin...
-//		getSolo().clickOnView(connectivityState);
-//		getActivityAndWaitFor(TTChecks.OFFLINE_CHECKBOX_ENABLED);
-//		getSolo().sleep(500);
-//		
-//		assertEquals(expectedSize, QuestionsProxy.getInstance().getOutboxSize());
-//		assertEquals("Only submitted question should be 'Statement 2'",
-//				"Statement 2", client.getLastSubmittedQuestionStatement());
-//		
-//		getSolo().clickOnView(connectivityState);
-//		getActivityAndWaitFor(TTChecks.OFFLINE_CHECKBOX_DISABLED);
-//		getSolo().sleep(500);
-//		
-//		assertEquals(0, QuestionsProxy.getInstance().getOutboxSize());
-//	}
+	public void testSendingOrderIsFIFO() {
+		int expectedSize = QuestionsProxy.getInstance().getOutboxSize() + 1;
+		CheckBox connectivityState = (CheckBox) getSolo().getView(
+				R.id.switchOnlineModeCheckbox);
+		
+		// manually switch to offline mode
+		getSolo().clickOnView(connectivityState);
+		getActivityAndWaitFor(TTChecks.OFFLINE_CHECKBOX_ENABLED);
+		getSolo().sleep(300);
+		
+		// preparing the responses scenario
+		AdvancedMockHttpClient client = new AdvancedMockHttpClient();
+		client.pushCannedResponse(
+				".", HttpStatus.SC_CREATED, "", "");
+		client.pushCannedResponse(
+				".", AdvancedMockHttpClient.IOEXCEPTION_ERROR_CODE,"", "", true);
+		client.pushCannedResponse(
+				".", HttpStatus.SC_CREATED, "", "", true);
+		SwengHttpClientFactory.setInstance(client);
+		
+		// filling the outbox
+		QuestionsProxy.getInstance().addOutAndInbox(createFakeQuestion(
+				"Statement 1"));
+		QuestionsProxy.getInstance().addOutAndInbox(createFakeQuestion(
+				"Statement 2"));
+		
+		// let the test begin...
+		getSolo().clickOnView(connectivityState);
+		getActivityAndWaitFor(TTChecks.OFFLINE_CHECKBOX_ENABLED);
+		getSolo().sleep(1000);
+		
+		assertEquals(expectedSize, QuestionsProxy.getInstance().getOutboxSize());
+		assertEquals("Only submitted question should be 'Statement 2'",
+				"Statement 2", client.getLastSubmittedQuestionStatement());
+		
+		getSolo().clickOnView(connectivityState);
+		getActivityAndWaitFor(TTChecks.OFFLINE_CHECKBOX_DISABLED);
+		getSolo().sleep(500);
+		
+		assertEquals(0, QuestionsProxy.getInstance().getOutboxSize());
+	}
 	
-//	public void testUncheckingBoxEmptiesOutbox() {
-//		CheckBox connectivityState = (CheckBox) getSolo().getView(
-//				R.id.switchOnlineModeCheckbox);
-//		setSimpleMockClient(HttpStatus.SC_CREATED);
-//		
-//		// 1. manually switching to offline state
-//		getSolo().clickOnView(connectivityState);
-//		getActivityAndWaitFor(TTChecks.OFFLINE_CHECKBOX_ENABLED);
-//		getSolo().sleep(500);
-//		
-//		// 2. adding stuff to the outbox
-//		QuestionsProxy.getInstance().
-//				addOutAndInbox(createFakeQuestion("Robotium?"));
-//		
-//		// 3. let's test 
-//		getSolo().clickOnView(connectivityState);
-//		getActivityAndWaitFor(TTChecks.OFFLINE_CHECKBOX_DISABLED);
-//		getSolo().sleep(500);
-//		
-//		assertEquals("Outbox should be empty after going from offline to online",
-//				0, QuestionsProxy.getInstance().getOutboxSize());
-//	}
+	public void testUncheckingBoxEmptiesOutbox() {
+		CheckBox connectivityState = (CheckBox) getSolo().getView(
+				R.id.switchOnlineModeCheckbox);
+		setSimpleMockClient(HttpStatus.SC_CREATED);
+
+		// 1. manually switching to offline state
+		getSolo().clickOnView(connectivityState);
+		getActivityAndWaitFor(TTChecks.OFFLINE_CHECKBOX_ENABLED);
+		getSolo().sleep(500);
+
+		// 2. adding stuff to the outbox
+		QuestionsProxy.getInstance().addOutAndInbox(
+				createFakeQuestion("Robotium?"));
+
+		// 3. let's test
+		getSolo().clickOnView(connectivityState);
+		getActivityAndWaitFor(TTChecks.OFFLINE_CHECKBOX_DISABLED);
+		getSolo().sleep(500);
+
+		assertEquals(
+				"Outbox should be empty after going from offline to online", 0,
+				QuestionsProxy.getInstance().getOutboxSize());
+	}
 
 	private QuizQuestion createFakeQuestion(String questionStatement) {
 		List<String> answers = new ArrayList<String>();
