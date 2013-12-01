@@ -28,13 +28,10 @@ import epfl.sweng.exceptions.authentication.TequilaNoTokenException;
  * @author born4new
  *
  */
-public final class AuthenticationProcess {
+abstract public class AuthenticationProcess {
 	
 	private static final int FOUND_CODE = 302;
 	
-	private AuthenticationProcess() {
-		
-	}
 	
 	public static String authenticate(String username, String password) {
 		String sessionId = null;
