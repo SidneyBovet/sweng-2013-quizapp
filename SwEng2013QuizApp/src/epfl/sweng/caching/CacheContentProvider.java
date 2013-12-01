@@ -1,6 +1,7 @@
 package epfl.sweng.caching;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -116,10 +117,10 @@ public class CacheContentProvider {
 					SQLiteCacheHelper.TABLE_QUESTIONS, selection, whereClause,
 						whereArgs, null, null, orderBy, null);
 			randomQuestionIdCursor.moveToFirst();
-			return randomQuestionIdCursor;
+//			return randomQuestionIdCursor;
 			/* end of fake cursor to avoid NPE */
 
-/************************* TO UNCOMMENT ********************************
+//************************* TO UNCOMMENT ********************************
 			String[] tagsArray = extractParameters(queryStr);
 
 			List<Set<Long>> questionsIdsList = new ArrayList<Set<Long>>();
@@ -129,9 +130,14 @@ public class CacheContentProvider {
 
 			queryStr = filterQuery(queryStr);
 			String[] tokens = queryStr.split("");
-
+			List<String> tokensAsList = new ArrayList<String>(Arrays.asList(tokens));
+			
+			Set<Long> idsMatchingQuery = evaluate(tokensAsList, questionsIdsList);
+			String correspondingSQLiteArray = setToSQLiteQueryArray(idsMatchingQuery);
+			
+return null;			
 			// What to use for the next step?
-			// - String[] tokens
+			// - String[] tokensAsList
 			// - List<Set<Long>> questionsIdsList
 
 			// What to do?
@@ -567,6 +573,15 @@ public class CacheContentProvider {
 		// We convert the List to an array of String.
 		return (String[]) whereArgsArray.toArray(new String[whereArgsArray
 				.size()]);
+	}
+	
+	private String setToSQLiteQueryArray(Set set) {
+		String statement = "(";
+		for (Object object : set) {
+			statement = statement + "," + object.toString();
+		}
+		statement = statement + ")";
+		return statement;
 	}
 	
 	//pre-condition: # of '?' in normalizedTagList == questionSetList.size()
