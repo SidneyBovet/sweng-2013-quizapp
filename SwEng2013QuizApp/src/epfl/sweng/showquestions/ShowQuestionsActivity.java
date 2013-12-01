@@ -143,15 +143,14 @@ public class ShowQuestionsActivity extends Activity {
 				// SearchQueryActivity
 				if (UserPreferences.getInstance(ShowQuestionsActivity.this)
 						.isConnected()) {
+					TextView textViewQuestion = (TextView) findViewById(R.id.displayQuestion);
+					textViewQuestion.setText(R.string.error_fetching_question);
 					Toast.makeText(
 							ShowQuestionsActivity.this,
 							getResources().getString(
 									R.string.error_fetching_query_question),
 							Toast.LENGTH_LONG).show();
-					// NOT SUR ABOUT THE TTCHECKS HERE 
-					TestCoordinator.check(TTChecks.QUESTION_SHOWN);
-					finish();
-					return;
+
 				} else {
 					TextView textViewQuestion = (TextView) findViewById(R.id.displayQuestion);
 					textViewQuestion.setText(R.string.error_fetching_question);
@@ -160,14 +159,11 @@ public class ShowQuestionsActivity extends Activity {
 							getResources().getString(
 									R.string.error_fetching_question),
 							Toast.LENGTH_LONG).show();
-					// NOT SUR ABOUT THE TTCHECKS HERE
-					TestCoordinator.check(TTChecks.QUESTION_SHOWN);
-					finish();
-					return;
+
 				}
+				TestCoordinator.check(TTChecks.QUESTION_SHOWN);
 			}
-			
-			
+
 		}
 	}
 }

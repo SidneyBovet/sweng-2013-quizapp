@@ -262,10 +262,6 @@ public final class QuestionsProxy implements ConnectivityProxy,
 		if (null == fetchedQuestion && wasConnectedBeforeRetrieving) {
 			// then if we're still connected: wtf
 			if (UserPreferences.getInstance(mContext).isConnected()) {
-				// XXX ISN'T THAT NORMAL WHEN SERVER HAS NOTHING TO SEND BACK
-				// FROM A GIVEN QUERY ? - John
-				Log.wtf(this.getClass().getName(),
-						"Server error and not in offline mode?!");
 				return null;
 				// otherwise
 			} else {
