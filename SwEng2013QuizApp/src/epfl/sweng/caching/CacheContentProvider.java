@@ -111,16 +111,16 @@ public class CacheContentProvider {
 			randomQuestionIdCursor.moveToFirst();
 			return randomQuestionIdCursor;
 		} else {
-			/* fake cursor to avoid NPE */
+			/* fake cursor to avoid NPE *
 			orderBy = "RANDOM()";
 			Cursor randomQuestionIdCursor = mDatabase.query(
 					SQLiteCacheHelper.TABLE_QUESTIONS, selection, whereClause,
 						whereArgs, null, null, orderBy, null);
 			randomQuestionIdCursor.moveToFirst();
-//			return randomQuestionIdCursor;
+			return randomQuestionIdCursor;
 			/* end of fake cursor to avoid NPE */
-
-//************************* TO UNCOMMENT ********************************
+			
+			
 			String[] tagsArray = extractParameters(queryStr);
 
 			List<Set<Long>> questionsIdsList = new ArrayList<Set<Long>>();
@@ -135,7 +135,13 @@ public class CacheContentProvider {
 			Set<Long> idsMatchingQuery = evaluate(tokensAsList, questionsIdsList);
 			String correspondingSQLiteArray = setToSQLiteQueryArray(idsMatchingQuery);
 			
-return null;			
+			String rawQuery = "SELECT * FROM " + SQLiteCacheHelper.TABLE_QUESTIONS +
+					" WHERE " + SQLiteCacheHelper.FIELD_QUESTIONS_PK + " IN " +
+					correspondingSQLiteArray + ";";
+			
+			Cursor questionsCursor = mDatabase.rawQuery(rawQuery, null);
+			return questionsCursor;
+			
 			// What to use for the next step?
 			// - String[] tokensAsList
 			// - List<Set<Long>> questionsIdsList
