@@ -175,7 +175,8 @@ public class CacheContentProviderTest extends AndroidTestCase {
 		
 		Long[] groupExpected = {Long.valueOf(1),Long.valueOf(2),Long.valueOf(3)};
 		Set<Long> expected = new HashSet<Long>(Arrays.asList(groupExpected));
-		assertEquals(expected, mProvider.reduceGroup(tagList, questionsSetList));
+		Set<Long> provided = mProvider.reduceGroup(tagList, questionsSetList);
+		assertEquals(expected, provided);
 	}
 	
 	/*********************** Private methods ***********************/

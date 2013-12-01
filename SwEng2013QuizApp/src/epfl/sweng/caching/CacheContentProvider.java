@@ -606,23 +606,21 @@ return null;
 			// we now work to suppress the group between those two indexes
 			
 			List<Set<Long>> setListedParenthesized = getSubListedSet(originalNormalizedTagList, questionsSetList,
-					correspondingOpeningParenthesisIndex,firstClosingParenthesisIndex);
+					correspondingOpeningParenthesisIndex, firstClosingParenthesisIndex);
 			
-			Set<Long> reducedSet = reduceGroup(expressionParenthesized, setListedParenthesized);
-			
-			normalizedTagList.add(correspondingOpeningParenthesisIndex, "?");
-			questionsSetList.add(correspondingOpeningParenthesisIndex, reducedSet);
+			reduceGroup(expressionParenthesized, setListedParenthesized);
 		}
 		
 		return questionsSetList.get(0);
 	}
 	
-	public List<Set<Long>> getSubListedSet(List<String> normalizedTagList, List<Set<Long>> questionsSetList, int a, int b) {
+	public List<Set<Long>> getSubListedSet(List<String> normalizedTagList,
+			List<Set<Long>> questionsSetList, int start, int end) {
 		int firstElementsCount = 0;
 		int parenthesizedCount = 0;
-		for (int i = 0; i < b; i++) {
+		for (int i = 0; i < end; i++) {
 			if (normalizedTagList.get(i).equals("?")) {
-				if (i < a) {
+				if (i < start) {
 					firstElementsCount++;
 				} else {
 					parenthesizedCount++;
