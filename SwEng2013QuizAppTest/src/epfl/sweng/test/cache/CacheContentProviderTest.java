@@ -1,6 +1,8 @@
 package epfl.sweng.test.cache;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -148,6 +150,31 @@ public class CacheContentProviderTest extends AndroidTestCase {
 		}
 		
 		assertEquals(0, mProvider.getOutboxCount());
+	}
+	
+	public void testReduceGroupWorks() {
+		String[] tagArray = {"?","+","?","*","?"};
+		List<String> tagList = Arrays.asList(tagArray);
+
+		Long[] group1 = {Long.valueOf(1),Long.valueOf(2)};
+		List<Long> group1List = Arrays.asList(group1);
+		Set<Long> group1Set = new HashSet<Long>(group1List);
+		Long[] group2 = {Long.valueOf(3),Long.valueOf(4)};
+		List<Long> group2List = Arrays.asList(group2);
+		Set<Long> group2Set = new HashSet<Long>(group2List);
+		Long[] group3 = {Long.valueOf(3),Long.valueOf(5)};
+		List<Long> group3List = Arrays.asList(group3);
+		Set<Long> group3Set = new HashSet<Long>(group3List);
+		List<Set<Long>> questionsSetList = new ArrayList<Set<Long>>();
+		questionsSetList.add(group1Set);
+		questionsSetList.add(group2Set);
+		questionsSetList.add(group3Set);
+		
+		
+		Long[] groupExpected = {Long.valueOf(1),Long.valueOf(2),Long.valueOf(3)};
+		Set<Long> expected = new HashSet<Long>(Arrays.asList(groupExpected));
+		assertEquals(expected, mProvider.reduceGroup(tagList, questionsSetList));
+		
 	}
 	
 	/*********************** Private methods ***********************/
