@@ -34,8 +34,6 @@ public final class QuestionsProxy implements ConnectivityProxy,
 
 	private static QuestionsProxy sQuestionProxy;
 	private QuestionAgent mAgent;
-	// question to be sent
-	private Queue<QuizQuestion> mQuizQuestionsOutbox;
 
 	private INetworkCommunication mNetworkCommunication;
 
@@ -103,11 +101,13 @@ public final class QuestionsProxy implements ConnectivityProxy,
 	 */
 	public void addOutAndInbox(QuizQuestion question) {
 		if (null != question && question.auditErrors() == 0) {
-			openContentProvider();
-			mContentProvider.addQuizQuestion(question, true);
-			closeContentProvider();
-			
-			mQuizQuestionsOutbox.add(question);
+			if (null == mContentProvider || mContentProvider.isClosed()) {
+				openContentProvider();
+				mContentProvider.addQuizQuestion(question, true);
+				closeContentProvider();
+			} else {
+				mContentProvider.addQuizQuestion(question, true);
+			}
 		}
 	}
 	
@@ -299,7 +299,6 @@ public final class QuestionsProxy implements ConnectivityProxy,
 	 * 
 	 */
 	private QuestionsProxy(Context ctx) {
-		mQuizQuestionsOutbox = new ArrayDeque<QuizQuestion>();
 		mNetworkCommunication = new NetworkCommunication();
 		mContext = ctx;
 		mAgent = null;
@@ -311,14 +310,18 @@ public final class QuestionsProxy implements ConnectivityProxy,
 		// We first send all the questions that we stored when in
 		// offline mode.
 		while (getOutboxSize() > 0) {
+<<<<<<< 4265ba07a5ed2a489996483b784c194d0de095d2
 			QuizQuestion questionOut = mContentProvider.peekFirstQuestionFromOutbox();
+=======
+			QuizQuestion questionOut = mContentProvider.getFirstQuestionFromOutbox();
+>>>>>>> 0b17338fb253b170f74722bc1b5473908cc67c59
 
 			httpCodeResponse = mNetworkCommunication
 					.sendQuizQuestion(questionOut);
 
 			if (HttpStatus.SC_CREATED == httpCodeResponse) {
 				// If the question has been sent, we remove it from the queue.
-				mQuizQuestionsOutbox.remove();
+				mContentProvider.takeQuestionOutOfOutbox(questionOut);
 			} else {
 				return httpCodeResponse;
 			}
