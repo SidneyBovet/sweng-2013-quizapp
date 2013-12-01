@@ -232,7 +232,7 @@ public class CacheContentProvider {
 		// Get the first question in the outbox stack.
 		Cursor questionOutboxIdCursor = mDatabase.query(
 				SQLiteCacheHelper.TABLE_QUESTIONS,
-				new String[] { SQLiteCacheHelper.FIELD_QUESTIONS_PK },
+				new String[] {SQLiteCacheHelper.FIELD_QUESTIONS_PK},
 				SQLiteCacheHelper.FIELD_QUESTIONS_IS_QUEUED + "=1", null, null,
 				null, SQLiteCacheHelper.FIELD_QUESTIONS_PK + " ASC", "1");
 
@@ -255,9 +255,9 @@ public class CacheContentProvider {
 	private List<String> retrieveAnswers(long id) {
 
 		Cursor answersCursor = mDatabase.query(SQLiteCacheHelper.TABLE_ANSWERS,
-				new String[] { SQLiteCacheHelper.FIELD_ANSWERS_ANSWER_VALUE },
+				new String[] {SQLiteCacheHelper.FIELD_ANSWERS_ANSWER_VALUE},
 				SQLiteCacheHelper.FIELD_ANSWERS_QUESTION_FK + " = ?",
-				new String[] { String.valueOf(id) }, null, null,
+				new String[] {String.valueOf(id)}, null, null,
 				SQLiteCacheHelper.FIELD_ANSWERS_PK + " ASC", null);
 
 		ArrayList<String> answers = new ArrayList<String>();
@@ -286,9 +286,9 @@ public class CacheContentProvider {
 		// Get ids of all the current question tags.
 		Cursor tagsIdCursor = mDatabase.query(
 				SQLiteCacheHelper.TABLE_QUESTIONS_TAGS,
-				new String[] { SQLiteCacheHelper.FIELD_QUESTIONS_TAGS_TAG_FK },
+				new String[] {SQLiteCacheHelper.FIELD_QUESTIONS_TAGS_TAG_FK },
 				SQLiteCacheHelper.FIELD_QUESTIONS_TAGS_QUESTION_FK + " = ?",
-				new String[] { String.valueOf(id) }, null, null,
+				new String[] {String.valueOf(id) }, null, null,
 				SQLiteCacheHelper.FIELD_QUESTIONS_TAGS_QUESTION_FK + " ASC",
 				null);
 
@@ -409,7 +409,7 @@ public class CacheContentProvider {
 				questionInOutbox ? 1 : 0);
 		mDatabase.update(SQLiteCacheHelper.TABLE_QUESTIONS, isQueuedValue,
 				SQLiteCacheHelper.FIELD_QUESTIONS_PK + "=?",
-				new String[] { String.valueOf(id) });
+				new String[] {String.valueOf(id) });
 	}
 
 	private void sanityDatabaseCheck() {
