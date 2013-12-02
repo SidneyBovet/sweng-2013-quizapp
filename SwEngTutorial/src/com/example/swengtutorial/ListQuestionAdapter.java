@@ -92,7 +92,9 @@ public class ListQuestionAdapter extends BaseAdapter {
 			
 			@Override
 			public void onClick(View v) {
-				if (pos == mCorrectAnswerIndex) return;
+				if (pos == mCorrectAnswerIndex) {
+					return;
+				}
 				mCorrectAnswerIndex = pos;
 				notifyDataSetChanged();
 			}
