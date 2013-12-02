@@ -2,6 +2,7 @@ package epfl.sweng.caching;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -601,7 +602,7 @@ public class CacheContentProvider {
 			
 			List<String> expressionParenthesized = new ArrayList<String>();
 			normalizedTagList.remove(firstClosingParenthesisIndex);
-			for (int i = firstClosingParenthesisIndex-1; i > 0; i--) {
+			for (int i = firstClosingParenthesisIndex-1; i >= 0; i--) {
 				if (normalizedTagList.get(i).equals("(")) {
 					normalizedTagList.remove(i);
 					correspondingOpeningParenthesisIndex = i;
@@ -611,12 +612,18 @@ public class CacheContentProvider {
 					normalizedTagList.remove(i);
 				}
 			}
+			Collections.reverse(expressionParenthesized);
 			// we now work to suppress the group between those two indexes
 			
-			List<Set<Long>> setListedParenthesized = getSubListedSet(originalNormalizedTagList, questionsSetList,
-					correspondingOpeningParenthesisIndex, firstClosingParenthesisIndex);
+			List<Set<Long>> setListedParenthesized = getSubListedSet(
+					originalNormalizedTagList,
+					questionsSetList,
+					correspondingOpeningParenthesisIndex,
+					firstClosingParenthesisIndex);
 			
 			reduceGroup(expressionParenthesized, setListedParenthesized);
+			
+			normalizedTagList.add(correspondingOpeningParenthesisIndex, "?");
 		}
 		
 		return questionsSetList.get(0);
@@ -636,7 +643,8 @@ public class CacheContentProvider {
 			}
 		}
 		
-		return questionsSetList.subList(firstElementsCount, parenthesizedCount);
+		return questionsSetList.subList(firstElementsCount, firstElementsCount
+				+ parenthesizedCount);
 	}
 	
 	// pre-condition: tagList does not contain parenthesis and is well-formed
