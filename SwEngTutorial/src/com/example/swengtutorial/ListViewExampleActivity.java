@@ -5,6 +5,12 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ListView;
 
+/**
+ * Complete example of an Activity with a ListView, using Adapters.
+ * 
+ * @author Melody Lucid
+ * 
+ */
 public class ListViewExampleActivity extends Activity {
 
 	private ListQuestionAdapter mAdapter;

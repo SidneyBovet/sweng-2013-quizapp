@@ -12,7 +12,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 
+/**
+ * Basic Adapter of a ListView, extending BaseAdapter and shit.
+ * 
+ * @author Melody Lucid
+ *
+ */
 public class ListQuestionAdapter extends BaseAdapter {
+	
 	private ListViewExampleActivity mAssociatedActivity;
 	private LayoutInflater mInflater;
 
@@ -71,12 +78,15 @@ public class ListQuestionAdapter extends BaseAdapter {
 			relatLayout = (RelativeLayout) this.mInflater.inflate(R.layout.listviewrow, parent, false);
 		}
 		
-		EditText answerField = (EditText)relatLayout.findViewById(R.id.submit_question_answer);
+		EditText answerField = (EditText) relatLayout.findViewById(R.id.submit_question_answer);
 		answerField.setText(mAnswersList.get(position));
 		
-		Button switchCorrectButton = (Button)relatLayout.findViewById(R.id.submit_question_trueness);
-		if (position == mCorrectAnswerIndex) switchCorrectButton.setText(R.string.question_right_answer);
-		else switchCorrectButton.setText(R.string.question_wrong_answer);
+		Button switchCorrectButton = (Button) relatLayout.findViewById(R.id.submit_question_trueness);
+		if (position == mCorrectAnswerIndex) {
+			switchCorrectButton.setText(R.string.question_right_answer);
+		} else {
+			switchCorrectButton.setText(R.string.question_wrong_answer);
+		}
 		final int pos = position;
 		switchCorrectButton.setOnClickListener(new OnClickListener() {
 			
@@ -88,14 +98,18 @@ public class ListQuestionAdapter extends BaseAdapter {
 			}
 		});
 		
-		Button removeButton = (Button)relatLayout.findViewById(R.id.submit_question_remove_answer);
+		Button removeButton = (Button) relatLayout.findViewById(R.id.submit_question_remove_answer);
 		removeButton.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
-				if (mAnswersList.size() <= 2) return;
+				if (mAnswersList.size() <= 2) {
+					return;
+				}
 				mAnswersList.remove(pos);
-				if (pos < mCorrectAnswerIndex) mCorrectAnswerIndex--;
+				if (pos < mCorrectAnswerIndex) {
+					mCorrectAnswerIndex--;
+				}
 				notifyDataSetChanged();
 			}
 		}
