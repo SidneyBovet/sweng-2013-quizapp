@@ -1,8 +1,5 @@
 package epfl.sweng.test.activities;
 
-import org.apache.http.HttpStatus;
-
-import android.content.Context;
 import android.widget.Button;
 import android.widget.EditText;
 import epfl.sweng.authentication.AuthenticationActivity;
@@ -13,8 +10,6 @@ import epfl.sweng.testing.TestCoordinator.TTChecks;
 
 public class AuthenticationActivityTest extends GUITest<AuthenticationActivity> {
 
-	private Context contextOfAuthenticationActivity;
-	private UserPreferences persistentStorage;
 	private MockHttpClient mockClient;
 
 	public AuthenticationActivityTest() {
@@ -26,11 +21,7 @@ public class AuthenticationActivityTest extends GUITest<AuthenticationActivity> 
 	protected void setUp() {
 		super.setUp();
 		mockClient = new MockHttpClient();
-		contextOfAuthenticationActivity = getInstrumentation()
-				.getTargetContext();
 		SwengHttpClientFactory.setInstance(mockClient);
-		persistentStorage = UserPreferences
-				.getInstance(contextOfAuthenticationActivity);
 		getActivityAndWaitFor(TTChecks.AUTHENTICATION_ACTIVITY_SHOWN);
 		getSolo().sleep(500);
 	}

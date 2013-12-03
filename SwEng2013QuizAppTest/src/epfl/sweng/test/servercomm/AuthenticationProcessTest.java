@@ -3,7 +3,6 @@ package epfl.sweng.test.servercomm;
 
 import org.apache.http.HttpStatus;
 
-import android.content.Context;
 import android.test.ActivityInstrumentationTestCase2;
 import epfl.sweng.authentication.AuthenticationActivity;
 import epfl.sweng.preferences.UserPreferences;
@@ -14,7 +13,6 @@ import epfl.sweng.test.minimalmock.AdvancedMockHttpClient;
 public class AuthenticationProcessTest extends
 		ActivityInstrumentationTestCase2<AuthenticationActivity> {
 
-	private Context contextOfActivity;
 	private UserPreferences persistentStorage;
 	private AdvancedMockHttpClient mockClient;
 
@@ -25,10 +23,8 @@ public class AuthenticationProcessTest extends
 	@Override
 	public void setUp() {
 		mockClient = new AdvancedMockHttpClient();
-		contextOfActivity = getInstrumentation().getTargetContext();
 		SwengHttpClientFactory.setInstance(mockClient);
-		persistentStorage = UserPreferences
-				.getInstance(contextOfActivity);
+		persistentStorage = UserPreferences.getInstance();
 		persistentStorage.destroyAuthentication();
 	}
 

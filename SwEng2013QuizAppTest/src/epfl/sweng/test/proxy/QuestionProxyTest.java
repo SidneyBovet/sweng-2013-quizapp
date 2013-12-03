@@ -9,9 +9,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.content.Context;
 import android.database.Cursor;
-import android.util.Log;
 import epfl.sweng.backend.QuizQuery;
 import epfl.sweng.caching.CacheContentProvider;
 import epfl.sweng.caching.SQLiteCacheHelper;
@@ -33,21 +31,17 @@ public class QuestionProxyTest extends GUITest<MainActivity>{
 
 	private QuestionsProxy proxy;
 	private QuizQuestion mQuestion;
-	private Context contextOfMainActivity;
 	private CacheContentProvider mContentProvider;
 	private MockHttpClient mMockClient;
 	private QuizQuery mfakeQuery;
 	@Override
 	protected void setUp() {
 		super.setUp();
-		contextOfMainActivity = getInstrumentation()
-				.getTargetContext();
-		mContentProvider = new CacheContentProvider(
-				contextOfMainActivity, true);
+		mContentProvider = new CacheContentProvider(true);
 		mContentProvider.eraseDatabase();
 		mMockClient = new MockHttpClient();
 		SwengHttpClientFactory.setInstance(mMockClient);
-		proxy = QuestionsProxy.getInstance(contextOfMainActivity);
+		proxy = QuestionsProxy.getInstance();
 		mQuestion = new QuizQuestion("q", 
 				new ArrayList<String>(Arrays.asList("a1", "a2", "a3")), 
 				0, new TreeSet<String>(Arrays.asList("t1", "t2")), 1, "o");
@@ -62,7 +56,7 @@ public class QuestionProxyTest extends GUITest<MainActivity>{
 		}*/
 	}
 	public void testSingleton() {
-		QuestionsProxy proxy2 = QuestionsProxy.getInstance(contextOfMainActivity);
+		QuestionsProxy proxy2 = QuestionsProxy.getInstance();
 		assertTrue(proxy.equals(proxy2));
 		QuestionsProxy proxy3 = QuestionsProxy.getInstance();
 		assertTrue(proxy2.equals(proxy3));

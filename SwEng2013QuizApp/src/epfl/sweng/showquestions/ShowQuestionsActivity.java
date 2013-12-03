@@ -44,7 +44,7 @@ public class ShowQuestionsActivity extends Activity {
 		if (null == quizQuery) {
 			quizQuery = new QuizQuery();
 		}
-		QuestionsProxy.getInstance(this).setStream(quizQuery);
+		QuestionsProxy.getInstance().setStream(quizQuery);
 		mQuestion = fetchQuestion();
 		setContentView(R.layout.activity_display_question);
 		setDisplayView();
@@ -53,7 +53,7 @@ public class ShowQuestionsActivity extends Activity {
 	@Override
 	protected void onStop() {
 		super.onStop();
-		QuestionsProxy.getInstance(this).closeStream();
+		QuestionsProxy.getInstance().closeStream();
 	}
 
 	/**
@@ -131,8 +131,7 @@ public class ShowQuestionsActivity extends Activity {
 
 		@Override
 		protected QuizQuestion doInBackground(Void... params) {
-			return QuestionsProxy.getInstance(ShowQuestionsActivity.this)
-					.getNextQuestion();
+			return QuestionsProxy.getInstance().getNextQuestion();
 		}
 
 		@Override
@@ -144,8 +143,7 @@ public class ShowQuestionsActivity extends Activity {
 				TextView textViewQuestion = (TextView) findViewById(R.id.displayQuestion);
 				textViewQuestion.setText(R.string.error_fetching_question);
 				String toastErrorMessage = "";
-				if (UserPreferences.getInstance(ShowQuestionsActivity.this)
-						.isConnected()) {
+				if (UserPreferences.getInstance().isConnected()) {
 					toastErrorMessage = getResources().getString(
 									R.string.error_fetching_query_question);
 				} else {

@@ -1,6 +1,5 @@
 package epfl.sweng.agents;
 
-import android.content.Context;
 import android.database.Cursor;
 import epfl.sweng.backend.QuizQuery;
 import epfl.sweng.caching.CacheContentProvider;
@@ -19,12 +18,10 @@ public class CachedQuestionAgent extends QuestionAgent {
 	 * @param query
 	 *            The {@link QuizQuery} defining this stream of questions,
 	 *            <code>null</code> if those are random questions.
-	 * @param context
-	 *            The {@link Context} of the activity using this object.
 	 */
-	public CachedQuestionAgent(QuizQuery query, Context context) {
+	public CachedQuestionAgent(QuizQuery query) {
 		super(query);
-		mContentProvider = new CacheContentProvider(context, false);
+		mContentProvider = new CacheContentProvider(false);
 		mCursor = mContentProvider.getQuestions(query);
 	}
 

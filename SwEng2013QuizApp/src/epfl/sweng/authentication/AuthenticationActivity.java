@@ -136,7 +136,7 @@ public class AuthenticationActivity extends Activity {
 		String password = ((TextView) findViewById(R.id.login_password))
 				.getText().toString();
 
-		if (UserPreferences.getInstance(this).isAuthenticated()) {
+		if (UserPreferences.getInstance().isAuthenticated()) {
 			Toast.makeText(this, "Already logged in!", Toast.LENGTH_LONG)
 					.show();
 			Log.wtf(this.getClass().getName(),

@@ -1,6 +1,5 @@
 package epfl.sweng.test;
 
-import android.content.Context;
 import android.test.ActivityInstrumentationTestCase2;
 import epfl.sweng.entry.MainActivity;
 import epfl.sweng.patterns.ConnectivityState;
@@ -9,7 +8,6 @@ import epfl.sweng.preferences.UserPreferences;
 public class UserPreferencesStorageTest extends
 		ActivityInstrumentationTestCase2<MainActivity> {
 
-	private Context contextOfMainActivity;
 	private UserPreferences persistentStorage;
 	
 	public UserPreferencesStorageTest() {
@@ -19,10 +17,7 @@ public class UserPreferencesStorageTest extends
 	@Override
 	public void setUp() {
 		//getActivity();
-		contextOfMainActivity = getInstrumentation()
-				.getTargetContext();
-		persistentStorage = UserPreferences.
-				getInstance(contextOfMainActivity);
+		persistentStorage = UserPreferences.getInstance();
 		persistentStorage.destroyAuthentication();
 	}
 	
@@ -44,8 +39,7 @@ public class UserPreferencesStorageTest extends
 	}
 	
 	public void testSingleton() {
-		UserPreferences persistentStorage2 = UserPreferences.
-				getInstance(contextOfMainActivity);
+		UserPreferences persistentStorage2 = UserPreferences.getInstance();
 		assertTrue(persistentStorage.equals(persistentStorage2));
 	} 
 	

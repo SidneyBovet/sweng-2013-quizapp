@@ -10,12 +10,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.util.Log;
+import epfl.sweng.app.SwEng2013QuizApp;
 import epfl.sweng.backend.QuizQuery;
 import epfl.sweng.quizquestions.QuizQuestion;
 
@@ -35,13 +35,12 @@ public class CacheContentProvider {
 	 * <i><b>NOTE:</b> It must be closed via its <code>destroy()</code>
 	 * method!</i>
 	 * 
-	 * @param context
-	 *            The activity's context
 	 * @param writable
 	 *            Indicates whether this content provider is read-only.
 	 */
-	public CacheContentProvider(Context context, boolean writable) {
-		SQLiteCacheHelper openHelper = new SQLiteCacheHelper(context);
+	public CacheContentProvider(boolean writable) {
+		SQLiteCacheHelper openHelper =
+				new SQLiteCacheHelper(SwEng2013QuizApp.getContext());
 
 		try {
 			mDatabase = writable ? openHelper.getWritableDatabase()
@@ -130,7 +129,7 @@ public class CacheContentProvider {
 			}
 
 			queryStr = filterQuery(queryStr);
-			String[] tokens = queryStr.split("");
+			String[] tokens = queryStr.split("(?!^)");
 			List<String> tokensAsList = new ArrayList<String>(Arrays.asList(tokens));
 			
 			Set<Long> idsMatchingQuery = evaluate(tokensAsList, questionsIdsList);
@@ -587,6 +586,9 @@ public class CacheContentProvider {
 		String statement = "";
 		for (Object object : set) {
 			statement = statement + "," + object.toString();
+		}
+		if (statement.isEmpty()) {
+			return "()";
 		}
 		statement = statement + ")";
 		statement = "(" + statement.substring(1);

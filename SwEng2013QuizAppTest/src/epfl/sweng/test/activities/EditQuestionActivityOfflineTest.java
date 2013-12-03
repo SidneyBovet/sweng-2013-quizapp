@@ -35,7 +35,7 @@ public class EditQuestionActivityOfflineTest extends GUITest<EditQuestionActivit
 	protected void tearDown() {
 		try {
 			super.tearDown();
-			UserPreferences.getInstance(getInstrumentation().getTargetContext()).
+			UserPreferences.getInstance().
 				setConnectivityState(ConnectivityState.ONLINE);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -43,12 +43,11 @@ public class EditQuestionActivityOfflineTest extends GUITest<EditQuestionActivit
 	}
 
 	public void testSubmittedQuestionIsInProxyOutbox() {
-		UserPreferences.getInstance(getInstrumentation().getTargetContext()).
-			setConnectivityState(ConnectivityState.OFFLINE);
+		UserPreferences.getInstance().setConnectivityState(ConnectivityState.OFFLINE);
 		
 		SwengHttpClientFactory.setInstance(mUnconnectedClient);
 		
-		int expectedOutboxSize = QuestionsProxy.getInstance(getInstrumentation().getTargetContext()).getOutboxSize() + 1;
+		int expectedOutboxSize = QuestionsProxy.getInstance().getOutboxSize() + 1;
 		
 		fillFormWithCorrectQuestion();
 		getSolo().clickOnButton("Submit");

@@ -5,23 +5,17 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.http.HttpStatus;
-
-import android.content.Context;
 import android.widget.CheckBox;
 import epfl.sweng.R;
 import epfl.sweng.entry.MainActivity;
 import epfl.sweng.patterns.ConnectivityState;
-import epfl.sweng.patterns.QuestionsProxy;
 import epfl.sweng.preferences.UserPreferences;
 import epfl.sweng.quizquestions.QuizQuestion;
 import epfl.sweng.servercomm.SwengHttpClientFactory;
-import epfl.sweng.test.minimalmock.AdvancedMockHttpClient;
 import epfl.sweng.test.minimalmock.MockHttpClient;
 import epfl.sweng.testing.TestCoordinator.TTChecks;
 
 public class MainActivityConnectionState extends GUITest<MainActivity> {
-	private Context contextOfMainActivity;
 	private UserPreferences persistentStorage;
 	
 	public MainActivityConnectionState() {
@@ -31,10 +25,7 @@ public class MainActivityConnectionState extends GUITest<MainActivity> {
 	@Override
 	public void setUp() {
 		super.setUp();
-		contextOfMainActivity = getInstrumentation()
-				.getTargetContext();
-		persistentStorage = UserPreferences.
-				getInstance(contextOfMainActivity);
+		persistentStorage = UserPreferences.getInstance();
 		persistentStorage.setSessionId("blabla");
 		persistentStorage.setConnectivityState(ConnectivityState.ONLINE);
 		getActivityAndWaitFor(TTChecks.MAIN_ACTIVITY_SHOWN);

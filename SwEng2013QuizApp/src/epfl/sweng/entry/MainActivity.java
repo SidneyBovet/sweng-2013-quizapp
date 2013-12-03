@@ -90,7 +90,7 @@ public class MainActivity extends Activity {
 
 		// Notify the change of connectivity state to the proxy
 		AsyncProxyConnectivityNotifier asyncProxyNotifier = new AsyncProxyConnectivityNotifier(
-				QuestionsProxy.getInstance(this));
+				QuestionsProxy.getInstance());
 		asyncProxyNotifier.execute(mUserPreferences.getConnectivityState());
 
 		if (auditErrors() != 0) {
@@ -147,7 +147,7 @@ public class MainActivity extends Activity {
 	            return true;
 	        case R.id.erase_database:
 	        	Log.v(this.getClass().getName(), "Wiping whole database!");
-	        	CacheContentProvider prov = new CacheContentProvider(this, true);
+	        	CacheContentProvider prov = new CacheContentProvider(true);
 	        	prov.eraseDatabase();
 	        	prov.close();
 	        	return true;
@@ -169,8 +169,7 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		// create the UserPreferences which use a SharedPreference
-		mUserPreferences = UserPreferences.getInstance(this
-				.getApplicationContext());
+		mUserPreferences = UserPreferences.getInstance();
 	}
 
 	/**

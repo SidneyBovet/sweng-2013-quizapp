@@ -5,7 +5,6 @@ import java.util.List;
 import org.apache.http.HttpStatus;
 
 import android.test.UiThreadTest;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import epfl.sweng.R;
@@ -25,7 +24,7 @@ public class EditQuestionActivityTest extends GUITest<EditQuestionActivity> {
 	protected void setUp() {
 		super.setUp();
 		getActivityAndWaitFor(TTChecks.EDIT_QUESTIONS_SHOWN);
-		getSolo().sleep(100);
+		getSolo().sleep(750);
 		// add stuff we need
 	}
 	
@@ -153,7 +152,6 @@ public class EditQuestionActivityTest extends GUITest<EditQuestionActivity> {
 
 		getSolo().clickOnButton("" + (char) 10008);
 		getActivityAndWaitFor(TTChecks.QUESTION_EDITED);
-		getSolo().sleep(500);
 		assertFalse("Submit button must be Disabled",
 				getSolo().getButton("Submit").isEnabled());
 
@@ -208,7 +206,6 @@ public class EditQuestionActivityTest extends GUITest<EditQuestionActivity> {
 
 		getSolo().enterText((EditText) getSolo().getText("Type in the answer"),
 				"   ");
-		getSolo().sleep(200);
 		assertFalse("Submit button must be Disabled",
 				getSolo().getButton("Submit").isEnabled());
 
@@ -231,7 +228,6 @@ public class EditQuestionActivityTest extends GUITest<EditQuestionActivity> {
 
 		getSolo().enterText((EditText) getSolo().getText("Type in the answer"),
 				"   ");
-		getSolo().sleep(200);
 		assertFalse("Submit button must be Disabled",
 				getSolo().getButton("Submit").isEnabled());
 
@@ -292,7 +288,6 @@ public class EditQuestionActivityTest extends GUITest<EditQuestionActivity> {
 				"answer BBBBBB");
 		getSolo().clickOnButton("" + (char) 10008);
 		waitFor(TTChecks.QUESTION_EDITED);
-		getSolo().sleep(500);
 		assertTrue("Submit button must be Enabled",
 				getSolo().getButton("Submit").isEnabled());
 		getSolo().clickOnButton("-");

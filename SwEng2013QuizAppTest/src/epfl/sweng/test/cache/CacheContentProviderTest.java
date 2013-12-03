@@ -8,7 +8,6 @@ import java.util.Set;
 
 import android.database.Cursor;
 import android.test.AndroidTestCase;
-import android.test.RenamingDelegatingContext;
 import epfl.sweng.backend.QuizQuery;
 import epfl.sweng.caching.CacheContentProvider;
 import epfl.sweng.caching.SQLiteCacheHelper;
@@ -22,9 +21,7 @@ public class CacheContentProviderTest extends AndroidTestCase {
 	protected void setUp() {
 
 		// We work on a test DB.
-		RenamingDelegatingContext context = new RenamingDelegatingContext(
-				getContext(), "test_");
-		mProvider = new CacheContentProvider(context, true);
+		mProvider = new CacheContentProvider(true);
 
 		try {
 			super.setUp();

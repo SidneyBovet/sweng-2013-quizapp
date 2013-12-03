@@ -1,10 +1,10 @@
 package epfl.sweng.preferences;
 
-import epfl.sweng.patterns.ConnectivityState;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.util.Log;
+import epfl.sweng.app.SwEng2013QuizApp;
+import epfl.sweng.patterns.ConnectivityState;
 
 /**
  * Data structure which uses a {@link SharedPreferences} to store the
@@ -25,28 +25,8 @@ public final class UserPreferences {
 	private ConnectivityState mCurrentConnectivityState;
 
 	/**
-	 * Returns the singleton, creates it if it's not instancied.
+	 * Singleton getter
 	 * 
-	 * @param context Context of the activity that needs the storage.
-	 * @return Singleton instance of the class.
-	 */
-	
-	public static UserPreferences getInstance(
-			Context context) {
-		// double-checked singleton: avoids calling costly synchronized if
-		// unnecessary
-		if (null == sSingletonStorage) {
-			synchronized (UserPreferences.class) {
-				if (null == sSingletonStorage) {
-					sSingletonStorage = new UserPreferences(context);
-				}
-			}
-		}
-		return sSingletonStorage;
-	}
-
-	/**
-	 * Singleton getter when no context is available.
 	 * @return
 	 * 		The singleton instance of this object (may be null!)
 	 */
@@ -55,8 +35,6 @@ public final class UserPreferences {
 		if (null == sSingletonStorage) {
 			synchronized (UserPreferences.class) {
 				if (null == sSingletonStorage) {
-					Log.e(UserPreferences.class.getName(), "getInstance(): "
-							+ "was used before the one with a Context");
 					sSingletonStorage = new UserPreferences();
 				}
 			}
@@ -92,6 +70,7 @@ public final class UserPreferences {
 	 * @return <b>true</b> if the sessionID is already in the table.
 	 *            <b>false</b> otherwise
 	 */
+	
 	public boolean isAuthenticated() {
 		String value = mUserCredentialsPrefs.getString(mKeySessionIDName, null);
 		return value != null;
@@ -103,6 +82,7 @@ public final class UserPreferences {
 	 * @return <b>true</b> if the connectionState is ONLINE,
 	 *           <b>false</b> otherwise
 	 */
+	
 	public boolean isConnected() {
 		return mCurrentConnectivityState.equals(ConnectivityState.ONLINE);
 	}
@@ -145,24 +125,12 @@ public final class UserPreferences {
 	/**
 	 * Private constructor of the singleton.
 	 * 
-	 * @param context
-	 *            Context of the activity that needs the storage.
-	 */
-	
-	private UserPreferences(Context context) {
-		this.mUserCredentialsPrefs = context.getSharedPreferences(
-				mSharedPreferencesName, Context.MODE_PRIVATE);
-		this.mEditor = mUserCredentialsPrefs.edit();
-		this.mCurrentConnectivityState = ConnectivityState.ONLINE;
-	}
-	
-	/**
-	 * Private constructor of the singleton, without context.
 	 */
 	
 	private UserPreferences() {
-		this.mUserCredentialsPrefs = null;
-		this.mEditor = null;
+		this.mUserCredentialsPrefs = SwEng2013QuizApp.getContext().
+				getSharedPreferences(mSharedPreferencesName, Context.MODE_PRIVATE);
+		this.mEditor = mUserCredentialsPrefs.edit();
 		this.mCurrentConnectivityState = ConnectivityState.ONLINE;
 	}
 }

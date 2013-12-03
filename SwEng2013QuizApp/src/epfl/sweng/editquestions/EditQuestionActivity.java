@@ -265,7 +265,7 @@ public class EditQuestionActivity extends Activity {
 				throw new IllegalArgumentException();
 			}
 			
-			return QuestionsProxy.getInstance(getApplicationContext()).
+			return QuestionsProxy.getInstance().
 					sendQuizQuestion(questions[0]);
 		}
 		

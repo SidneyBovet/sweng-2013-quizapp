@@ -20,7 +20,7 @@ public class GUITest<T extends Activity> extends
 	@Override
 	protected void setUp() {
 		solo = new Solo(getInstrumentation());
-		UserPreferences.getInstance(getInstrumentation().getContext());
+		UserPreferences.getInstance();
 	}
 
 	@Override

@@ -1,8 +1,6 @@
 package epfl.sweng.test.agent;
 
-import android.content.Context;
 import android.test.AndroidTestCase;
-import android.test.RenamingDelegatingContext;
 import epfl.sweng.agents.CachedQuestionAgent;
 import epfl.sweng.agents.OnlineQuestionsAgent;
 import epfl.sweng.agents.QuestionAgent;
@@ -15,7 +13,6 @@ public class QuestionAgentFactoryTest extends AndroidTestCase {
 	private QuizQuery fakeQueryOnline;
 	private QuizQuery fakeQueryCache;
 	private CachedQuestionAgent fakeCachedAgent;
-	private Context contextShowQuestionActivity;
 
 	@Override
 	protected void setUp() {
@@ -26,13 +23,9 @@ public class QuestionAgentFactoryTest extends AndroidTestCase {
 			e.printStackTrace();
 		}
 		
-		contextShowQuestionActivity = new RenamingDelegatingContext(
-				getContext(), "test_");
-		
 		fakeQueryOnline = new QuizQuery("queryOnline", "from");
 		fakeQueryCache = new QuizQuery("queryOffline", "from");
-		fakeCachedAgent = new CachedQuestionAgent(fakeQueryCache,
-				contextShowQuestionActivity);
+		fakeCachedAgent = new CachedQuestionAgent(fakeQueryCache);
 	}
 
 	@Override
@@ -43,33 +36,28 @@ public class QuestionAgentFactoryTest extends AndroidTestCase {
 
 	public void testInstance() {
 		QuestionAgentFactory.setInstance(fakeCachedAgent);
-		QuestionAgent agentToTest = QuestionAgentFactory.getAgent(
-				contextShowQuestionActivity, fakeQueryCache);
+		QuestionAgent agentToTest = QuestionAgentFactory.getAgent(fakeQueryCache);
 		assertEquals(fakeCachedAgent, agentToTest);
 		QuestionAgentFactory.releaseInstance();
 	}
 
 	public void testGetAgent() {
 		
-		UserPreferences.getInstance(contextShowQuestionActivity)
+		UserPreferences.getInstance()
 		.setConnectivityState(ConnectivityState.OFFLINE);
 		
-		QuestionAgent agentOfflineToTest = QuestionAgentFactory.getAgent(
-				contextShowQuestionActivity, fakeQueryCache);
+		QuestionAgent agentOfflineToTest = QuestionAgentFactory.getAgent(fakeQueryCache);
 		assertTrue(agentOfflineToTest instanceof CachedQuestionAgent);
 		QuestionAgentFactory.releaseInstance();
 
-		UserPreferences.getInstance(contextShowQuestionActivity)
-				.setConnectivityState(ConnectivityState.ONLINE);
-		QuestionAgent agentOnlineToTest = QuestionAgentFactory.getAgent(
-				contextShowQuestionActivity, fakeQueryOnline);
+		UserPreferences.getInstance().setConnectivityState(ConnectivityState.ONLINE);
+		QuestionAgent agentOnlineToTest = QuestionAgentFactory.getAgent(fakeQueryOnline);
 		assertTrue(fakeQueryOnline.equals(agentOnlineToTest.getQuery()));
 		assertTrue(agentOnlineToTest instanceof OnlineQuestionsAgent);
 		QuestionAgentFactory.releaseInstance();
 
 		QuestionAgentFactory.setInstance(fakeCachedAgent);
-		QuestionAgent agentToTest = QuestionAgentFactory.getAgent(
-				contextShowQuestionActivity, fakeQueryCache);
+		QuestionAgent agentToTest = QuestionAgentFactory.getAgent(fakeQueryCache);
 		assertTrue(agentToTest instanceof CachedQuestionAgent);
 	}
 	

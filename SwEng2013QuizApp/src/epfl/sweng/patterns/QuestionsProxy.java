@@ -7,7 +7,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.content.Context;
 import android.util.Log;
 import epfl.sweng.agents.QuestionAgent;
 import epfl.sweng.agents.QuestionAgentFactory;
@@ -35,7 +34,6 @@ public final class QuestionsProxy implements ConnectivityProxy,
 
 	private INetworkCommunication mNetworkCommunication;
 
-	private Context mContext;
 	private CacheContentProvider mContentProvider;
 
 	/**
@@ -43,13 +41,13 @@ public final class QuestionsProxy implements ConnectivityProxy,
 	 * 
 	 * @return The singleton instance of this object.
 	 */
-	public static QuestionsProxy getInstance(Context context) {
+	public static QuestionsProxy getInstance() {
 		// double-checked singleton: avoids calling costly synchronized if
 		// unnecessary
 		if (null == sQuestionProxy) {
 			synchronized (QuestionsProxy.class) {
 				if (null == sQuestionProxy) {
-					sQuestionProxy = new QuestionsProxy(context);
+					sQuestionProxy = new QuestionsProxy();
 				}
 			}
 		}
@@ -57,12 +55,11 @@ public final class QuestionsProxy implements ConnectivityProxy,
 	}
 
 	/**
-	 * Singleton getter when no context is available.
-	 * 
-	 * @return The singleton instance of this object (may be null!)
+	 * Resets the instance of the singleton to <code>null</code>.
 	 */
-	public static QuestionsProxy getInstance() {
-		return sQuestionProxy;
+	
+	public static void resetQuestionsProxy() {
+		sQuestionProxy = null;
 	}
 
 	/**
@@ -241,7 +238,7 @@ public final class QuestionsProxy implements ConnectivityProxy,
 	 * @param query
 	 */
 	public void setStream(QuizQuery query) {
-		mAgent = QuestionAgentFactory.getAgent(mContext, query);
+		mAgent = QuestionAgentFactory.getAgent(query);
 	}
 
 	/**
@@ -254,21 +251,20 @@ public final class QuestionsProxy implements ConnectivityProxy,
 			throw new IllegalStateException("cannot get next question from "
 					+ "closed stream (in QuestionProxy).");
 		}
-		boolean wasConnectedBeforeRetrieving = UserPreferences.getInstance(
-				mContext).isConnected();
+		boolean wasConnectedBeforeRetrieving = UserPreferences.getInstance().isConnected();
 
 		QuizQuestion fetchedQuestion = mAgent.getNextQuestion();
 
 		// if something wrong happened and we were connected
 		if (null == fetchedQuestion && wasConnectedBeforeRetrieving) {
 			// then if we're still connected: wtf
-			if (UserPreferences.getInstance(mContext).isConnected()) {
+			if (UserPreferences.getInstance().isConnected()) {
 				return null;
 				// otherwise
 			} else {
 				// re-load the agent
 				QuizQuery query = mAgent.getQuery();
-				mAgent = QuestionAgentFactory.getAgent(mContext, query);
+				mAgent = QuestionAgentFactory.getAgent(query);
 				// re-fetch the question with the new agent
 				return getNextQuestion();
 			}
@@ -287,16 +283,14 @@ public final class QuestionsProxy implements ConnectivityProxy,
 		}
 	}
 	
-	public static void resetQuestionsProxy() {
-		sQuestionProxy = null;
-	}
+	
 
 	// //////////////////////////////////////////////////////////////////////////
 	// //////////////////////////////////////////////////////////////////////////
 	// //////////////////////////////////////////////////////////////////////////
 
 	private void openContentProvider() {
-		mContentProvider = new CacheContentProvider(mContext, true);
+		mContentProvider = new CacheContentProvider(true);
 	}
 
 	private void closeContentProvider() {
@@ -308,9 +302,8 @@ public final class QuestionsProxy implements ConnectivityProxy,
 	 * Private constructor of the singleton.
 	 * 
 	 */
-	private QuestionsProxy(Context ctx) {
+	private QuestionsProxy() {
 		mNetworkCommunication = new NetworkCommunication();
-		mContext = ctx;
 		mAgent = null;
 	}
 

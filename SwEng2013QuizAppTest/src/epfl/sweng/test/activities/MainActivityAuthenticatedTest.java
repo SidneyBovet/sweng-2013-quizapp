@@ -1,6 +1,5 @@
 package epfl.sweng.test.activities;
 
-import android.content.Context;
 import android.widget.Button;
 import android.widget.CheckBox;
 import epfl.sweng.R;
@@ -10,7 +9,6 @@ import epfl.sweng.testing.TestCoordinator.TTChecks;
 
 public class MainActivityAuthenticatedTest extends GUITest<MainActivity> {
 
-	private Context contextOfMainActivity;
 	private UserPreferences persistentStorage;
 	
 	public MainActivityAuthenticatedTest() {
@@ -20,10 +18,7 @@ public class MainActivityAuthenticatedTest extends GUITest<MainActivity> {
 	@Override
 	public void setUp() {
 		super.setUp();
-		contextOfMainActivity = getInstrumentation()
-				.getTargetContext();
-		persistentStorage = UserPreferences.
-				getInstance(contextOfMainActivity);
+		persistentStorage = UserPreferences.getInstance();
 		persistentStorage.setSessionId("blabla");
 		getActivityAndWaitFor(TTChecks.MAIN_ACTIVITY_SHOWN);
 	}
@@ -31,10 +26,7 @@ public class MainActivityAuthenticatedTest extends GUITest<MainActivity> {
 	@Override
 	protected void tearDown() throws Exception {
 		super.tearDown();
-		contextOfMainActivity = getInstrumentation()
-				.getTargetContext();
-		persistentStorage = UserPreferences.
-				getInstance(contextOfMainActivity);
+		persistentStorage = UserPreferences.getInstance();
 		persistentStorage.destroyAuthentication();
 	};
 	

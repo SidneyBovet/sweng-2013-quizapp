@@ -36,7 +36,7 @@ public class ShowQuestionsActivityTest extends GUITest<ShowQuestionsActivity> {
 		super.tearDown();
 		SwengHttpClientFactory.setInstance(null);
 		QuestionAgentFactory.releaseInstance();
-		QuestionsProxy.getInstance(getInstrumentation().getContext()).closeStream();
+		QuestionsProxy.getInstance().closeStream();
 		QuestionsProxy.resetQuestionsProxy();
 	}
 
