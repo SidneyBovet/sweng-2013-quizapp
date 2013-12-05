@@ -22,6 +22,7 @@ public class CacheContentProviderTest extends AndroidTestCase {
 
 		// We work on a test DB.
 		mProvider = new CacheContentProvider(true);
+		mProvider.eraseDatabase();
 
 		try {
 			super.setUp();

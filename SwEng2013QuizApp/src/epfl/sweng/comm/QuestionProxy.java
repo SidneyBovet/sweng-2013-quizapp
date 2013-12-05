@@ -47,7 +47,7 @@ public final class QuestionProxy implements IQuestionCommunication,
 	 * Resets the instance of the singleton to <code>null</code>.
 	 */
 	
-	public static void resetQuestionsProxy() {
+	public static void resetQuestionProxy() {
 		sSingletonProxy = null;
 	}
 

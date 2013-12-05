@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.http.HttpStatus;
 
 import android.test.UiThreadTest;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import epfl.sweng.R;
@@ -329,37 +330,37 @@ public class EditQuestionActivityTest extends GUITest<EditQuestionActivity> {
 				getSolo().getButton("Submit").isEnabled());
 	}
 
-//	public void testRemoveSpecificRow() {
-//		getSolo().clickOnButton("\\+");
-//		waitFor(TTChecks.QUESTION_EDITED);
-//		getSolo().enterText(
-//				(EditText) getSolo().getText(
-//						"Type in the question\'s text body"), "my question1");
-//
-//		getSolo().enterText(
-//				(EditText) getSolo().getText("Type in the question\'s tags"),
-//				"tag");
-//
-//		getSolo().enterText((EditText) getSolo().getText("Type in the answer"),
-//				"answer AAAAAA");
-//		getSolo().enterText((EditText) getSolo().getText("Type in the answer"),
-//				"answer BBBBBB");
-//		Button butAnswerIndexRow2 = getSolo().getView(Button.class, 3);
-//		getSolo().clickOnView(butAnswerIndexRow2);
-//		waitFor(TTChecks.QUESTION_EDITED);
-//		getSolo().sleep(2000);
-//		getSolo().clickOnButton("+");
-//		waitFor(TTChecks.QUESTION_EDITED);
-//		getSolo().enterText((EditText) getSolo().getText("Type in the answer"),
-//				"answer CCCCCC");
-//		// ArrayList<Button> lB = getSolo().getView();
-//		getSolo().sleep(2000);
-//		Button butRemoveRow2 = getSolo().getView(Button.class, 4);
-//		getSolo().clickOnView(butRemoveRow2);
-//		waitFor(TTChecks.QUESTION_EDITED);
-//		getSolo().sleep(2000);
-//
-//		assertFalse("Must not be text BBBBBB", getSolo().searchText("answer BBBBBB"));
-//	}
+	public void testRemoveSpecificRow() {
+		getSolo().clickOnButton("\\+");
+		waitFor(TTChecks.QUESTION_EDITED);
+		getSolo().enterText(
+				(EditText) getSolo().getText(
+						"Type in the question\'s text body"), "my question1");
+
+		getSolo().enterText(
+				(EditText) getSolo().getText("Type in the question\'s tags"),
+				"tag");
+
+		getSolo().enterText((EditText) getSolo().getText("Type in the answer"),
+				"answer AAAAAA");
+		getSolo().enterText((EditText) getSolo().getText("Type in the answer"),
+				"answer BBBBBB");
+		Button butAnswerIndexRow2 = getSolo().getView(Button.class, 3);
+		getSolo().clickOnView(butAnswerIndexRow2);
+		waitFor(TTChecks.QUESTION_EDITED);
+		getSolo().sleep(2000);
+		getSolo().clickOnButton("+");
+		waitFor(TTChecks.QUESTION_EDITED);
+		getSolo().enterText((EditText) getSolo().getText("Type in the answer"),
+				"answer CCCCCC");
+		// ArrayList<Button> lB = getSolo().getView();
+		getSolo().sleep(2000);
+		Button butRemoveRow2 = getSolo().getView(Button.class, 4);
+		getSolo().clickOnView(butRemoveRow2);
+		waitFor(TTChecks.QUESTION_EDITED);
+		getSolo().sleep(2000);
+
+		assertFalse("Must not be text BBBBBB", getSolo().searchText("answer BBBBBB"));
+	}
 	
 }

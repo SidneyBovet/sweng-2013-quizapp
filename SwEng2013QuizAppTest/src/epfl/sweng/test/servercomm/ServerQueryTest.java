@@ -9,7 +9,7 @@ import org.json.JSONObject;
 
 import android.util.Log;
 import epfl.sweng.backend.QuizQuery;
-import epfl.sweng.servercomm.NetworkCommunication;
+import epfl.sweng.comm.OnlineCommunication;
 import epfl.sweng.servercomm.SwengHttpClientFactory;
 import epfl.sweng.test.minimalmock.MockHttpClient;
 
@@ -40,7 +40,7 @@ public class ServerQueryTest extends TestCase {
                 "\"next\": null }",
                 "application/json");
 		
-		NetworkCommunication mNetworkCommunication = new NetworkCommunication();
+		OnlineCommunication mNetworkCommunication = new OnlineCommunication();
 		QuizQuery query = new QuizQuery("fruit", "no fromm string... whaaaat?");
 		JSONObject queryJSON;
 		try {
@@ -50,7 +50,7 @@ public class ServerQueryTest extends TestCase {
 			e.printStackTrace();
 		}
 		
-		JSONObject result = mNetworkCommunication.retrieveQuizQuestions(query);
+		JSONObject result = mNetworkCommunication.retrieveQuizQuestion(query);
 		Log.v("JSON string", result.toString(0));
 		try {
 			JSONArray array = result.getJSONArray("questions");

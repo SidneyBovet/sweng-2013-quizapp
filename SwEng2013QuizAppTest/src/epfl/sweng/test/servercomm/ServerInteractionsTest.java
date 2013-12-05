@@ -4,15 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import junit.framework.TestCase;
+import epfl.sweng.comm.IQuestionCommunication;
+import epfl.sweng.comm.OnlineCommunication;
 import epfl.sweng.quizquestions.QuizQuestion;
-import epfl.sweng.servercomm.INetworkCommunication;
-import epfl.sweng.servercomm.NetworkCommunication;
 import epfl.sweng.servercomm.SwengHttpClientFactory;
 import epfl.sweng.test.minimalmock.MockHttpClient;
 
 public class ServerInteractionsTest extends TestCase {
 	private MockHttpClient mMockClient;
-	private INetworkCommunication mNetworkCommunication = new NetworkCommunication();
+	private IQuestionCommunication mNetworkCommunication = new OnlineCommunication();
 
 	@Override
 	public void setUp() {

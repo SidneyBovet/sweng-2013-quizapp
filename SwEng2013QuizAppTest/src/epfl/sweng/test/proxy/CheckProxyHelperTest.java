@@ -1,16 +1,16 @@
 package epfl.sweng.test.proxy;
 
 import junit.framework.TestCase;
+import epfl.sweng.comm.OnlineCommunication;
+import epfl.sweng.comm.QuestionProxy;
 import epfl.sweng.patterns.CheckProxyHelper;
-import epfl.sweng.patterns.QuestionsProxy;
-import epfl.sweng.servercomm.NetworkCommunication;
 
 public class CheckProxyHelperTest extends TestCase{
 	public void testTheOnlyOne(){
 		CheckProxyHelper checkproxy = new CheckProxyHelper();
-		assertEquals(NetworkCommunication.class, 
+		assertEquals(OnlineCommunication.class, 
 				checkproxy.getServerCommunicationClass());
-		assertEquals(QuestionsProxy.class, 
+		assertEquals(QuestionProxy.class, 
 				checkproxy.getProxyClass());
 	}
 }

@@ -1,9 +1,9 @@
 package epfl.sweng.test.activities;
 
 import android.widget.EditText;
+import epfl.sweng.caching.CacheContentProvider;
 import epfl.sweng.comm.ConnectivityState;
 import epfl.sweng.editquestions.EditQuestionActivity;
-import epfl.sweng.patterns.QuestionsProxy;
 import epfl.sweng.preferences.UserPreferences;
 import epfl.sweng.servercomm.SwengHttpClientFactory;
 import epfl.sweng.test.minimalmock.MockHttpClient;
@@ -47,13 +47,15 @@ public class EditQuestionActivityOfflineTest extends GUITest<EditQuestionActivit
 		
 		SwengHttpClientFactory.setInstance(mUnconnectedClient);
 		
-		int expectedOutboxSize = QuestionsProxy.getInstance().getOutboxSize() + 1;
+		CacheContentProvider provider = new CacheContentProvider(false);
+		int expectedOutboxSize = provider.getOutboxCount() + 1;
 		
 		fillFormWithCorrectQuestion();
 		getSolo().clickOnButton("Submit");
 		getActivityAndWaitFor(TTChecks.NEW_QUESTION_SUBMITTED);
 		
-		assertEquals(expectedOutboxSize, QuestionsProxy.getInstance().getOutboxSize());
+		assertEquals(expectedOutboxSize, provider.getOutboxCount());
+		provider.close();
 	}
 
 	private void fillFormWithCorrectQuestion() {

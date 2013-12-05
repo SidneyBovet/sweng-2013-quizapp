@@ -3,7 +3,6 @@ package epfl.sweng.test.activities;
 import android.widget.Button;
 import android.widget.EditText;
 import epfl.sweng.authentication.AuthenticationActivity;
-import epfl.sweng.preferences.UserPreferences;
 import epfl.sweng.servercomm.SwengHttpClientFactory;
 import epfl.sweng.test.minimalmock.MockHttpClient;
 import epfl.sweng.testing.TestCoordinator.TTChecks;

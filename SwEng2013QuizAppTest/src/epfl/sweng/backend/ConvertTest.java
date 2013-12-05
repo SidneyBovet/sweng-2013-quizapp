@@ -13,7 +13,7 @@ import epfl.sweng.test.MockJSON;
 
 import junit.framework.TestCase;
 
-public class ConvertTestt extends TestCase {
+public class ConvertTest extends TestCase {
 	private JSONArray jsonArray;
 	private MockJSON mockJson1;
 	private List<String> list = new ArrayList<String>();

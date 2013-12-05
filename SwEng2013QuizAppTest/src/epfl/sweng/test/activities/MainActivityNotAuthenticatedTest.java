@@ -1,17 +1,15 @@
-/*package epfl.sweng.test.activities;
+package epfl.sweng.test.activities;
 
-import android.content.Context;
 import android.widget.Button;
 import android.widget.CheckBox;
 import epfl.sweng.R;
+import epfl.sweng.comm.ConnectivityState;
 import epfl.sweng.entry.MainActivity;
-import epfl.sweng.patterns.ConnectivityState;
 import epfl.sweng.preferences.UserPreferences;
 import epfl.sweng.testing.TestCoordinator.TTChecks;
 
 public class MainActivityNotAuthenticatedTest extends GUITest<MainActivity> {
 
-	private Context contextOfMainActivity;
 	private UserPreferences persistentStorage;
 	
 	public MainActivityNotAuthenticatedTest() {
@@ -26,25 +24,18 @@ public class MainActivityNotAuthenticatedTest extends GUITest<MainActivity> {
 		} catch (InterruptedException e) {
 			fail("wtf");
 		}
-		contextOfMainActivity = getInstrumentation()
-				.getTargetContext();
-		persistentStorage = UserPreferences.
-				getInstance(contextOfMainActivity);
+		persistentStorage = UserPreferences.getInstance();
 		persistentStorage.destroyAuthentication();
 		getActivityAndWaitFor(TTChecks.MAIN_ACTIVITY_SHOWN);
 	}
 
 	@Override
 	protected void tearDown() {
-		
 		try {
 			super.tearDown();
-			contextOfMainActivity = getInstrumentation()
-					.getTargetContext();
-			persistentStorage = UserPreferences.
-					getInstance(contextOfMainActivity);
-			UserPreferences.getInstance(getInstrumentation().getContext()).
-				setConnectivityState(ConnectivityState.OFFLINE);
+			persistentStorage = UserPreferences.getInstance();
+			UserPreferences.getInstance()
+					.setConnectivityState(ConnectivityState.OFFLINE);
 			persistentStorage.destroyAuthentication();
 		} catch (Exception e1) {
 			e1.printStackTrace();
@@ -97,4 +88,4 @@ public class MainActivityNotAuthenticatedTest extends GUITest<MainActivity> {
 		}
 		assertFalse(connexionState.isShown());
 	}
-}*/
+}

@@ -11,19 +11,19 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import epfl.sweng.backend.QuizQuery;
+import epfl.sweng.comm.OnlineCommunication;
 import epfl.sweng.quizquestions.QuizQuestion;
-import epfl.sweng.servercomm.NetworkCommunication;
 import epfl.sweng.servercomm.SwengHttpClientFactory;
 import epfl.sweng.test.minimalmock.AdvancedMockHttpClient;
 
 public class NetworkCommunicationTest extends TestCase {
 
-	private NetworkCommunication mNetworkComm;
+	private OnlineCommunication mNetworkComm;
 	private AdvancedMockHttpClient mClient;
 	
 	@Override
 	public void setUp() {
-		mNetworkComm = new NetworkCommunication();
+		mNetworkComm = new OnlineCommunication();
 		mClient = new AdvancedMockHttpClient();
 		SwengHttpClientFactory.setInstance(mClient);
 	}
@@ -98,10 +98,13 @@ public class NetworkCommunicationTest extends TestCase {
 						+ " \"solutionIndex\": 0, \"tags\": [\"h2g2\", \"trivia\"], \"id\": \"1\" }",
 				"application/json");
 				
-		QuizQuestion question = mNetworkComm.retrieveRandomQuizQuestion();
-		
-		assertEquals("Didn't retrieve the right question.",
-				question.getOwner(), "sweng");
+		try {
+			QuizQuestion question = new QuizQuestion(mNetworkComm.retrieveRandomQuizQuestion().toString());
+			assertEquals("Didn't retrieve the right question.",
+					question.getOwner(), "sweng");
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void testRetrieveRandomQuizQuestionIOException() {
@@ -109,10 +112,9 @@ public class NetworkCommunicationTest extends TestCase {
 				"GET (?:https?://[^/]+|[^/]+)?/+quizquestions/random\\b",
 				AdvancedMockHttpClient.IOEXCEPTION_ERROR_CODE, "", "");
 				
-		QuizQuestion question = mNetworkComm.retrieveRandomQuizQuestion();
-		
+		JSONObject jsonQuestion = mNetworkComm.retrieveRandomQuizQuestion();
 		assertEquals("The question retrieved should be null.",
-				question, null);
+				jsonQuestion, null);
 	}
 	
 	public void testRetrieveRandomQuizQuestionClientProtocolException() {
@@ -120,10 +122,9 @@ public class NetworkCommunicationTest extends TestCase {
 				"GET (?:https?://[^/]+|[^/]+)?/+quizquestions/random\\b",
 				AdvancedMockHttpClient.CLIENTPROTOCOLEXCEPTION_ERROR_CODE, "", "");
 				
-		QuizQuestion question = mNetworkComm.retrieveRandomQuizQuestion();
-		
+		JSONObject jsonQuestion = mNetworkComm.retrieveRandomQuizQuestion();
 		assertEquals("The question retrieved should be null.",
-				question, null);
+				jsonQuestion, null);
 	}
 	
 	public void testRetrieveRandomQuizQuestionExceptionBaseServerError() {
@@ -131,10 +132,9 @@ public class NetworkCommunicationTest extends TestCase {
 				"GET (?:https?://[^/]+|[^/]+)?/+quizquestions/random\\b",
 				AdvancedMockHttpClient.CLIENTPROTOCOLEXCEPTION_ERROR_CODE, "", "");
 				
-		QuizQuestion question = mNetworkComm.retrieveRandomQuizQuestion();
-		
+		JSONObject jsonQuestion = mNetworkComm.retrieveRandomQuizQuestion();
 		assertEquals("The question retrieved should be null.",
-				question, null);
+				jsonQuestion, null);
 	}
 	
 	public void testRetrieveRandomQuizQuestionWrongJSON() {
@@ -144,10 +144,9 @@ public class NetworkCommunicationTest extends TestCase {
 				"not a single structure of JSON question was here",
 				"application/json");
 				
-		QuizQuestion question = mNetworkComm.retrieveRandomQuizQuestion();
-		
+		JSONObject jsonQuestion = mNetworkComm.retrieveRandomQuizQuestion();
 		assertEquals("The question retrieved should be null.",
-				question, null);
+				jsonQuestion, null);
 	}
 	
 	public void testRetrieveQuizQuerySuccessful() {
@@ -168,7 +167,7 @@ public class NetworkCommunicationTest extends TestCase {
 						+ "\"next\": \"YG9HB8)H9*-BYb88fdsfsyb(08bfsdybfdsoi4\""
 				+ "}", "application/json");
 		
-		JSONObject jsonObject = mNetworkComm.retrieveQuizQuestions(
+		JSONObject jsonObject = mNetworkComm.retrieveQuizQuestion(
 				new QuizQuery("please", "killme"));
 		
 		try {
@@ -184,7 +183,7 @@ public class NetworkCommunicationTest extends TestCase {
 				"POST (?:https?://[^/]+|[^/]+)?/+search\\b",
 				AdvancedMockHttpClient.CLIENTPROTOCOLEXCEPTION_ERROR_CODE, "", "");
 		
-		JSONObject jsonObject = mNetworkComm.retrieveQuizQuestions(
+		JSONObject jsonObject = mNetworkComm.retrieveQuizQuestion(
 				new QuizQuery("please", "killme"));
 		
 		assertEquals("The question retrieved should be null.",
@@ -196,7 +195,7 @@ public class NetworkCommunicationTest extends TestCase {
 				"POST (?:https?://[^/]+|[^/]+)?/+search\\b",
 				AdvancedMockHttpClient.IOEXCEPTION_ERROR_CODE, "", "");
 		
-		JSONObject jsonObject = mNetworkComm.retrieveQuizQuestions(
+		JSONObject jsonObject = mNetworkComm.retrieveQuizQuestion(
 				new QuizQuery("please", "killme"));
 		
 		assertEquals("The question retrieved should be null.",
@@ -210,7 +209,7 @@ public class NetworkCommunicationTest extends TestCase {
 				"not a single structure of JSON question was here",
 				"application/json");
 		
-		JSONObject jsonObject = mNetworkComm.retrieveQuizQuestions(
+		JSONObject jsonObject = mNetworkComm.retrieveQuizQuestion(
 				new QuizQuery("please", "killme"));
 		
 		assertEquals("The question retrieved should be null.",

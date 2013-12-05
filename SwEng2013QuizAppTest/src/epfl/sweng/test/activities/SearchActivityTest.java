@@ -128,50 +128,49 @@ public class SearchActivityTest extends GUITest<SearchActivity> {
 		fillQueryAndTestButton(")-#", false);
 	}
 
-//	public void testCreateQuery() {
-//		AdvancedMockHttpClient mockClient = new AdvancedMockHttpClient();
-//		SwengHttpClientFactory.setInstance(mockClient);
-//
-//		mockClient
-//				.pushCannedResponse(
-//						"POST (?:https?://[^/]+|[^/]+)?/+search\\b",
-//						HttpStatus.SC_OK,
-//						"{"
-//								+ "\"questions\": ["
-//								+ "{"
-//								+ "\"id\": \"7654765\","
-//								+ "\"owner\": \"fruitninja\","
-//								+ "\"question\": \"How many calories are in a banana?\","
-//								+ "\"answers\": [ \"Just enough\", \"Too many\" ],"
-//								+ "\"solutionIndex\": 0,"
-//								+ "\"tags\": [ \"fruit\", \"banana\", \"trivia\" ]"
-//								+ "},"
-//								+ "],"
-//								+ "\"next\": \"YG9HB8)H9*-BYb88fdsfsyb(08bfsdybfdsoi4\""
-//								+ "}", "application/json");
-//
-//		fillQueryAndTestButton("(strawberry + raspberry) * banana", true);
-//		getSolo().clickOnButton(context.getString(R.string.SearchQueryButton));
-//		getSolo().sleep(2000);
-////		getActivityAndWaitFor(TTChecks.QUESTION_SHOWN);
-//
-//		assertTrue(getSolo().searchText("How many calories are in a banana?"));
-//
-//		getSolo().goBack();
-//
-//		getSolo().sleep(500); // TODO can we wait for another TTChecks? Aymeric
-//
-//		String queryDefaultText = context
-//				.getString(R.string.search_question_query);
-//		String buttonDefaultText = context
-//				.getString(R.string.SearchQueryButton);
-//		assertTrue("Query EditText could not be found.",
-//				getSolo().searchText(queryDefaultText));
-//		assertTrue("Query Button could not be found.",
-//				getSolo().searchButton(buttonDefaultText));
-//
-//		SwengHttpClientFactory.setInstance(null);
-//	}
+	public void testCreateQuery() {
+		AdvancedMockHttpClient mockClient = new AdvancedMockHttpClient();
+		SwengHttpClientFactory.setInstance(mockClient);
+
+		mockClient
+				.pushCannedResponse(
+						"POST (?:https?://[^/]+|[^/]+)?/+search\\b",
+						HttpStatus.SC_OK,
+						"{"
+								+ "\"questions\": ["
+								+ "{"
+								+ "\"id\": \"7654765\","
+								+ "\"owner\": \"fruitninja\","
+								+ "\"question\": \"How many calories are in a banana?\","
+								+ "\"answers\": [ \"Just enough\", \"Too many\" ],"
+								+ "\"solutionIndex\": 0,"
+								+ "\"tags\": [ \"fruit\", \"banana\", \"trivia\" ]"
+								+ "},"
+								+ "],"
+								+ "\"next\": \"YG9HB8)H9*-BYb88fdsfsyb(08bfsdybfdsoi4\""
+								+ "}", "application/json");
+
+		fillQueryAndTestButton("(strawberry + raspberry) * banana", true);
+		getSolo().clickOnButton(context.getString(R.string.SearchQueryButton));
+		getActivityAndWaitFor(TTChecks.QUESTION_SHOWN);
+
+		assertTrue(getSolo().searchText("How many calories are in a banana?"));
+
+		getSolo().goBack();
+
+		getSolo().sleep(500); // TODO can we wait for another TTChecks? Aymeric
+
+		String queryDefaultText = context
+				.getString(R.string.search_question_query);
+		String buttonDefaultText = context
+				.getString(R.string.SearchQueryButton);
+		assertTrue("Query EditText could not be found.",
+				getSolo().searchText(queryDefaultText));
+		assertTrue("Query Button could not be found.",
+				getSolo().searchButton(buttonDefaultText));
+
+		SwengHttpClientFactory.setInstance(null);
+	}
 
 //	public void testSendAndResetQuerySearchField() {
 //		AdvancedMockHttpClient mockClient = new AdvancedMockHttpClient();

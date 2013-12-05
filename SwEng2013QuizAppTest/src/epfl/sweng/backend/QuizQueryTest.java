@@ -1,12 +1,11 @@
 package epfl.sweng.backend;
 
+import junit.framework.TestCase;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.os.Bundle;
 import android.os.Parcel;
-
-import junit.framework.TestCase;
 
 public class QuizQueryTest extends TestCase {
 	private QuizQuery mQuizQuery;
