@@ -4,7 +4,9 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import epfl.sweng.app.SwEng2013QuizApp;
-import epfl.sweng.patterns.ConnectivityState;
+import epfl.sweng.comm.ConnectivityProxy;
+import epfl.sweng.comm.ConnectivityState;
+import epfl.sweng.comm.QuestionProxy;
 
 /**
  * Data structure which uses a {@link SharedPreferences} to store the
@@ -16,13 +18,14 @@ import epfl.sweng.patterns.ConnectivityState;
  * 
  */
 public final class UserPreferences {
-	
+
 	private static UserPreferences sSingletonStorage;
 	private SharedPreferences mUserCredentialsPrefs;
 	private Editor mEditor;
 	private String mSharedPreferencesName = "user_session";
 	private final String mKeySessionIDName = "SESSION_ID";
 	private ConnectivityState mCurrentConnectivityState;
+	private ConnectivityProxy mProxy;
 
 	/**
 	 * Singleton getter
@@ -59,8 +62,9 @@ public final class UserPreferences {
 		mEditor.commit();
 	}
 
-	public void setConnectivityState(ConnectivityState newState) {
+	public int setConnectivityState(ConnectivityState newState) {
 		mCurrentConnectivityState = newState;
+		return mProxy.notifyConnectivityChange(newState);
 	}
 
 	/**
@@ -132,5 +136,6 @@ public final class UserPreferences {
 				getSharedPreferences(mSharedPreferencesName, Context.MODE_PRIVATE);
 		this.mEditor = mUserCredentialsPrefs.edit();
 		this.mCurrentConnectivityState = ConnectivityState.ONLINE;
+		this.mProxy = QuestionProxy.getInstance();
 	}
 }

@@ -1,4 +1,4 @@
-package epfl.sweng.patterns;
+package epfl.sweng.comm;
 
 /**
  * Enumeration of all the possible states of connectivity.

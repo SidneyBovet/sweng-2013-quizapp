@@ -1,8 +1,8 @@
 package epfl.sweng.test.activities;
 
 import android.widget.EditText;
+import epfl.sweng.comm.ConnectivityState;
 import epfl.sweng.editquestions.EditQuestionActivity;
-import epfl.sweng.patterns.ConnectivityState;
 import epfl.sweng.patterns.QuestionsProxy;
 import epfl.sweng.preferences.UserPreferences;
 import epfl.sweng.servercomm.SwengHttpClientFactory;

@@ -1,4 +1,5 @@
-package epfl.sweng.patterns;
+package epfl.sweng.comm;
+
 
 /**
  * A proxy with a connectivity state that can be notified.

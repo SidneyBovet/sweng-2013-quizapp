@@ -1,8 +1,8 @@
 package epfl.sweng.test;
 
 import android.test.ActivityInstrumentationTestCase2;
+import epfl.sweng.comm.ConnectivityState;
 import epfl.sweng.entry.MainActivity;
-import epfl.sweng.patterns.ConnectivityState;
 import epfl.sweng.preferences.UserPreferences;
 
 public class UserPreferencesStorageTest extends

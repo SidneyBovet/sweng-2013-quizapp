@@ -16,10 +16,8 @@ import android.widget.Toast;
 import epfl.sweng.R;
 import epfl.sweng.authentication.AuthenticationActivity;
 import epfl.sweng.caching.CacheContentProvider;
+import epfl.sweng.comm.ConnectivityState;
 import epfl.sweng.editquestions.EditQuestionActivity;
-import epfl.sweng.patterns.ConnectivityProxy;
-import epfl.sweng.patterns.ConnectivityState;
-import epfl.sweng.patterns.QuestionsProxy;
 import epfl.sweng.preferences.UserPreferences;
 import epfl.sweng.searchquestions.SearchActivity;
 import epfl.sweng.showquestions.ShowQuestionsActivity;
@@ -76,22 +74,12 @@ public class MainActivity extends Activity {
 	public void onCheckboxSwitchModeClicked(View v) {
 		CheckBox clickedCheckBox = (CheckBox) v;
 
-		// Change the connection state entry in the UserPreferences
-		if (clickedCheckBox.isChecked()) {
-			mUserPreferences.setConnectivityState(ConnectivityState.OFFLINE);
-		} else {
-			mUserPreferences.setConnectivityState(ConnectivityState.ONLINE);
-
-			// See https://github.com/sweng-epfl/sweng-2013-team-swing/issues/67
-			// new
-			// AsyncSendCachedQuestion().execute(QuestionsProxy.getInstance());
-		}
 		setDisplayView();
 
 		// Notify the change of connectivity state to the proxy
-		AsyncProxyConnectivityNotifier asyncProxyNotifier = new AsyncProxyConnectivityNotifier(
-				QuestionsProxy.getInstance());
-		asyncProxyNotifier.execute(mUserPreferences.getConnectivityState());
+		AsyncProxyConnectivityNotifier asyncProxyNotifier
+			= new AsyncProxyConnectivityNotifier();
+		asyncProxyNotifier.execute(clickedCheckBox.isChecked());
 
 		if (auditErrors() != 0) {
 			throw new AssertionError();
@@ -226,47 +214,47 @@ public class MainActivity extends Activity {
 		return numErrors;
 	}
 
-	class AsyncProxyConnectivityNotifier extends
-			AsyncTask<ConnectivityState, Void, Integer> {
-
-		private ConnectivityProxy mProxy;
-
-		public AsyncProxyConnectivityNotifier(ConnectivityProxy proxy) {
-			this.mProxy = proxy;
-		}
-
-		// *
+	private final class AsyncProxyConnectivityNotifier extends
+			AsyncTask<Boolean, Void, Integer> {
+		
 		@Override
-		protected Integer doInBackground(ConnectivityState... state) {
+		protected Integer doInBackground(Boolean... state) {
 			if (null != state && state.length != 1) {
 				throw new IllegalArgumentException("Should be only one state.");
 			}
+			
+			// Change the connection state entry in the UserPreferences
+			// state true = offline box checked
+			if (state[0].booleanValue()) {
+				return mUserPreferences.setConnectivityState(ConnectivityState.ONLINE);
+			} else {
+				return mUserPreferences.setConnectivityState(ConnectivityState.OFFLINE);
+			}
 
-			return mProxy.notifyConnectivityChange(state[0]);
 		}
 
 		@Override
 		protected void onPostExecute(Integer result) {
 			super.onPostExecute(result);
-
+			
+			CheckBox isOffline = (CheckBox) findViewById(R.id.switchOnlineModeCheckbox);
+			isOffline.setChecked(!mUserPreferences.isConnected());
 			switch (result) {
-
+				
 				case HttpStatus.SC_CREATED:
 					TestCoordinator.check(TTChecks.OFFLINE_CHECKBOX_DISABLED);
 					break;
 				case HttpStatus.SC_OK:
 					TestCoordinator.check(TTChecks.OFFLINE_CHECKBOX_ENABLED);
 					break;
-	
+				
 				default: // Http code error
 					Toast.makeText(
 							MainActivity.this,
 							getResources().getString(
 									R.string.error_uploading_question),
 							Toast.LENGTH_LONG).show();
-					CheckBox isOffline = (CheckBox) findViewById(R.id.switchOnlineModeCheckbox);
-					isOffline.setChecked(!mUserPreferences.isConnected());
-	
+					
 					if (mUserPreferences.isConnected()) {
 						TestCoordinator.check(TTChecks.OFFLINE_CHECKBOX_DISABLED);
 					} else {
@@ -275,6 +263,5 @@ public class MainActivity extends Activity {
 
 			}
 		}
-		// */
 	}
 }

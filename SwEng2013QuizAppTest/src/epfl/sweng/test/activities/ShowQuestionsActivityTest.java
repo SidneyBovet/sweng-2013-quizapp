@@ -9,7 +9,7 @@ import org.apache.http.HttpStatus;
 
 import android.widget.Button;
 import epfl.sweng.agents.QuestionAgentFactory;
-import epfl.sweng.patterns.ConnectivityState;
+import epfl.sweng.comm.ConnectivityState;
 import epfl.sweng.patterns.QuestionsProxy;
 import epfl.sweng.preferences.UserPreferences;
 import epfl.sweng.quizquestions.QuizQuestion;

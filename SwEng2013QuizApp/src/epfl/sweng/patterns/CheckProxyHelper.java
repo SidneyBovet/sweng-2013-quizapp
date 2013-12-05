@@ -1,6 +1,7 @@
 package epfl.sweng.patterns;
 
-import epfl.sweng.servercomm.NetworkCommunication;
+import epfl.sweng.comm.OnlineCommunication;
+import epfl.sweng.comm.QuestionProxy;
 
 /**
  * Used for sweng Jenkins' testing.
@@ -11,12 +12,12 @@ public class CheckProxyHelper implements ICheckProxyHelper {
 
 	@Override
 	public Class<?> getServerCommunicationClass() {
-		return NetworkCommunication.class;
+		return OnlineCommunication.class;
 	}
 
 	@Override
-	public Class<QuestionsProxy> getProxyClass() {
-		return QuestionsProxy.class;
+	public Class<QuestionProxy> getProxyClass() {
+		return QuestionProxy.class;
 	}
 
 }

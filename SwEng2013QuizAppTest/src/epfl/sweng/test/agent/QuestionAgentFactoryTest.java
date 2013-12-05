@@ -6,7 +6,7 @@ import epfl.sweng.agents.OnlineQuestionsAgent;
 import epfl.sweng.agents.QuestionAgent;
 import epfl.sweng.agents.QuestionAgentFactory;
 import epfl.sweng.backend.QuizQuery;
-import epfl.sweng.patterns.ConnectivityState;
+import epfl.sweng.comm.ConnectivityState;
 import epfl.sweng.preferences.UserPreferences;
 
 public class QuestionAgentFactoryTest extends AndroidTestCase {

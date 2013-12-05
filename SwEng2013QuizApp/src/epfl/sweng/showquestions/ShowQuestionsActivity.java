@@ -15,7 +15,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 import epfl.sweng.R;
 import epfl.sweng.backend.QuizQuery;
-import epfl.sweng.patterns.QuestionsProxy;
 import epfl.sweng.preferences.UserPreferences;
 import epfl.sweng.quizquestions.QuizQuestion;
 import epfl.sweng.testing.TestCoordinator;
@@ -32,6 +31,7 @@ import epfl.sweng.testing.TestCoordinator.TTChecks;
 public class ShowQuestionsActivity extends Activity {
 
 	private QuizQuestion mQuestion = null;
+	private ShowQuestionsAgent mAgent = null;
 
 	@Override
 	protected void onStart() {
@@ -44,16 +44,10 @@ public class ShowQuestionsActivity extends Activity {
 		if (null == quizQuery) {
 			quizQuery = new QuizQuery();
 		}
-		QuestionsProxy.getInstance().setStream(quizQuery);
+		mAgent = new ShowQuestionsAgent(quizQuery);
 		mQuestion = fetchQuestion();
 		setContentView(R.layout.activity_display_question);
 		setDisplayView();
-	}
-
-	@Override
-	protected void onStop() {
-		super.onStop();
-		QuestionsProxy.getInstance().closeStream();
 	}
 
 	/**
@@ -131,7 +125,7 @@ public class ShowQuestionsActivity extends Activity {
 
 		@Override
 		protected QuizQuestion doInBackground(Void... params) {
-			return QuestionsProxy.getInstance().getNextQuestion();
+			return mAgent.getNextQuestion();
 		}
 
 		@Override

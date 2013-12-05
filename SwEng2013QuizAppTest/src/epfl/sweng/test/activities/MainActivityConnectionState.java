@@ -7,8 +7,8 @@ import java.util.Set;
 
 import android.widget.CheckBox;
 import epfl.sweng.R;
+import epfl.sweng.comm.ConnectivityState;
 import epfl.sweng.entry.MainActivity;
-import epfl.sweng.patterns.ConnectivityState;
 import epfl.sweng.preferences.UserPreferences;
 import epfl.sweng.quizquestions.QuizQuestion;
 import epfl.sweng.servercomm.SwengHttpClientFactory;
