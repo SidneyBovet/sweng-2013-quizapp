@@ -31,10 +31,8 @@ public class ShowQuestionsActivityTest extends GUITest<ShowQuestionsActivity> {
 		super(ShowQuestionsActivity.class);
 	}
 
-	
 	@Override
-	public void tearDown() throws Exception {
-		while (!mockClient.responsesIsEmpty()) {
+	protected void tearDown() throws Exception {
 		super.tearDown();
 		SwengHttpClientFactory.setInstance(null);
 		QuestionAgentFactory.releaseInstance();
