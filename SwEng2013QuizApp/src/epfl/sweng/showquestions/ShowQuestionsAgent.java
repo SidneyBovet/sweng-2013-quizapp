@@ -60,7 +60,9 @@ public class ShowQuestionsAgent {
 	 */
 
 	public QuizQuestion getNextQuestion() {
-		if (mQuizQuery.isRandom()) {
+		if (hasNext()) {
+			return mQuestionQueue.poll();
+		} else if (mQuizQuery.isRandom()) {
 			JSONObject randomJSON = mQuestionComm.retrieveRandomQuizQuestion();
 			try {
 				if (randomJSON != null) {
@@ -73,11 +75,11 @@ public class ShowQuestionsAgent {
 						+ "QuizQuestion JSON input was incorrect", e);
 				return null;
 			}
-		} else if (hasNext()) {
-			return mQuestionQueue.poll();
-		} else {
+		} else if (mQuizQuery.getFrom() != null) {
 			fetchMoreQuestions();
 			return getNextQuestion();
+		} else {
+			return null;
 		}
 	}
 
@@ -100,7 +102,7 @@ public class ShowQuestionsAgent {
 	 */
 
 	private boolean hasNext() {
-		return mQuestionQueue.size() != 0 || mQuizQuery.getFrom() == null;
+		return mQuestionQueue.size() != 0;
 	}
 
 	private void fetchMoreQuestions() {
