@@ -35,7 +35,7 @@ import android.util.Log;
 public class MockHttpClient extends DefaultHttpClient {
 
     /** Prepared response */
-    private class CannedResponse {
+    private static class CannedResponse {
         private final Pattern pattern;
         private final int statusCode;
         private final String responseBody;
@@ -46,20 +46,6 @@ public class MockHttpClient extends DefaultHttpClient {
             this.statusCode = statusCode;
             this.responseBody = responseBody;
             this.contentType = contentType;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (!(o instanceof CannedResponse)) {
-                return false;
-            }
-            CannedResponse _o = (CannedResponse) o;
-            return _o.pattern.pattern().equals(pattern.pattern());
-        }
-
-        @Override
-        public int hashCode() {
-            return pattern.pattern().hashCode();
         }
     }
 
@@ -77,12 +63,19 @@ public class MockHttpClient extends DefaultHttpClient {
     }
 
     @Override
-    protected RequestDirector createClientRequestDirector(final HttpRequestExecutor requestExec,
-            final ClientConnectionManager conman, final ConnectionReuseStrategy reustrat,
-            final ConnectionKeepAliveStrategy kastrat, final HttpRoutePlanner rouplan,
-            final HttpProcessor httpProcessor, final HttpRequestRetryHandler retryHandler,
-            final RedirectHandler redirectHandler, final AuthenticationHandler targetAuthHandler,
-            final AuthenticationHandler proxyAuthHandler, final UserTokenHandler stateHandler, final HttpParams params) {
+    protected RequestDirector createClientRequestDirector(
+            final HttpRequestExecutor requestExec,
+            final ClientConnectionManager conman,
+            final ConnectionReuseStrategy reustrat,
+            final ConnectionKeepAliveStrategy kastrat,
+            final HttpRoutePlanner rouplan,
+            final HttpProcessor httpProcessor,
+            final HttpRequestRetryHandler retryHandler,
+            final RedirectHandler redirectHandler,
+            final AuthenticationHandler targetAuthHandler,
+            final AuthenticationHandler proxyAuthHandler,
+            final UserTokenHandler stateHandler,
+            final HttpParams params) {
         return new MockRequestDirector(this);
     }
 
@@ -110,12 +103,12 @@ class MockRequestDirector implements RequestDirector {
     public MockRequestDirector(MockHttpClient httpClient) {
         this.httpClient = httpClient;
     }
-    
+
     @Override
     public HttpResponse execute(HttpHost target, HttpRequest request,
             HttpContext context) {
         Log.v("HTTP", request.getRequestLine().toString());
-        
+
         HttpResponse response = httpClient.processRequest(request);
         if (response == null) {
             throw new AssertionError("Request \"" + request.getRequestLine().toString()
@@ -135,7 +128,7 @@ class MockHttpResponse extends BasicHttpResponse {
                 statusCode,
                 EnglishReasonPhraseCatalog.INSTANCE.getReason(
                         statusCode, Locale.getDefault()));
-        
+
         if (responseBody != null) {
             try {
                 StringEntity responseBodyEntity = new StringEntity(responseBody);
@@ -144,9 +137,8 @@ class MockHttpResponse extends BasicHttpResponse {
                 }
                 this.setEntity(responseBodyEntity);
             } catch (UnsupportedEncodingException e) {
-                // Nothing, really...
+                throw new RuntimeException("Default HTTP charset not supported!?", e);
             }
         }
     }
 }
-

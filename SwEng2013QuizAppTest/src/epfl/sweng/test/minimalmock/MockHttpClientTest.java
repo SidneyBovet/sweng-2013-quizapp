@@ -27,8 +27,6 @@ public class MockHttpClientTest extends ActivityInstrumentationTestCase2<ShowQue
     @Override
     public void setUp() throws Exception {
         super.setUp();
-        
-        Thread.sleep(500);
 
         httpClient = new MockHttpClient();
         SwengHttpClientFactory.setInstance(httpClient);
@@ -36,21 +34,21 @@ public class MockHttpClientTest extends ActivityInstrumentationTestCase2<ShowQue
         solo = new Solo(getInstrumentation());
     }
 
-//    public void testFetchQuestion() {
-//        httpClient.pushCannedResponse(
-//                "GET (?:https?://[^/]+|[^/]+)?/+quizquestions/random\\b",
-//                HttpStatus.SC_OK,
-//                "{\"question\": \"What is the answer to life, the universe, and everything?\","
-//                + " \"answers\": [\"Forty-two\", \"Twenty-seven\"], \"owner\": \"sweng\","
-//                + " \"solutionIndex\": 0, \"tags\": [\"h2g2\", \"trivia\"], \"id\": \"1\" }",
-//                "application/json");
-//
-//        getActivityAndWaitFor(TTChecks.QUESTION_SHOWN);
-//        assertTrue("Question must be displayed",
-//                solo.searchText("What is the answer to life, the universe, and everything?"));
-//        assertTrue("Correct answer must be displayed", solo.searchText("Forty-two"));
-//        assertTrue("Incorrect answer must be displayed", solo.searchText("Twenty-seven"));
-//    }
+    public void testFetchQuestion() {
+        httpClient.pushCannedResponse(
+                "GET (?:https?://[^/]+|[^/]+)?/+quizquestions/random\\b",
+                HttpStatus.SC_OK,
+                "{\"question\": \"What is the answer to life, the universe, and everything?\","
+                + " \"answers\": [\"Forty-two\", \"Twenty-seven\"], \"owner\": \"sweng\","
+                + " \"solutionIndex\": 0, \"tags\": [\"h2g2\", \"trivia\"], \"id\": \"1\" }",
+                "application/json");
+
+        getActivityAndWaitFor(TTChecks.QUESTION_SHOWN);
+        assertTrue("Question must be displayed",
+                solo.searchText("What is the answer to life, the universe, and everything?"));
+        assertTrue("Correct answer must be displayed", solo.searchText("Forty-two"));
+        assertTrue("Incorrect answer must be displayed", solo.searchText("Twenty-seven"));
+    }
 
     protected void getActivityAndWaitFor(final TestCoordinator.TTChecks expected) {
         TestCoordinator.run(getInstrumentation(), new TestingTransaction() {
