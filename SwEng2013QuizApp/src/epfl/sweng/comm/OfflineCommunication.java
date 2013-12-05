@@ -16,7 +16,7 @@ import epfl.sweng.quizquestions.QuizQuestion;
  * @author Melody Lucid
  *
  */
-public class OfflineCommunication implements QuestionCommunication {
+public class OfflineCommunication implements IQuestionCommunication {
 
 	private CacheContentProvider mContentProvider;
 	private Cursor mCursor;

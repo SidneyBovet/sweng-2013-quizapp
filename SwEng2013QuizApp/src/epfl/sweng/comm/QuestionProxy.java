@@ -17,11 +17,11 @@ import epfl.sweng.quizquestions.QuizQuestion;
  * @author born4new, JoTearoom, Merok, Melody Lucid
  * 
  */
-public final class QuestionProxy implements QuestionCommunication,
-		ConnectivityProxy {
+public final class QuestionProxy implements IQuestionCommunication,
+		IConnectivityProxy {
 
 	private static QuestionProxy sSingletonProxy;
-	private QuestionCommunication mActualCommunication;
+	private IQuestionCommunication mActualCommunication;
 	private CacheContentProvider mContentProvider;
 
 	/**

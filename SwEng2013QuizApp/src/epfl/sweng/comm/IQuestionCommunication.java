@@ -11,7 +11,7 @@ import epfl.sweng.quizquestions.QuizQuestion;
  * @author Melody Lucid
  * 
  */
-public interface QuestionCommunication {
+public interface IQuestionCommunication {
 
 	/**
 	 * Sends a {@link QuizQuestion}.
@@ -20,9 +20,9 @@ public interface QuestionCommunication {
 	 *            Question to send.
 	 * @return HTTP status response code.
 	 */
-
+	
 	int sendQuizQuestion(QuizQuestion quizQuestion);
-
+	
 	/**
 	 * Retrieves a {@link QuizQuestion}, according to a specific
 	 * {@link QuizQuery}.
@@ -32,7 +32,7 @@ public interface QuestionCommunication {
 	 * @return JSONObject containing an array of questions, with a possible
 	 *            <code>next</code> field.
 	 */
-
+	
 	JSONObject retrieveQuizQuestion(QuizQuery quizQuery);
 	
 	/**
@@ -40,5 +40,6 @@ public interface QuestionCommunication {
 	 * 
 	 * @return JSONObject containing a single structure of {@link QuizQuestion}.
 	 */
+	
 	JSONObject retrieveRandomQuizQuestion();
 }

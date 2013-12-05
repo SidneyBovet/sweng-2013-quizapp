@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import epfl.sweng.app.SwEng2013QuizApp;
-import epfl.sweng.comm.ConnectivityProxy;
+import epfl.sweng.comm.IConnectivityProxy;
 import epfl.sweng.comm.ConnectivityState;
 import epfl.sweng.comm.QuestionProxy;
 
@@ -25,7 +25,7 @@ public final class UserPreferences {
 	private String mSharedPreferencesName = "user_session";
 	private final String mKeySessionIDName = "SESSION_ID";
 	private ConnectivityState mCurrentConnectivityState;
-	private ConnectivityProxy mProxy;
+	private IConnectivityProxy mProxy;
 
 	/**
 	 * Singleton getter

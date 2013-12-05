@@ -11,7 +11,7 @@ import org.json.JSONObject;
 import android.util.Log;
 import epfl.sweng.backend.Converter;
 import epfl.sweng.backend.QuizQuery;
-import epfl.sweng.comm.QuestionCommunication;
+import epfl.sweng.comm.IQuestionCommunication;
 import epfl.sweng.comm.QuestionProxy;
 import epfl.sweng.quizquestions.QuizQuestion;
 
@@ -27,7 +27,7 @@ public class ShowQuestionsAgent {
 
 	private QuizQuery mQuizQuery;
 	private Queue<QuizQuestion> mQuestionQueue;
-	private QuestionCommunication mQuestionComm;
+	private IQuestionCommunication mQuestionComm;
 
 	/**
 	 * Creates a {@code ShowQuestionsAgent} that can ask a specific query to the
@@ -89,7 +89,7 @@ public class ShowQuestionsAgent {
 	 *            new instance of {@link INetworkCommunication}.
 	 */
 
-	public void setNetworkCommunication(QuestionCommunication questionComm) {
+	public void setNetworkCommunication(IQuestionCommunication questionComm) {
 		this.mQuestionComm = questionComm;
 	}
 

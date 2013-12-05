@@ -24,7 +24,7 @@ import epfl.sweng.quizquestions.QuizQuestion;
 import epfl.sweng.servercomm.HttpFactory;
 import epfl.sweng.servercomm.SwengHttpClientFactory;
 
-public class OnlineCommunication implements QuestionCommunication {
+public class OnlineCommunication implements IQuestionCommunication {
 
 	private static final int BASE_SERVER_ERRORS = 5;
 	private static final double ONE_HUNDRED = 100.0;

@@ -7,7 +7,7 @@ package epfl.sweng.comm;
  * @author Melody Lucid
  * 
  */
-public interface ConnectivityProxy {
+public interface IConnectivityProxy {
 
 	/**
 	 * Notifies the proxy of a change of the state of connectivity.
@@ -16,5 +16,6 @@ public interface ConnectivityProxy {
 	 * @return A code (generally HTTP) that indicates a success or a failure in
 	 *         the current change.
 	 */
+	
 	int notifyConnectivityChange(ConnectivityState newState);
 }
