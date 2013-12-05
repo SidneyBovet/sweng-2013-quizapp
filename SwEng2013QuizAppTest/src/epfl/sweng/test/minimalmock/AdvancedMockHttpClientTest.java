@@ -15,72 +15,71 @@ import epfl.sweng.testing.TestCoordinator.TTChecks;
 
 public class AdvancedMockHttpClientTest extends GUITest<EditQuestionActivity> {
 
-	protected static final String RANDOM_QUESTION_BUTTON_LABEL = "Show a random question";
+    protected static final String RANDOM_QUESTION_BUTTON_LABEL = "Show a random question";
 
-	private AdvancedMockHttpClient httpClient;
+    private AdvancedMockHttpClient httpClient;
 
-	public AdvancedMockHttpClientTest() {
-		super(EditQuestionActivity.class);
-	}
+    public AdvancedMockHttpClientTest() {
+        super(EditQuestionActivity.class);
+    }
 
-	@Override
-	public void setUp() {
-		super.setUp();
-		httpClient = new AdvancedMockHttpClient();
-		SwengHttpClientFactory.setInstance(null);
-		SwengHttpClientFactory.setInstance(httpClient);
-		getActivityAndWaitFor(TTChecks.EDIT_QUESTIONS_SHOWN);
-	}
+    @Override
+    public void setUp() {
+        super.setUp();
+        httpClient = new AdvancedMockHttpClient();
+        SwengHttpClientFactory.setInstance(httpClient);
+        getActivityAndWaitFor(TTChecks.EDIT_QUESTIONS_SHOWN);
+    }
 
-	public void testResponseIsUsedOnlyOnce() {
-		httpClient
-				.pushCannedResponse(".+", HttpStatus.SC_CREATED, "", "", true);
-		getSolo().sleep(1000);
+    public void testResponseIsUsedOnlyOnce() {
+    	httpClient.pushCannedResponse(".", HttpStatus.SC_CREATED, "", "", true);
+    	
 		fillFormWithCorrectQuestion("statement");
-		getSolo().sleep(3000);
-		getSolo().clickOnButton("Submit");
-		
-		getActivityAndWaitFor(TTChecks.NEW_QUESTION_SUBMITTED);
+    	getSolo().clickOnButton("Submit");
+    	
+    	getActivityAndWaitFor(TTChecks.NEW_QUESTION_SUBMITTED);
+    	
+    	assertEquals("Client's responses should be empty", 0,
+    			httpClient.getResponsesListSize());
+    }
 
-		assertEquals("Client's responses should be empty", 0,
-				httpClient.getResponsesListSize());
-	}
+    public void testLastPostedQuestionIsStoredByClient() {
+    	getSolo().sleep(1000);
+    	final String statement = "Statement lolilol";
+    	httpClient.pushCannedResponse(".", HttpStatus.SC_CREATED, "", "");
 
-	public void testLastPostedQuestionIsStoredByClient() {
-		getSolo().sleep(1000);
-		final String statement = "Statement lolilol";
-		httpClient.pushCannedResponse(".+", HttpStatus.SC_CREATED, "", "");
-		getSolo().sleep(1000);
 		fillFormWithCorrectQuestion("not the good statement");
-		getSolo().clickOnButton("Submit");
-		getActivityAndWaitFor(TTChecks.NEW_QUESTION_SUBMITTED);
-		getSolo().sleep(300);
+    	getSolo().clickOnButton("Submit");
+    	getActivityAndWaitFor(TTChecks.NEW_QUESTION_SUBMITTED);
+    	getSolo().sleep(300);
 		fillFormWithCorrectQuestion(statement);
-		getSolo().clickOnButton("Submit");
-		getActivityAndWaitFor(TTChecks.NEW_QUESTION_SUBMITTED);
-		getSolo().sleep(300);
-		assertEquals("Client should've stored the last question", statement,
-				httpClient.getLastSubmittedQuestionStatement());
-	}
+    	getSolo().clickOnButton("Submit");
+    	getActivityAndWaitFor(TTChecks.NEW_QUESTION_SUBMITTED);
+    	getSolo().sleep(300);
+    	
+    	assertEquals("Client should've stored the last question", statement,
+    			httpClient.getLastSubmittedQuestionStatement());
+    }
 
-	public void testOrderOfMatchingResponses() {
-		httpClient
-				.pushCannedResponse(".+", HttpStatus.SC_CREATED, "", "", true);
-		httpClient.pushCannedResponse(".",
-				AdvancedMockHttpClient.IOEXCEPTION_ERROR_CODE, "", "", true);
-		httpClient.pushCannedResponse(".",
-				AdvancedMockHttpClient.CLIENTPROTOCOLEXCEPTION_ERROR_CODE, "",
-				"", true);
+    public void testOrderOfMatchingResponses() {
+    	httpClient.pushCannedResponse(".", HttpStatus.SC_CREATED, "", "", true);
+    	httpClient.pushCannedResponse(
+    			".", AdvancedMockHttpClient.IOEXCEPTION_ERROR_CODE,
+    			"", "", true);
+    	httpClient.pushCannedResponse(
+    			".", AdvancedMockHttpClient.CLIENTPROTOCOLEXCEPTION_ERROR_CODE,
+    			"", "", true);
 
-		HttpUriRequest request = new HttpGet("http://fake.uri.lol");
-
-		try {
-			httpClient.execute(request);
-		} catch (ClientProtocolException e) {
-			// okay
-		} catch (IOException e) {
-			fail("should be a CPE");
-		}
+    	HttpUriRequest request = new HttpGet("http://fake.uri.lol");
+    	
+    	
+    	try {
+    		httpClient.execute(request);
+    	} catch (ClientProtocolException e) {
+    		// okay
+    	} catch (IOException e) {
+    		fail("should be a CPE");
+    	}
 
 		try {
 			httpClient.execute(request);
@@ -89,25 +88,25 @@ public class AdvancedMockHttpClientTest extends GUITest<EditQuestionActivity> {
 		} catch (IOException e) {
 			// okay
 		}
-
+		
 		try {
 			httpClient.execute(request);
 		} catch (Exception e) {
 			fail("should have returned SC_CREATED");
 		}
-	}
-
-	private void fillFormWithCorrectQuestion(String statement) {
+    }
+    
+    private void fillFormWithCorrectQuestion(String statement) {
 		getSolo().clickOnButton("\\+");
 		waitFor(TTChecks.QUESTION_EDITED);
 		getSolo().enterText(
 				(EditText) getSolo().getText(
 						"Type in the question\'s text body"), statement);
-
+	
 		getSolo().enterText(
 				(EditText) getSolo().getText("Type in the question\'s tags"),
 				"tag");
-
+	
 		getSolo().enterText((EditText) getSolo().getText("Type in the answer"),
 				"answer D");
 		getSolo().enterText((EditText) getSolo().getText("Type in the answer"),
