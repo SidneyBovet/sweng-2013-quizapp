@@ -10,5 +10,3 @@ local.properties
 *~
 .checkstyle
 .DS_Store
-.sonar*
-sonar*
