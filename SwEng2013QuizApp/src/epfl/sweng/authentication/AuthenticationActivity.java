@@ -110,7 +110,6 @@ public class AuthenticationActivity extends Activity {
 	 * Resets the layout by emptying every EditText on the Activity, and by
 	 * disabling the loginButton.
 	 */
-
 	public void resetGUIWhenAuthenticationFails() {
 		mUserNameEditText.setText("");
 		mPasswordEditText.setText("");
@@ -129,7 +128,6 @@ public class AuthenticationActivity extends Activity {
 	 * <p>
 	 * Used when the login button is clicked.
 	 */
-
 	public void buttonAuthenticate(View view) {
 		String username = ((TextView) findViewById(R.id.login_user)).getText()
 				.toString();
@@ -158,22 +156,22 @@ public class AuthenticationActivity extends Activity {
 	class AsyncAuthentication extends AsyncTask<String, Void, String> {
 
 		private ProgressDialog mProgressDialog;
-		
+
 		public AsyncAuthentication() {
 			mProgressDialog = new ProgressDialog(AuthenticationActivity.this);
 		}
-		
+
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
-			
+
 			mProgressDialog.setTitle("Authenticating...");
 			mProgressDialog.setMessage("Please wait.");
 			mProgressDialog.setCancelable(false);
 			mProgressDialog.setIndeterminate(true);
 			mProgressDialog.show();
 		}
-		
+
 		@Override
 		protected String doInBackground(String... userInfos) {
 			if (null != userInfos && userInfos.length != 2) {
@@ -189,7 +187,7 @@ public class AuthenticationActivity extends Activity {
 			super.onPostExecute(sessionId);
 
 			mProgressDialog.dismiss();
-			
+
 			if (null == sessionId || sessionId.equals("")) {
 				Toast.makeText(AuthenticationActivity.this,
 						getResources().getString(R.string.error_logging_in),

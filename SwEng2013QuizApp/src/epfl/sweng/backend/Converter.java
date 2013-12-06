@@ -27,7 +27,6 @@ public abstract class Converter {
 	 * @param array The {@link JSONArray} to convert.
 	 * @return A <code>List</code> of the <code>JSONObjects</code> string field.
 	 */
-	
 	public static List<String> jsonArrayToStringList(JSONArray array) {
 		List<String> list = new ArrayList<String>();
 		if (array != null) {
@@ -48,7 +47,6 @@ public abstract class Converter {
 	 * @return A <code>List</code> of the translated <code>JSONObjects</code>
 	 *         string field into {@link QuizQuestion} instances.
 	 */
-	
 	public static List<QuizQuestion> jsonArrayToQuizQuestionList(JSONArray array) {
 		List<QuizQuestion> list = new ArrayList<QuizQuestion>();
 		if (array != null) {
@@ -72,7 +70,6 @@ public abstract class Converter {
 	 * @return An <code>HashSet</code> of the <code>JSONObjects</code> string
 	 *            field.
 	 */
-	
 	public static Set<String> jsonArrayToStringSet(
 			JSONArray arrayToConvert) {
 		TreeSet<String> set = new TreeSet<String>();

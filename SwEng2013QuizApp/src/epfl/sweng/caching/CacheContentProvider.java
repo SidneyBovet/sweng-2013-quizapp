@@ -39,8 +39,8 @@ public class CacheContentProvider {
 	 *            Indicates whether this content provider is read-only.
 	 */
 	public CacheContentProvider(boolean writable) {
-		SQLiteCacheHelper openHelper =
-				new SQLiteCacheHelper(SwEng2013QuizApp.getContext());
+		SQLiteCacheHelper openHelper = new SQLiteCacheHelper(
+				SwEng2013QuizApp.getContext());
 
 		try {
 			mDatabase = writable ? openHelper.getWritableDatabase()
@@ -51,6 +51,7 @@ public class CacheContentProvider {
 	}
 
 	/**
+	 * Returns the number of questions currently in the outbox cache.
 	 * 
 	 * @return the number of questions currently in the outbox cache.
 	 */
@@ -62,6 +63,13 @@ public class CacheContentProvider {
 				SQLiteCacheHelper.FIELD_QUESTIONS_IS_QUEUED + "=1");
 	}
 
+	/**
+	 * Returns the set of IDs that match the tag given in parameter.
+	 * 
+	 * @param tag
+	 *            The wanted tag in the question.
+	 * @return The set of IDs that match the tag given in parameter.
+	 */
 	public Set<Long> getQuestionsIdsWithTag(String tag) {
 
 		Set<Long> questionsIds = new HashSet<Long>();
@@ -78,7 +86,7 @@ public class CacheContentProvider {
 				+ SQLiteCacheHelper.FIELD_TAGS_NAME + "=?";
 
 		Cursor questionsIdsCursor = mDatabase.rawQuery(query,
-				new String[] {tag});
+				new String[] { tag });
 
 		if (questionsIdsCursor.moveToFirst()) {
 			do {
@@ -91,6 +99,14 @@ public class CacheContentProvider {
 		return questionsIds;
 	}
 
+	/**
+	 * Returns the pointer to the questions matching the query given in
+	 * parameter.
+	 * 
+	 * @param query
+	 *            The query used in order to get the wanted questions.
+	 * @return The pointer to the questions matching the query.
+	 */
 	public Cursor getQuestions(QuizQuery query) {
 		sanityDatabaseCheck();
 
@@ -98,7 +114,7 @@ public class CacheContentProvider {
 		String queryStr = query.toString();
 
 		// We select all question ids...
-		String[] selection = new String[] {SQLiteCacheHelper.FIELD_QUESTIONS_PK};
+		String[] selection = new String[] { SQLiteCacheHelper.FIELD_QUESTIONS_PK };
 		String whereClause = null;
 		String[] whereArgs = null;
 		String orderBy = null;
@@ -111,16 +127,7 @@ public class CacheContentProvider {
 			randomQuestionIdCursor.moveToFirst();
 			return randomQuestionIdCursor;
 		} else {
-			/* fake cursor to avoid NPE *
-			orderBy = "RANDOM()";
-			Cursor randomQuestionIdCursor = mDatabase.query(
-					SQLiteCacheHelper.TABLE_QUESTIONS, selection, whereClause,
-						whereArgs, null, null, orderBy, null);
-			randomQuestionIdCursor.moveToFirst();
-			return randomQuestionIdCursor;
-			/* end of fake cursor to avoid NPE */
-			
-			
+
 			String[] tagsArray = extractParameters(queryStr);
 
 			List<Set<Long>> questionsIdsList = new ArrayList<Set<Long>>();
@@ -130,53 +137,47 @@ public class CacheContentProvider {
 
 			queryStr = filterQuery(queryStr);
 			String[] tokens = queryStr.split("(?!^)");
-			List<String> tokensAsList = new ArrayList<String>(Arrays.asList(tokens));
-			
-			Set<Long> idsMatchingQuery = evaluate(tokensAsList, questionsIdsList);
+			List<String> tokensAsList = new ArrayList<String>(
+					Arrays.asList(tokens));
+
+			Set<Long> idsMatchingQuery = evaluate(tokensAsList,
+					questionsIdsList);
 			String correspondingSQLiteArray = setToSQLiteQueryArray(idsMatchingQuery);
-			
-			String rawQuery = "SELECT * FROM " + SQLiteCacheHelper.TABLE_QUESTIONS +
-					" WHERE " + SQLiteCacheHelper.FIELD_QUESTIONS_PK + " IN " +
-					correspondingSQLiteArray + ";";
-			
+
+			String rawQuery = "SELECT * FROM "
+					+ SQLiteCacheHelper.TABLE_QUESTIONS + " WHERE "
+					+ SQLiteCacheHelper.FIELD_QUESTIONS_PK + " IN "
+					+ correspondingSQLiteArray + ";";
+
 			Cursor questionsCursor = mDatabase.rawQuery(rawQuery, null);
 			questionsCursor.moveToFirst();
 			return questionsCursor;
-			
-			// What to use for the next step?
-			// - String[] tokensAsList
-			// - List<Set<Long>> questionsIdsList
-
-			// What to do?
-			// 1 - Find the deeply-nested block, then evaluate it with
-			// evaluateBlock
-			// with the following rules:
-			// a) Multiplication first, addition afterwards
-			// b) Do it until the block contains one element
-			// 2 - Repeat step 1 until questionsIdsList.size() == 1
-			
-			// Last but not least, when finished please do the following:
-			// 		1 - Return something
-			// 		2 - Remove the block above: /* fake cursor to avoid NPE */
-/************************ TO UNCOMMENT *********************************/
 		}
 	}
 
+	/**
+	 * Retrieve the {@link QuizQuestion} with the id matching the id given in
+	 * parameter from the cache.
+	 * 
+	 * @param id
+	 *            The identifier of the question.
+	 * @return The wanted {@link QuizQuestion}.
+	 */
 	public QuizQuestion getQuestionFromPK(long id) {
 
-		// Step 2 : Get all the answers and tags for that question
+		// Step 1 : Get all the answers and tags for that question
 		List<String> answers = retrieveAnswers(id);
 		Set<String> tags = retrieveTags(id);
 
-		// Step 3 : Store question content into variables.
+		// Step 2 : Store question content into variables.
 		Cursor questionCursor = mDatabase.query(
 				SQLiteCacheHelper.TABLE_QUESTIONS, new String[] {
-					SQLiteCacheHelper.FIELD_QUESTIONS_SWENG_ID,
-					SQLiteCacheHelper.FIELD_QUESTIONS_STATEMENT,
-					SQLiteCacheHelper.FIELD_QUESTIONS_SOLUTION_INDEX,
-					SQLiteCacheHelper.FIELD_QUESTIONS_OWNER },
+						SQLiteCacheHelper.FIELD_QUESTIONS_SWENG_ID,
+						SQLiteCacheHelper.FIELD_QUESTIONS_STATEMENT,
+						SQLiteCacheHelper.FIELD_QUESTIONS_SOLUTION_INDEX,
+						SQLiteCacheHelper.FIELD_QUESTIONS_OWNER },
 				SQLiteCacheHelper.FIELD_QUESTIONS_PK + " = ?",
-				new String[] {String.valueOf(id)}, null, null, null, null);
+				new String[] { String.valueOf(id) }, null, null, null, null);
 
 		if (questionCursor.moveToFirst()) {
 			int questionId = questionCursor
@@ -193,7 +194,7 @@ public class CacheContentProvider {
 
 			questionCursor.close();
 
-			// Step 4 : Create the new question and return it
+			// Step 3 : Create the new question and return it
 			return new QuizQuestion(statement, answers, solutionIndex, tags,
 					questionId, owner);
 		}
@@ -249,7 +250,7 @@ public class CacheContentProvider {
 	 */
 	public QuizQuestion takeFirstQuestionFromOutbox() {
 
-		int id = getIdOfFirstQuestionInOutbox();
+		long id = getIdOfFirstQuestionInOutbox();
 
 		if (-1 != id) {
 			takeQuestionOutOfOutbox(id);
@@ -291,23 +292,29 @@ public class CacheContentProvider {
 		mDatabase.close();
 	}
 
+	/**
+	 * Indicate if the cache is accessible.
+	 * 
+	 * @return true if accessible, false otherwise.
+	 */
 	public boolean isClosed() {
 		return null == mDatabase || !mDatabase.isOpen();
 	}
-	
 
 	/*********************** Search mechanism methods ***********************/
 
-	//pre-condition: # of '?' in normalizedTagList == questionSetList.size()
-	public Set<Long> evaluate(List<String> normalizedTagList, List<Set<Long>> questionsSetList) {
+	// pre-condition: # of '?' in normalizedTagList == questionSetList.size()
+	public Set<Long> evaluate(List<String> normalizedTagList,
+			List<Set<Long>> questionsSetList) {
 		while (normalizedTagList.contains(")")) {
-			List<String> originalNormalizedTagList = new ArrayList<String>(normalizedTagList);
+			List<String> originalNormalizedTagList = new ArrayList<String>(
+					normalizedTagList);
 			int firstClosingParenthesisIndex = normalizedTagList.indexOf(")");
 			int correspondingOpeningParenthesisIndex = 0;
-			
+
 			List<String> expressionParenthesized = new ArrayList<String>();
 			normalizedTagList.remove(firstClosingParenthesisIndex);
-			for (int i = firstClosingParenthesisIndex-1; i >= 0; i--) {
+			for (int i = firstClosingParenthesisIndex - 1; i >= 0; i--) {
 				if (normalizedTagList.get(i).equals("(")) {
 					normalizedTagList.remove(i);
 					correspondingOpeningParenthesisIndex = i;
@@ -319,18 +326,17 @@ public class CacheContentProvider {
 			}
 			Collections.reverse(expressionParenthesized);
 			// we now work to suppress the group between those two indexes
-			
+
 			List<Set<Long>> setListedParenthesized = getSubListedSet(
-					originalNormalizedTagList,
-					questionsSetList,
+					originalNormalizedTagList, questionsSetList,
 					correspondingOpeningParenthesisIndex,
 					firstClosingParenthesisIndex);
-			
+
 			reduceGroup(expressionParenthesized, setListedParenthesized);
-			
+
 			normalizedTagList.add(correspondingOpeningParenthesisIndex, "?");
 		}
-		
+
 		return questionsSetList.get(0);
 	}
 
@@ -347,71 +353,92 @@ public class CacheContentProvider {
 				}
 			}
 		}
-		
+
 		return questionsSetList.subList(firstElementsCount, firstElementsCount
 				+ parenthesizedCount);
 	}
 
 	// pre-condition: tagList does not contain parenthesis and is well-formed
-	public Set<Long> reduceGroup(List<String> tagList, List<Set<Long>> questionsSetList) {
+	public Set<Long> reduceGroup(List<String> tagList,
+			List<Set<Long>> questionsSetList) {
 		while (tagList.contains("*")) {
 			int firstANDIndex = tagList.indexOf("*");
-			
+
 			int leftOperandIndex = -1;
 			for (int i = 0; i < firstANDIndex; i++) {
 				if (tagList.get(i).equals("?")) {
 					leftOperandIndex++;
 				}
 			}
-	
+
 			// compute the INTERSECTION of the two operands
 			Set<Long> leftOperand = questionsSetList.get(leftOperandIndex);
-			Set<Long> rightOperand = questionsSetList.remove(leftOperandIndex+1);
+			Set<Long> rightOperand = questionsSetList
+					.remove(leftOperandIndex + 1);
 			leftOperand.retainAll(rightOperand);
-			
+
 			// update the tagList
 			tagList.remove(firstANDIndex);
-			tagList.remove(firstANDIndex); // this will remove the right-hand operand
+			tagList.remove(firstANDIndex); // this will remove the right-hand
+											// operand
 		}
-		
-	
+
 		while (tagList.contains("+")) {
 			int firstANDIndex = tagList.indexOf("+");
-			
+
 			int leftOperandIndex = -1;
 			for (int i = 0; i < firstANDIndex; i++) {
 				if (tagList.get(i).equals("?")) {
 					leftOperandIndex++;
 				}
 			}
-	
+
 			// compute the UNION of the two operands
 			Set<Long> leftOperand = questionsSetList.get(leftOperandIndex);
-			Set<Long> rightOperand = questionsSetList.remove(leftOperandIndex+1);
+			Set<Long> rightOperand = questionsSetList
+					.remove(leftOperandIndex + 1);
 			leftOperand.addAll(rightOperand);
-			
+
 			// update the tagList
 			tagList.remove(firstANDIndex);
-			tagList.remove(firstANDIndex); // this will remove the right-hand operand
+			tagList.remove(firstANDIndex); // this will remove the right-hand
+											// operand
 		}
 		return questionsSetList.get(0);
+	}
+	
+	private String setToSQLiteQueryArray(Set<Long> set) {
+		String statement = "";
+		for (Object object : set) {
+			statement = statement + "," + object.toString();
+		}
+		if (statement.isEmpty()) {
+			return "()";
+		}
+		statement = statement + ")";
+		statement = "(" + statement.substring(1);
+		return statement;
 	}
 
 	/*********************** Private methods ***********************/
 
-	private int getIdOfFirstQuestionInOutbox() {
+	/**
+	 * Get the first question ID in the outbox stack.
+	 * 
+	 * @return the first question ID.
+	 */
+	private long getIdOfFirstQuestionInOutbox() {
 
-		int id = -1;
+		long id = -1;
 
-		// Get the first question in the outbox stack.
 		Cursor questionOutboxIdCursor = mDatabase.query(
 				SQLiteCacheHelper.TABLE_QUESTIONS,
-				new String[] {SQLiteCacheHelper.FIELD_QUESTIONS_PK},
+				new String[] { SQLiteCacheHelper.FIELD_QUESTIONS_PK },
 				SQLiteCacheHelper.FIELD_QUESTIONS_IS_QUEUED + "=1", null, null,
 				null, SQLiteCacheHelper.FIELD_QUESTIONS_PK + " ASC", "1");
 
 		if (questionOutboxIdCursor.moveToFirst()) {
-			id = questionOutboxIdCursor.getInt(questionOutboxIdCursor
+			id = questionOutboxIdCursor.getLong(questionOutboxIdCursor
 					.getColumnIndex(SQLiteCacheHelper.FIELD_QUESTIONS_PK));
 
 			questionOutboxIdCursor.close();
@@ -429,9 +456,9 @@ public class CacheContentProvider {
 	private List<String> retrieveAnswers(long id) {
 
 		Cursor answersCursor = mDatabase.query(SQLiteCacheHelper.TABLE_ANSWERS,
-				new String[] {SQLiteCacheHelper.FIELD_ANSWERS_ANSWER_VALUE},
+				new String[] { SQLiteCacheHelper.FIELD_ANSWERS_ANSWER_VALUE },
 				SQLiteCacheHelper.FIELD_ANSWERS_QUESTION_FK + " = ?",
-				new String[] {String.valueOf(id)}, null, null,
+				new String[] { String.valueOf(id) }, null, null,
 				SQLiteCacheHelper.FIELD_ANSWERS_PK + " ASC", null);
 
 		ArrayList<String> answers = new ArrayList<String>();
@@ -440,8 +467,6 @@ public class CacheContentProvider {
 				answers.add(answersCursor.getString(answersCursor
 						.getColumnIndex(SQLiteCacheHelper.FIELD_ANSWERS_ANSWER_VALUE)));
 			} while (answersCursor.moveToNext());
-		} else {
-			// No answers found.
 		}
 
 		answersCursor.close();
@@ -450,6 +475,7 @@ public class CacheContentProvider {
 	}
 
 	/**
+	 * Get ids of all the current question tags.
 	 * 
 	 * @param id
 	 *            id of the question in the cache.
@@ -457,12 +483,11 @@ public class CacheContentProvider {
 	 */
 	private Set<String> retrieveTags(long id) {
 
-		// Get ids of all the current question tags.
 		Cursor tagsIdCursor = mDatabase.query(
 				SQLiteCacheHelper.TABLE_QUESTIONS_TAGS,
-				new String[] {SQLiteCacheHelper.FIELD_QUESTIONS_TAGS_TAG_FK},
+				new String[] { SQLiteCacheHelper.FIELD_QUESTIONS_TAGS_TAG_FK },
 				SQLiteCacheHelper.FIELD_QUESTIONS_TAGS_QUESTION_FK + " = ?",
-				new String[] {String.valueOf(id)}, null, null,
+				new String[] { String.valueOf(id) }, null, null,
 				SQLiteCacheHelper.FIELD_QUESTIONS_TAGS_QUESTION_FK + " ASC",
 				null);
 
@@ -500,6 +525,15 @@ public class CacheContentProvider {
 		return tags;
 	}
 
+	/**
+	 * Adds the tags given in parameters to the question with id given in
+	 * parameter.
+	 * 
+	 * @param id
+	 *            the id of the question to modify.
+	 * @param tags
+	 *            the tags to add to the question.
+	 */
 	private void insertQuestionTags(long id, Set<String> tags) {
 		for (String tag : tags) {
 
@@ -528,6 +562,15 @@ public class CacheContentProvider {
 		}
 	}
 
+	/**
+	 * Adds the answers given in parameters to the question with id given in
+	 * parameter.
+	 * 
+	 * @param id
+	 *            the id of the question to modify.
+	 * @param answers
+	 *            the answers to add to the question.
+	 */
 	private void insertQuestionAnswers(long id, List<String> answers) {
 		for (String answer : answers) {
 			ContentValues values = new ContentValues(2);
@@ -541,13 +584,17 @@ public class CacheContentProvider {
 	}
 
 	/**
-	 * Note that both the questionId and the owner can be set to null.
+	 * Insert a "simplified" question in the cache.
 	 * 
 	 * @param questionId
+	 *            question id.
 	 * @param owner
+	 *            question owner.
 	 * @param statement
+	 *            statement of the question.
 	 * @param solutionIndex
-	 * @return
+	 *            index of the answer.
+	 * @return the id of the question created.
 	 */
 	private long insertSimplifiedQuestion(long questionId, String owner,
 			String statement, int solutionIndex) {
@@ -569,26 +616,50 @@ public class CacheContentProvider {
 		return id;
 	}
 
+	/**
+	 * Wrapper method used to add a question in the outbox.
+	 * 
+	 * @param id
+	 *            id of the question to be added in the outbox.
+	 */
 	private void putQuestionInOutbox(long id) {
 		changeQuestionOutboxStatus(id, true);
 	}
 
+	/**
+	 * Wrapper method used to take a question in the outbox.
+	 * 
+	 * @param id
+	 *            id of the question to be taken out of the outbox.
+	 */
 	private void takeQuestionOutOfOutbox(long id) {
 		changeQuestionOutboxStatus(id, false);
 	}
 
+	/**
+	 * Changes the question with id given in parameter to outbox or cache given
+	 * the boolean in parameter.
+	 * 
+	 * @param id
+	 *            question id.
+	 * @param questionInOutbox
+	 *            do you want the question to be in the outbox (true) or the
+	 *            cache (false)?
+	 */
 	private void changeQuestionOutboxStatus(long id, boolean questionInOutbox) {
 		ContentValues isQueuedValue = new ContentValues(1);
 		isQueuedValue.put(SQLiteCacheHelper.FIELD_QUESTIONS_IS_QUEUED,
 				questionInOutbox ? 1 : 0);
 		mDatabase.update(SQLiteCacheHelper.TABLE_QUESTIONS, isQueuedValue,
 				SQLiteCacheHelper.FIELD_QUESTIONS_PK + "=?",
-				new String[] {String.valueOf(id)});
+				new String[] { String.valueOf(id) });
 	}
 
+	/**
+	 * Check whether the cache is accessible.
+	 * @throws IllegalStateException If the cache is unavailable.
+	 */
 	private void sanityDatabaseCheck() {
-		// note that use of isDatabaseIntegrityOk() may take a long time,
-		// it is therefore avoided here.
 		if (null == mDatabase || !mDatabase.isOpen()) {
 			throw new IllegalStateException(
 					"The database object is either null or closed");
@@ -596,17 +667,13 @@ public class CacheContentProvider {
 	}
 
 	/**
-	 * I got that function from
-	 * http://stackoverflow.com/questions/7418849/android
-	 * -sqlite-in-clause-and-placeholders even though it's not a complex piece
-	 * of code.
-	 * 
+	 * Given a length, returns a series of ? separated by commas.
+	 * Example for len = 4 : "?, ?, ?, ?" 
 	 * @param len
-	 * @return
+	 * @return String used as placeholders.
 	 */
 	private String makePlaceholders(int len) {
 		if (len < 1) {
-			// It will lead to an invalid query anyway ..
 			throw new RuntimeException("No placeholders");
 		} else {
 			StringBuilder sb = new StringBuilder(len * 2 - 1);
@@ -619,8 +686,10 @@ public class CacheContentProvider {
 	}
 
 	/**
-	 * Normalizes the query: - We change the '*' by a logical AND. - We change
-	 * the '+' by a logical OR. - We change the ' ' by a logical AND.
+	 * Normalizes the query.
+	 * 	- We change the '*' by a logical AND. 
+	 *  - We change the '+' by a logical OR. 
+	 *  - We change the ' ' by a logical AND.
 	 * 
 	 * @param query
 	 *            Query to be changed.
@@ -682,18 +751,5 @@ public class CacheContentProvider {
 		// We convert the List to an array of String.
 		return (String[]) whereArgsArray.toArray(new String[whereArgsArray
 				.size()]);
-	}
-	
-	private String setToSQLiteQueryArray(Set<Long> set) {
-		String statement = "";
-		for (Object object : set) {
-			statement = statement + "," + object.toString();
-		}
-		if (statement.isEmpty()) {
-			return "()";
-		}
-		statement = statement + ")";
-		statement = "(" + statement.substring(1);
-		return statement;
 	}
 }

@@ -11,7 +11,6 @@ import epfl.sweng.generated.QueryParser;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-
 /**
  * Used to filter data from the SwEng server.
  * 
@@ -43,8 +42,7 @@ public class QuizQuery implements Parcelable {
 	 * @param from
 	 */
 	public QuizQuery() {
-		mQuery = null;
-		mFrom = null;
+		this(null, null);
 	}
 
 	/**
@@ -56,25 +54,23 @@ public class QuizQuery implements Parcelable {
 	 *            Query to be verified.
 	 * @return {@code true} if it has a good syntax, {@code false} otherwise.
 	 */
-
 	public boolean hasGoodSyntax() {
-		boolean ok = true;
+
 		ANTLRStringStream in = new ANTLRStringStream(mQuery);
 		QueryLexer lexer = new QueryLexer(in);
 		CommonTokenStream tokens = new CommonTokenStream(lexer);
 		QueryParser parser = new QueryParser(tokens);
 
+		boolean ok = true;
 		try {
 			parser.eval();
 		} catch (Throwable e) {
 			ok = false;
 		}
-		
+
 		return ok;
 	}
 
-	
-	
 	@Override
 	public String toString() {
 		return mQuery;
@@ -85,7 +81,6 @@ public class QuizQuery implements Parcelable {
 	 * 
 	 * @return A {@link JSONObject} of the query.
 	 */
-
 	public JSONObject toJSON() throws JSONException {
 		JSONObject jsonQuery = new JSONObject();
 		jsonQuery.put("query", mQuery);
@@ -100,7 +95,6 @@ public class QuizQuery implements Parcelable {
 	 * 
 	 * @return The string representation of the query.
 	 */
-
 	public String getQuery() {
 		return mQuery;
 	}
@@ -110,11 +104,15 @@ public class QuizQuery implements Parcelable {
 	 * 
 	 * @return The string representation of the next hash.
 	 */
-
 	public String getFrom() {
 		return mFrom;
 	}
 
+	/**
+	 * Indicates the query type : Search or Random.
+	 * 
+	 * @return true if random, false if search
+	 */
 	public boolean isRandom() {
 		return null == mQuery;
 	}
@@ -140,6 +138,11 @@ public class QuizQuery implements Parcelable {
 		}
 	};
 
+	/**
+	 * Create QuizQuery from a Parcel.
+	 * 
+	 * @param in
+	 */
 	private QuizQuery(Parcel in) {
 		mQuery = in.readString();
 		mFrom = in.readString();

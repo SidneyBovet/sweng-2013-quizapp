@@ -5,7 +5,7 @@ import android.content.Context;
 import android.test.mock.MockContext;
 
 /**
- * Class of our application.
+ * Subclass of our application.
  * 
  * @author Melody Lucid
  *
