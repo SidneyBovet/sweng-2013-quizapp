@@ -190,7 +190,7 @@ public class CacheContentProvider {
 							.getColumnIndex(SQLiteCacheHelper.FIELD_QUESTIONS_SOLUTION_INDEX));
 			String owner = questionCursor.getString(questionCursor
 					.getColumnIndex(SQLiteCacheHelper.FIELD_QUESTIONS_OWNER));
-
+			
 			questionCursor.close();
 
 			// Step 3 : Create the new question and return it

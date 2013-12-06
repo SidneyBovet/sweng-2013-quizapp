@@ -83,7 +83,7 @@ public class QuizQuestion {
 
 	public QuizQuestion(final String question, final List<String> answers,
 			final int solutionIndex, final Set<String> tags) {
-		this(question, answers, solutionIndex, tags, -1, null);
+		this(question, answers, solutionIndex, tags, -1, "default");
 	}
 
 	/**
