@@ -2,6 +2,7 @@ package epfl.sweng.app;
 
 import android.app.Application;
 import android.content.Context;
+import android.test.mock.MockContext;
 
 /**
  * Class of our application.
@@ -28,6 +29,10 @@ public class SwEng2013QuizApp extends Application {
 	 */
 	
 	public static Context getContext() {
-		return mApplicationContext;
+		if (mApplicationContext == null) {
+			return new MockContext();
+		} else {
+			return mApplicationContext;
+		}
 	}
 }
