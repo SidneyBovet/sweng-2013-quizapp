@@ -6,8 +6,6 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -85,7 +83,7 @@ public class CacheContentProvider {
 				+ SQLiteCacheHelper.FIELD_TAGS_NAME + "=?";
 
 		Cursor questionsIdsCursor = mDatabase.rawQuery(query,
-				new String[] {tag });
+				new String[] { tag });
 
 		if (questionsIdsCursor.moveToFirst()) {
 			do {
@@ -113,7 +111,7 @@ public class CacheContentProvider {
 		String queryStr = query.toString();
 
 		// We select all question ids...
-		String[] selection = new String[] {SQLiteCacheHelper.FIELD_QUESTIONS_PK };
+		String[] selection = new String[] { SQLiteCacheHelper.FIELD_QUESTIONS_PK };
 		String whereClause = null;
 		String[] whereArgs = null;
 		String orderBy = null;
@@ -127,21 +125,22 @@ public class CacheContentProvider {
 			return randomQuestionIdCursor;
 		} else {
 
-			String[] tagsArray = extractParameters(queryStr);
+			String[] tagsArray = SQLHelper.extractParameters(queryStr);
 
 			List<Set<Long>> questionsIdsList = new ArrayList<Set<Long>>();
 			for (String tag : tagsArray) {
 				questionsIdsList.add(getQuestionsIdsWithTag(tag));
 			}
 
-			queryStr = filterQuery(queryStr);
+			queryStr = SQLHelper.filterQuery(queryStr);
 			String[] tokens = queryStr.split("(?!^)");
 			List<String> tokensAsList = new ArrayList<String>(
 					Arrays.asList(tokens));
 
 			Set<Long> idsMatchingQuery = evaluate(tokensAsList,
 					questionsIdsList);
-			String correspondingSQLiteArray = setToSQLiteQueryArray(idsMatchingQuery);
+			String correspondingSQLiteArray = SQLHelper
+					.setToSQLiteQueryArray(idsMatchingQuery);
 
 			String rawQuery = "SELECT * FROM "
 					+ SQLiteCacheHelper.TABLE_QUESTIONS + " WHERE "
@@ -171,12 +170,12 @@ public class CacheContentProvider {
 		// Step 2 : Store question content into variables.
 		Cursor questionCursor = mDatabase.query(
 				SQLiteCacheHelper.TABLE_QUESTIONS, new String[] {
-					SQLiteCacheHelper.FIELD_QUESTIONS_SWENG_ID,
-					SQLiteCacheHelper.FIELD_QUESTIONS_STATEMENT,
-					SQLiteCacheHelper.FIELD_QUESTIONS_SOLUTION_INDEX,
-					SQLiteCacheHelper.FIELD_QUESTIONS_OWNER },
+						SQLiteCacheHelper.FIELD_QUESTIONS_SWENG_ID,
+						SQLiteCacheHelper.FIELD_QUESTIONS_STATEMENT,
+						SQLiteCacheHelper.FIELD_QUESTIONS_SOLUTION_INDEX,
+						SQLiteCacheHelper.FIELD_QUESTIONS_OWNER },
 				SQLiteCacheHelper.FIELD_QUESTIONS_PK + " = ?",
-				new String[] {String.valueOf(id) }, null, null, null, null);
+				new String[] { String.valueOf(id) }, null, null, null, null);
 
 		if (questionCursor.moveToFirst()) {
 			int questionId = questionCursor
@@ -190,7 +189,7 @@ public class CacheContentProvider {
 							.getColumnIndex(SQLiteCacheHelper.FIELD_QUESTIONS_SOLUTION_INDEX));
 			String owner = questionCursor.getString(questionCursor
 					.getColumnIndex(SQLiteCacheHelper.FIELD_QUESTIONS_OWNER));
-			
+
 			questionCursor.close();
 
 			// Step 3 : Create the new question and return it
@@ -405,19 +404,6 @@ public class CacheContentProvider {
 		}
 		return questionsSetList.get(0);
 	}
-	
-	private String setToSQLiteQueryArray(Set<Long> set) {
-		String statement = "";
-		for (Object object : set) {
-			statement = statement + "," + object.toString();
-		}
-		if (statement.isEmpty()) {
-			return "()";
-		}
-		statement = statement + ")";
-		statement = "(" + statement.substring(1);
-		return statement;
-	}
 
 	/*********************** Private methods ***********************/
 
@@ -432,7 +418,7 @@ public class CacheContentProvider {
 
 		Cursor questionOutboxIdCursor = mDatabase.query(
 				SQLiteCacheHelper.TABLE_QUESTIONS,
-				new String[] {SQLiteCacheHelper.FIELD_QUESTIONS_PK },
+				new String[] { SQLiteCacheHelper.FIELD_QUESTIONS_PK },
 				SQLiteCacheHelper.FIELD_QUESTIONS_IS_QUEUED + "=1", null, null,
 				null, SQLiteCacheHelper.FIELD_QUESTIONS_PK + " ASC", "1");
 
@@ -455,9 +441,9 @@ public class CacheContentProvider {
 	private List<String> retrieveAnswers(long id) {
 
 		Cursor answersCursor = mDatabase.query(SQLiteCacheHelper.TABLE_ANSWERS,
-				new String[] {SQLiteCacheHelper.FIELD_ANSWERS_ANSWER_VALUE },
+				new String[] { SQLiteCacheHelper.FIELD_ANSWERS_ANSWER_VALUE },
 				SQLiteCacheHelper.FIELD_ANSWERS_QUESTION_FK + " = ?",
-				new String[] {String.valueOf(id) }, null, null,
+				new String[] { String.valueOf(id) }, null, null,
 				SQLiteCacheHelper.FIELD_ANSWERS_PK + " ASC", null);
 
 		ArrayList<String> answers = new ArrayList<String>();
@@ -484,9 +470,9 @@ public class CacheContentProvider {
 
 		Cursor tagsIdCursor = mDatabase.query(
 				SQLiteCacheHelper.TABLE_QUESTIONS_TAGS,
-				new String[] {SQLiteCacheHelper.FIELD_QUESTIONS_TAGS_TAG_FK },
+				new String[] { SQLiteCacheHelper.FIELD_QUESTIONS_TAGS_TAG_FK },
 				SQLiteCacheHelper.FIELD_QUESTIONS_TAGS_QUESTION_FK + " = ?",
-				new String[] {String.valueOf(id) }, null, null,
+				new String[] { String.valueOf(id) }, null, null,
 				SQLiteCacheHelper.FIELD_QUESTIONS_TAGS_QUESTION_FK + " ASC",
 				null);
 
@@ -507,7 +493,7 @@ public class CacheContentProvider {
 		String query = "SELECT " + SQLiteCacheHelper.FIELD_TAGS_NAME + " FROM "
 				+ SQLiteCacheHelper.TABLE_TAGS + " WHERE "
 				+ SQLiteCacheHelper.FIELD_TAGS_PK + " IN ("
-				+ makePlaceholders(tagsId.size()) + ");";
+				+ SQLHelper.makePlaceholders(tagsId.size()) + ");";
 		Cursor tagsCursor = mDatabase.rawQuery(query,
 				(String[]) tagsId.toArray(new String[tagsId.size()]));
 
@@ -651,104 +637,19 @@ public class CacheContentProvider {
 				questionInOutbox ? 1 : 0);
 		mDatabase.update(SQLiteCacheHelper.TABLE_QUESTIONS, isQueuedValue,
 				SQLiteCacheHelper.FIELD_QUESTIONS_PK + "=?",
-				new String[] {String.valueOf(id) });
+				new String[] { String.valueOf(id) });
 	}
 
 	/**
 	 * Check whether the cache is accessible.
-	 * @throws IllegalStateException If the cache is unavailable.
+	 * 
+	 * @throws IllegalStateException
+	 *             If the cache is unavailable.
 	 */
 	private void sanityDatabaseCheck() {
 		if (null == mDatabase || !mDatabase.isOpen()) {
 			throw new IllegalStateException(
 					"The database object is either null or closed");
 		}
-	}
-
-	/**
-	 * Given a length, returns a series of ? separated by commas.
-	 * Example for len = 4 : "?, ?, ?, ?" 
-	 * @param len
-	 * @return String used as placeholders.
-	 */
-	private String makePlaceholders(int len) {
-		if (len < 1) {
-			throw new RuntimeException("No placeholders");
-		} else {
-			StringBuilder sb = new StringBuilder(len * 2 - 1);
-			sb.append("?");
-			for (int i = 1; i < len; i++) {
-				sb.append(",?");
-			}
-			return sb.toString();
-		}
-	}
-
-	/**
-	 * Normalizes the query.
-	 * 	- We change the '*' by a logical AND. 
-	 *  - We change the '+' by a logical OR. 
-	 *  - We change the ' ' by a logical AND.
-	 * 
-	 * @param query
-	 *            Query to be changed.
-	 * @return the new SQL-compatible query.
-	 */
-	private String filterQuery(String query) {
-
-		// We start with "  (  A * B C + D (  E + F ))  "
-
-		// Only one space max. between words.
-		// " ( A * B C + D ( E + F )) "
-		query = query.replaceAll("(\\ )+", " ");
-
-		// Removes the spaces after '(' and/or before ')'
-		// " (A * B C + D (E + F)) "
-		query = query.replaceAll("\\(\\ ", "(");
-		query = query.replaceAll("\\ \\)", ")");
-
-		// Removes beginning and end spaces.
-		// "(A * B C + D (E + F))"
-		query = query.replaceAll("^\\ ", "");
-		query = query.replaceAll("\\ $", "");
-
-		// Replaces all the names by ? for the SQL query.
-		// "(? * ? ? + ? (? + ?))"
-		query = query.replaceAll("\\w+", "?");
-
-		// Makes the " * " or " + " look like "*" or "+"
-		// "(?*? ?+? (?+?))"
-		query = query.replaceAll("(?:\\ )?\\*(?:\\ )?", "*");
-		query = query.replaceAll("(?:\\ )?\\+(?:\\ )?", "+");
-
-		// Replaces all the spaces by ANDs (the order
-		// is important, do not move it without a valid reason).
-		// "(?*?*?+?*(?+?))"
-		query = query.replaceAll("\\ ", "*");
-
-		return query;
-	}
-
-	/**
-	 * Will get all the words contained in the query given in parameters.
-	 * 
-	 * @param query
-	 *            Query from where we need to extract the data.
-	 * @return All the words contained in the query.
-	 */
-	private String[] extractParameters(String query) {
-
-		List<String> whereArgsArray = new ArrayList<String>();
-
-		// Finds all alphanumeric tokens in the query
-		Pattern pattern = Pattern.compile("\\w+");
-		Matcher m = pattern.matcher(query);
-		while (m.find()) {
-			whereArgsArray.add(m.group());
-		}
-
-		// We convert the List to an array of String.
-		return (String[]) whereArgsArray.toArray(new String[whereArgsArray
-				.size()]);
 	}
 }
