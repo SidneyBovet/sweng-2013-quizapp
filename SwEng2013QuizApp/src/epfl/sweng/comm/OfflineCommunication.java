@@ -6,6 +6,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.database.Cursor;
+import android.util.Log;
 import epfl.sweng.backend.QuizQuery;
 import epfl.sweng.caching.CacheContentProvider;
 import epfl.sweng.quizquestions.QuizQuestion;
@@ -58,8 +59,6 @@ public class OfflineCommunication implements IQuestionCommunication {
 			mCursor.moveToFirst();
 		}
 		
-		addInbox(retrievedQuestion);
-		
 		JSONObject jsonQuestions = new JSONObject();
 		try {
 			JSONArray array = new JSONArray();
@@ -68,7 +67,8 @@ public class OfflineCommunication implements IQuestionCommunication {
 			jsonQuestions.put("questions", (Object) array);	// Ouch! TODO
 			jsonQuestions.put("next", couldMove ? "Yup there's more." : null);
 		} catch (JSONException e) {
-			e.printStackTrace();	// TODO log
+			Log.e(this.getClass().getName(), "Unable to create JSON containing " +
+					"the questions.", e);
 		}
 		return jsonQuestions;
 	}
