@@ -65,6 +65,8 @@ public class OfflineCommunication implements IQuestionCommunication {
 			array.put(retrievedQuestion.toJSON());
 			
 			jsonQuestions.put("questions", (Object) array);	// Ouch! TODO
+			
+			// TODO make "next" tag follow the position of the cursor for double check
 			jsonQuestions.put("next", couldMove ? "Yup there's more." : null);
 		} catch (JSONException e) {
 			Log.e(this.getClass().getName(), "Unable to create JSON containing " +
