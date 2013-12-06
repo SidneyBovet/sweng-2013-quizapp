@@ -1,0 +1,43 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:text="@string/displayRandomQuestionButton" >
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/autenticationLogButton"
+        android:text="@string/autenticationLoginButtonStateLogIn"
+        android:onClick="displayAuthenticationActivity" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="displayRandomQuestion"
+        android:id="@+id/displayRandomQuestionButton"
+        android:text="@string/displayRandomQuestionButton" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="submitQuestion"
+        android:id="@+id/submitQuestionButton"
+        android:text="@string/submitQuestionButton" />
+    
+        <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/SearchQueryButton"
+        android:text="@string/SearchQueryButton"
+        android:onClick="searchActivity" />
+
+        <CheckBox
+            android:id="@+id/switchOnlineModeCheckbox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="onCheckboxSwitchModeClicked"
+            android:text="@string/switchOnlineModeCheckbox" />
+
+</LinearLayout>

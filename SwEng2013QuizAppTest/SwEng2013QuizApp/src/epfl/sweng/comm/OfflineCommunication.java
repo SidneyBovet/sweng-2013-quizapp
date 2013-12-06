@@ -6,7 +6,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.database.Cursor;
-import android.util.Log;
 import epfl.sweng.backend.QuizQuery;
 import epfl.sweng.caching.CacheContentProvider;
 import epfl.sweng.quizquestions.QuizQuestion;
@@ -59,18 +58,17 @@ public class OfflineCommunication implements IQuestionCommunication {
 			mCursor.moveToFirst();
 		}
 		
+		addInbox(retrievedQuestion);
+		
 		JSONObject jsonQuestions = new JSONObject();
 		try {
 			JSONArray array = new JSONArray();
 			array.put(retrievedQuestion.toJSON());
 			
 			jsonQuestions.put("questions", (Object) array);	// Ouch! TODO
-			
-			// TODO make "next" tag follow the position of the cursor for double check
 			jsonQuestions.put("next", couldMove ? "Yup there's more." : null);
 		} catch (JSONException e) {
-			Log.e(this.getClass().getName(), "Unable to create JSON containing " +
-					"the questions.", e);
+			e.printStackTrace();	// TODO log
 		}
 		return jsonQuestions;
 	}
@@ -115,5 +113,18 @@ public class OfflineCommunication implements IQuestionCommunication {
 			mContentProvider.addQuizQuestion(quizQuestion, true);
 		}
 	}
-
+	
+	/**
+	 * Add a {@link QuizQuestion} to the Inbox only if it is a well formed
+	 * question
+	 * 
+	 * @param question
+	 *            The {@link QuizQuestion} to be cached.
+	 */
+	
+	private void addInbox(QuizQuestion quizQuestion) {
+		if (null != quizQuestion && quizQuestion.auditErrors() == 0) {
+			mContentProvider.addQuizQuestion(quizQuestion);
+		}
+	}
 }

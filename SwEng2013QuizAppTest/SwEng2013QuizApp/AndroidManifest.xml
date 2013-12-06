@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="epfl.sweng"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-sdk
+        android:minSdkVersion="16"
+        android:targetSdkVersion="18" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <application
+        android:name="epfl.sweng.app.SwEng2013QuizApp"
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+        <activity
+            android:name="epfl.sweng.entry.MainActivity"
+            android:label="@string/title_activity_main" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="epfl.sweng.editquestions.EditQuestionActivity"
+            android:label="@string/title_activity_submit_question" >
+        </activity>
+        <activity
+            android:name="epfl.sweng.showquestions.ShowQuestionsActivity"
+            android:label="@string/title_activity_display_question"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="epfl.sweng.authentication.AuthenticationActivity"
+            android:label="@string/title_activity_authentication" >
+        </activity>
+        <activity
+            android:name="epfl.sweng.searchquestions.SearchActivity"
+            android:label="@string/title_activity_search" >
+        </activity>
+    </application>
+
+</manifest>

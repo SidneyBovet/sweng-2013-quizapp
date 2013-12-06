@@ -1,0 +1,5 @@
+A)	isNotBlanck(question.questionText) && 0 < len(question.questionText) <= 500 
+B)	For all question.answers[i] : isNotBlanck(question.answer[i]) && 0 < len(question.answers[i]) <= 500 
+C)	2 <= len(question.answers) <= 10
+D)	there exists i such that isMarkedCorrect(question.answers[i])
+E)	For all question.tags[i] : isNotBlanck(question.tags[i]) &&  0 < len(question.tags[i]) <= 20

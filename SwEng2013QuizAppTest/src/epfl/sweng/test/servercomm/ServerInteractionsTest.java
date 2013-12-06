@@ -12,10 +12,11 @@ import epfl.sweng.test.minimalmock.MockHttpClient;
 
 public class ServerInteractionsTest extends TestCase {
 	private MockHttpClient mMockClient;
-	private IQuestionCommunication mNetworkCommunication = new OnlineCommunication();
+	private IQuestionCommunication mNetworkCommunication;
 
 	@Override
 	public void setUp() {
+		mNetworkCommunication = new OnlineCommunication();
 		mMockClient = new MockHttpClient();
 		mMockClient
 				.pushCannedResponse(

@@ -1,0 +1,14 @@
+<map id="G" name="G">
+<area shape="rect" id="c696" href="../backend/Question.html" title="epfl.sweng.backend.Question" alt="" coords="15,4534,707,4815"/>
+<area shape="rect" id="node1" href="../backend/Question.html" title="&lt;TABLE&gt;" alt="" coords="5,4529,717,4821"/>
+<area shape="rect" id="c703" href="./SelectionListener.html" title="epfl.sweng.showquestions.SelectionListener" alt="" coords="1215,161,1681,250"/>
+<area shape="rect" id="node2" href="./SelectionListener.html" title="&lt;TABLE&gt;" alt="" coords="1205,155,1691,255"/>
+<area shape="rect" id="c720" href="http://java.sun.com/j2se/1.4.2/docs/api/android/widget/Button.html" title="android.widget.Button" alt="" coords="751,4606,1145,4743"/>
+<area shape="rect" id="node6" href="http://java.sun.com/j2se/1.4.2/docs/api/android/widget/Button.html" title="&lt;TABLE&gt;" alt="" coords="741,4601,1155,4749"/>
+<area shape="rect" id="c721" href="http://java.sun.com/j2se/1.4.2/docs/api/android/widget/AdapterView.html" title="android.widget.AdapterView" alt="" coords="1189,4270,1707,5079"/>
+<area shape="rect" id="node8" href="http://java.sun.com/j2se/1.4.2/docs/api/android/widget/AdapterView.html" title="&lt;TABLE&gt;" alt="" coords="1179,4265,1717,5085"/>
+<area shape="rect" id="c722" href="http://java.sun.com/j2se/1.4.2/docs/api/android/view/View.html" title="android.view.View" alt="" coords="1752,310,2477,9039"/>
+<area shape="rect" id="node11" href="http://java.sun.com/j2se/1.4.2/docs/api/android/view/View.html" title="&lt;TABLE&gt;" alt="" coords="1741,305,2488,9045"/>
+<area shape="rect" id="c719" href="http://java.sun.com/j2se/1.4.2/docs/api/android/widget/AdapterView/OnItemClickListener.html" title="android.widget.AdapterView.OnItemClickListener" alt="" coords="1225,11,1671,101"/>
+<area shape="rect" id="node3" href="http://java.sun.com/j2se/1.4.2/docs/api/android/widget/AdapterView/OnItemClickListener.html" title="&lt;TABLE&gt;" alt="" coords="1215,6,1681,106"/>
+</map>
