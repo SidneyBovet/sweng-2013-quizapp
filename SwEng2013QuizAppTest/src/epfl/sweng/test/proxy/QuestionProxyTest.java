@@ -11,6 +11,7 @@ import org.json.JSONObject;
 
 import epfl.sweng.backend.QuizQuery;
 import epfl.sweng.caching.CacheContentProvider;
+import epfl.sweng.caching.OutboxManager;
 import epfl.sweng.comm.ConnectivityState;
 import epfl.sweng.comm.QuestionProxy;
 import epfl.sweng.entry.MainActivity;
@@ -121,10 +122,10 @@ public class QuestionProxyTest extends GUITest<MainActivity>{
 				"(POST|GET) https://sweng-quiz.appspot.com/quizquestions/",
 				200, "", "HttpResponse");
 		proxy.sendQuizQuestion(mQuestion);
-		CacheContentProvider provider = new CacheContentProvider(false);
-		assertTrue("Outbox doesn't contain one element", provider.getOutboxCount()==1);
+		OutboxManager outbox = new OutboxManager();
+		assertTrue("Outbox doesn't contain one element", outbox.size() == 1);
 		assertEquals("The sending of cached question was not successful",200, proxy.notifyConnectivityChange(ConnectivityState.ONLINE));
-		provider.close();
+		outbox.close();
 	}
 	
 	public void testRetrieveQuizQuestionsOffline() {

@@ -4,7 +4,7 @@ import org.apache.http.HttpStatus;
 import org.json.JSONObject;
 
 import epfl.sweng.backend.QuizQuery;
-import epfl.sweng.caching.CacheContentProvider;
+import epfl.sweng.caching.OutboxManager;
 import epfl.sweng.quizquestions.QuizQuestion;
 
 /**
@@ -22,14 +22,14 @@ public final class QuestionProxy implements IQuestionCommunication,
 
 	private static QuestionProxy sSingletonProxy;
 	private IQuestionCommunication mActualCommunication;
-	private CacheContentProvider mContentProvider;
+	private OutboxManager mOutbox;
 
 	/**
 	 * Singleton getter.
 	 * 
 	 * @return The singleton instance of this object.
 	 */
-	
+
 	public static QuestionProxy getInstance() {
 		// double-checked singleton: avoids calling costly synchronized if
 		// unnecessary
@@ -42,11 +42,11 @@ public final class QuestionProxy implements IQuestionCommunication,
 		}
 		return sSingletonProxy;
 	}
-	
+
 	/**
 	 * Resets the instance of the singleton to <code>null</code>.
 	 */
-	
+
 	public static void resetQuestionProxy() {
 		sSingletonProxy = null;
 	}
@@ -61,8 +61,8 @@ public final class QuestionProxy implements IQuestionCommunication,
 
 	@Override
 	public int sendQuizQuestion(QuizQuestion quizQuestion) {
-		int httpCodeResponse 
-			= mActualCommunication.sendQuizQuestion(quizQuestion);
+		int httpCodeResponse = mActualCommunication
+				.sendQuizQuestion(quizQuestion);
 
 		return httpCodeResponse;
 	}
@@ -74,12 +74,12 @@ public final class QuestionProxy implements IQuestionCommunication,
 	 * Choose a random {@link QuizQuestion} from the cached content before
 	 * returning it if offline.
 	 */
-	
+
 	@Override
 	public JSONObject retrieveQuizQuestion(QuizQuery quizQuery) {
-		JSONObject jsonRetrievedQuestions
-			= mActualCommunication.retrieveQuizQuestion(quizQuery);
-		
+		JSONObject jsonRetrievedQuestions = mActualCommunication
+				.retrieveQuizQuestion(quizQuery);
+
 		return jsonRetrievedQuestions;
 	}
 
@@ -87,12 +87,12 @@ public final class QuestionProxy implements IQuestionCommunication,
 	 * Retrieves a random {@link QuizQuestion} from the actual communication
 	 * service.
 	 */
-	
+
 	@Override
 	public JSONObject retrieveRandomQuizQuestion() {
-		JSONObject jsonRetrievedQuestion 
-			= mActualCommunication.retrieveRandomQuizQuestion();
-		
+		JSONObject jsonRetrievedQuestion = mActualCommunication
+				.retrieveRandomQuizQuestion();
+
 		return jsonRetrievedQuestion;
 	}
 
@@ -103,7 +103,7 @@ public final class QuestionProxy implements IQuestionCommunication,
 	 * 
 	 * @return The HTTP response code of the last proxy request.
 	 */
-	
+
 	@Override
 	public int notifyConnectivityChange(ConnectivityState newState) {
 		int proxyResponse = -1;
@@ -112,60 +112,59 @@ public final class QuestionProxy implements IQuestionCommunication,
 			proxyResponse = HttpStatus.SC_OK;
 			mActualCommunication = new OfflineCommunication();
 		} else if (newState == ConnectivityState.ONLINE) {
-			openContentProvider();
+			openOutboxManager();
 			if (getOutboxSize() > 0) {
 				proxyResponse = sendCachedQuestions();
 			} else {
 				proxyResponse = HttpStatus.SC_CREATED;
 				mActualCommunication = new OnlineCommunication();
 			}
-			closeContentProvider();
+			closeOutboxManager();
 		}
 
 		return proxyResponse;
 	}
-	
+
 	private int getOutboxSize() {
 		int count = -1;
-		if (null == mContentProvider || mContentProvider.isClosed()) {
-			openContentProvider();
-			count = mContentProvider.getOutboxCount();
-			closeContentProvider();
+		if (null == mOutbox || mOutbox.isClosed()) {
+			openOutboxManager();
+			count = mOutbox.size();
+			closeOutboxManager();
 		} else {
-			count = mContentProvider.getOutboxCount();
+			count = mOutbox.size();
 		}
 		return count;
 	}
-	
+
 	private synchronized int sendCachedQuestions() {
 		mActualCommunication = new OnlineCommunication();
 		int httpCodeResponse = -1;
 		// We first send all the questions that we stored when in
 		// offline mode.
-		while (mContentProvider.getOutboxCount() > 0) {
-			QuizQuestion questionOut 
-				= mContentProvider.peekFirstQuestionFromOutbox();
-			
-			httpCodeResponse 
-				= mActualCommunication.sendQuizQuestion(questionOut);
-			
+		while (mOutbox.size() > 0) {
+			QuizQuestion questionOut = mOutbox.peek();
+
+			httpCodeResponse = mActualCommunication
+					.sendQuizQuestion(questionOut);
+
 			if (HttpStatus.SC_CREATED == httpCodeResponse) {
 				// If the question has been sent, we remove it from the queue.
-				mContentProvider.takeFirstQuestionFromOutbox();
+				mOutbox.pop();
 			} else {
 				return httpCodeResponse;
 			}
 		}
 		return httpCodeResponse;
 	}
-	
-	private void openContentProvider() {
-		mContentProvider = new CacheContentProvider(true);
+
+	private void openOutboxManager() {
+		mOutbox = new OutboxManager();
 	}
 
-	private void closeContentProvider() {
-		mContentProvider.close();
-		mContentProvider = null;
+	private void closeOutboxManager() {
+		mOutbox.close();
+		mOutbox = null;
 	}
 
 	private QuestionProxy() {

@@ -2,14 +2,12 @@ package epfl.sweng.caching;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.util.Log;
@@ -48,19 +46,6 @@ public class CacheContentProvider {
 	}
 
 	/**
-	 * Returns the number of questions currently in the outbox cache.
-	 * 
-	 * @return the number of questions currently in the outbox cache.
-	 */
-	public int getOutboxCount() {
-		sanityDatabaseCheck();
-
-		return (int) DatabaseUtils.queryNumEntries(mDatabase,
-				SQLiteCacheHelper.TABLE_QUESTIONS,
-				SQLiteCacheHelper.FIELD_QUESTIONS_IS_QUEUED + "=1");
-	}
-
-	/**
 	 * Returns the set of IDs that match the tag given in parameter.
 	 * 
 	 * @param tag
@@ -83,7 +68,7 @@ public class CacheContentProvider {
 				+ SQLiteCacheHelper.FIELD_TAGS_NAME + "=?";
 
 		Cursor questionsIdsCursor = mDatabase.rawQuery(query,
-				new String[] { tag });
+				new String[] {tag});
 
 		if (questionsIdsCursor.moveToFirst()) {
 			do {
@@ -111,7 +96,7 @@ public class CacheContentProvider {
 		String queryStr = query.toString();
 
 		// We select all question ids...
-		String[] selection = new String[] { SQLiteCacheHelper.FIELD_QUESTIONS_PK };
+		String[] selection = new String[] {SQLiteCacheHelper.FIELD_QUESTIONS_PK};
 		String whereClause = null;
 		String[] whereArgs = null;
 		String orderBy = null;
@@ -137,13 +122,13 @@ public class CacheContentProvider {
 			List<String> tokensAsList = new ArrayList<String>(
 					Arrays.asList(tokens));
 
-			Set<Long> idsMatchingQuery = evaluate(tokensAsList,
-					questionsIdsList);
+			Set<Long> idsMatchingQuery = TagsAlgorithmHelper.evaluate(
+					tokensAsList, questionsIdsList);
 			String correspondingSQLiteArray = SQLHelper
 					.setToSQLiteQueryArray(idsMatchingQuery);
 
-			String rawQuery = "SELECT * FROM "
-					+ SQLiteCacheHelper.TABLE_QUESTIONS + " WHERE "
+			String rawQuery = "SELECT " + SQLiteCacheHelper.FIELD_QUESTIONS_PK
+					+ " FROM " + SQLiteCacheHelper.TABLE_QUESTIONS + " WHERE "
 					+ SQLiteCacheHelper.FIELD_QUESTIONS_PK + " IN "
 					+ correspondingSQLiteArray + ";";
 
@@ -170,12 +155,12 @@ public class CacheContentProvider {
 		// Step 2 : Store question content into variables.
 		Cursor questionCursor = mDatabase.query(
 				SQLiteCacheHelper.TABLE_QUESTIONS, new String[] {
-						SQLiteCacheHelper.FIELD_QUESTIONS_SWENG_ID,
-						SQLiteCacheHelper.FIELD_QUESTIONS_STATEMENT,
-						SQLiteCacheHelper.FIELD_QUESTIONS_SOLUTION_INDEX,
-						SQLiteCacheHelper.FIELD_QUESTIONS_OWNER },
+					SQLiteCacheHelper.FIELD_QUESTIONS_SWENG_ID,
+					SQLiteCacheHelper.FIELD_QUESTIONS_STATEMENT,
+					SQLiteCacheHelper.FIELD_QUESTIONS_SOLUTION_INDEX,
+					SQLiteCacheHelper.FIELD_QUESTIONS_OWNER },
 				SQLiteCacheHelper.FIELD_QUESTIONS_PK + " = ?",
-				new String[] { String.valueOf(id) }, null, null, null, null);
+				new String[] {String.valueOf(id)}, null, null, null, null);
 
 		if (questionCursor.moveToFirst()) {
 			int questionId = questionCursor
@@ -201,23 +186,13 @@ public class CacheContentProvider {
 	}
 
 	/**
+	 * Adds a question to the cache.
 	 * 
 	 * @param question
-	 *            Question to be stored in cache (not in outbox).
+	 *            Question to be stored in cache.
 	 * @return the PK of the newly added question.
 	 */
 	public long addQuizQuestion(QuizQuestion question) {
-		return addQuizQuestion(question, false);
-	}
-
-	/**
-	 * Adds a {@link QuizQuestion}to the persistent cache.
-	 * 
-	 * @param question
-	 *            The question to be added to the cache
-	 * @return the PK of the newly added question.
-	 */
-	public long addQuizQuestion(QuizQuestion question, boolean wantInOutbox) {
 		sanityDatabaseCheck();
 		long id = insertSimplifiedQuestion(question.getId(),
 				question.getOwner(), question.getStatement(),
@@ -225,37 +200,7 @@ public class CacheContentProvider {
 		insertQuestionAnswers(id, question.getAnswers());
 		insertQuestionTags(id, question.getTags());
 
-		if (wantInOutbox) {
-			putQuestionInOutbox(id);
-		}
-
 		return id;
-	}
-
-	/**
-	 * Returns a copy of the first question in the outbox.
-	 * 
-	 * @return the first question in the outbox.
-	 */
-	public QuizQuestion peekFirstQuestionFromOutbox() {
-		return getQuestionFromPK(getIdOfFirstQuestionInOutbox());
-	}
-
-	/**
-	 * Removes and returns the first question in the outbox.
-	 * 
-	 * @return First question in the outbox.
-	 */
-	public QuizQuestion takeFirstQuestionFromOutbox() {
-
-		long id = getIdOfFirstQuestionInOutbox();
-
-		if (-1 != id) {
-			takeQuestionOutOfOutbox(id);
-			return getQuestionFromPK(id);
-		}
-
-		return null;
 	}
 
 	/**
@@ -299,138 +244,7 @@ public class CacheContentProvider {
 		return null == mDatabase || !mDatabase.isOpen();
 	}
 
-	/*********************** Search mechanism methods ***********************/
-
-	// pre-condition: # of '?' in normalizedTagList == questionSetList.size()
-	public Set<Long> evaluate(List<String> normalizedTagList,
-			List<Set<Long>> questionsSetList) {
-		while (normalizedTagList.contains(")")) {
-			List<String> originalNormalizedTagList = new ArrayList<String>(
-					normalizedTagList);
-			int firstClosingParenthesisIndex = normalizedTagList.indexOf(")");
-			int correspondingOpeningParenthesisIndex = 0;
-
-			List<String> expressionParenthesized = new ArrayList<String>();
-			normalizedTagList.remove(firstClosingParenthesisIndex);
-			for (int i = firstClosingParenthesisIndex - 1; i >= 0; i--) {
-				if (normalizedTagList.get(i).equals("(")) {
-					normalizedTagList.remove(i);
-					correspondingOpeningParenthesisIndex = i;
-					break;
-				} else {
-					expressionParenthesized.add(normalizedTagList.get(i));
-					normalizedTagList.remove(i);
-				}
-			}
-			Collections.reverse(expressionParenthesized);
-			// we now work to suppress the group between those two indexes
-
-			List<Set<Long>> setListedParenthesized = getSubListedSet(
-					originalNormalizedTagList, questionsSetList,
-					correspondingOpeningParenthesisIndex,
-					firstClosingParenthesisIndex);
-
-			reduceGroup(expressionParenthesized, setListedParenthesized);
-
-			normalizedTagList.add(correspondingOpeningParenthesisIndex, "?");
-		}
-
-		return questionsSetList.get(0);
-	}
-
-	public List<Set<Long>> getSubListedSet(List<String> normalizedTagList,
-			List<Set<Long>> questionsSetList, int start, int end) {
-		int firstElementsCount = 0;
-		int parenthesizedCount = 0;
-		for (int i = 0; i < end; i++) {
-			if (normalizedTagList.get(i).equals("?")) {
-				if (i < start) {
-					firstElementsCount++;
-				} else {
-					parenthesizedCount++;
-				}
-			}
-		}
-
-		return questionsSetList.subList(firstElementsCount, firstElementsCount
-				+ parenthesizedCount);
-	}
-
-	// pre-condition: tagList does not contain parenthesis and is well-formed
-	public Set<Long> reduceGroup(List<String> tagList,
-			List<Set<Long>> questionsSetList) {
-		while (tagList.contains("*")) {
-			int firstANDIndex = tagList.indexOf("*");
-
-			int leftOperandIndex = -1;
-			for (int i = 0; i < firstANDIndex; i++) {
-				if (tagList.get(i).equals("?")) {
-					leftOperandIndex++;
-				}
-			}
-
-			// compute the INTERSECTION of the two operands
-			Set<Long> leftOperand = questionsSetList.get(leftOperandIndex);
-			Set<Long> rightOperand = questionsSetList
-					.remove(leftOperandIndex + 1);
-			leftOperand.retainAll(rightOperand);
-
-			// update the tagList
-			tagList.remove(firstANDIndex);
-			tagList.remove(firstANDIndex); // this will remove the right-hand
-											// operand
-		}
-
-		while (tagList.contains("+")) {
-			int firstANDIndex = tagList.indexOf("+");
-
-			int leftOperandIndex = -1;
-			for (int i = 0; i < firstANDIndex; i++) {
-				if (tagList.get(i).equals("?")) {
-					leftOperandIndex++;
-				}
-			}
-
-			// compute the UNION of the two operands
-			Set<Long> leftOperand = questionsSetList.get(leftOperandIndex);
-			Set<Long> rightOperand = questionsSetList
-					.remove(leftOperandIndex + 1);
-			leftOperand.addAll(rightOperand);
-
-			// update the tagList
-			tagList.remove(firstANDIndex);
-			tagList.remove(firstANDIndex); // this will remove the right-hand
-											// operand
-		}
-		return questionsSetList.get(0);
-	}
-
 	/*********************** Private methods ***********************/
-
-	/**
-	 * Get the first question ID in the outbox stack.
-	 * 
-	 * @return the first question ID.
-	 */
-	private long getIdOfFirstQuestionInOutbox() {
-
-		long id = -1;
-
-		Cursor questionOutboxIdCursor = mDatabase.query(
-				SQLiteCacheHelper.TABLE_QUESTIONS,
-				new String[] { SQLiteCacheHelper.FIELD_QUESTIONS_PK },
-				SQLiteCacheHelper.FIELD_QUESTIONS_IS_QUEUED + "=1", null, null,
-				null, SQLiteCacheHelper.FIELD_QUESTIONS_PK + " ASC", "1");
-
-		if (questionOutboxIdCursor.moveToFirst()) {
-			id = questionOutboxIdCursor.getLong(questionOutboxIdCursor
-					.getColumnIndex(SQLiteCacheHelper.FIELD_QUESTIONS_PK));
-
-			questionOutboxIdCursor.close();
-		}
-
-		return id;
-	}
 
 	/**
 	 * 
@@ -441,9 +255,9 @@ public class CacheContentProvider {
 	private List<String> retrieveAnswers(long id) {
 
 		Cursor answersCursor = mDatabase.query(SQLiteCacheHelper.TABLE_ANSWERS,
-				new String[] { SQLiteCacheHelper.FIELD_ANSWERS_ANSWER_VALUE },
+				new String[] {SQLiteCacheHelper.FIELD_ANSWERS_ANSWER_VALUE},
 				SQLiteCacheHelper.FIELD_ANSWERS_QUESTION_FK + " = ?",
-				new String[] { String.valueOf(id) }, null, null,
+				new String[] {String.valueOf(id)}, null, null,
 				SQLiteCacheHelper.FIELD_ANSWERS_PK + " ASC", null);
 
 		ArrayList<String> answers = new ArrayList<String>();
@@ -470,9 +284,9 @@ public class CacheContentProvider {
 
 		Cursor tagsIdCursor = mDatabase.query(
 				SQLiteCacheHelper.TABLE_QUESTIONS_TAGS,
-				new String[] { SQLiteCacheHelper.FIELD_QUESTIONS_TAGS_TAG_FK },
+				new String[] {SQLiteCacheHelper.FIELD_QUESTIONS_TAGS_TAG_FK},
 				SQLiteCacheHelper.FIELD_QUESTIONS_TAGS_QUESTION_FK + " = ?",
-				new String[] { String.valueOf(id) }, null, null,
+				new String[] {String.valueOf(id)}, null, null,
 				SQLiteCacheHelper.FIELD_QUESTIONS_TAGS_QUESTION_FK + " ASC",
 				null);
 
@@ -599,45 +413,6 @@ public class CacheContentProvider {
 		}
 
 		return id;
-	}
-
-	/**
-	 * Wrapper method used to add a question in the outbox.
-	 * 
-	 * @param id
-	 *            id of the question to be added in the outbox.
-	 */
-	private void putQuestionInOutbox(long id) {
-		changeQuestionOutboxStatus(id, true);
-	}
-
-	/**
-	 * Wrapper method used to take a question in the outbox.
-	 * 
-	 * @param id
-	 *            id of the question to be taken out of the outbox.
-	 */
-	private void takeQuestionOutOfOutbox(long id) {
-		changeQuestionOutboxStatus(id, false);
-	}
-
-	/**
-	 * Changes the question with id given in parameter to outbox or cache given
-	 * the boolean in parameter.
-	 * 
-	 * @param id
-	 *            question id.
-	 * @param questionInOutbox
-	 *            do you want the question to be in the outbox (true) or the
-	 *            cache (false)?
-	 */
-	private void changeQuestionOutboxStatus(long id, boolean questionInOutbox) {
-		ContentValues isQueuedValue = new ContentValues(1);
-		isQueuedValue.put(SQLiteCacheHelper.FIELD_QUESTIONS_IS_QUEUED,
-				questionInOutbox ? 1 : 0);
-		mDatabase.update(SQLiteCacheHelper.TABLE_QUESTIONS, isQueuedValue,
-				SQLiteCacheHelper.FIELD_QUESTIONS_PK + "=?",
-				new String[] { String.valueOf(id) });
 	}
 
 	/**

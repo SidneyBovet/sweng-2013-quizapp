@@ -1,7 +1,6 @@
 package epfl.sweng.test.cache;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -10,12 +9,14 @@ import android.database.Cursor;
 import android.test.AndroidTestCase;
 import epfl.sweng.backend.QuizQuery;
 import epfl.sweng.caching.CacheContentProvider;
+import epfl.sweng.caching.OutboxManager;
 import epfl.sweng.caching.SQLiteCacheHelper;
 import epfl.sweng.quizquestions.QuizQuestion;
 
 public class CacheContentProviderTest extends AndroidTestCase {
 
 	private CacheContentProvider mProvider;
+	private OutboxManager mOutbox;
 
 	@Override
 	protected void setUp() {
@@ -23,6 +24,8 @@ public class CacheContentProviderTest extends AndroidTestCase {
 		// We work on a test DB.
 		mProvider = new CacheContentProvider(true);
 		mProvider.eraseDatabase();
+
+		mOutbox = new OutboxManager();
 
 		try {
 			super.setUp();
@@ -34,12 +37,13 @@ public class CacheContentProviderTest extends AndroidTestCase {
 	@Override
 	protected void tearDown() throws Exception {
 		mProvider.close();
+		mOutbox.close();
 		super.tearDown();
 	}
 
 	public void testEraseDatabaseActuallyErasesIt() {
 		mProvider.eraseDatabase();
-		assertEquals(0, mProvider.getOutboxCount());
+		assertEquals(0, mOutbox.size());
 	}
 
 	public void testCanAddQuestion() {
@@ -55,23 +59,20 @@ public class CacheContentProviderTest extends AndroidTestCase {
 	}
 
 	public void testgetOutboxCountIsIncremented() {
-		int expectedCount = mProvider.getOutboxCount() + 1;
-		mProvider.addQuizQuestion(createFakeQuestion("lolilol"), true);
-		assertEquals(expectedCount, mProvider.getOutboxCount());
+		int expectedCount = mOutbox.size() + 1;
+		long id = mProvider.addQuizQuestion(createFakeQuestion("lolilol"));
+		mOutbox.push(id);
+		assertEquals(expectedCount, mOutbox.size());
 	}
 
 	public void testWeDoNotTakeTheQuestionFromTheOutboxWhenPeeking() {
-		assertEquals(0, mProvider.getOutboxCount());
-		mProvider.addQuizQuestion(createFakeQuestion("MyNewQuestion"), true);
-		assertEquals(1, mProvider.getOutboxCount());
-		mProvider.peekFirstQuestionFromOutbox();
-		assertEquals(1, mProvider.getOutboxCount());
-	}
-
-	public void addingQuizQuestionDoesNotInfluenceTheOutbox() {
-		assertEquals(0, mProvider.getOutboxCount());
-		mProvider.addQuizQuestion(createFakeQuestion("MyNewQuestion"), true);
-		assertEquals(0, mProvider.getOutboxCount());
+		assertEquals(0, mOutbox.size());
+		long id = mProvider
+				.addQuizQuestion(createFakeQuestion("MyNewQuestion"));
+		mOutbox.push(id);
+		assertEquals(1, mOutbox.size());
+		mOutbox.peek();
+		assertEquals(1, mOutbox.size());
 	}
 
 	public void testFullQuestion() {
@@ -98,8 +99,9 @@ public class CacheContentProviderTest extends AndroidTestCase {
 
 		QuizQuestion expectedquestion = createFakeFullQuestion("What's the answer?");
 
-		mProvider.addQuizQuestion(expectedquestion, true);
-		QuizQuestion cachedQuestion = mProvider.peekFirstQuestionFromOutbox();
+		long id = mProvider.addQuizQuestion(expectedquestion);
+		mOutbox.push(id);
+		QuizQuestion cachedQuestion = mOutbox.peek();
 
 		assertEquals(expectedquestion.getId(), cachedQuestion.getId());
 		assertEquals(expectedquestion.getOwner(), cachedQuestion.getOwner());
@@ -135,47 +137,46 @@ public class CacheContentProviderTest extends AndroidTestCase {
 		final int nbQuestions = 10;
 
 		for (int i = 1; i <= nbQuestions; i++) {
-			mProvider.addQuizQuestion(createFakeQuestion("questionStatement"
-					+ i), true);
+			long id = mProvider.addQuizQuestion(createFakeQuestion("questionStatement"
+					+ i));
+			mOutbox.push(id);
 		}
 
 		for (int i = 1; i <= nbQuestions; i++) {
-			assertEquals("questionStatement" + i, mProvider
-					.peekFirstQuestionFromOutbox().getStatement());
-
-			mProvider.takeFirstQuestionFromOutbox();
+			assertEquals("questionStatement" + i, mOutbox.peek().getStatement());
+			mOutbox.pop();
 		}
-		
-		assertEquals(0, mProvider.getOutboxCount());
-	}
-	
-	public void testReduceGroupWorks() {
-		// tests "?+?*?" and {[1,2],[3,4],[3,5]}
-		// (should return [1,2,3])
-		String[] tagArray = {"?","+","?","*","?"};
-		List<String> tagList = new ArrayList<String>(Arrays.asList(tagArray));
 
-		Long[] group1 = {Long.valueOf(1),Long.valueOf(2)};
-		List<Long> group1List = new ArrayList<Long>(Arrays.asList(group1));
-		Set<Long> group1Set = new HashSet<Long>(group1List);
-		Long[] group2 = {Long.valueOf(3),Long.valueOf(4)};
-		List<Long> group2List = new ArrayList<Long>(Arrays.asList(group2));
-		Set<Long> group2Set = new HashSet<Long>(group2List);
-		Long[] group3 = {Long.valueOf(3),Long.valueOf(5)};
-		List<Long> group3List = new ArrayList<Long>(Arrays.asList(group3));
-		Set<Long> group3Set = new HashSet<Long>(group3List);
-		List<Set<Long>> questionsSetList = new ArrayList<Set<Long>>();
-		questionsSetList.add(group1Set);
-		questionsSetList.add(group2Set);
-		questionsSetList.add(group3Set);
-		
-		
-		Long[] groupExpected = {Long.valueOf(1),Long.valueOf(2),Long.valueOf(3)};
-		Set<Long> expected = new HashSet<Long>(Arrays.asList(groupExpected));
-		Set<Long> provided = mProvider.reduceGroup(tagList, questionsSetList);
-		assertEquals(expected, provided);
+		assertEquals(0, mOutbox.size());
 	}
-	
+
+//	public void testReduceGroupWorks() {
+//		// tests "?+?*?" and {[1,2],[3,4],[3,5]}
+//		// (should return [1,2,3])
+//		String[] tagArray = { "?", "+", "?", "*", "?" };
+//		List<String> tagList = new ArrayList<String>(Arrays.asList(tagArray));
+//
+//		Long[] group1 = { Long.valueOf(1), Long.valueOf(2) };
+//		List<Long> group1List = new ArrayList<Long>(Arrays.asList(group1));
+//		Set<Long> group1Set = new HashSet<Long>(group1List);
+//		Long[] group2 = { Long.valueOf(3), Long.valueOf(4) };
+//		List<Long> group2List = new ArrayList<Long>(Arrays.asList(group2));
+//		Set<Long> group2Set = new HashSet<Long>(group2List);
+//		Long[] group3 = { Long.valueOf(3), Long.valueOf(5) };
+//		List<Long> group3List = new ArrayList<Long>(Arrays.asList(group3));
+//		Set<Long> group3Set = new HashSet<Long>(group3List);
+//		List<Set<Long>> questionsSetList = new ArrayList<Set<Long>>();
+//		questionsSetList.add(group1Set);
+//		questionsSetList.add(group2Set);
+//		questionsSetList.add(group3Set);
+//
+//		Long[] groupExpected = { Long.valueOf(1), Long.valueOf(2),
+//				Long.valueOf(3) };
+//		Set<Long> expected = new HashSet<Long>(Arrays.asList(groupExpected));
+//		Set<Long> provided = mProvider.reduceGroup(tagList, questionsSetList);
+//		assertEquals(expected, provided);
+//	}
+
 	/*********************** Private methods ***********************/
 
 	private QuizQuestion createFakeQuestion(String questionStatement) {

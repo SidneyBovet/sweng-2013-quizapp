@@ -9,6 +9,7 @@ import android.database.Cursor;
 import android.util.Log;
 import epfl.sweng.backend.QuizQuery;
 import epfl.sweng.caching.CacheContentProvider;
+import epfl.sweng.caching.OutboxManager;
 import epfl.sweng.quizquestions.QuizQuestion;
 
 /**
@@ -20,10 +21,12 @@ import epfl.sweng.quizquestions.QuizQuestion;
 public class OfflineCommunication implements IQuestionCommunication {
 
 	private CacheContentProvider mContentProvider;
+	private OutboxManager mOutbox;
 	private Cursor mCursor;
 	
 	public OfflineCommunication() {
 		mContentProvider = new CacheContentProvider(false);
+		mOutbox = new OutboxManager();
 	}
 	
 	/**
@@ -112,7 +115,8 @@ public class OfflineCommunication implements IQuestionCommunication {
 	
 	private void addOutbox(QuizQuestion quizQuestion) {
 		if (null != quizQuestion && quizQuestion.auditErrors() == 0) {
-			mContentProvider.addQuizQuestion(quizQuestion, true);
+			long id = mContentProvider.addQuizQuestion(quizQuestion);
+			mOutbox.push(id);
 		}
 	}
 

@@ -1,7 +1,7 @@
 package epfl.sweng.test.activities;
 
 import android.widget.EditText;
-import epfl.sweng.caching.CacheContentProvider;
+import epfl.sweng.caching.OutboxManager;
 import epfl.sweng.comm.ConnectivityState;
 import epfl.sweng.editquestions.EditQuestionActivity;
 import epfl.sweng.preferences.UserPreferences;
@@ -47,15 +47,15 @@ public class EditQuestionActivityOfflineTest extends GUITest<EditQuestionActivit
 		
 		SwengHttpClientFactory.setInstance(mUnconnectedClient);
 		
-		CacheContentProvider provider = new CacheContentProvider(false);
-		int expectedOutboxSize = provider.getOutboxCount() + 1;
+		OutboxManager outbox = new OutboxManager();
+		int expectedOutboxSize = outbox.size() + 1;
 		
 		fillFormWithCorrectQuestion();
 		getSolo().clickOnButton("Submit");
 		getActivityAndWaitFor(TTChecks.NEW_QUESTION_SUBMITTED);
 		
-		assertEquals(expectedOutboxSize, provider.getOutboxCount());
-		provider.close();
+		assertEquals(expectedOutboxSize, outbox.size());
+		outbox.close();
 	}
 
 	private void fillFormWithCorrectQuestion() {
