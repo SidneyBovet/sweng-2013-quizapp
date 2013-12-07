@@ -9,6 +9,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.util.Log;
+
 import epfl.sweng.backend.QuizQuery;
 import epfl.sweng.caching.CacheContentProvider;
 import epfl.sweng.caching.OutboxManager;
@@ -105,11 +107,15 @@ public class QuestionProxyTest extends GUITest<MainActivity>{
 				"{\"id\": 17005,\"question\": \"What is the capital of Antigua and Barbuda?\",\"answers\": [\"Chisinau\"],\"solutionIndex\": 2,\"tags\": [\"capitals\"],\"owner\": \"sweng\"}",
 				"application/json");
 		QuizQuestion retrievedQuestion = null;
-		try {
-			retrievedQuestion = new QuizQuestion(proxy.retrieveRandomQuizQuestion().toString());
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
+
+			try {
+				retrievedQuestion = new QuizQuestion(proxy.retrieveRandomQuizQuestion().toString());
+			} catch (JSONException e) {
+				Log.e(QuizQuestion.class.getName(), "constructor of QuizQuestion: "
+						+ "JSON input was incorrect.", e);
+				fail("Exception when hard creating JSONobject");
+			}
+
 		assertTrue("The question was not fetched", retrievedQuestion.getId()==17005);
 	}
 	
@@ -153,7 +159,9 @@ public class QuestionProxyTest extends GUITest<MainActivity>{
 			JSONObject question1 = array.getJSONObject(0);
 			assertEquals("q1", question1.get("question"));
 		} catch (JSONException e) {
-			e.printStackTrace();
+			Log.e(result.getClass().getName(), "getJSONArray: "
+					+ "JSON input was incorrect.", e);
+			fail("Exception when hard creating JSONobject");
 		}
 	}
 	
