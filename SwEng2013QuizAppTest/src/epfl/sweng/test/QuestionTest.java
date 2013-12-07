@@ -12,6 +12,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.util.Log;
+
 import epfl.sweng.backend.Converter;
 import epfl.sweng.quizquestions.QuizQuestion;
 
@@ -73,8 +75,9 @@ public class QuestionTest extends TestCase {
 			}
 			
 		} catch (JSONException e) {
+			Log.e(mQuestion.getClass().getName(), "toJSON(): "
+					+ "QuizQuestion JSON input was incorrect.", e);
 			fail("Exception when hard creating JSONobject");
-			e.printStackTrace();
 		}
 	}
 
