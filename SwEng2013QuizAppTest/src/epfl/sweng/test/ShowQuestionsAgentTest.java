@@ -6,6 +6,8 @@ import org.apache.http.HttpStatus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.util.Log;
+
 import epfl.sweng.backend.QuizQuery;
 import epfl.sweng.comm.IQuestionCommunication;
 import epfl.sweng.quizquestions.QuizQuestion;
@@ -84,7 +86,9 @@ public class ShowQuestionsAgentTest extends TestCase {
 			};
 			
 		} catch (JSONException e) {
-			e.printStackTrace();
+			Log.e(this.getClass().getName(), "Problem when hard " +
+					"creating JSONObject", e);
+			fail("Exception when hard creating JSONobject");
 		}
 
 	}
@@ -149,7 +153,9 @@ public class ShowQuestionsAgentTest extends TestCase {
 				try {
 					jsonResponse = new JSONObject("{\"abcdefg\": \"0123456\"}");
 				} catch (JSONException e) {
-					e.printStackTrace();
+					Log.e(this.getClass().getName(), "Problem when hard " +
+							"creating JSONObject", e);
+					fail("Exception when hard creating JSONobject");
 				}
 				return jsonResponse;
 			}
