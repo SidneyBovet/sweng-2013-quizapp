@@ -1,5 +1,6 @@
 package epfl.sweng.test.activities;
 
+import android.util.Log;
 import android.widget.EditText;
 import epfl.sweng.caching.OutboxManager;
 import epfl.sweng.comm.ConnectivityState;
@@ -33,13 +34,15 @@ public class EditQuestionActivityOfflineTest extends GUITest<EditQuestionActivit
 	
 	@Override
 	protected void tearDown() {
-		try {
-			super.tearDown();
+			try {
+				super.tearDown();
 			UserPreferences.getInstance().
 				setConnectivityState(ConnectivityState.ONLINE);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+			} catch (Exception e) {
+				Log.e(this.getClass().getName(), "Problem when using" +
+						"the super to tear down the test", e);
+				fail("Exception when tearing down the test");
+			}
 	}
 
 	public void testSubmittedQuestionIsInProxyOutbox() {
