@@ -2,6 +2,7 @@ package epfl.sweng.test.audit;
 
 import java.util.concurrent.Semaphore;
 
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import epfl.sweng.R;
@@ -71,7 +72,9 @@ public class AuditTest extends GUITest<EditQuestionActivity> {
 			assertTrue("# Audit errors = " + getActivity().auditErrors()
 					+ " != 0", getActivity().auditErrors() == 0);
 		} catch (InterruptedException e) {
-			e.printStackTrace();
+			Log.e(this.getClass().getName(), "Problem when acquiring" +
+					"the semaphore", e);
+			fail("Exception when Problem when acquiring the semaphore");
 		}
 	}
 
@@ -118,7 +121,9 @@ public class AuditTest extends GUITest<EditQuestionActivity> {
 			assertTrue("# Audit errors = " + getActivity().auditErrors()
 					+ " != 1", getActivity().auditErrors() == 1);
 		} catch (InterruptedException e) {
-			e.printStackTrace();
+			Log.e(this.getClass().getName(), "Problem when acquiring" +
+					"the semaphore", e);
+			fail("Exception when Problem when acquiring the semaphore");
 		}
 	}
 
@@ -146,7 +151,9 @@ public class AuditTest extends GUITest<EditQuestionActivity> {
 			assertTrue("# Audit errors = " + getActivity().auditErrors()
 					+ " != 1", getActivity().auditErrors() == 1);
 		} catch (InterruptedException e) {
-			e.printStackTrace();
+			Log.e(this.getClass().getName(), "Problem when acquiring" +
+					"the semaphore", e);
+			fail("Exception when Problem when acquiring the semaphore");
 		}
 
 		getSolo().enterText((EditText) getSolo().getText("Type in the answer"),
@@ -187,7 +194,9 @@ public class AuditTest extends GUITest<EditQuestionActivity> {
 			assertTrue("# Audit errors = " + getActivity().auditErrors()
 					+ " != 1", getActivity().auditErrors() == 1);
 		} catch (InterruptedException e) {
-			e.printStackTrace();
+			Log.e(this.getClass().getName(), "Problem when acquiring" +
+					"the semaphore", e);
+			fail("Exception when Problem when acquiring the semaphore");
 		}
 
 		getActivity().runOnUiThread(new Runnable() {
@@ -208,7 +217,9 @@ public class AuditTest extends GUITest<EditQuestionActivity> {
 			assertTrue("# Audit errors = " + getActivity().auditErrors()
 					+ " != 2", getActivity().auditErrors() == 2);
 		} catch (InterruptedException e) {
-			e.printStackTrace();
+			Log.e(this.getClass().getName(), "Problem when acquiring" +
+					"the semaphore", e);
+			fail("Exception when Problem when acquiring the semaphore");
 		}
 
 	}
@@ -250,7 +261,9 @@ public class AuditTest extends GUITest<EditQuestionActivity> {
 					+ getActivity().auditErrors() + " != 1", getActivity()
 					.auditErrors() == 1);
 		} catch (InterruptedException e) {
-			e.printStackTrace();
+			Log.e(this.getClass().getName(), "Problem when acquiring" +
+					"the semaphore", e);
+			fail("Exception when Problem when acquiring the semaphore");
 		}
 	}
 
@@ -292,7 +305,9 @@ public class AuditTest extends GUITest<EditQuestionActivity> {
 					+ getActivity().auditErrors() + " != 1", getActivity()
 					.auditErrors() == 1);
 		} catch (InterruptedException e) {
-			e.printStackTrace();
+			Log.e(this.getClass().getName(), "Problem when acquiring" +
+					"the semaphore", e);
+			fail("Exception when Problem when acquiring the semaphore");
 		}
 	}
 
@@ -378,7 +393,9 @@ public class AuditTest extends GUITest<EditQuestionActivity> {
 					+ getActivity().auditErrors() + " != 1", getActivity()
 					.auditErrors() == 1);
 		} catch (InterruptedException e) {
-			e.printStackTrace();
+			Log.e(this.getClass().getName(), "Problem when acquiring" +
+					"the semaphore", e);
+			fail("Exception when Problem when acquiring the semaphore");
 		}
 	}
 
@@ -442,7 +459,9 @@ public class AuditTest extends GUITest<EditQuestionActivity> {
 			assertFalse("AuditButton errors: => " + activity.auditErrors(),
 					activity.auditErrors() == 8);
 		} catch (InterruptedException e) {
-			e.printStackTrace();
+			Log.e(this.getClass().getName(), "Problem when acquiring" +
+					"the semaphore", e);
+			fail("Exception when Problem when acquiring the semaphore");
 		}
 	}
 
@@ -487,7 +506,9 @@ public class AuditTest extends GUITest<EditQuestionActivity> {
 			assertTrue("AuditButton errors: => " + activity.auditErrors(),
 					activity.auditErrors() == 0);
 		} catch (InterruptedException e) {
-			e.printStackTrace();
+			Log.e(this.getClass().getName(), "Problem when acquiring" +
+					"the semaphore", e);
+			fail("Exception when Problem when acquiring the semaphore");
 		}
 
 	}
@@ -536,7 +557,9 @@ public class AuditTest extends GUITest<EditQuestionActivity> {
 			assertTrue("AuditButton is: " + activity.auditErrors()
 					+ "but was expected 1", activity.auditErrors() == 1);
 		} catch (InterruptedException e) {
-			e.printStackTrace();
+			Log.e(this.getClass().getName(), "Problem when acquiring" +
+					"the semaphore", e);
+			fail("Exception when Problem when acquiring the semaphore");
 		}
 
 	}
@@ -579,7 +602,9 @@ public class AuditTest extends GUITest<EditQuestionActivity> {
 			assertTrue("AuditButton is: " + activity.auditErrors()
 					+ "but was expected 1", activity.auditErrors() == 1);
 		} catch (InterruptedException e) {
-			e.printStackTrace();
+			Log.e(this.getClass().getName(), "Problem when acquiring" +
+					"the semaphore", e);
+			fail("Exception when Problem when acquiring the semaphore");
 		}
 	}
 
