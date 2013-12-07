@@ -176,7 +176,7 @@ abstract public class AuthenticationProcess {
 					+ "\'token\'. : " + e.getMessage());
 		}
 	
-		JSONObject jsonResponse = new JSONObject();
+		JSONObject jsonResponse;
 	
 		try {
 			HttpPost postRequest = new HttpPost(HttpFactory.getSwengLogin());
