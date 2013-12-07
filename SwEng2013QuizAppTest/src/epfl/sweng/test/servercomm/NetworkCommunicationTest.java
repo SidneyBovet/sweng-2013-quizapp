@@ -10,6 +10,8 @@ import org.apache.http.HttpStatus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.util.Log;
+
 import epfl.sweng.backend.QuizQuery;
 import epfl.sweng.comm.OnlineCommunication;
 import epfl.sweng.quizquestions.QuizQuestion;
@@ -103,7 +105,9 @@ public class NetworkCommunicationTest extends TestCase {
 			assertEquals("Didn't retrieve the right question.",
 					question.getOwner(), "sweng");
 		} catch (JSONException e) {
-			e.printStackTrace();
+			Log.e(QuizQuestion.class.getName(), "constructor of QuizQuestion: "
+					+ "JSON input was incorrect.", e);
+			fail("Exception when hard creating JSONobject");
 		}
 	}
 	
