@@ -107,7 +107,7 @@ public class QuestionTest extends TestCase {
 	
 	public void testSecondConstructor() {
 		assertEquals(-1, mQuestion2.getId());
-		assertEquals(null, mQuestion2.getOwner());
+		assertEquals("default", mQuestion2.getOwner());
 	}
 	
 	public void testListTranslation() {

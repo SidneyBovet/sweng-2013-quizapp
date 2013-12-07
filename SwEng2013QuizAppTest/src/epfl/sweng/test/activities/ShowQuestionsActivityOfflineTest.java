@@ -7,6 +7,7 @@ import java.util.Set;
 
 import org.apache.http.HttpStatus;
 
+import epfl.sweng.caching.CacheContentProvider;
 import epfl.sweng.comm.ConnectivityState;
 import epfl.sweng.comm.QuestionProxy;
 import epfl.sweng.preferences.UserPreferences;
@@ -37,6 +38,7 @@ public class ShowQuestionsActivityOfflineTest extends
 	protected void tearDown() throws Exception {
 		super.tearDown();
 		SwengHttpClientFactory.setInstance(null);
+		UserPreferences.getInstance().setConnectivityState(ConnectivityState.ONLINE);
 		QuestionProxy.resetQuestionProxy();
 	}
 
@@ -45,6 +47,8 @@ public class ShowQuestionsActivityOfflineTest extends
 		super.setUp();
 
 		/* Reseting both client for security */
+		CacheContentProvider contentProvider = new CacheContentProvider(false);
+		contentProvider.eraseDatabase();
 		mUnconnectedClient = new UnconnectedHttpClient();
 		mMockClient = new MockHttpClient();
 
@@ -68,13 +72,12 @@ public class ShowQuestionsActivityOfflineTest extends
 		SwengHttpClientFactory.setInstance(mUnconnectedClient);
 
 		getActivityAndWaitFor(TTChecks.QUESTION_SHOWN);
-		getSolo().sleep(1000);
 		assertTrue(
 				"Question must be displayed",
 				getSolo().searchText(
 						"How\\ reliable\\ Robotium\\ testing\\ is\\?"));
 		assertTrue("Incorrect answer must be displayed",
-				getSolo().searchText("100%\\ accurate"));
+				getSolo().searchText("100\\ percent\\ accurate"));
 		assertTrue("Correct answer must be displayed", getSolo().searchText(
 				"Fully\\ voodoo\\ and\\ could\\ generate\\ non\\-"
 						+ "pseudorandom\\ numbers"));

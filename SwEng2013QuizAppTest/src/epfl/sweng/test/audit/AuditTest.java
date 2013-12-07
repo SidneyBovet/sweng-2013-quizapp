@@ -437,9 +437,8 @@ public class AuditTest extends GUITest<EditQuestionActivity> {
 
 		try {
 			semaphore.acquire();
-			getSolo().sleep(1000);
 			getSolo().clickOnButton("**"); // resets the adapter
-			getSolo().sleep(1000);
+			getSolo().sleep(500);
 			assertFalse("AuditButton errors: => " + activity.auditErrors(),
 					activity.auditErrors() == 8);
 		} catch (InterruptedException e) {
@@ -483,7 +482,7 @@ public class AuditTest extends GUITest<EditQuestionActivity> {
 
 		try {
 			semaphore.acquire();
-			getSolo().sleep(3000);
+			getSolo().sleep(500);
 
 			assertTrue("AuditButton errors: => " + activity.auditErrors(),
 					activity.auditErrors() == 0);
@@ -527,7 +526,6 @@ public class AuditTest extends GUITest<EditQuestionActivity> {
 			public void run() {
 				// HERE WE FORCE THE SUBMIT BUTTON TO BE ENABLED
 				getSolo().getButton("Submit").setEnabled(true);
-				// getSolo().sleep(1000);
 				semaphore.release();
 			}
 		});
@@ -563,7 +561,6 @@ public class AuditTest extends GUITest<EditQuestionActivity> {
 		getSolo().enterText((EditText) getSolo().getText("Type in the answer"),
 				"an3");
 
-		getSolo().sleep(3000);
 		final EditQuestionActivity activity = (EditQuestionActivity) getActivity();
 
 		getActivity().runOnUiThread(new Runnable() {
@@ -572,7 +569,6 @@ public class AuditTest extends GUITest<EditQuestionActivity> {
 			public void run() {
 				// HERE WE FORCE THE SUBMIT BUTTON TO BE ENABLED
 				getSolo().getButton("Submit").setEnabled(true);
-				getSolo().sleep(2000);
 				semaphore.release();
 			}
 		});
