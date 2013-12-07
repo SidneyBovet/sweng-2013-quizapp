@@ -107,8 +107,9 @@ public class MainActivity extends Activity {
 			mUserPreferences.destroyAuthentication();
 			Button logButton = (Button) findViewById(R.id.autenticationLogButton);
 			logButton
-					.setText(mUserPreferences.isAuthenticated() ? R.string.autenticationLoginButtonStateLogOut
-							: R.string.autenticationLoginButtonStateLogIn);
+					.setText(mUserPreferences.isAuthenticated()
+							? R.string.authentication_login_button_state_log_out
+							: R.string.authentication_login_button_state_log_in);
 			setDisplayView();
 			TestCoordinator.check(TTChecks.LOGGED_OUT);
 		}
@@ -173,8 +174,9 @@ public class MainActivity extends Activity {
 		super.onResume();
 		Button logButton = (Button) findViewById(R.id.autenticationLogButton);
 		logButton
-				.setText(mUserPreferences.isAuthenticated() ? R.string.autenticationLoginButtonStateLogOut
-						: R.string.autenticationLoginButtonStateLogIn);
+				.setText(mUserPreferences.isAuthenticated()
+						? R.string.authentication_login_button_state_log_out
+						: R.string.authentication_login_button_state_log_in);
 		setDisplayView();
 	}
 

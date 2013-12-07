@@ -8,25 +8,26 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:orientation="vertical"
     tools:context=".AuthenticationActivity" >
-
+    
    <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/login_user"
         android:hint="@string/login_user" />
-
+    
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/login_password"
         android:hint="@string/login_password"
         android:inputType="textPassword" />
-
+    
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/login_button"
         android:onClick="buttonAuthenticate"
-        android:text="@string/login_button" />
-
+        android:text="@string/login_button"
+        android:enabled="false" />
+    
 </LinearLayout>

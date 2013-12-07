@@ -1,20 +1,24 @@
 <resources>
 
     <string name="app_name">SwEng2013QuizApp</string>
+    
+    <!-- Main Activity -->
     <string name="title_activity_main">MainActivity</string>
     <string name="action_settings">Settings</string>
     <string name="action_erase_db">Erase database</string>
-    <string name="displayRandomQuestionButton">Show a random question.</string>
-    <string name="submitQuestionButton">Submit a quiz question.</string>
-    <string name="title_activity_submit_question">SubmitQuestionActivity</string>
+    <string name="display_activity_button">Show a random question.</string>
+    <string name="submit_activity_button">Submit a quiz question.</string>
+    <string name="search_activity_button">Search</string>
+    <string name="authentication_login_button_state_log_in">Log in using Tequila</string>
+    <string name="authentication_login_button_state_log_out">Log out</string>
+    <string name="switch_online_mode_checkbox">Offline mode</string>
+    
+    <!-- Show Questions Activity -->
     <string name="title_activity_display_question">DisplayQuestionActivity</string>
-    <string name="nextRandomQuestion">Next question</string>
-    <string name="write_question1">Type in the question\'s text body.</string>
-    <string name="answer_question1">Type in the answer.</string>
-    <string name="answer_question2">Type in the answer</string>
-    <string name="tags_question">Type in the question\'s tags.</string>
-    <string name="submit_Edited_Question_Button">Submit.</string>
-    <string name="title_activity_submit_quizz">SubmitQuizzActivity</string>
+    <string name="show_next_random_question">Next question</string>
+    
+    <!-- Submit Question Activity -->
+    <string name="title_activity_submit_question">SubmitQuestionActivity</string>
     <string name="submit_question_text_body">Type in the question\'s text body</string>
     <string name="submit_question_tags">Type in the question\'s tags</string>
     <string name="submit_question_button">Submit</string>
@@ -22,25 +26,28 @@
     <string name="submit_question_add_button">+</string>
     <string name="submit_question_remove_answer">-</string>
     <string name="submit_question_answer_hint">Type in the answer</string>
-    <string name="question_wrong_answer">✘</string>
-    <string name="question_correct_answer">✔</string>
-    <string name="add_answers_text">Answers</string>
+    
+    <!-- Authentication Activity -->
     <string name="title_activity_authentication">AuthenticationActivity</string>
-    <string name="hello_world">Hello world!</string>
     <string name="login_user">GASPAR Username</string>
     <string name="login_password">GASPAR Password</string>
     <string name="login_button">Log in using Tequila</string>
-    <string name="autenticationLoginButtonStateLogIn">Log in using Tequila</string>
-    <string name="autenticationLoginButtonStateLogOut">Log out</string>
+    
+    <!-- Search Activity -->
+    <string name="title_activity_search">SearchActivity</string>
+    <string name="search_question_query">Type in the search query</string>
+    <string name="search_query_button">Search</string>
+    
+    <!-- Error messages -->
     <string name="error_fetching_question">There was an error retrieving the question</string>
     <string name="error_cache_empty">The local questions cache is empty.</string>
     <string name="error_uploading_question">Could not upload the question to the server</string>
     <string name="error_logging_in">Error in the authentication process</string>
-    <string name="switchOnlineModeCheckbox">Offline mode</string>
-    <string name="search_question_query">Type in the search query</string>
-    <string name="submit_query_button">Search</string>
-    <string name="title_activity_search">SearchActivity</string>
-    <string name="SearchQueryButton">Search</string>
     <string name="error_fetching_query_question">Server could not found any questions form this query</string>
+    
+    <!--  Miscellaneous -->
+    <string name="hello_world">Hello world!</string>
+    <string name="question_wrong_answer">✘</string>
+    <string name="question_correct_answer">✔</string>
 
 </resources>
