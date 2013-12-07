@@ -67,7 +67,7 @@ public class SearchActivity extends Activity {
 	
 	private void setDisplayView() {
 	
-		mSubmitQuery = (Button) findViewById(R.id.submit_query_button);
+		mSubmitQuery = (Button) findViewById(R.id.search_query_button);
 		mQueryField = (EditText) findViewById(R.id.search_question_query);
 		mSubmitQuery.setEnabled(false);
 		mQueryFieldText = "";

@@ -8,15 +8,15 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/autenticationLogButton"
-        android:text="@string/authentication_login_button_state_log_in"
+        android:id="@+id/autentication_log_button"
+        android:text="@string/auth_login_button_state_log_in"
         android:onClick="displayAuthenticationActivity" />
     
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="displayRandomQuestion"
-        android:id="@+id/displayRandomQuestionButton"
+        android:id="@+id/display_activity_button"
         android:text="@string/display_activity_button"
         android:enabled="false" />
     
@@ -24,24 +24,24 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="submitQuestion"
-        android:id="@+id/submitQuestionButton"
+        android:id="@+id/submit_activity_button"
         android:text="@string/submit_activity_button"
         android:enabled="false" />
     
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/SearchQueryButton"
+        android:id="@+id/search_activity_button"
         android:text="@string/search_activity_button"
         android:onClick="searchActivity"
         android:enabled="false" />
     
     <CheckBox
-        android:id="@+id/switchOnlineModeCheckbox"
+        android:id="@+id/switch_offline_mode_checkbox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="onCheckboxSwitchModeClicked"
-        android:text="@string/switch_online_mode_checkbox"
+        android:text="@string/switch_offline_mode_checkbox"
         android:visibility="invisible" />
     
 </LinearLayout>

@@ -12,22 +12,22 @@
    <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/login_user"
-        android:hint="@string/login_user" />
+        android:id="@+id/auth_login_user"
+        android:hint="@string/auth_login_user" />
     
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/login_password"
-        android:hint="@string/login_password"
+        android:id="@+id/auth_login_password"
+        android:hint="@string/auth_login_password"
         android:inputType="textPassword" />
     
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/login_button"
+        android:id="@+id/auth_login_button"
         android:onClick="buttonAuthenticate"
-        android:text="@string/login_button"
+        android:text="@string/auth_login_button"
         android:enabled="false" />
     
 </LinearLayout>

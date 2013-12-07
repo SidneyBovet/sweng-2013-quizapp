@@ -82,7 +82,7 @@ public class MainActivityNotAuthenticatedTest extends GUITest<MainActivity> {
 	public void testCheckBoxInvisible() {
  		assertTrue("Check Box should be present", 
 				getSolo().searchText("Offline mode"));
-		CheckBox connexionState = (CheckBox) getSolo().getView(R.id.switchOnlineModeCheckbox);
+		CheckBox connexionState = (CheckBox) getSolo().getView(R.id.switch_offline_mode_checkbox);
 		if (null == connexionState) {
 			fail("R.id.switchOnlineModeCheckbox cannot be fetched by Robotium!");
 		}

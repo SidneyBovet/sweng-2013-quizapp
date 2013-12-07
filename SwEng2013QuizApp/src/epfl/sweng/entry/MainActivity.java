@@ -105,11 +105,11 @@ public class MainActivity extends Activity {
 		} else {
 			// Case Log out
 			mUserPreferences.destroyAuthentication();
-			Button logButton = (Button) findViewById(R.id.autenticationLogButton);
+			Button logButton = (Button) findViewById(R.id.autentication_log_button);
 			logButton
 					.setText(mUserPreferences.isAuthenticated()
-							? R.string.authentication_login_button_state_log_out
-							: R.string.authentication_login_button_state_log_in);
+							? R.string.auth_login_button_state_log_out
+							: R.string.auth_login_button_state_log_in);
 			setDisplayView();
 			TestCoordinator.check(TTChecks.LOGGED_OUT);
 		}
@@ -172,11 +172,11 @@ public class MainActivity extends Activity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		Button logButton = (Button) findViewById(R.id.autenticationLogButton);
+		Button logButton = (Button) findViewById(R.id.autentication_log_button);
 		logButton
 				.setText(mUserPreferences.isAuthenticated()
-						? R.string.authentication_login_button_state_log_out
-						: R.string.authentication_login_button_state_log_in);
+						? R.string.auth_login_button_state_log_out
+						: R.string.auth_login_button_state_log_in);
 		setDisplayView();
 	}
 
@@ -191,15 +191,15 @@ public class MainActivity extends Activity {
 	 * the checkbox according to the authentication state.
 	 */
 	private void setDisplayView() {
-		((Button) findViewById(R.id.displayRandomQuestionButton))
+		((Button) findViewById(R.id.display_activity_button))
 				.setEnabled(mUserPreferences.isAuthenticated());
-		((Button) findViewById(R.id.submitQuestionButton))
+		((Button) findViewById(R.id.submit_activity_button))
 				.setEnabled(mUserPreferences.isAuthenticated());
-		((Button) findViewById(R.id.SearchQueryButton))
+		((Button) findViewById(R.id.search_activity_button))
 		.setEnabled(mUserPreferences.isAuthenticated());
 		int visibility = mUserPreferences.isAuthenticated() ? View.VISIBLE
 				: View.INVISIBLE;
-		CheckBox isOffline = (CheckBox) findViewById(R.id.switchOnlineModeCheckbox);
+		CheckBox isOffline = (CheckBox) findViewById(R.id.switch_offline_mode_checkbox);
 		isOffline.setVisibility(visibility);
 		isOffline.setChecked(!mUserPreferences.isConnected());
 	}
@@ -207,7 +207,7 @@ public class MainActivity extends Activity {
 	private int auditCheckbox() {
 		int numErrors = 0;
 		CheckBox onfflineCheckbox = (CheckBox) this
-				.findViewById(R.id.switchOnlineModeCheckbox);
+				.findViewById(R.id.switch_offline_mode_checkbox);
 		if ((!onfflineCheckbox.isChecked() && !mUserPreferences.isConnected())
 				|| (onfflineCheckbox.isChecked() && !!mUserPreferences
 						.isConnected())) {
@@ -239,7 +239,7 @@ public class MainActivity extends Activity {
 		protected void onPostExecute(Integer result) {
 			super.onPostExecute(result);
 			
-			CheckBox isOffline = (CheckBox) findViewById(R.id.switchOnlineModeCheckbox);
+			CheckBox isOffline = (CheckBox) findViewById(R.id.switch_offline_mode_checkbox);
 			isOffline.setChecked(!mUserPreferences.isConnected());
 			switch (result) {
 				
@@ -262,7 +262,6 @@ public class MainActivity extends Activity {
 					} else {
 						TestCoordinator.check(TTChecks.OFFLINE_CHECKBOX_ENABLED);
 					}
-
 			}
 		}
 	}

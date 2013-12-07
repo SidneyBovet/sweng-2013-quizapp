@@ -2,7 +2,7 @@ package epfl.sweng.app;
 
 import android.app.Application;
 import android.content.Context;
-import android.test.mock.MockContext;
+import android.util.Log;
 
 /**
  * Subclass of our application.
@@ -30,7 +30,9 @@ public class SwEng2013QuizApp extends Application {
 	
 	public static Context getContext() {
 		if (mApplicationContext == null) {
-			return new MockContext();
+			Log.w(SwEng2013QuizApp.class.getName(), "getContext(): Called before "
+					+ "the onCreate() method. Returned null.");
+			return null;
 		} else {
 			return mApplicationContext;
 		}

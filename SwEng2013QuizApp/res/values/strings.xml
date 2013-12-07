@@ -9,9 +9,9 @@
     <string name="display_activity_button">Show a random question.</string>
     <string name="submit_activity_button">Submit a quiz question.</string>
     <string name="search_activity_button">Search</string>
-    <string name="authentication_login_button_state_log_in">Log in using Tequila</string>
-    <string name="authentication_login_button_state_log_out">Log out</string>
-    <string name="switch_online_mode_checkbox">Offline mode</string>
+    <string name="auth_login_button_state_log_in">Log in using Tequila</string>
+    <string name="auth_login_button_state_log_out">Log out</string>
+    <string name="switch_offline_mode_checkbox">Offline mode</string>
     
     <!-- Show Questions Activity -->
     <string name="title_activity_display_question">DisplayQuestionActivity</string>
@@ -29,9 +29,9 @@
     
     <!-- Authentication Activity -->
     <string name="title_activity_authentication">AuthenticationActivity</string>
-    <string name="login_user">GASPAR Username</string>
-    <string name="login_password">GASPAR Password</string>
-    <string name="login_button">Log in using Tequila</string>
+    <string name="auth_login_user">GASPAR Username</string>
+    <string name="auth_login_password">GASPAR Password</string>
+    <string name="auth_login_button">Log in using Tequila</string>
     
     <!-- Search Activity -->
     <string name="title_activity_search">SearchActivity</string>

@@ -51,7 +51,8 @@ public class ShowQuestionsActivity extends Activity {
 	}
 
 	/**
-	 * Goes back to the state when the current activity was started.
+	 * Fetches a new question from the {@link ShowQuestionsAgent}, and displays
+	 * it.
 	 * <p>
 	 * Used when the next button is clicked.
 	 * 
@@ -59,7 +60,7 @@ public class ShowQuestionsActivity extends Activity {
 	 *            Element that was clicked, which is the send button.
 	 */
 
-	public void displayAgainRandomQuestion(View view) {
+	public void displayNextQuestion(View view) {
 		mQuestion = fetchQuestion();
 		setDisplayView();
 	}
@@ -79,28 +80,36 @@ public class ShowQuestionsActivity extends Activity {
 
 	private void setDisplayView() {
 		// setting button look
-		Button buttonNext = (Button) findViewById(R.id.buttonNext);
+		Button buttonNext = (Button) findViewById(R.id.show_questions_button_next);
 		buttonNext.setEnabled(false);
 
 		if (mQuestion != null) {
 			// setting statement
-			TextView textViewQuestion = (TextView) findViewById(R.id.displayQuestion);
+			TextView textViewQuestion = (TextView) findViewById(R.id.show_questions_display_question);
 			textViewQuestion.setText("Question: " + mQuestion.getStatement());
 
 			// setting tags
-			TextView textViewTag = (TextView) findViewById(R.id.displayTags);
+			TextView textViewTag = (TextView) findViewById(R.id.show_questions_display_tags);
 			textViewTag.setText(mQuestion.getTagsToString());
 
 			// setting answer list
 			ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
 					android.R.layout.simple_list_item_1, mQuestion.getAnswers());
-			ListView displayAnswers = (ListView) findViewById(R.id.displayAnswers);
+			ListView displayAnswers = (ListView) findViewById(R.id.show_questions_display_answers);
 			displayAnswers.setAdapter(adapter);
 
 			// put answer list under listening
 			AnswerSelectionListener listener = new AnswerSelectionListener(
 					buttonNext, mQuestion);
 			displayAnswers.setOnItemClickListener(listener);
+		} else {
+			// clear answer list
+			ListView displayAnswers = (ListView) findViewById(R.id.show_questions_display_answers);
+			displayAnswers.setAdapter(null);
+			
+			// clear tags
+			TextView textViewTag = (TextView) findViewById(R.id.show_questions_display_tags);
+			textViewTag.setText(null);
 		}
 	}
 
@@ -134,7 +143,7 @@ public class ShowQuestionsActivity extends Activity {
 			if (null == question) {
 				// if server has send nothing from the given query we go back to
 				// SearchQueryActivity
-				TextView textViewQuestion = (TextView) findViewById(R.id.displayQuestion);
+				TextView textViewQuestion = (TextView) findViewById(R.id.show_questions_display_question);
 				textViewQuestion.setText(R.string.error_fetching_question);
 				String toastErrorMessage = "";
 				if (UserPreferences.getInstance().isConnected()) {

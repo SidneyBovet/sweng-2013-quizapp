@@ -47,10 +47,10 @@ public class AuthenticationActivity extends Activity {
 	 */
 
 	private void setDisplayView() {
-		mLoginbutton = (Button) findViewById(R.id.login_button);
+		mLoginbutton = (Button) findViewById(R.id.auth_login_button);
 		mLoginbutton.setEnabled(false);
-		mUserNameEditText = (EditText) findViewById(R.id.login_user);
-		mPasswordEditText = (EditText) findViewById(R.id.login_password);
+		mUserNameEditText = (EditText) findViewById(R.id.auth_login_user);
+		mPasswordEditText = (EditText) findViewById(R.id.auth_login_password);
 		mPasswordEditText.setInputType(InputType.TYPE_CLASS_TEXT
 				| InputType.TYPE_TEXT_VARIATION_PASSWORD);
 
@@ -129,9 +129,9 @@ public class AuthenticationActivity extends Activity {
 	 * Used when the login button is clicked.
 	 */
 	public void buttonAuthenticate(View view) {
-		String username = ((TextView) findViewById(R.id.login_user)).getText()
+		String username = ((TextView) findViewById(R.id.auth_login_user)).getText()
 				.toString();
-		String password = ((TextView) findViewById(R.id.login_password))
+		String password = ((TextView) findViewById(R.id.auth_login_password))
 				.getText().toString();
 
 		if (UserPreferences.getInstance().isAuthenticated()) {

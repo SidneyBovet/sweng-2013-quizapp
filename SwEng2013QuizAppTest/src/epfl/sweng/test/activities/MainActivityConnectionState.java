@@ -40,7 +40,7 @@ public class MainActivityConnectionState extends GUITest<MainActivity> {
 	
 	public void testCheckBoxCheckDisconnected() {
 		CheckBox connectivityState = (CheckBox) getSolo().getView(
-				R.id.switchOnlineModeCheckbox);;
+				R.id.switch_offline_mode_checkbox);;
 		getSolo().clickOnView(connectivityState);
 		getActivityAndWaitFor(TTChecks.OFFLINE_CHECKBOX_ENABLED);
 		assertFalse(persistentStorage.isConnected());
@@ -48,7 +48,7 @@ public class MainActivityConnectionState extends GUITest<MainActivity> {
 	
 	public void testCheckBoxCheckConnected() {
 		CheckBox connectivityState = (CheckBox) getSolo().getView(
-				R.id.switchOnlineModeCheckbox);
+				R.id.switch_offline_mode_checkbox);
 		
 		getSolo().clickOnView(connectivityState);
 		getActivityAndWaitFor(TTChecks.OFFLINE_CHECKBOX_ENABLED);
@@ -62,7 +62,7 @@ public class MainActivityConnectionState extends GUITest<MainActivity> {
 	public void testHTTPNotFoundStatusRightAfterAuthenticationWhenClickinOnShowRandomQuestion() {
 
 		CheckBox connectivityState = (CheckBox) getSolo().getView(
-				R.id.switchOnlineModeCheckbox);
+				R.id.switch_offline_mode_checkbox);
 		assertTrue("The checkbox should stay disabled", !connectivityState.isChecked());
 		
 		UserPreferences.getInstance().setSessionId("hahaFake");
