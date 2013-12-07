@@ -35,6 +35,7 @@ public class QuizQuestion {
 	public final static int TAGSET_MAX_SIZE = 20;
 	public final static int TAGSLIST_MAX_SIZE = 20;
 	public static final int FIELDS_COUNT = 6;
+	private static final int LIST_ELEM_MIN_ELEMENTS = 4;
 
 	/**
 	 * Constructor
@@ -126,25 +127,29 @@ public class QuizQuestion {
 	 */
 
 	public static QuizQuestion createQuestionFromList(List<String> listElm) {
-		String questionText = listElm.remove(0);
-		String tagsInOneLine = listElm.remove(listElm.size() - 1);
-		int solutionIndex = Integer
-				.parseInt(listElm.remove(listElm.size() - 1));
-
-		Pattern pattern = Pattern.compile("(\\w+)", Pattern.CASE_INSENSITIVE);
-		Matcher matcher = pattern.matcher(tagsInOneLine);
-
-		Set<String> tagSet = new TreeSet<String>();
-		while (matcher.find()) {
-			tagSet.add(matcher.group(1));
+		if (listElm != null && listElm.size() >= LIST_ELEM_MIN_ELEMENTS) {
+			String questionText = listElm.remove(0);
+			String tagsInOneLine = listElm.remove(listElm.size() - 1);
+			int solutionIndex = Integer
+					.parseInt(listElm.remove(listElm.size() - 1));
+			
+			Pattern pattern = Pattern.compile("(\\w+)", Pattern.CASE_INSENSITIVE);
+			Matcher matcher = pattern.matcher(tagsInOneLine);
+			
+			Set<String> tagSet = new TreeSet<String>();
+			while (matcher.find()) {
+				tagSet.add(matcher.group(1));
+			}
+			
+			List<String> answerList = new ArrayList<String>();
+			for (String answer : listElm) {
+				answerList.add(answer);
+			}
+			
+			return new QuizQuestion(questionText, answerList, solutionIndex, tagSet);
+		} else {
+			return null;
 		}
-
-		List<String> answerList = new ArrayList<String>();
-		for (String answer : listElm) {
-			answerList.add(answer);
-		}
-
-		return new QuizQuestion(questionText, answerList, solutionIndex, tagSet);
 	}
 
 	/**
@@ -164,7 +169,9 @@ public class QuizQuestion {
 			jsonObject.put("tags", jsonArrayTags);
 			jsonObject.put("owner", mOwner);
 		} catch (JSONException e) {
-			e.printStackTrace();
+			Log.e(this.getClass().getName(), "toJSON(): Couldn't parse "
+					+ "attributes to JSONObjects.", e);
+			return null;
 		}
 
 		return jsonObject;
@@ -211,41 +218,51 @@ public class QuizQuestion {
 	 */
 	public int auditErrors() {
 		int errorCount = 0;
-		if (mQuestionStatement.trim().length() == 0
+		if (mQuestionStatement == null || mQuestionStatement.trim().length() == 0
 				|| !(0 < mQuestionStatement.length() && mQuestionStatement
 						.length() <= QUESTION_CONTENT_MAX_SIZE)) {
-			logErrorIncrement("Statement is empty or has invalid lenght");
+			logErrorIncrement("Statement is null, empty or has invalid lenght");
 			++errorCount;
 		}
-
-		for (String answer : mAnswers) {
-			if (answer.trim().length() == 0
-					|| !(0 < answer.length() && answer.length() <= ANSWER_CONTENT_MAX_SIZE)) {
-				logErrorIncrement("One answer is empty or has invalid lenght");
+		
+		if (mAnswers == null) {
+			logErrorIncrement("Answers list is empty");
+			++errorCount;
+		} else {
+			for (String answer : mAnswers) {
+				if (answer == null || answer.trim().length() == 0
+						|| !(0 < answer.length() && answer.length() <= ANSWER_CONTENT_MAX_SIZE)) {
+					logErrorIncrement("One answer is empty or has invalid lenght");
+					++errorCount;
+				}
+			}
+			
+			if (!(mAnswers.size() > 1 && mAnswers.size() <= ANSWERLIST_MAX_SIZE)) {
+				logErrorIncrement("Number of answers is invalid");
 				++errorCount;
 			}
 		}
-
-		if (!(mAnswers.size() > 1 && mAnswers.size() <= ANSWERLIST_MAX_SIZE)) {
-			logErrorIncrement("Number of answers is invalid");
-			++errorCount;
-		}
-
+		
 		if (!(mSolutionIndex >= 0 && mSolutionIndex < mAnswers.size())) {
 			logErrorIncrement("Index of the solution is invalid");
 			++errorCount;
 		}
-
-		if (!(mTags.size() > 0 && mTags.size() <= TAGSET_MAX_SIZE)) {
-			logErrorIncrement("Number of tags is invalid");
+		
+		if (mTags == null) {
+			logErrorIncrement("Tag set is null.");
 			++errorCount;
-		}
-
-		for (String tag : mTags) {
-			if (tag.trim().length() == 0
-					|| !(0 < tag.length() && tag.length() <= TAGSLIST_MAX_SIZE)) {
-				logErrorIncrement("one of the tags is empty or has invalit lenght");
+		} else {
+			if (!(mTags.size() > 0 && mTags.size() <= TAGSET_MAX_SIZE)) {
+				logErrorIncrement("Number of tags is invalid.");
 				++errorCount;
+			}
+			
+			for (String tag : mTags) {
+				if (tag == null || tag.trim().length() == 0
+						|| !(0 < tag.length() && tag.length() <= TAGSLIST_MAX_SIZE)) {
+					logErrorIncrement("one of the tags is empty or has invalit lenght");
+					++errorCount;
+				}
 			}
 		}
 
