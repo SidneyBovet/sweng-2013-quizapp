@@ -1,5 +1,6 @@
 package epfl.sweng.showquestions;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -60,9 +61,8 @@ public class AnswerSelectionListener implements OnItemClickListener {
 			try {
 				clickedAnswer = (TextView) parent.getChildAt(position);
 			} catch (RuntimeException e) {
-				System.err.println("Exception while casting parent."
-						+ "Not containing TextViews?\n"
-						+ e.getStackTrace());
+				Log.e(this.getClass().getName(), "onItemClick(): Exception while " 
+						+ "casting parent. Not containing TextViews?", e);
 				clickedAnswer = null;
 			}
 			if (clickedAnswer != null) {
