@@ -174,7 +174,7 @@ public class AuthenticationActivity extends Activity {
 
 		@Override
 		protected String doInBackground(String... userInfos) {
-			if (null != userInfos && userInfos.length != 2) {
+			if (null == userInfos || userInfos.length != 2) {
 				throw new IllegalArgumentException();
 			}
 
