@@ -1,5 +1,6 @@
 package epfl.sweng.test.activities;
 
+import android.util.Log;
 import android.widget.Button;
 import android.widget.CheckBox;
 import epfl.sweng.R;
@@ -37,9 +38,12 @@ public class MainActivityNotAuthenticatedTest extends GUITest<MainActivity> {
 			UserPreferences.getInstance()
 					.setConnectivityState(ConnectivityState.OFFLINE);
 			persistentStorage.destroyAuthentication();
-		} catch (Exception e1) {
-			e1.printStackTrace();
+		} catch (Exception e) {
+			Log.e(this.getClass().getName(), "Problem when hard using" +
+					"the super to tear down the test", e);
+			fail("Exception when tearing down the test");
 		}
+
 	}
 	
 	public void testShowAllButtons() {
