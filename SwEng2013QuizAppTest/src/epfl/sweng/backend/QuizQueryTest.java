@@ -6,6 +6,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.os.Parcel;
+import android.util.Log;
 
 public class QuizQueryTest extends TestCase {
 	private QuizQuery mQuizQuery;
@@ -39,7 +40,9 @@ public class QuizQueryTest extends TestCase {
 			booleanFromJsonFromMethod = jsonFromMethod.has("from");
 
 		} catch (JSONException e) {
-			e.printStackTrace();
+			Log.e(mQuizQuery.getClass().getName(), "toJSON(): "
+					+ "QuizQuery JSON input was incorrect.", e);
+			fail("Exception when hard creating JSONobject");
 		}
 		assertTrue("json objects must have same \"query\"",
 				strJsonFromMethod.equals(strJsonQuery));
@@ -67,7 +70,9 @@ public class QuizQueryTest extends TestCase {
 			fromJsonFromMethod = jsonFromMethod.getString("from");
 
 		} catch (JSONException e) {
-			e.printStackTrace();
+			Log.e(mQuizQuery.getClass().getName(), "toJSON(): "
+					+ "QuizQuery JSON input was incorrect.", e);
+			fail("Exception when hard creating JSONobject");
 		}
 		assertTrue("json objects must have same \"query\"",
 				strJsonFromMethod.equals(strJsonQuery));
