@@ -7,6 +7,7 @@ import java.util.Set;
 
 import android.database.Cursor;
 import android.test.AndroidTestCase;
+import android.util.Log;
 import epfl.sweng.backend.QuizQuery;
 import epfl.sweng.caching.CacheContentProvider;
 import epfl.sweng.caching.OutboxManager;
@@ -30,7 +31,9 @@ public class CacheContentProviderTest extends AndroidTestCase {
 		try {
 			super.setUp();
 		} catch (Exception e) {
-			e.printStackTrace();
+			Log.e(this.getClass().getName(), "Problem when using" +
+					"the super to set up the test", e);
+			fail("Exception when setting up the test");
 		}
 	}
 
