@@ -261,7 +261,7 @@ public class EditQuestionActivity extends Activity {
 		
 		@Override
 		protected Integer doInBackground(QuizQuestion... questions) {
-			if (null != questions && questions.length != 1) {
+			if (null == questions || questions.length != 1) {
 				throw new IllegalArgumentException();
 			}
 			
