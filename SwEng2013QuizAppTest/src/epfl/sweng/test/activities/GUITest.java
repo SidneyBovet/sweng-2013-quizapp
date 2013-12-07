@@ -2,6 +2,7 @@ package epfl.sweng.test.activities;
 
 import android.app.Activity;
 import android.test.ActivityInstrumentationTestCase2;
+import android.util.Log;
 
 import com.jayway.android.robotium.solo.Solo;
 
@@ -28,7 +29,9 @@ public class GUITest<T extends Activity> extends
 		try {
 			solo.finalize();
 		} catch (Throwable e) {
-			e.printStackTrace();
+			Log.e(this.getClass().getName(), "Problem when using" +
+					"the super to tear down the test", e);
+			fail("Exception when tearing down the test");
 		}
 		getActivity().finish();
 		super.tearDown();
