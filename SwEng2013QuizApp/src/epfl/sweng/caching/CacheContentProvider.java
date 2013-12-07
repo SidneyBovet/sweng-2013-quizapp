@@ -41,7 +41,7 @@ public class CacheContentProvider {
 			mDatabase = writable ? openHelper.getWritableDatabase()
 					: openHelper.getReadableDatabase();
 		} catch (SQLiteException e) {
-			Log.e("DB", "Could not open the DB.");
+			Log.e("DB", "Could not open the DB.", e);
 		}
 	}
 
