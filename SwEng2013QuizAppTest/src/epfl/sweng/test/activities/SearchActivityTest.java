@@ -40,7 +40,7 @@ public class SearchActivityTest extends GUITest<SearchActivity> {
 		String queryDefaultText = context
 				.getString(R.string.search_question_query);
 		String buttonDefaultText = context
-				.getString(R.string.SearchQueryButton);
+				.getString(R.string.search_query_button);
 		assertTrue("Query EditText could not be found.",
 				getSolo().searchText(queryDefaultText));
 		assertTrue("Query Button could not be found.",
@@ -49,7 +49,7 @@ public class SearchActivityTest extends GUITest<SearchActivity> {
 
 	public void testSearchButtonDisabledAtStart() {
 		String buttonDefaultText = context
-				.getString(R.string.SearchQueryButton);
+				.getString(R.string.search_query_button);
 		Button queryButton = getSolo().getButton(buttonDefaultText);
 		assertTrue("Search Button is not disabled at start.",
 				!queryButton.isEnabled());
@@ -151,7 +151,7 @@ public class SearchActivityTest extends GUITest<SearchActivity> {
 								+ "}", "application/json");
 
 		fillQueryAndTestButton("(strawberry + raspberry) * banana", true);
-		getSolo().clickOnButton(context.getString(R.string.SearchQueryButton));
+		getSolo().clickOnButton(context.getString(R.string.search_query_button));
 		getActivityAndWaitFor(TTChecks.QUESTION_SHOWN);
 
 		assertTrue(getSolo().searchText("How many calories are in a banana?"));
@@ -163,7 +163,7 @@ public class SearchActivityTest extends GUITest<SearchActivity> {
 		String queryDefaultText = context
 				.getString(R.string.search_question_query);
 		String buttonDefaultText = context
-				.getString(R.string.SearchQueryButton);
+				.getString(R.string.search_query_button);
 		assertTrue("Query EditText could not be found.",
 				getSolo().searchText(queryDefaultText));
 		assertTrue("Query Button could not be found.",
@@ -205,7 +205,7 @@ public class SearchActivityTest extends GUITest<SearchActivity> {
 	private void fillQueryAndTestButton(String query, boolean enabled) {
 		getSolo().sleep(500);
 		String buttonDefaultText = context
-				.getString(R.string.SearchQueryButton);
+				.getString(R.string.search_query_button);
 		Button queryButton = getSolo().getButton(buttonDefaultText);
 
 		String queryDefaultText = context
