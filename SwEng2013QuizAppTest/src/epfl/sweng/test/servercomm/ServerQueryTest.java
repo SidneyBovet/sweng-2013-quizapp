@@ -47,7 +47,9 @@ public class ServerQueryTest extends TestCase {
 			queryJSON = query.toJSON();
 			assertEquals("fruit", queryJSON.get("query"));
 		} catch (JSONException e) {
-			e.printStackTrace();
+			Log.e(query.getClass().getName(), "toJSON(): "
+					+ "QuizQuery JSON input was incorrect.", e);
+			fail("Exception when hard creating JSONobject");
 		}
 		
 		JSONObject result = mNetworkCommunication.retrieveQuizQuestion(query);
