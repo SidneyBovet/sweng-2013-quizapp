@@ -59,7 +59,9 @@ public class ServerQueryTest extends TestCase {
 			JSONObject question1 = array.getJSONObject(0);
 			assertEquals("q1", question1.get("question"));
 		} catch (JSONException e) {
-			e.printStackTrace();
+			Log.e(query.getClass().getName(), "getJSONArray(..): "
+					+  "JSON input was incorrect.", e);
+			fail("Exception when hard creating JSONobject");
 		}
 	}
 	
