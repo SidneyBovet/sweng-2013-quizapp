@@ -2,6 +2,7 @@ package epfl.sweng.backend;
 
 import org.antlr.runtime.ANTLRStringStream;
 import org.antlr.runtime.CommonTokenStream;
+import org.antlr.runtime.RecognitionException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -10,6 +11,7 @@ import epfl.sweng.generated.QueryParser;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 /**
  * Used to filter data from the SwEng server.
@@ -62,10 +64,12 @@ public class QuizQuery implements Parcelable {
 		QueryParser parser = new QueryParser(tokens);
 
 		boolean ok = true;
+
 		try {
 			parser.eval();
-		} catch (Throwable e) {
+		} catch (RuntimeException e) {
 			ok = false;
+		} catch (RecognitionException e) {
 		}
 
 		return ok;
