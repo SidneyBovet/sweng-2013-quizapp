@@ -11,7 +11,7 @@ import epfl.sweng.generated.QueryParser;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.Log;
+
 
 /**
  * Used to filter data from the SwEng server.
