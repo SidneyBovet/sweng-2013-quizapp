@@ -262,6 +262,7 @@ public class MainActivity extends Activity {
 					} else {
 						TestCoordinator.check(TTChecks.OFFLINE_CHECKBOX_ENABLED);
 					}
+					break;
 			}
 		}
 	}
