@@ -28,7 +28,7 @@ public class OutboxManager {
 					SwEng2013QuizApp.getContext());
 			mDatabase = openHelper.getWritableDatabase();
 		} catch (SQLiteException e) {
-			Log.e("DB", "Could not open the DB.");
+			Log.e("DB", "Could not open the DB.", e);
 		}
 	}
 
