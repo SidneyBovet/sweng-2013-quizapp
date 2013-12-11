@@ -68,11 +68,11 @@ public class QuizQuery implements Parcelable {
 			parser.eval();
 		} catch (RuntimeException e) {
 			Log.e(this.getClass().getName(), "eval():" +
-					"QueryParser corrupted");
+					"QueryParser corrupted", e);
 			ok = false;
 		} catch (RecognitionException e) {
 			Log.e(this.getClass().getName(), "eval():" +
-					"QueryParser corrupted");
+					"QueryParser corrupted", e);
 			ok = false;
 		}
 
