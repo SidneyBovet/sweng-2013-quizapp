@@ -6,12 +6,11 @@ import org.antlr.runtime.RecognitionException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import epfl.sweng.generated.QueryLexer;
-import epfl.sweng.generated.QueryParser;
-
 import android.os.Parcel;
 import android.os.Parcelable;
-
+import android.util.Log;
+import epfl.sweng.generated.QueryLexer;
+import epfl.sweng.generated.QueryParser;
 
 /**
  * Used to filter data from the SwEng server.
@@ -68,8 +67,13 @@ public class QuizQuery implements Parcelable {
 		try {
 			parser.eval();
 		} catch (RuntimeException e) {
+			Log.e(this.getClass().getName(), "eval():" +
+					"QueryParser corrupted");
 			ok = false;
 		} catch (RecognitionException e) {
+			Log.e(this.getClass().getName(), "eval():" +
+					"QueryParser corrupted");
+			ok = false;
 		}
 
 		return ok;
