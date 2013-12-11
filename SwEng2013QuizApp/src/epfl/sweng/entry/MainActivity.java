@@ -227,7 +227,7 @@ public class MainActivity extends Activity {
 			
 			// Change the connection state entry in the UserPreferences
 			// state true = offline box checked
-			if (state[0].booleanValue()) {
+			if (null != state[0] && state[0].booleanValue()) {
 				return mUserPreferences.setConnectivityState(ConnectivityState.ONLINE);
 			} else {
 				return mUserPreferences.setConnectivityState(ConnectivityState.OFFLINE);
