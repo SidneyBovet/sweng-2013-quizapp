@@ -23,6 +23,8 @@ public class MainActivityNotAuthenticatedTest extends GUITest<MainActivity> {
 		try {
 			Thread.sleep(500);
 		} catch (InterruptedException e) {
+			Log.e(this.getClass().getName(), "sleep()"
+					+ "error while making the thread sleep", e);
 			fail("wtf");
 		}
 		persistentStorage = UserPreferences.getInstance();
