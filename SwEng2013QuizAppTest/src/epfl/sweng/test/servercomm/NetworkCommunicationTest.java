@@ -178,6 +178,8 @@ public class NetworkCommunicationTest extends TestCase {
 			assertEquals("Didn't retrieve the right question.",
 					jsonObject.get("next"), "YG9HB8)H9*-BYb88fdsfsyb(08bfsdybfdsoi4");
 		} catch (JSONException e) {
+			Log.e(QuizQuestion.class.getName(), "get()"
+					+ "JSON object was incorrect.", e);
 			assertFalse("JSON retrieved was not the same as pushed.", true);
 		}
 	}
