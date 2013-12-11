@@ -121,9 +121,9 @@ public class ShowQuestionsActivity extends Activity {
 			randomQuestion = asyncFetchQuestion.get();
 		} catch (InterruptedException e) {
 			Log.wtf(this.getClass().getName(),
-					"AsyncFetchQuestion was interrupted");
+					"AsyncFetchQuestion was interrupted", e);
 		} catch (ExecutionException e) {
-			Log.e(this.getClass().getName(), "Process crashed");
+			Log.e(this.getClass().getName(), "Process crashed", e);
 			return null;
 		}
 		return randomQuestion;
