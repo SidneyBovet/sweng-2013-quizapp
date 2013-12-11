@@ -354,7 +354,9 @@ public class AuditTest extends GUITest<EditQuestionActivity> {
 					+ getActivity().auditErrors() + " != 1", getActivity()
 					.auditErrors() == 1);
 		} catch (InterruptedException e) {
-			e.printStackTrace();
+			Log.e(this.getClass().getName(), "Problem when acquiring" +
+					"the semaphore", e);
+			fail("Exception when Problem when acquiring the semaphore");
 		}
 	}
 
