@@ -9,11 +9,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.database.Cursor;
 import android.util.Log;
 
 import epfl.sweng.backend.QuizQuery;
 import epfl.sweng.caching.CacheContentProvider;
 import epfl.sweng.caching.OutboxManager;
+import epfl.sweng.caching.SQLiteCacheHelper;
 import epfl.sweng.comm.ConnectivityState;
 import epfl.sweng.comm.QuestionProxy;
 import epfl.sweng.entry.MainActivity;
@@ -31,9 +33,10 @@ public class QuestionProxyTest extends GUITest<MainActivity> {
 	}
 
 	private QuestionProxy proxy;
+	private OutboxManager  outbox;
 	private QuizQuestion mQuestion;
 	private CacheContentProvider mContentProvider;
-	private MockHttpClient mMockClient;
+	private AdvancedMockHttpClient mMockClient;
 	private QuizQuery mfakeQuery;
 
 	@Override
@@ -41,8 +44,9 @@ public class QuestionProxyTest extends GUITest<MainActivity> {
 		super.setUp();
 		mContentProvider = new CacheContentProvider(true);
 		mContentProvider.eraseDatabase();
-		mMockClient = new MockHttpClient();
+		mMockClient = new AdvancedMockHttpClient();
 		SwengHttpClientFactory.setInstance(mMockClient);
+		outbox = new OutboxManager();
 		proxy = QuestionProxy.getInstance();
 		mQuestion = new QuizQuestion("q", new ArrayList<String>(Arrays.asList(
 				"a1", "a2", "a3")), 0, new TreeSet<String>(Arrays.asList("t1",
@@ -52,10 +56,9 @@ public class QuestionProxyTest extends GUITest<MainActivity> {
 
 	@Override
 	protected void tearDown() throws Exception {
+		SwengHttpClientFactory.setInstance(null);
+		mContentProvider.close();
 		super.tearDown();
-		/*
-		 * if(!mContentProvider.isClosed()){ mContentProvider.close(); }
-		 */
 	}
 
 	public void testSingleton() {
@@ -65,45 +68,43 @@ public class QuestionProxyTest extends GUITest<MainActivity> {
 		assertTrue(proxy2.equals(proxy3));
 	}
 
-	// public void testAddInbox() {
-	// proxy.addInbox(mQuestion);
-	// Cursor cursor = mContentProvider.getQuestions(new QuizQuery());
-	// int id = cursor.getInt(0);
-	// QuizQuestion question = mContentProvider.getQuestionFromPK(id);
-	// getSolo().sleep(500);
-	// assertEquals("Statement should be the same.",
-	// "q", question.getStatement());
-	// }
-	//
-	// public void testaddOutAndInbox() {
-	// proxy.addOutAndInbox(mQuestion);
-	// Cursor cursor = mContentProvider.getQuestions(new QuizQuery());
-	// int id = cursor.getInt(0);
-	// QuizQuestion question = mContentProvider.getQuestionFromPK(id);
-	// getSolo().sleep(500);
-	// int isQueued =
-	// cursor.getInt(cursor.getColumnIndex(SQLiteCacheHelper.FIELD_QUESTIONS_PK));
-	// assertEquals("Statement should be the same.",
-	// "q", question.getStatement());
-	// assertTrue("The question is not queued",isQueued==1);
-	// //assertTrue("There is not one question in the outbox",
-	// proxy.getOutboxSize()==1);
-	// }
+	public void testAddInbox() {
+		mContentProvider.addQuizQuestion(mQuestion);
+		Cursor cursor = mContentProvider.getQuestions(new QuizQuery());
+		int id = cursor.getInt(0);
+		QuizQuestion question = mContentProvider.getQuestionFromPK(id);
+		getSolo().sleep(500);
+		assertEquals("Statement should be the same.", "q",
+				question.getStatement());
+	}
+
+	public void testaddOutAndInbox() {
+		outbox.push(mContentProvider.addQuizQuestion(mQuestion));
+		Cursor cursor = mContentProvider.getQuestions(new QuizQuery());
+		int id = cursor.getInt(0);
+		QuizQuestion question = mContentProvider.getQuestionFromPK(id);
+		getSolo().sleep(500);
+		int isQueued = cursor.getInt(cursor
+				.getColumnIndex(SQLiteCacheHelper.FIELD_QUESTIONS_PK));
+		assertEquals("Statement should be the same.", "q",
+				question.getStatement());
+		assertTrue("The question is not queued", isQueued == 1);
+		assertTrue("There is not one question in the outbox",
+				outbox.size() == 1);
+	 }
 
 	public void testSendQuizQuestion() {
-		/*
-		 * UserPreferences.getInstance().setConnectivityState(ConnectivityState.
-		 * OFFLINE); assertEquals(HttpStatus.SC_CREATED,
-		 * proxy.sendQuizQuestion(mQuestion)); //XXX to decomment when issue
-		 * #118 will be resolved
-		 * UserPreferences.getInstance().setConnectivityState
-		 * (ConnectivityState.ONLINE); assertEquals(HttpStatus.SC_CREATED,
-		 * proxy.notifyConnectivityChange(ConnectivityState.ONLINE));
-		 * mMockClient.pushCannedResponse(
-		 * "(POST|GET) https://sweng-quiz.appspot.com/quizquestions/", 200, "",
-		 * "HttpResponse"); assertEquals(200,
-		 * proxy.sendQuizQuestion(mQuestion));
-		 */
+		mMockClient.pushCannedResponse(
+				"POST https://sweng-quiz.appspot.com",
+				HttpStatus.SC_CREATED, "", "HttpResponse");
+		UserPreferences.getInstance().setConnectivityState(
+				ConnectivityState.OFFLINE);
+		assertEquals(HttpStatus.SC_CREATED, proxy.sendQuizQuestion(mQuestion));
+		UserPreferences.getInstance().setConnectivityState(
+				ConnectivityState.ONLINE);
+		assertEquals(HttpStatus.SC_CREATED,
+				proxy.notifyConnectivityChange(ConnectivityState.ONLINE));
+		assertEquals(HttpStatus.SC_CREATED, proxy.sendQuizQuestion(mQuestion));	 
 	}
 
 	public void testRetrieveRandomQuestion() {
@@ -140,7 +141,6 @@ public class QuestionProxyTest extends GUITest<MainActivity> {
 				proxy.notifyConnectivityChange(ConnectivityState.ONLINE));
 		assertEquals(HttpStatus.SC_OK,
 				proxy.notifyConnectivityChange(ConnectivityState.OFFLINE));
-		// XXX to decomment when issue #118 will be resolved
 		mMockClient.pushCannedResponse(
 				"(POST|GET) https://sweng-quiz.appspot.com/quizquestions/",
 				200, "", "HttpResponse");

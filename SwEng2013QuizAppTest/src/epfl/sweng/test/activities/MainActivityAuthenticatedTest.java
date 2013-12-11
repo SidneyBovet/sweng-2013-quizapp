@@ -26,8 +26,7 @@ public class MainActivityAuthenticatedTest extends GUITest<MainActivity> {
 	@Override
 	protected void tearDown() throws Exception {
 		super.tearDown();
-		persistentStorage = UserPreferences.getInstance();
-		persistentStorage.destroyAuthentication();
+		UserPreferences.getInstance().destroyAuthentication();
 	};
 	
 	public void testLogOut() {

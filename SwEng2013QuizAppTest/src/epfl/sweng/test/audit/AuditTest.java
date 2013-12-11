@@ -311,52 +311,52 @@ public class AuditTest extends GUITest<EditQuestionActivity> {
 		}
 	}
 
-//	public void testTooManyTag() {
-//		getSolo().enterText((EditText) getSolo().getText("Type in the answer"),
-//				"answer D");
-//		getSolo().clickOnButton("+");
-//		waitFor(TTChecks.QUESTION_EDITED);
-//		getSolo().enterText(
-//				(EditText) getSolo().getText(
-//						"Type in the question\'s text body"), "my question1");
-//
-//		getSolo().enterText(
-//				(EditText) getSolo().getText("Type in the question\'s tags"),
-//				"1, 2, 3, 4, 5, 6, 7, 8, 9, "
-//						+ "10, 11, 12 ,13, 14, 15, 16, 17, 18, 19 ,20, 21");
-//
-//		getSolo().enterText((EditText) getSolo().getText("Type in the answer"),
-//				"answer BBBBBB");
-//		getSolo().clickOnButton("" + (char) 10008);
-//		waitFor(TTChecks.QUESTION_EDITED);
-//		final EditQuestionActivity activity = (EditQuestionActivity) getActivity();
-//		QuizQuestion question = activity.createQuestionFromGui();
-//
-//		getActivity().runOnUiThread(new Runnable() {
-//
-//			@Override
-//			public void run() {
-//				Button button = (Button) activity
-//						.findViewById(R.id.submit_question_button);
-//				button.setEnabled(true);
-//				semaphore.release();
-//			}
-//		});
-//
-//		try {
-//			semaphore.acquire();
-//			getSolo().sleep(500);
-//			assertEquals("my question1",
-//					question.getStatement());
-//			assertTrue("Size of Tag Set != 21", question.getTags().size() == 21);
-//			assertTrue("Audit questions != 1", question.auditErrors() == 1);
-//			assertTrue("Number of audit errors = "
-//					+ getActivity().auditErrors() + " != 1", getActivity()
-//					.auditErrors() == 1);
-//		} catch (InterruptedException e) {
-//			e.printStackTrace();
-//		}
-//	}
+	public void testTooManyTag() {
+		getSolo().enterText((EditText) getSolo().getText("Type in the answer"),
+				"answer D");
+		getSolo().clickOnButton("+");
+		waitFor(TTChecks.QUESTION_EDITED);
+		getSolo().enterText(
+				(EditText) getSolo().getText(
+						"Type in the question\'s text body"), "my question1");
+
+		getSolo().enterText(
+				(EditText) getSolo().getText("Type in the question\'s tags"),
+				"1, 2, 3, 4, 5, 6, 7, 8, 9, "
+						+ "10, 11, 12 ,13, 14, 15, 16, 17, 18, 19 ,20, 21");
+
+		getSolo().enterText((EditText) getSolo().getText("Type in the answer"),
+				"answer BBBBBB");
+		getSolo().clickOnButton("" + (char) 10008);
+		waitFor(TTChecks.QUESTION_EDITED);
+		final EditQuestionActivity activity = (EditQuestionActivity) getActivity();
+		QuizQuestion question = activity.createQuestionFromGui();
+
+		getActivity().runOnUiThread(new Runnable() {
+
+			@Override
+			public void run() {
+				Button button = (Button) activity
+						.findViewById(R.id.submit_question_button);
+				button.setEnabled(true);
+				semaphore.release();
+			}
+		});
+
+		try {
+			semaphore.acquire();
+			getSolo().sleep(500);
+			assertEquals("my question1",
+					question.getStatement());
+			assertTrue("Size of Tag Set != 21", question.getTags().size() == 21);
+			assertTrue("Audit questions != 1", question.auditErrors() == 1);
+			assertTrue("Number of audit errors = "
+					+ getActivity().auditErrors() + " != 1", getActivity()
+					.auditErrors() == 1);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
 
 	public void testBlankTagEmptyAnswers() {
 

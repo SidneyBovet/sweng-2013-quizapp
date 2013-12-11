@@ -1,17 +1,10 @@
 package epfl.sweng.test.activities;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import org.apache.http.HttpStatus;
 
 import android.widget.Button;
 import epfl.sweng.comm.ConnectivityState;
-import epfl.sweng.comm.QuestionProxy;
 import epfl.sweng.preferences.UserPreferences;
-import epfl.sweng.quizquestions.QuizQuestion;
 import epfl.sweng.servercomm.SwengHttpClientFactory;
 import epfl.sweng.showquestions.ShowQuestionsActivity;
 import epfl.sweng.test.minimalmock.AdvancedMockHttpClient;
@@ -34,20 +27,19 @@ public class ShowQuestionsActivityTest extends GUITest<ShowQuestionsActivity> {
 	protected void tearDown() throws Exception {
 		super.tearDown();
 		SwengHttpClientFactory.setInstance(null);
-		QuestionProxy.resetQuestionProxy();
 	}
 
 	@Override
 	public void setUp() {
 		super.setUp();
 		mockClient = new AdvancedMockHttpClient();
-		SwengHttpClientFactory.setInstance(mockClient);
 		UserPreferences.getInstance().setConnectivityState(
 				ConnectivityState.ONLINE);
 
 	}
 
 	public void testFetchQuestion() {
+		SwengHttpClientFactory.setInstance(mockClient);
 		mockClient
 				.pushCannedResponse(
 						"GET (?:https?://[^/]+|[^/]+)?/+quizquestions/random\\b",
@@ -70,30 +62,15 @@ public class ShowQuestionsActivityTest extends GUITest<ShowQuestionsActivity> {
 	}
 
 	public void testCorrectQuestionSelected() {
-
-		String statement = "What is the answer to life, the universe, and everything?";
-
-		List<String> answers = new ArrayList<String>();
-		answers.add("Forty-two");
-		answers.add("Twenty-seven");
-
-		int solutionIndex = 0;
-
-		Set<String> tags = new HashSet<String>();
-		tags.add("h2g2");
-		tags.add("trivial");
-
-		int id = 1;
-		String owner = "sweng";
-
-		QuizQuestion question = new QuizQuestion(statement, answers,
-				solutionIndex, tags, id, owner);
-
-		mockClient.pushCannedResponse(
-				"GET (?:https?://[^/]+|[^/]+)?/+quizquestions/random\\b",
-				HttpStatus.SC_OK, question.toJSON().toString(),
-				"application/json");
-
+		SwengHttpClientFactory.setInstance(mockClient);
+		mockClient
+				.pushCannedResponse(
+						"GET (?:https?://[^/]+|[^/]+)?/+quizquestions/random\\b",
+						HttpStatus.SC_OK,
+						"{\"question\": \"What is the answer to life, the universe, and everything?\","
+								+ " \"answers\": [\"Forty-two\", \"Twenty-seven\"], \"owner\": \"sweng\","
+								+ " \"solutionIndex\": 0, \"tags\": [\"h2g2\", \"trivia\"], \"id\": \"1\" }",
+						"application/json");
 		getActivityAndWaitFor(TTChecks.QUESTION_SHOWN);
 
 		assertTrue("Correct answer must be displayed",
@@ -107,6 +84,7 @@ public class ShowQuestionsActivityTest extends GUITest<ShowQuestionsActivity> {
 	}
 
 	public void testWrongQuestionSelected() {
+		SwengHttpClientFactory.setInstance(mockClient);
 		mockClient
 				.pushCannedResponse(
 						"GET (?:https?://[^/]+|[^/]+)?/+quizquestions/random\\b",
@@ -130,78 +108,76 @@ public class ShowQuestionsActivityTest extends GUITest<ShowQuestionsActivity> {
 
 	}
 
-	// public void testNextButtonBehaviour() {
-	// mockClient
-	// .pushCannedResponse(
-	// "GET (?:https?://[^/]+|[^/]+)?/+quizquestions/random\\b",
-	// HttpStatus.SC_OK,
-	// "{\"question\": \"Final question.\","
-	// + " \"answers\": [\"#1 Answer\", \"#2 Answer\"], \"owner\": \"sweng\","
-	// + " \"solutionIndex\": 0, \"tags\": [\"tag3\"], \"id\": \"2\" }",
-	// "application/json");
-	// mockClient
-	// .pushCannedResponse(
-	// "GET (?:https?://[^/]+|[^/]+)?/+quizquestions/random\\b",
-	// HttpStatus.SC_OK,
-	// "{\"question\": \"Question content.\","
-	// + " \"answers\": [\"Answer #1\", \"Answer #2\"], \"owner\": \"sweng\","
-	// +
-	// " \"solutionIndex\": 1, \"tags\": [\"tag1\", \"tag2\"], \"id\": \"2\" }",
-	// "application/json");
-	// mockClient
-	// .pushCannedResponse(
-	// "GET (?:https?://[^/]+|[^/]+)?/+quizquestions/random\\b",
-	// HttpStatus.SC_OK,
-	// "{\"question\": \"What is the answer to life, the universe, and everything?\","
-	// +
-	// " \"answers\": [\"Forty-two\", \"Twenty-seven\"], \"owner\": \"sweng\","
-	// +
-	// " \"solutionIndex\": 0, \"tags\": [\"h2g2\", \"trivia\"], \"id\": \"1\" }",
-	// "application/json");
-	//
-	// getActivityAndWaitFor(TTChecks.QUESTION_SHOWN);
-	//
-	// assertTrue("Correct answer must be displayed",
-	// getSolo().searchText("Forty-two"));
-	// getSolo().clickOnText("Forty-two");
-	//
-	// getActivityAndWaitFor(TTChecks.ANSWER_SELECTED);
-	//
-	// assertTrue("Couldn't find the correct answer",
-	// getSolo().searchText("" + (char) 10004));
-	// mockClient.popCannedResponse();
-	// getSolo().clickOnButton("Next question");
-	//
-	// getActivityAndWaitFor(TTChecks.QUESTION_SHOWN);
-	//
-	// assertTrue("Question must be displayed",
-	// getSolo().searchText("Question content."));
-	//
-	// assertTrue("Wrong answer must be displayed",
-	// getSolo().searchText("Answer #1"));
-	// getSolo().clickOnText("Answer #1");
-	//
-	// getActivityAndWaitFor(TTChecks.ANSWER_SELECTED);
-	//
-	// assertTrue("Couldn't find the wrong answer",
-	// getSolo().searchText("" + (char) 10008));
-	//
-	// assertTrue("Correct answer must be displayed",
-	// getSolo().searchText("Answer #2"));
-	// getSolo().clickOnText("Answer #2");
-	//
-	// getActivityAndWaitFor(TTChecks.ANSWER_SELECTED);
-	//
-	// assertTrue("Couldn't find the correct answer",
-	// getSolo().searchText("" + (char) 10004));
-	// mockClient.popCannedResponse();
-	// getSolo().clickOnButton("Next question");
-	//
-	// getActivityAndWaitFor(TTChecks.QUESTION_SHOWN);
-	//
-	// assertTrue("Question must be displayed",
-	// getSolo().searchText("Final question."));
-	// }
+	 public void testNextButtonBehaviour() {
+		SwengHttpClientFactory.setInstance(mockClient);
+		mockClient
+				.pushCannedResponse(
+						"GET (?:https?://[^/]+|[^/]+)?/+quizquestions/random\\b",
+						HttpStatus.SC_OK,
+						"{\"question\": \"Final question.\","
+								+ " \"answers\": [\"#1 Answer\", \"#2 Answer\"], \"owner\": \"sweng\","
+								+ " \"solutionIndex\": 0, \"tags\": [\"tag3\"], \"id\": \"2\" }",
+						"application/json");
+		mockClient
+				.pushCannedResponse(
+						"GET (?:https?://[^/]+|[^/]+)?/+quizquestions/random\\b",
+						HttpStatus.SC_OK,
+						"{\"question\": \"Question content.\","
+								+ " \"answers\": [\"Answer #1\", \"Answer #2\"], \"owner\": \"sweng\","
+								+ " \"solutionIndex\": 1, \"tags\": [\"tag1\", \"tag2\"], \"id\": \"2\" }",
+						"application/json");
+		mockClient
+				.pushCannedResponse(
+						"GET (?:https?://[^/]+|[^/]+)?/+quizquestions/random\\b",
+						HttpStatus.SC_OK,
+						"{\"question\": \"What is the answer to life, the universe, and everything?\","
+								+ " \"answers\": [\"Forty-two\", \"Twenty-seven\"], \"owner\": \"sweng\","
+								+ " \"solutionIndex\": 0, \"tags\": [\"h2g2\", \"trivia\"], \"id\": \"1\" }",
+						"application/json");
+
+		getActivityAndWaitFor(TTChecks.QUESTION_SHOWN);
+
+		assertTrue("Correct answer must be displayed",
+				getSolo().searchText("Forty-two"));
+		getSolo().clickOnText("Forty-two");
+
+		getActivityAndWaitFor(TTChecks.ANSWER_SELECTED);
+
+		assertTrue("Couldn't find the correct answer",
+				getSolo().searchText("" + (char) 10004));
+		mockClient.popCannedResponse();
+		getSolo().clickOnButton("Next question");
+
+		getActivityAndWaitFor(TTChecks.QUESTION_SHOWN);
+
+		assertTrue("Question must be displayed",
+				getSolo().searchText("Question content."));
+
+		assertTrue("Wrong answer must be displayed",
+				getSolo().searchText("Answer #1"));
+		getSolo().clickOnText("Answer #1");
+
+		getActivityAndWaitFor(TTChecks.ANSWER_SELECTED);
+
+		assertTrue("Couldn't find the wrong answer",
+				getSolo().searchText("" + (char) 10008));
+
+		assertTrue("Correct answer must be displayed",
+				getSolo().searchText("Answer #2"));
+		getSolo().clickOnText("Answer #2");
+
+		getActivityAndWaitFor(TTChecks.ANSWER_SELECTED);
+
+		assertTrue("Couldn't find the correct answer",
+				getSolo().searchText("" + (char) 10004));
+		mockClient.popCannedResponse();
+		getSolo().clickOnButton("Next question");
+
+		getActivityAndWaitFor(TTChecks.QUESTION_SHOWN);
+
+		assertTrue("Question must be displayed",
+				getSolo().searchText("Final question."));
+	 }
 
 	public void testNextButtonFirstDisabled() {
 		mockClient
@@ -242,8 +218,6 @@ public class ShowQuestionsActivityTest extends GUITest<ShowQuestionsActivity> {
 		getActivityAndWaitFor(TTChecks.QUESTION_SHOWN);
 		getSolo().searchText("There was an error retrieving the question");
 	}
-
-	// TODO debug test
 
 	public void testErrorWhile400SendByServer() {
 		mockClient.pushCannedResponse(

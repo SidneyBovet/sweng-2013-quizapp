@@ -29,6 +29,7 @@ public class ShowQuestionsActivityOfflineTest extends
 	
 	MockHttpClient mMockClient;
 	UnconnectedHttpClient mUnconnectedClient;
+	CacheContentProvider cacheContentProvider;
 
 	public ShowQuestionsActivityOfflineTest() {
 		super(ShowQuestionsActivity.class);
@@ -40,10 +41,12 @@ public class ShowQuestionsActivityOfflineTest extends
 		SwengHttpClientFactory.setInstance(null);
 		UserPreferences.getInstance().setConnectivityState(ConnectivityState.ONLINE);
 		QuestionProxy.resetQuestionProxy();
+		//cacheContentProvider.close();
 	}
 
 	@Override
 	public void setUp() {
+		//cacheContentProvider = new CacheContentProvider(true);
 		super.setUp();
 
 		/* Reseting both client for security */
@@ -83,25 +86,25 @@ public class ShowQuestionsActivityOfflineTest extends
 						+ "pseudorandom\\ numbers"));
 	}
 
-//	public void testNewlyRetrievedQuestionShouldBeCached() {
-//		int expectedInboxSize = QuestionProxy.getInstance().getInboxSize() + 1;
-//
-//		UserPreferences.getInstance().setConnectivityState(ConnectivityState.ONLINE);
-//		SwengHttpClientFactory.setInstance(mMockClient);
-//		mMockClient
-//				.pushCannedResponse(
-//						"GET (?:https?://[^/]+|[^/]+)?/+quizquestions/random\\b",
-//						HttpStatus.SC_OK,
-//						"{\"question\": \"What is the answer to life, the universe, and everything?\","
-//								+ " \"answers\": [\"Forty-two\", \"Twenty-seven\"], \"owner\": \"sweng\","
-//								+ " \"solutionIndex\": 0, \"tags\": [\"h2g2\", \"trivia\"], \"id\": \"1\" }",
-//						"application/json");
-//
-//		getActivityAndWaitFor(TTChecks.QUESTION_SHOWN);
-//		getSolo().sleep(500);
-//		assertEquals(expectedInboxSize, QuestionsProxy.getInstance()
-//				.getInboxSize());
-//	}
+	public void testNewlyRetrievedQuestionShouldBeCached() {
+		//int expectedInboxSize = cacheContentProvider.;
+
+		UserPreferences.getInstance().setConnectivityState(ConnectivityState.ONLINE);
+		SwengHttpClientFactory.setInstance(mMockClient);
+		mMockClient
+				.pushCannedResponse(
+						"GET (?:https?://[^/]+|[^/]+)?/+quizquestions/random\\b",
+						HttpStatus.SC_OK,
+						"{\"question\": \"What is the answer to life, the universe, and everything?\","
+								+ " \"answers\": [\"Forty-two\", \"Twenty-seven\"], \"owner\": \"sweng\","
+								+ " \"solutionIndex\": 0, \"tags\": [\"h2g2\", \"trivia\"], \"id\": \"1\" }",
+						"application/json");
+
+		getActivityAndWaitFor(TTChecks.QUESTION_SHOWN);
+		getSolo().sleep(500);
+		//assertEquals(expectedInboxSize, QuestionsProxy.getInstance()
+		//		.getInboxSize());
+	}
 
 	public void testNetworkUnavailableShouldMakeConnectionStateOffline() {
 		UserPreferences.getInstance().setConnectivityState(ConnectivityState.ONLINE);
