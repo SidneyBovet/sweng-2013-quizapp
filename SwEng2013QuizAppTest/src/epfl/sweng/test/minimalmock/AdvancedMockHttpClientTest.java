@@ -87,15 +87,20 @@ public class AdvancedMockHttpClientTest extends GUITest<EditQuestionActivity> {
 		try {
 			httpClient.execute(request);
 		} catch (ClientProtocolException e) {
-			
+			Log.e(httpClient.getClass().getName(), "execute(): "
+					+ "there was a ClientProtocolException ", e);
 			fail("should be an IOE");
 		} catch (IOException e) {
+			Log.e(httpClient.getClass().getName(), "execute(): "
+					+ "there was a IOException ", e);
 			// okay
 		}
 
 		try {
 			httpClient.execute(request);
 		} catch (Exception e) {
+			Log.e(httpClient.getClass().getName(), "execute(): "
+					+ "there was a Exception", e);
 			fail("should have returned SC_CREATED");
 		}
 	}
