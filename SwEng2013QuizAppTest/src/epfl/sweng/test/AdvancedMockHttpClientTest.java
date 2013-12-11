@@ -5,6 +5,8 @@ import java.io.IOException;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpGet;
 
+import android.util.Log;
+
 import epfl.sweng.servercomm.SwengHttpClientFactory;
 import epfl.sweng.test.minimalmock.AdvancedMockHttpClient;
 import junit.framework.TestCase;
@@ -28,8 +30,12 @@ public class AdvancedMockHttpClientTest extends TestCase{
 			SwengHttpClientFactory.getInstance().
 					execute(request);
 		} catch (ClientProtocolException e) {
+			Log.e(this.getClass().getName(), "execute(): Error in the "
+					+ "HTTP protocol.", e);
 			return;
 		} catch (IOException e) {
+			Log.e(this.getClass().getName(), "execute(): An I/O error"
+					+ "has occurred.", e);
 			fail("Not a CPE...");
 		}
 		fail("no exception thrown");
