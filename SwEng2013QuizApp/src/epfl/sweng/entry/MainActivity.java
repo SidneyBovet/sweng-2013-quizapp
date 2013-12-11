@@ -82,6 +82,7 @@ public class MainActivity extends Activity {
 		asyncProxyNotifier.execute(clickedCheckBox.isChecked());
 
 		if (auditErrors() != 0) {
+			System.out.println("SISI");
 			throw new AssertionError();
 		}
 	}

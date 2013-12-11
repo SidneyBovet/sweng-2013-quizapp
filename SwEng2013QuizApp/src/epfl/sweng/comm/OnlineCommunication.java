@@ -19,6 +19,7 @@ import android.util.Log;
 import epfl.sweng.backend.Converter;
 import epfl.sweng.backend.QuizQuery;
 import epfl.sweng.caching.CacheContentProvider;
+import epfl.sweng.caching.OutboxManager;
 import epfl.sweng.preferences.UserPreferences;
 import epfl.sweng.quizquestions.QuizQuestion;
 import epfl.sweng.servercomm.HttpFactory;
@@ -30,51 +31,57 @@ public class OnlineCommunication implements IQuestionCommunication {
 	private static final double ONE_HUNDRED = 100.0;
 	private int mHttpStatusCommFailure = HttpStatus.SC_BAD_GATEWAY;
 	private CacheContentProvider mContentProvider;
-	
+	private OutboxManager mOutbox;
+	private long mQuestionID;
+
 	public OnlineCommunication() {
 		mContentProvider = new CacheContentProvider(true);
+		mOutbox = new OutboxManager();
 	}
-	
+
 	/**
 	 * Sends a {@link QuizQuestion} to the SwEng server.
 	 */
 	@Override
 	public int sendQuizQuestion(QuizQuestion quizQuestion) {
-		mContentProvider.addQuizQuestion(quizQuestion);
+		mQuestionID = mContentProvider.addQuizQuestion(quizQuestion);
 		HttpPost postQuery = HttpFactory.getPostRequest(HttpFactory
 				.getSwengBaseAddress() + "/quizquestions/");
 
 		int httpCodeResponse = -1;
 		try {
-			postQuery.setEntity(new StringEntity(quizQuestion.toJSON().toString()));
+			postQuery.setEntity(new StringEntity(quizQuestion.toJSON()
+					.toString()));
 			postQuery.setHeader("Content-type", "application/json");
 			HttpResponse response = SwengHttpClientFactory.getInstance()
 					.execute(postQuery);
 			httpCodeResponse = response.getStatusLine().getStatusCode();
-			
-			if (Math.floor(httpCodeResponse/ONE_HUNDRED) == BASE_SERVER_ERRORS) {
-				UserPreferences.getInstance()
-					.setConnectivityState(ConnectivityState.OFFLINE);
+
+			if (Math.floor(httpCodeResponse / ONE_HUNDRED) == BASE_SERVER_ERRORS) {
+				UserPreferences.getInstance().setConnectivityState(
+						ConnectivityState.OFFLINE);
 			}
 			response.getEntity().consumeContent();
-			
+
 			return httpCodeResponse;
-			
+
 		} catch (UnsupportedEncodingException e) {
 			Log.e(this.getClass().getName(), "sendQuizQuestion(): Entity does "
 					+ "not support the local encoding.", e);
 			return mHttpStatusCommFailure;
 		} catch (ClientProtocolException e) {
-			Log.e(this.getClass().getName(), "sendQuizQuestion(): Error in the "
-					+ "HTTP protocol.", e);
-			UserPreferences.getInstance()
-					.setConnectivityState(ConnectivityState.OFFLINE);
+			addOutbox(quizQuestion);
+			Log.e(this.getClass().getName(),
+					"sendQuizQuestion(): Error in the " + "HTTP protocol.", e);
+			UserPreferences.getInstance().setConnectivityState(
+					ConnectivityState.OFFLINE);
 			return mHttpStatusCommFailure;
 		} catch (IOException e) {
+			addOutbox(quizQuestion);
 			Log.e(this.getClass().getName(), "sendQuizQuestion(): An I/O error"
-					+ "has occurred.", e);
-			UserPreferences.getInstance()
-					.setConnectivityState(ConnectivityState.OFFLINE);
+					+ " has occurred.", e);
+			UserPreferences.getInstance().setConnectivityState(
+					ConnectivityState.OFFLINE);
 			return mHttpStatusCommFailure;
 		}
 	}
@@ -89,55 +96,57 @@ public class OnlineCommunication implements IQuestionCommunication {
 				.getSwengQueryQuestions());
 		String jsonStringQuestions = null;
 		try {
-			postQuery.setEntity(new StringEntity(quizQuery.toJSON().toString()));
+			postQuery
+					.setEntity(new StringEntity(quizQuery.toJSON().toString()));
 			postQuery.setHeader("Content-type", "application/json");
 			HttpResponse response = SwengHttpClientFactory.getInstance()
 					.execute(postQuery);
 			int httpCodeResponse = response.getStatusLine().getStatusCode();
-			
-			if (Math.floor(httpCodeResponse/ONE_HUNDRED) == BASE_SERVER_ERRORS) {
-				UserPreferences.getInstance()
-					.setConnectivityState(ConnectivityState.OFFLINE);
+
+			if (Math.floor(httpCodeResponse / ONE_HUNDRED) == BASE_SERVER_ERRORS) {
+				UserPreferences.getInstance().setConnectivityState(
+						ConnectivityState.OFFLINE);
 				return null;
-				
+
 			} else if (httpCodeResponse == HttpStatus.SC_OK) {
 				jsonStringQuestions = new BasicResponseHandler()
-					.handleResponse(response);
+						.handleResponse(response);
 				JSONObject jsonQuestions = new JSONObject(jsonStringQuestions);
-				
+
 				// cache the questions retrieved
 				JSONArray array = jsonQuestions.getJSONArray("questions");
 				if (array != null) {
 					List<QuizQuestion> fetchedQuestions = Converter
 							.jsonArrayToQuizQuestionList(array);
-					
+
 					for (QuizQuestion question : fetchedQuestions) {
 						if (question != null && question.auditErrors() == 0) {
 							mContentProvider.addQuizQuestion(question);
 						}
 					}
 				}
-				
+
 				return jsonQuestions;
 			} else {
 				return null;
 			}
-			
+
 		} catch (UnsupportedEncodingException e) {
 			Log.e(this.getClass().getName(), "retrieveQuizQuestion(): Entity "
 					+ "does not support the local encoding.", e);
 			return null;
 		} catch (ClientProtocolException e) {
-			Log.e(this.getClass().getName(), "retrieveQuizQuestion(): Error in "
-					+ "the HTTP protocol.", e);
-			UserPreferences.getInstance()
-					.setConnectivityState(ConnectivityState.OFFLINE);
+			Log.e(this.getClass().getName(),
+					"retrieveQuizQuestion(): Error in " + "the HTTP protocol.",
+					e);
+			UserPreferences.getInstance().setConnectivityState(
+					ConnectivityState.OFFLINE);
 			return null;
 		} catch (IOException e) {
 			Log.e(this.getClass().getName(), "retrieveQuizQuestion(): An I/O "
 					+ "error has occurred.", e);
-			UserPreferences.getInstance()
-					.setConnectivityState(ConnectivityState.OFFLINE);
+			UserPreferences.getInstance().setConnectivityState(
+					ConnectivityState.OFFLINE);
 			return null;
 		} catch (JSONException e) {
 			Log.e(this.getClass().getName(), "retrieveQuizQuestion(): "
@@ -152,45 +161,62 @@ public class OnlineCommunication implements IQuestionCommunication {
 	@Override
 	public JSONObject retrieveRandomQuizQuestion() {
 		String jsonQuestion = null;
-		
+
 		String url = HttpFactory.getSwengFetchQuestion();
 		HttpGet firstRandom = HttpFactory.getGetRequest(url);
 		try {
 			HttpResponse response = SwengHttpClientFactory.getInstance()
 					.execute(firstRandom);
 			int httpCodeResponse = response.getStatusLine().getStatusCode();
-			
-			if (Math.floor(httpCodeResponse/ONE_HUNDRED) == BASE_SERVER_ERRORS) {
-				UserPreferences.getInstance()
-					.setConnectivityState(ConnectivityState.OFFLINE);
+
+			if (Math.floor(httpCodeResponse / ONE_HUNDRED) == BASE_SERVER_ERRORS) {
+				UserPreferences.getInstance().setConnectivityState(
+						ConnectivityState.OFFLINE);
 				return null;
-				
+
 			} else if (httpCodeResponse == HttpStatus.SC_OK) {
 				jsonQuestion = new BasicResponseHandler()
-					.handleResponse(response);
-				mContentProvider.addQuizQuestion(new QuizQuestion(jsonQuestion));
+						.handleResponse(response);
+				mContentProvider
+						.addQuizQuestion(new QuizQuestion(jsonQuestion));
 				return new JSONObject(jsonQuestion);
-				
+
 			} else {
 				return null;
 			}
-			
+
 		} catch (ClientProtocolException e) {
 			Log.e(this.getClass().getName(), "retrieveRandomQuizQuestion(): "
 					+ "Error in the HTTP protocol.", e);
-			UserPreferences.getInstance()
-				.setConnectivityState(ConnectivityState.OFFLINE);
+			UserPreferences.getInstance().setConnectivityState(
+					ConnectivityState.OFFLINE);
 			return null;
 		} catch (IOException e) {
 			Log.e(this.getClass().getName(), "retrieveRandomQuizQuestion(): "
 					+ "An I/O error has occurred.", e);
-			UserPreferences.getInstance()
-				.setConnectivityState(ConnectivityState.OFFLINE);
+			UserPreferences.getInstance().setConnectivityState(
+					ConnectivityState.OFFLINE);
 			return null;
 		} catch (JSONException e) {
 			Log.e(this.getClass().getName(), "retrieveRandomQuizQuestion(): "
 					+ "QuizQuestion JSON input was incorrect.", e);
 			return null;
+		}
+	}
+
+	/**
+	 * Add a {@link QuizQuestion} to the Outbox only if it is a well formed
+	 * question.
+	 * <p>
+	 * <b>Note</b>: this also adds the question to the Inbox.
+	 * 
+	 * @param question
+	 *            The {@link QuizQuestion} to be verify
+	 */
+
+	private void addOutbox(QuizQuestion quizQuestion) {
+		if (null != quizQuestion && quizQuestion.auditErrors() == 0) {
+			mOutbox.push(mQuestionID);
 		}
 	}
 }
