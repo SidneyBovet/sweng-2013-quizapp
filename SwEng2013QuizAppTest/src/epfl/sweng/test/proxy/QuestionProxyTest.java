@@ -11,7 +11,6 @@ import org.json.JSONObject;
 
 import android.database.Cursor;
 import android.util.Log;
-
 import epfl.sweng.backend.QuizQuery;
 import epfl.sweng.caching.CacheContentProvider;
 import epfl.sweng.caching.OutboxManager;
@@ -24,7 +23,6 @@ import epfl.sweng.quizquestions.QuizQuestion;
 import epfl.sweng.servercomm.SwengHttpClientFactory;
 import epfl.sweng.test.activities.GUITest;
 import epfl.sweng.test.minimalmock.AdvancedMockHttpClient;
-import epfl.sweng.test.minimalmock.MockHttpClient;
 
 public class QuestionProxyTest extends GUITest<MainActivity> {
 

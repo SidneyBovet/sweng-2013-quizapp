@@ -2,7 +2,6 @@ package epfl.sweng.test.activities;
 
 import android.app.Activity;
 import android.test.ActivityInstrumentationTestCase2;
-import android.util.Log;
 
 import com.jayway.android.robotium.solo.Solo;
 
