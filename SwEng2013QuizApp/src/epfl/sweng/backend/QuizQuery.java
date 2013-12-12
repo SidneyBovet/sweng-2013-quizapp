@@ -158,8 +158,7 @@ public class QuizQuery implements Parcelable {
 
 	@Override
 	public boolean equals(Object o) {
-		
-		if (o.getClass() == this.getClass()) {
+		if (o != null && o.getClass() == this.getClass()) {
 			return this.mQuery.equals(((QuizQuery) o).mQuery);
 		}
 
