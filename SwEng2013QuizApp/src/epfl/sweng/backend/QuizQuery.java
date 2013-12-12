@@ -158,11 +158,23 @@ public class QuizQuery implements Parcelable {
 
 	@Override
 	public boolean equals(Object o) {
-
-		if (o instanceof QuizQuery) {
+		
+		if (o.getClass() == this.getClass()) {
 			return this.mQuery.equals(((QuizQuery) o).mQuery);
 		}
 
 		return false;
+	}
+	
+	@Override
+	public int hashCode() {
+		int hashCode = 0;
+		if (mQuery != null) {
+			hashCode += mQuery.hashCode();
+		}
+		if (mFrom != null) {
+			hashCode -= mFrom.hashCode();
+		}
+		return hashCode;
 	}
 }
