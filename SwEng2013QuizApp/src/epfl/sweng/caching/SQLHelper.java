@@ -101,10 +101,14 @@ public abstract class SQLHelper {
 	}
 
 	public static String setToSQLiteQueryArray(Set<Long> set) {
-		String statement = "";
+		//String statement = "";
+		StringBuffer buf = new StringBuffer();
 		for (Object object : set) {
-			statement = statement + "," + object.toString();
+			//statement = statement + "," + object.toString();
+			buf.append(",");
+			buf.append(object.toString());
 		}
+		String statement = buf.toString();
 		if (statement.isEmpty()) {
 			return "()";
 		}
