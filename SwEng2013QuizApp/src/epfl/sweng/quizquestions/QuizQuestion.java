@@ -316,14 +316,15 @@ public class QuizQuestion {
 	// XXX Sidney Is it possible to remove the "Tags: "
 	public String getTagsToString() {
 		Iterator<String> tagsIterator = mTags.iterator();
-		String tagsTogether = "Tags: ";
+		StringBuffer tagsTogether = new StringBuffer();
+		tagsTogether.append("Tags: ");
 		while (tagsIterator.hasNext()) {
-			tagsTogether += tagsIterator.next();
+			tagsTogether.append(tagsIterator.next());
 			if (tagsIterator.hasNext()) {
-				tagsTogether += ", ";
+				tagsTogether.append(", ");
 			}
 		}
-		return tagsTogether;
+		return tagsTogether.toString();
 	}
 
 	/**
