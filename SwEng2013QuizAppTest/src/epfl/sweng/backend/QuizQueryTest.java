@@ -25,15 +25,14 @@ public class QuizQueryTest extends TestCase {
 
 	public void testToJsonWithFromEqualsToNull() {
 		mQuizQuery = new QuizQuery("adibou", null);
-		JSONObject jsonQuery = new JSONObject();
-		JSONObject jsonFromMethod = new JSONObject();
+		JSONObject jsonQuery = new JSONObject();;
 		String strJsonQuery = null;
 		String strJsonFromMethod = null;
 		Boolean boleanFromJsonQuery = null;
 		Boolean booleanFromJsonFromMethod = null;
 		try {
 			jsonQuery.put("query", "adibou");
-			jsonFromMethod = mQuizQuery.toJSON();
+			JSONObject jsonFromMethod = mQuizQuery.toJSON();
 			strJsonQuery = jsonQuery.getString("query");
 			strJsonFromMethod = jsonFromMethod.getString("query");
 			boleanFromJsonQuery = jsonQuery.has("from");
