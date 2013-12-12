@@ -37,16 +37,16 @@ public class ShowQuestionsActivityOfflineTest extends
 
 	@Override
 	protected void tearDown() throws Exception {
-		super.tearDown();
 		SwengHttpClientFactory.setInstance(null);
 		UserPreferences.getInstance().setConnectivityState(ConnectivityState.ONLINE);
 		QuestionProxy.resetQuestionProxy();
-		//cacheContentProvider.close();
+		cacheContentProvider.close();
+		super.tearDown();
 	}
 
 	@Override
 	public void setUp() {
-		//cacheContentProvider = new CacheContentProvider(true);
+		cacheContentProvider = new CacheContentProvider(false);
 		super.setUp();
 
 		/* Reseting both client for security */
@@ -87,7 +87,7 @@ public class ShowQuestionsActivityOfflineTest extends
 	}
 
 	public void testNewlyRetrievedQuestionShouldBeCached() {
-		//int expectedInboxSize = cacheContentProvider.;
+		int expectedInboxSize = cacheContentProvider.getInboxSize() + 1;
 
 		UserPreferences.getInstance().setConnectivityState(ConnectivityState.ONLINE);
 		SwengHttpClientFactory.setInstance(mMockClient);
@@ -102,8 +102,7 @@ public class ShowQuestionsActivityOfflineTest extends
 
 		getActivityAndWaitFor(TTChecks.QUESTION_SHOWN);
 		getSolo().sleep(500);
-		//assertEquals(expectedInboxSize, QuestionsProxy.getInstance()
-		//		.getInboxSize());
+		assertEquals(expectedInboxSize, cacheContentProvider.getInboxSize());
 	}
 
 	public void testNetworkUnavailableShouldMakeConnectionStateOffline() {
@@ -119,14 +118,15 @@ public class ShowQuestionsActivityOfflineTest extends
 	public void testStatus500ShouldMakeConnectionStateOffline() {
 		UserPreferences.getInstance().setConnectivityState(ConnectivityState.ONLINE);
 		SwengHttpClientFactory.setInstance(mMockClient);
-
+		assertEquals("At the beginning the state should be online",
+				true, UserPreferences.getInstance().isConnected());
 		mMockClient.pushCannedResponse(".",
 				HttpStatus.SC_INTERNAL_SERVER_ERROR, "", "");
 
 		getActivityAndWaitFor(TTChecks.QUESTION_SHOWN);
 		getSolo().sleep(500);
-		boolean isOnline = UserPreferences.getInstance().isConnected();
+		
 		assertEquals("After a failed connection, state should be offline",
-				false, isOnline);
+				false, UserPreferences.getInstance().isConnected());
 	}
 }
