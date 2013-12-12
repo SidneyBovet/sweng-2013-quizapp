@@ -19,7 +19,6 @@ import android.util.Log;
 import epfl.sweng.backend.Converter;
 import epfl.sweng.backend.QuizQuery;
 import epfl.sweng.caching.CacheContentProvider;
-import epfl.sweng.caching.OutboxManager;
 import epfl.sweng.preferences.UserPreferences;
 import epfl.sweng.quizquestions.QuizQuestion;
 import epfl.sweng.servercomm.HttpFactory;
@@ -31,12 +30,9 @@ public class OnlineCommunication implements IQuestionCommunication {
 	private static final double ONE_HUNDRED = 100.0;
 	private int mHttpStatusCommFailure = HttpStatus.SC_BAD_GATEWAY;
 	private CacheContentProvider mContentProvider;
-	private OutboxManager mOutbox;
-	private long mQuestionID;
 
 	public OnlineCommunication() {
 		mContentProvider = new CacheContentProvider(true);
-		mOutbox = new OutboxManager();
 	}
 
 	/**
@@ -44,7 +40,7 @@ public class OnlineCommunication implements IQuestionCommunication {
 	 */
 	@Override
 	public int sendQuizQuestion(QuizQuestion quizQuestion) {
-		mQuestionID = mContentProvider.addQuizQuestion(quizQuestion);
+		mContentProvider.addQuizQuestion(quizQuestion);
 		HttpPost postQuery = HttpFactory.getPostRequest(HttpFactory
 				.getSwengBaseAddress() + "/quizquestions/");
 
@@ -70,14 +66,12 @@ public class OnlineCommunication implements IQuestionCommunication {
 					+ "not support the local encoding.", e);
 			return mHttpStatusCommFailure;
 		} catch (ClientProtocolException e) {
-			addOutbox(quizQuestion);
 			Log.e(this.getClass().getName(),
 					"sendQuizQuestion(): Error in the " + "HTTP protocol.", e);
 			UserPreferences.getInstance().setConnectivityState(
 					ConnectivityState.OFFLINE);
 			return mHttpStatusCommFailure;
 		} catch (IOException e) {
-			addOutbox(quizQuestion);
 			Log.e(this.getClass().getName(), "sendQuizQuestion(): An I/O error"
 					+ " has occurred.", e);
 			UserPreferences.getInstance().setConnectivityState(
@@ -214,9 +208,4 @@ public class OnlineCommunication implements IQuestionCommunication {
 	 *            The {@link QuizQuestion} to be verify
 	 */
 
-	private void addOutbox(QuizQuestion quizQuestion) {
-		if (null != quizQuestion && quizQuestion.auditErrors() == 0) {
-			mOutbox.push(mQuestionID);
-		}
-	}
 }
