@@ -67,12 +67,12 @@ public class QuizQuery implements Parcelable {
 		try {
 			parser.eval();
 		} catch (RuntimeException e) {
-			Log.e(this.getClass().getName(), "eval():" +
-					"QueryParser corrupted", e);
+			Log.e(this.getClass().getName(), "eval():"
+					+ "QueryParser corrupted", e);
 			ok = false;
 		} catch (RecognitionException e) {
-			Log.e(this.getClass().getName(), "eval():" +
-					"QueryParser corrupted", e);
+			Log.e(this.getClass().getName(), "eval():"
+					+ "QueryParser corrupted", e);
 			ok = false;
 		}
 
@@ -154,5 +154,15 @@ public class QuizQuery implements Parcelable {
 	private QuizQuery(Parcel in) {
 		mQuery = in.readString();
 		mFrom = in.readString();
+	}
+
+	@Override
+	public boolean equals(Object o) {
+
+		if (o instanceof QuizQuery) {
+			return this.mQuery.equals(((QuizQuery) o).mQuery);
+		}
+
+		return false;
 	}
 }
