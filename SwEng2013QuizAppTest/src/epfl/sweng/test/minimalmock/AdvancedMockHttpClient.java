@@ -159,7 +159,7 @@ public class AdvancedMockHttpClient extends DefaultHttpClient {
 	public void usingResponse(CannedResponse response) {
 		if (responsesToUseOnlyOnce.contains(response)) {
 			responses.remove(response);
-			responsesToUseOnlyOnce.remove(responses);
+			responsesToUseOnlyOnce.remove(response);
 		}
 	}
 
