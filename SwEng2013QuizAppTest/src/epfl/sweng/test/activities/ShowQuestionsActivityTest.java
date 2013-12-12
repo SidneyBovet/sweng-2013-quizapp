@@ -10,7 +10,6 @@ import epfl.sweng.showquestions.ShowQuestionsActivity;
 import epfl.sweng.test.minimalmock.AdvancedMockHttpClient;
 import epfl.sweng.testing.TestCoordinator.TTChecks;
 
-//import java.io.IOException;
 
 /** A test that illustrates the use of AdvancedMockHttpClients */
 public class ShowQuestionsActivityTest extends GUITest<ShowQuestionsActivity> {
@@ -35,7 +34,53 @@ public class ShowQuestionsActivityTest extends GUITest<ShowQuestionsActivity> {
 		mockClient = new AdvancedMockHttpClient();
 		UserPreferences.getInstance().setConnectivityState(
 				ConnectivityState.ONLINE);
-
+	}
+	
+	public void testTenAnswersQuestion() {
+		SwengHttpClientFactory.setInstance(mockClient);
+		mockClient
+			.pushCannedResponse(
+				"GET (?:https?://[^/]+|[^/]+)?/+quizquestions/random\\b",
+				HttpStatus.SC_OK,
+				"{"
+				+ "\"tags\": ["
+					+ "\"lol\""
+					+ "]," 
+					+ "\"solutionIndex\": 2, "
+					+ "\"question\": \"u89wuer9qe\", "
+					+ "\"answers\": ["
+					+ "\"a\", "
+					+ "\"b\", "
+					+ "\"c\", "
+					+ "\"d\", "
+					+ "\"e\", "
+					+ "\"f\", "
+					+ "\"g\", "
+					+ "\"h\", "
+					+ "\"j\", "
+					+ "\"k\""
+					+ "], "
+				+ "\"owner\": \"anonymous\", "
+				+ "\"id\": 5906310176440320"
+				+ "}",
+			"application/json");
+		getActivityAndWaitFor(TTChecks.QUESTION_SHOWN);
+		
+		getSolo().sleep(750);
+		getSolo().clickOnText("^a$");
+		getSolo().sleep(750);
+		getSolo().clickOnText("^b$");
+		getSolo().sleep(750);
+		getSolo().clickOnText("^d$");
+		getSolo().sleep(750);
+		getSolo().clickOnText("^f$");
+		getSolo().sleep(750);
+		getSolo().clickOnText("^e$");
+		getSolo().sleep(750);
+//		getSolo().scrollDownList((ListView) getActivity().findViewById(R.id.show_questions_display_answers));
+		getSolo().clickOnText("^j$");
+		getSolo().sleep(750);
+		getSolo().clickOnText("k");
 	}
 
 	public void testFetchQuestion() {
