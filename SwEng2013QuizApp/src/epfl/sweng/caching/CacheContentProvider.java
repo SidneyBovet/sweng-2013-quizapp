@@ -8,6 +8,7 @@ import java.util.Set;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.util.Log;
@@ -244,6 +245,17 @@ public class CacheContentProvider {
 		return null == mDatabase || !mDatabase.isOpen();
 	}
 
+	/**
+	 * Give the size of the inbox
+	 * 
+	 * @return the size of the inbox
+	 */
+	public int getInboxSize() {
+		sanityDatabaseCheck();
+		return (int) DatabaseUtils.queryNumEntries(mDatabase,
+				SQLiteCacheHelper.TABLE_QUESTIONS,
+				null);
+	}
 	/*********************** Private methods ***********************/
 
 	/**
@@ -427,4 +439,5 @@ public class CacheContentProvider {
 					"The database object is either null or closed");
 		}
 	}
+
 }
