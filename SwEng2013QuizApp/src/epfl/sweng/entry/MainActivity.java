@@ -222,7 +222,7 @@ public class MainActivity extends Activity {
 		
 		@Override
 		protected Integer doInBackground(Boolean... state) {
-			if (null != state && state.length != 1) {
+			if (null == state || state.length != 1) {
 				throw new IllegalArgumentException("Should be only one state.");
 			}
 			
