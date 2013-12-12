@@ -17,7 +17,7 @@ public class SwEng2013QuizApp extends Application {
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		mApplicationContext = getApplicationContext();
+		setContext(getApplicationContext());
 	}
 	
 	/**
@@ -36,5 +36,9 @@ public class SwEng2013QuizApp extends Application {
 		} else {
 			return mApplicationContext;
 		}
+	}
+	
+	private static void setContext(Context ctx) {
+		mApplicationContext = ctx;
 	}
 }
