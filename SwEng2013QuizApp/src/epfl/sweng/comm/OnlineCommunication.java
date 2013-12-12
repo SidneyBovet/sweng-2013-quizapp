@@ -57,7 +57,9 @@ public class OnlineCommunication implements IQuestionCommunication {
 				UserPreferences.getInstance().setConnectivityState(
 						ConnectivityState.OFFLINE);
 			}
-			response.getEntity().consumeContent();
+			if (response.getEntity() != null) {
+				response.getEntity().consumeContent();
+			}
 
 			return httpCodeResponse;
 
