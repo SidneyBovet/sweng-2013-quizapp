@@ -55,7 +55,6 @@ public class QuizQueryTest extends TestCase {
 	public void testToJsonWithFromNotEqualsToNull() {
 		mQuizQuery = new QuizQuery("adibou", "xxxxx");
 		JSONObject jsonQuery = new JSONObject();
-		JSONObject jsonFromMethod = new JSONObject();
 		String strJsonQuery = null;
 		String strJsonFromMethod = null;
 		String fromJsonQuery = null;
@@ -63,7 +62,7 @@ public class QuizQueryTest extends TestCase {
 		try {
 			jsonQuery.put("query", "adibou");
 			jsonQuery.put("from", "xxxxx");
-			jsonFromMethod = mQuizQuery.toJSON();
+			JSONObject jsonFromMethod = mQuizQuery.toJSON();
 			strJsonQuery = jsonQuery.getString("query");
 			strJsonFromMethod = jsonFromMethod.getString("query");
 			fromJsonQuery = jsonQuery.getString("from");
