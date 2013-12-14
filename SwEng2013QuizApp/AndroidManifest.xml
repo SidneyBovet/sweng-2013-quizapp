@@ -19,7 +19,8 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name="epfl.sweng.entry.MainActivity"
-            android:label="@string/title_activity_main" >
+            android:label="@string/title_activity_main"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -28,7 +29,8 @@
         </activity>
         <activity
             android:name="epfl.sweng.editquestions.EditQuestionActivity"
-            android:label="@string/title_activity_submit_question" >
+            android:label="@string/title_activity_submit_question"
+            android:screenOrientation="portrait">
         </activity>
         <activity
             android:name="epfl.sweng.showquestions.ShowQuestionsActivity"
@@ -37,11 +39,13 @@
         </activity>
         <activity
             android:name="epfl.sweng.authentication.AuthenticationActivity"
-            android:label="@string/title_activity_authentication" >
+            android:label="@string/title_activity_authentication"
+            android:screenOrientation="portrait">
         </activity>
         <activity
             android:name="epfl.sweng.searchquestions.SearchActivity"
-            android:label="@string/title_activity_search" >
+            android:label="@string/title_activity_search"
+            android:screenOrientation="portrait">
         </activity>
     </application>
 
