@@ -1,12 +1,9 @@
 package epfl.sweng.showquestions;
 
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
-import android.widget.TextView;
-import epfl.sweng.R;
 import epfl.sweng.quizquestions.QuizQuestion;
 import epfl.sweng.testing.TestCoordinator;
 import epfl.sweng.testing.TestCoordinator.TTChecks;
@@ -26,8 +23,6 @@ public class AnswerSelectionListener implements OnItemClickListener {
 	private QuizQuestion mConcernedQuestion;
 	private boolean mRightAnswerSelected;
 	
-	private int mLastSelectedQuestion;
-	
 	/**
 	 * Creates a listener that will react to user input within a
 	 * {@link ShowQuestionsActivity}.
@@ -40,7 +35,6 @@ public class AnswerSelectionListener implements OnItemClickListener {
 		this.mButtonNext = bNext;
 		this.mConcernedQuestion = question;
 		this.mRightAnswerSelected = false;
-		this.mLastSelectedQuestion = -1;
 	}
 	
 	@Override
@@ -57,30 +51,17 @@ public class AnswerSelectionListener implements OnItemClickListener {
 		 * 									Sidney
 		 */
 		if (!mRightAnswerSelected) {
-			TextView clickedAnswer;
-			try {
-				clickedAnswer = (TextView) parent.getChildAt(position);
-			} catch (RuntimeException e) {
-				Log.e(this.getClass().getName(), "onItemClick(): Exception while " 
-						+ "casting parent. Not containing TextViews?", e);
-				clickedAnswer = null;
+			int solution = mConcernedQuestion.getSolutionIndex();
+			
+			if (id == solution) {
+				mRightAnswerSelected = true;
+				mButtonNext.setEnabled(true);
+				((ShowQuestionsAdapter) parent.getAdapter()).setWrongIndex(-1);
+				((ShowQuestionsAdapter) parent.getAdapter()).setCorrectIndex((int) id);
+			} else {
+				((ShowQuestionsAdapter) parent.getAdapter()).setWrongIndex((int) id);
 			}
-			if (clickedAnswer != null) {
-				int solution = mConcernedQuestion.getSolutionIndex();
-				
-				resetAnswerStatements(parent);
-				this.mLastSelectedQuestion = (int) id;
-				
-				if (id == solution) {
-					mRightAnswerSelected = true;
-					mButtonNext.setEnabled(true);
-					clickedAnswer.append(" " + parent.getContext().
-							getString(R.string.question_correct_answer));
-				} else {
-					clickedAnswer.append(" " + parent.getContext().
-							getString(R.string.question_wrong_answer));
-				}
-			}
+			notifyAnswerStatements(parent);
 		}
 		
 		// Notifying the testing interface
@@ -88,19 +69,13 @@ public class AnswerSelectionListener implements OnItemClickListener {
 	}
 
 	/**
-	 * Resets the selection of answer, so only one selection of answer can be
+	 * Notifies the selection of answer, so only one selection of answer can be
 	 * shown.
 	 * 
 	 * @param The parent {@link AdapterView} that called this listener
 	 */
-	private void resetAnswerStatements(AdapterView<?> parent) {
-		if (mLastSelectedQuestion != -1) {
-			TextView child = (TextView) parent.getChildAt(mLastSelectedQuestion);
-			CharSequence childsContent = child.getText().toString();
-			CharSequence newContent = childsContent.subSequence(0,
-					childsContent.length()-2);
-			child.setText(newContent);
-		}
+	private void notifyAnswerStatements(AdapterView<?> parent) {
+		((ShowQuestionsAdapter) parent.getAdapter()).notifyDataSetChanged();
 	}
 
 }

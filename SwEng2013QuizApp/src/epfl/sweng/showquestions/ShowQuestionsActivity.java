@@ -8,7 +8,6 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -93,8 +92,8 @@ public class ShowQuestionsActivity extends Activity {
 			textViewTag.setText(mQuestion.getTagsToString());
 
 			// setting answer list
-			ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-					android.R.layout.simple_list_item_1, mQuestion.getAnswers());
+			ShowQuestionsAdapter adapter = new ShowQuestionsAdapter(this,
+					mQuestion.getAnswers());
 			ListView displayAnswers = (ListView) findViewById(R.id.show_questions_display_answers);
 			displayAnswers.setAdapter(adapter);
 
