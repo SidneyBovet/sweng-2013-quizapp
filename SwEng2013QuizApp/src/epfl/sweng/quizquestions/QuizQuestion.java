@@ -133,7 +133,7 @@ public class QuizQuestion {
 			int solutionIndex = Integer
 					.parseInt(listElm.remove(listElm.size() - 1));
 			
-			Pattern pattern = Pattern.compile("(\\w+)", Pattern.CASE_INSENSITIVE);
+			Pattern pattern = Pattern.compile("([A-Za-z0-9]+)", Pattern.CASE_INSENSITIVE);
 			Matcher matcher = pattern.matcher(tagsInOneLine);
 			
 			Set<String> tagSet = new TreeSet<String>();
