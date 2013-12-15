@@ -46,8 +46,11 @@ public class OnlineCommunication implements IQuestionCommunication {
 
 		int httpCodeResponse = -1;
 		try {
-			postQuery.setEntity(new StringEntity(quizQuestion.toJSON()
-					.toString()));
+			JSONObject jsonQuestion = quizQuestion.toJSON();
+			if (jsonQuestion == null) {
+				return httpCodeResponse;
+			}
+			postQuery.setEntity(new StringEntity(jsonQuestion.toString()));
 			postQuery.setHeader("Content-type", "application/json");
 			HttpResponse response = SwengHttpClientFactory.getInstance()
 					.execute(postQuery);

@@ -70,7 +70,11 @@ public class OfflineCommunication implements IQuestionCommunication {
 		JSONObject jsonQuestions = new JSONObject();
 		try {
 			JSONArray array = new JSONArray();
-			array.put(retrievedQuestion.toJSON());
+			JSONObject jsonQuestion = retrievedQuestion.toJSON();
+			if (jsonQuestion == null) {
+				return null;
+			}
+			array.put(jsonQuestion);
 
 			jsonQuestions.put("questions", (Object) array); // Ouch! TODO
 
