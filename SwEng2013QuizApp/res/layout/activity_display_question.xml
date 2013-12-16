@@ -15,8 +15,7 @@
         android:id="@+id/show_questions_display_question"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:maxLines="10"
-        android:text="@string/submit_question_answer_hint" />
+        android:maxLines="10" />
     
     <ListView
         android:id="@+id/show_questions_display_answers"
