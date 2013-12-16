@@ -19,7 +19,9 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 import epfl.sweng.R;
+import epfl.sweng.comm.ConnectivityState;
 import epfl.sweng.comm.QuestionProxy;
+import epfl.sweng.preferences.UserPreferences;
 import epfl.sweng.quizquestions.QuizQuestion;
 import epfl.sweng.testing.TestCoordinator;
 import epfl.sweng.testing.TestCoordinator.TTChecks;
@@ -259,14 +261,17 @@ public class EditQuestionActivity extends Activity {
 	private final class AsyncPostQuestion
 		extends AsyncTask<QuizQuestion, Void, Integer> {
 		
+		private QuizQuestion mQuestion;
+		
 		@Override
 		protected Integer doInBackground(QuizQuestion... questions) {
 			if (null == questions || questions.length != 1) {
 				throw new IllegalArgumentException();
 			}
+			mQuestion = questions[0];
 			
 			return QuestionProxy.getInstance().
-					sendQuizQuestion(questions[0]);
+					sendQuizQuestion(mQuestion);
 		}
 		
 		@Override
@@ -278,6 +283,16 @@ public class EditQuestionActivity extends Activity {
 						getResources().getString(
 								R.string.error_uploading_question),
 						Toast.LENGTH_LONG).show();
+				if (result >= HttpStatus.SC_INTERNAL_SERVER_ERROR
+						&& result <= HttpStatus.SC_INSUFFICIENT_STORAGE) {
+					// TODO there's maybe a better recursive way to do it
+					// pre-condition : Need to ensure that proxy is offline.
+					// May be redundant.
+					if (UserPreferences.getInstance().setConnectivityState(
+							ConnectivityState.OFFLINE) == HttpStatus.SC_OK) {
+						QuestionProxy.getInstance().sendQuizQuestion(mQuestion);
+					}
+				}
 			}
 			TestCoordinator.check(TTChecks.NEW_QUESTION_SUBMITTED);
 		}
