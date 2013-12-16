@@ -44,10 +44,10 @@ public class ShowQuestionsActivityTest extends GUITest<ShowQuestionsActivity> {
 				HttpStatus.SC_OK,
 				"{"
 				+ "\"tags\": ["
-					+ "\"lol\""
+					+ "\"lol\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\""
 					+ "]," 
 					+ "\"solutionIndex\": 2, "
-					+ "\"question\": \"u89wuer9qe\", "
+					+ "\"question\": \"u89wuer9qe\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\", "
 					+ "\"answers\": ["
 					+ "\"a\", "
 					+ "\"b\", "
