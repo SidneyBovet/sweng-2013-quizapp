@@ -112,6 +112,22 @@ public class OfflineCommunication implements IQuestionCommunication {
 
 		return retrievedQuestion.toJSON();
 	}
+	
+	/**
+	 * Closes everything related to the cache content provider.
+	 */
+	@Override
+	public void close() {
+		if (mOutbox != null) {
+			mOutbox.close();
+		}
+		if (mContentProvider != null) {
+			mContentProvider.close();
+		}
+		if (mCursor != null) {
+			mCursor.close();
+		}
+	}
 
 	/**
 	 * Add a {@link QuizQuestion} to the Outbox only if it is a well formed

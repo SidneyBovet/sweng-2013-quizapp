@@ -204,13 +204,10 @@ public class OnlineCommunication implements IQuestionCommunication {
 	}
 
 	/**
-	 * Add a {@link QuizQuestion} to the Outbox only if it is a well formed
-	 * question.
-	 * <p>
-	 * <b>Note</b>: this also adds the question to the Inbox.
-	 * 
-	 * @param question
-	 *            The {@link QuizQuestion} to be verify
+	 * Closes everything related to the cache content provider.
 	 */
-
+	@Override
+	public void close() {
+		mContentProvider.close();
+	}
 }

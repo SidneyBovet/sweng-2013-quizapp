@@ -42,4 +42,10 @@ public interface IQuestionCommunication {
 	 */
 	
 	JSONObject retrieveRandomQuizQuestion();
+	
+	/**
+	 * Closes the communication.
+	 */
+	
+	void close();
 }

@@ -58,7 +58,6 @@ public final class QuestionProxy implements IQuestionCommunication,
 	 *            {@link QuizQuestion} that we want to send
 	 * @return The HTTP status code in response of the request.
 	 */
-
 	@Override
 	public int sendQuizQuestion(QuizQuestion quizQuestion) {
 		int httpCodeResponse = mActualCommunication
@@ -74,7 +73,6 @@ public final class QuestionProxy implements IQuestionCommunication,
 	 * Choose a random {@link QuizQuestion} from the cached content before
 	 * returning it if offline.
 	 */
-
 	@Override
 	public JSONObject retrieveQuizQuestion(QuizQuery quizQuery) {
 		JSONObject jsonRetrievedQuestions = mActualCommunication
@@ -87,13 +85,20 @@ public final class QuestionProxy implements IQuestionCommunication,
 	 * Retrieves a random {@link QuizQuestion} from the actual communication
 	 * service.
 	 */
-
 	@Override
 	public JSONObject retrieveRandomQuizQuestion() {
 		JSONObject jsonRetrievedQuestion = mActualCommunication
 				.retrieveRandomQuizQuestion();
 
 		return jsonRetrievedQuestion;
+	}
+	
+	/**
+	 * Closes the actual communication.
+	 */
+	@Override
+	public void close() {
+		mActualCommunication.close();
 	}
 
 	/**
@@ -103,11 +108,11 @@ public final class QuestionProxy implements IQuestionCommunication,
 	 * 
 	 * @return The HTTP response code of the last proxy request.
 	 */
-
 	@Override
 	public int notifyConnectivityChange(ConnectivityState newState) {
 		int proxyResponse = -1;
 
+		mActualCommunication.close();
 		if (newState == ConnectivityState.OFFLINE) {
 			proxyResponse = HttpStatus.SC_OK;
 			mActualCommunication = new OfflineCommunication();
