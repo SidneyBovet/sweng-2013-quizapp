@@ -15,7 +15,8 @@
         android:id="@+id/submit_question_text_body_edit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/submit_question_text_body" />
+        android:hint="@string/submit_question_text_body"
+        android:singleLine="true" />
     
     <TextView
         android:id="@+id/submit_question_add_text"
@@ -57,7 +58,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/submit_question_button"
-        android:hint="@string/submit_question_tags" />
+        android:hint="@string/submit_question_tags"
+        android:singleLine="true" />
     
     <Button
         android:id="@+id/submit_question_button"

@@ -18,7 +18,8 @@
         android:layout_alignParentTop="true"
         android:layout_toLeftOf="@+id/submit_question_remove_answer_edit"
         android:layout_toRightOf="@+id/submit_question_correct_switch"
-        android:hint="@string/submit_question_answer_hint" />
+        android:hint="@string/submit_question_answer_hint"
+        android:singleLine="true" />
     
     <Button
         android:id="@+id/submit_question_remove_answer_edit"

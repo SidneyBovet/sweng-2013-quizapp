@@ -13,7 +13,8 @@
         android:id="@+id/search_question_query"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/search_question_query" />
+        android:hint="@string/search_question_query"
+        android:singleLine="true" />
     
     <Button
         android:id="@+id/search_query_button"
