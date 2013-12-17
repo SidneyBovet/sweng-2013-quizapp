@@ -83,6 +83,11 @@ public class ShowQuestionsAgentTest extends TestCase {
 						return secondQueriedJSON;
 					}
 				}
+
+				@Override
+				public void close() {
+					
+				}
 			};
 			
 		} catch (JSONException e) {
@@ -158,6 +163,11 @@ public class ShowQuestionsAgentTest extends TestCase {
 					fail("Exception when hard creating JSONobject");
 				}
 				return jsonResponse;
+			}
+
+			@Override
+			public void close() {
+				
 			}
 		};
 		mAgent.setNetworkCommunication(mNetworkComm);
