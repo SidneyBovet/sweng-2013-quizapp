@@ -29,6 +29,13 @@ public class ShowQuestionsAdapter extends BaseAdapter implements ListAdapter {
 	private int mCorrectIndex;
 	private int mWrongIndex;
 	
+	/**
+	 * Constructor
+	 * 
+	 * @param showQuestionsActivity The associated {@link ShowQuestionsActivity}
+	 * @param answerList List of answers from the current question to display
+	 */
+	
 	public ShowQuestionsAdapter(ShowQuestionsActivity showQuestionsActivity,
 			List<String> answerList) {
 		super();
@@ -39,9 +46,21 @@ public class ShowQuestionsAdapter extends BaseAdapter implements ListAdapter {
 		this.mWrongIndex = -1;
 	}
 	
+	/**
+	 * Sets the index at which the Adapter should put a correct 'V' mark.
+	 * 
+	 * @param correctIndex index at which there should be a correct mark.
+	 */
+	
 	public void setCorrectIndex(int correctIndex) {
 		mCorrectIndex = correctIndex;
 	}
+	
+	/**
+	 * Sets the index at which the Adapter should put a incorrect 'X' mark.
+	 * 
+	 * @param correctIndex index at which there should be a incorrect mark.
+	 */
 	
 	public void setWrongIndex(int wrongIndex) {
 		mWrongIndex = wrongIndex;
@@ -62,6 +81,11 @@ public class ShowQuestionsAdapter extends BaseAdapter implements ListAdapter {
 		return position;
 	}
 
+	/**
+	 * Creates and returns the <code>position</code>-th layout by adding a
+	 * correct answer mark 'V' or the incorrect answer mark 'X' if it is the
+	 * appropriate position.
+	 */
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		TextView answerField = (TextView) this.mInflater.inflate(
