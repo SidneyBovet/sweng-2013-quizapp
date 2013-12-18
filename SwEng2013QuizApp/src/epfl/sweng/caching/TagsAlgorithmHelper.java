@@ -50,6 +50,7 @@ public abstract class TagsAlgorithmHelper {
 
 			normalizedTagList.add(correspondingOpeningParenthesisIndex, "?");
 		}
+		reduceGroup(normalizedTagList, questionsSetList);
 
 		return questionsSetList.get(0);
 	}
