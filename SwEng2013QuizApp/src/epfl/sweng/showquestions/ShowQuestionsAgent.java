@@ -48,6 +48,7 @@ public class ShowQuestionsAgent {
 		}
 		this.mQuestionQueue = new ArrayDeque<QuizQuestion>();
 		this.mQuestionComm = QuestionProxy.getInstance();
+		mQuestionComm.close();
 	}
 
 	/**
