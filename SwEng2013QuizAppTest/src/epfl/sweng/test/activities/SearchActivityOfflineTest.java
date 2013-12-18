@@ -45,6 +45,7 @@ public class SearchActivityOfflineTest extends GUITest<SearchActivity> {
 	@Override
 	public void tearDown() throws Exception {
 		mContentProvider.eraseDatabase();
+		mContentProvider.close();
 		super.tearDown();
 	}
 	
