@@ -208,6 +208,6 @@ public class OnlineCommunication implements IQuestionCommunication {
 	 */
 	@Override
 	public void close() {
-		mContentProvider.close();
+		// Nothing to do
 	}
 }

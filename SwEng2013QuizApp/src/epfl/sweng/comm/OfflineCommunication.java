@@ -19,6 +19,7 @@ import epfl.sweng.quizquestions.QuizQuestion;
  * 
  */
 public class OfflineCommunication implements IQuestionCommunication {
+
 	private QuizQuery mCurrentQueryServed;
 	private CacheContentProvider mContentProvider;
 	private OutboxManager mOutbox;
@@ -44,12 +45,11 @@ public class OfflineCommunication implements IQuestionCommunication {
 	 */
 	@Override
 	public JSONObject retrieveQuizQuestion(QuizQuery quizQuery) {
-		
 		if (mCurrentQueryServed == null) {
 			mCurrentQueryServed = quizQuery;
 		}
 		
-		if (mCursor == null || !mCurrentQueryServed.equals(quizQuery)) {
+		if (!mCurrentQueryServed.equals(quizQuery) || mCursor == null) {
 			mCursor = mContentProvider.getQuestions(quizQuery);
 		}
 
@@ -93,7 +93,8 @@ public class OfflineCommunication implements IQuestionCommunication {
 	 */
 	@Override
 	public JSONObject retrieveRandomQuizQuestion() {
-		if (mCursor == null) {
+		if (mCursor == null || mCurrentQueryServed != null) {
+			mCurrentQueryServed = null;
 			mCursor = mContentProvider.getQuestions(new QuizQuery());
 		}
 
@@ -118,14 +119,9 @@ public class OfflineCommunication implements IQuestionCommunication {
 	 */
 	@Override
 	public void close() {
-		if (mOutbox != null) {
-			mOutbox.close();
-		}
-		if (mContentProvider != null) {
-			mContentProvider.close();
-		}
 		if (mCursor != null) {
 			mCursor.close();
+			mCursor = null;
 		}
 	}
 
